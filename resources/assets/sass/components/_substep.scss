@@ -1,0 +1,100 @@
+.substep {
+  @include clearfix;
+
+  border-radius: $border-radius;
+  border: 2px solid $color-primary;
+  margin-bottom: $layout-spacing;
+
+  &:last-child {
+    margin-bottom: 0;
+
+    .substep__content {
+      border: none;
+    }
+  }
+
+  &__title,
+  &__add {
+    display: inline-block;
+    font-size: 1.1rem;
+    float: left;
+    border-radius: 0 0 $border-radius 0;
+    padding: 5px 10px;
+    position: relative;
+    user-select: none;
+  }
+
+  &__title {
+    z-index: $z-index-2;
+    color: $color-white;
+    background-color: $color-primary;
+  }
+
+  &__add {
+    box-sizing: content-box;
+    z-index: $z-index-1;
+    color: $color-primary;
+    background-color: $color-secondary;
+    padding-left: 19px;
+    margin-left: -10px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken($color-secondary, 10%);
+    }
+  }
+
+  &__content {
+    width: 100%;
+    float: left;
+    padding: $spacing-substep;
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+}
+
+.item {
+  @include clearfix;
+
+  border-bottom: 1px solid $color-secondary;
+  padding: 5px;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  &__title,
+  &__actions {
+    display: inline-block;
+  }
+
+  &__title {
+    float: left;
+    font-size: 1rem;
+  }
+
+  &__actions {
+    float: right;
+    font-size: 0;
+
+    &__action {
+      display: inline-block;
+      margin-left: 5px;
+      font-size: 0.9rem;
+      border-radius: 3px;
+      padding: 2px 5px;
+      color: $color-white;
+      background-color: $color-primary;
+      cursor: pointer;
+    }
+  }
+}

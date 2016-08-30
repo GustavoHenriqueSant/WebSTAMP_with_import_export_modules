@@ -1,0 +1,117 @@
+.drop-element {
+  opacity: 0;
+
+  &.drop-open-transitionend {
+    display: block;
+  }
+
+  &.drop-after-open {
+    transition: opacity 1s;
+    opacity: 1;
+  }
+
+  &.drop-out-of-bounds-bottom {
+    .drop-content {
+      &:after {
+        top: unset;
+        right: 100%;
+        bottom: 5px;
+        border: solid transparent;
+        border-right-color: $color-primary-dark;
+        border-width: 5px 5px 0 5px;
+        margin-top: 0;
+        margin-bottom: -5px;
+      }
+    }
+
+    .add-drop {
+      &__content {
+        border-radius: $drop-border-radius $drop-border-radius 0 0;
+      }
+
+      &__buttons {
+        border-radius: 0 0 $drop-border-radius;
+      }
+    }
+  }
+
+  .drop-content {
+    position: relative;
+    left: 10px;
+    color: $color-white;
+
+    &:after {
+      content: " ";
+      position: absolute;
+      right: 100%;
+      top: 5px;
+      border: solid transparent;
+      border-width: 0 5px 5px;
+      border-right-color: $color-primary;
+      height: 0;
+      width: 0;
+      pointer-events: none;
+      margin-top: -5px;
+    }
+  }
+}
+
+.add-drop {
+  @extend %with-shadow;
+
+  &__content,
+  &__buttons {
+    @include clearfix;
+
+    width: 100%;
+    padding: 7px;
+  }
+
+  &__content {
+    background-color: $color-primary;
+    border-radius: 0 $drop-border-radius 0 0;
+  }
+
+  &__buttons {
+    font-size: 0;
+    text-align: right;
+    background-color: $color-primary-dark;
+    border-radius: 0 0 $drop-border-radius $drop-border-radius;
+  }
+
+  &__input,
+  &__action {
+    border-radius: 2px;
+  }
+
+  &__label {
+    display: block;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-top: 7px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    font-size: 1.1rem;
+    border: 1px solid $color-secondary;
+    margin: 3px 3px 0 0;
+  }
+
+  &__select {
+  }
+
+  &__action {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: $color-primary-dark;
+    background-color: $color-secondary;
+    border: none;
+    padding: 2px;
+    margin-left: 7px;
+  }
+}
