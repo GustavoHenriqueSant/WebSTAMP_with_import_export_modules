@@ -1,5 +1,7 @@
 <div data-component="drop" data-drop="{{ $add }}" class="add-drop">
-    <form action ="/enviar{{$add}}" method="POST">
+    <form action ="/add{{$add}}" method="POST">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input id="project_id" name="project_id" type="hidden" value="1">
         <div class="add-drop__content">
             @yield('content-add')
         </div>

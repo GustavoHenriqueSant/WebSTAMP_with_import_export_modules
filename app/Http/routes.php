@@ -11,7 +11,17 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', ['as' => 'fundamentals', function () {
     return view('pages.index');
-});
-Route::post('/enviaraccident', 'AccidentController@send');
+}]);
+Route::post('/addaccident', 'AccidentController@add');
+Route::post('/deleteaccident', 'AccidentController@delete');
+Route::post('/addcomponent', 'ComponentController@add');
+Route::post('/addcontrolaction', 'ControlActionController@add');
+Route::post('/addhazard', 'HazardController@add');
+Route::post('/addsystemgoal', 'SystemGoalController@add');
+Route::post('/addvariable', 'VariableController@add');
+Route::post('/addstate', 'StateController@add');
+Route::get('/stepone', ['as' => 'stepone', function () {
+    return view('pages.stepone');
+}]);

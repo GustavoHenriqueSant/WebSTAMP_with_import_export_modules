@@ -59,7 +59,7 @@
 
     <div class="navbar__item">
       <div class="navbar__item__content">
-        <a href="/" class="navbar__item__link">
+        <a href="/stepone" class="navbar__item__link">
           STPA Step 1
         </a>
       </div>
