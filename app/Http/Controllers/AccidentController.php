@@ -15,13 +15,16 @@ class AccidentController extends Controller
     
 	public function add(Request $request){
 		$accident = new Accidents();
-		$accident->name = $request->get('accident-name');
+		$accident->name = $request->input('name');
 		$accident->description = "Teste";
-		$accident->project_id = $request->get('project_id');
+		$accident->project_id = 1;
 
 		$accident->save();
 
-		return redirect()->route('fundamentals');
+		return response()->json([
+        	'name' => $request->input('name'),
+        	'id' => $request->input('id')
+    	]);
 	}
 
 	public function delete(Request $request){

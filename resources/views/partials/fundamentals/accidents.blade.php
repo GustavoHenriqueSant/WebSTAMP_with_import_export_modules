@@ -8,7 +8,7 @@
 
 <div class="substep__content">
     <ul class="substep__list">
-        @foreach (App\Accidents::all() as $accident)
+        @foreach ($accidents as $accident)
             <li class="item">
                 <div class="item__title">
                     A-{{$accident->id}}: {{ $accident->name }}

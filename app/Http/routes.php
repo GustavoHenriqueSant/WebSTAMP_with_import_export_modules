@@ -12,7 +12,8 @@
 */
 
 Route::get('/', ['as' => 'fundamentals', function () {
-    return view('pages.index');
+    $accidents = App\Accidents::all();
+    return view('pages.index', compact("accidents"));
 }]);
 Route::post('/addaccident', 'AccidentController@add');
 Route::post('/deleteaccident', 'AccidentController@delete');

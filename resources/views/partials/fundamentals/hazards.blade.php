@@ -6,7 +6,7 @@
     +
 </div>
 
-<div class="substep__content">
+<div class="substep__content" id="hazards_content" data-accidents="{{$accidents}}">
     <ul class="substep__list">
         @foreach (App\Hazards::all() as $hazard)
             <li class="item">
