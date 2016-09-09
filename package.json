@@ -9,6 +9,7 @@
     "laravel-elixir": "^5.0.0"
   },
   "dependencies": {
+    "axios": "^0.14.0",
     "jquery": "^2.2.4",
     "tether-drop": "^1.2.2"
   }

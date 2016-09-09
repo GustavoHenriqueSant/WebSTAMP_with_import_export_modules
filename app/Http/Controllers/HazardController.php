@@ -17,13 +17,16 @@ class HazardController extends Controller
     
 	public function add(Request $request){
 		$hazard = new Hazards();
-		$hazard->name = $request->get('hazard-name');
+		$hazard->name = $request->input('name');
 		$hazard->description = "Teste";
-		$hazard->project_id = $request->get('project_id');
+		$hazard->project_id = 1;
 
 		$hazard->save();
 
-		return redirect()->route('fundamentals');
+		return response()->json([
+        	'name' => $request->input('name'),
+        	'id' => $request->input('id')
+    	]);
 	}
 
 	public function delete(Request $request){

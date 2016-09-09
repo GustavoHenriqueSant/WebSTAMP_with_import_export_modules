@@ -26,8 +26,10 @@ fundamentals.forEach(function(f) {
   })
 });
 
-var accident = require('./templates/accident_template');
 var axios = require('./axios');
+var functions = require('./ajax_functions');
+var accident = require('./templates/accident_template');
+var hazard = require('./templates/hazard_template');
 
 var $ = require('jquery');
 $('body').on('submit', '.add-form', function(event) {
@@ -36,6 +38,7 @@ $('body').on('submit', '.add-form', function(event) {
   var activity = form.data("add");
   var activity_name = activity + '-name';
   var name = form.find("#" + activity_name).val();
+  // Verifies if activity is accident
   if (activity === 'accident') {
     var $newAccident = $('#accidents').find(".substep__list");
     axios.post('/addaccident', {
@@ -50,6 +53,24 @@ $('body').on('submit', '.add-form', function(event) {
     .catch(function (error) {
       console.log(error);
     });
+  // Verify if activity is hazard
+  } else if (activity === 'hazard') { 
+    var $newHazard = $('#hazards').find(".substep__list");
+    axios.post('/addhazard', {
+      name : name,
+      id : 4
+    })
+    .then(function(response) {
+      console.log(response);
+      $newHazard.append(hazard(response.data));
+    })
+    .catch(function(error) {
+      console.log(error);
+    })
+  }
+  //
+  else if (activity === 'component') {
+
   }
   return false;
 });
