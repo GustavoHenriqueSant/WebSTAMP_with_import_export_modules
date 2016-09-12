@@ -15,13 +15,16 @@ class SystemGoalController extends Controller
     
 	public function add(Request $request){
 		$systemGoals = new SystemGoals();
-		$systemGoals->name = $request->get('systemgoals-name');
+		$systemGoals->name = $request->input('name');
 		$systemGoals->description = "Teste";
-		$systemGoals->project_id = $request->get('project_id');
+		$systemGoals->project_id = 1;
 
 		$systemGoals->save();
 
-		return redirect()->route('fundamentals');
+		return response()->json([
+        	'name' => $request->input('name'),
+        	'id' => $request->input('id')
+    	]);
 	}
 
 	public function delete(Request $request){

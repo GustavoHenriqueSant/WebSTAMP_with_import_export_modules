@@ -15,12 +15,15 @@ class StateController extends Controller
 
     public function add(Request $request){
 		$state = new State();
-		$state->name = $request->get('state-name');
-		$state->variable_id = $request->get('variable-association');
+		$state->name = $request->input('name');
+		$state->variable_id = $request->input('variable_id');
 
 		$state->save();
 
-		return redirect()->route('fundamentals');
+		return response()->json([
+        	'name' => $request->input('name'),
+        	'variable_id' => $request->input('variable_id')
+    	]);
 	}
 
 	public function delete(Request $request){

@@ -8,7 +8,7 @@
 
 <div class="substep__content">
     <ul class="substep__list">
-        @foreach (App\Variable::all() as $variable)
+        @foreach ($variables as $variable)
             <li class="item">
                 <div class="item__title">
                     {{ $variable->name }}

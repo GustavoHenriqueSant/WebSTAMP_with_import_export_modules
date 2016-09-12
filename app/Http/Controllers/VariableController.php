@@ -15,12 +15,15 @@ class VariableController extends Controller
 
     public function add(Request $request){
 		$variable = new Variable();
-		$variable->name = $request->get('variable-name');
-		$variable->project_id = $request->get('project_id');
+		$variable->name = $request->input('name');
+		$variable->project_id = 1;
 
 		$variable->save();
 
-		return redirect()->route('fundamentals');
+		return response()->json([
+        	'name' => $request->input('name'),
+        	'id' => $request->input('id')
+    	]);
 	}
 
 	public function delete(Request $request){

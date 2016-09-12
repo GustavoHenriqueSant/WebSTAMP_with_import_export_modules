@@ -8,7 +8,7 @@
 
 <div class="substep__content">
     <ul class="substep__list">
-        @foreach (App\Components::all() as $component)
+        @foreach ($components as $component)
             <li class="item">
                 <div class="item__title">
                     {{ $component->name }}

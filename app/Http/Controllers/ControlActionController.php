@@ -16,13 +16,16 @@ class ControlActionController extends Controller
     
 	public function add(Request $request){
 		$controlAction = new CA();
-		$controlAction->name = $request->get('controlaction-name');
+		$controlAction->name = $request->input('name');
 		$controlAction->description = "Description";
-		$controlAction->component_id = $request->get('controller-association');
+		$controlAction->component_id = $request->input('component_id');
 
 		$controlAction->save();
 
-		return redirect()->route('fundamentals');
+		return response()->json([
+        	'name' => $request->input('name'),
+        	'component_id' => $request->input('component_id')
+    	]);
 	}
 
 	public function delete(Request $request){

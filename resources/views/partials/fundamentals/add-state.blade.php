@@ -11,7 +11,7 @@
         Variable Associated
     </label>
     <select id="variable-association" name="variable-association" class="add-drop__select add-drop__input">
-        @foreach (App\Variable::all() as $variable)
+        @foreach ($variables as $variable)
         	<option value="{{$variable->id}}">{{$variable->name}}</option>
         @endforeach
     </select>

@@ -6,7 +6,7 @@
     +
 </div>
 
-<div class="substep__content">
+<div class="substep__content" id="variables_content" data-variables="{{$variables}}">
     <ul class="substep__list">
         @foreach (App\State::all() as $state)
             <li class="item">

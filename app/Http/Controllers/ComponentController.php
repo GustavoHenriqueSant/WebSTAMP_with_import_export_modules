@@ -15,13 +15,17 @@ class ComponentController extends Controller
 
     public function add(Request $request){
 		$component = new Components();
-		$component->name = $request->get('component-name');
-		$component->type = $request->get('component-type');
-		$component->project_id = $request->get('project_id');
+		$component->name = $request->input('name');
+		$component->type = $request->input('type');
+		$component->project_id = 1;
 
 		$component->save();
 
-		return redirect()->route('fundamentals');
+		return response()->json([
+        	'name' => $request->input('name'),
+        	'type' => $request->input('type'),
+        	'id' => $request->input('id')
+    	]);
 	}
 
 	public function delete(Request $request){

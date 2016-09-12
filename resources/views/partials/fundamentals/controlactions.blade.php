@@ -6,7 +6,7 @@
     +
 </div>
 
-<div class="substep__content">
+<div class="substep__content" id="controlactions_content" data-components="{{$components}}">
     <ul class="substep__list">
         @foreach (App\ControlAction::all() as $controlAction)
             <li class="item">

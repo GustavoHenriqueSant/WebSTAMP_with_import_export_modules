@@ -11,7 +11,7 @@
         Controller Associated
     </label>
     <select id="controller-association" name="controller-association" class="add-drop__select add-drop__input">
-        @foreach (App\Components::all() as $component)
+        @foreach ($components as $component)
         	@if($component->type === 'Controller')
         		<option value="{{$component->id}}">{{$component->name}}</option>
         	@endif

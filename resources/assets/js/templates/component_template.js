@@ -2,10 +2,10 @@ module.exports = function(context) {
     return `
         <li class="item">
             <div class="item__title">
-                H-${context.id}: ${context.name}
+                ${context.name}
             </div>
             <div class="item__actions__action">
-                [A-1]
+                ${context.type}
             </div>
             <div class="item__actions">
                 <div class="item__title">

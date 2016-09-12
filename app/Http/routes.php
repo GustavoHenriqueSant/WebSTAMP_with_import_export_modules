@@ -13,7 +13,9 @@
 
 Route::get('/', ['as' => 'fundamentals', function () {
     $accidents = App\Accidents::all();
-    return view('pages.index', compact("accidents"));
+    $variables = App\Variable::all();
+    $components = App\Components::all();
+    return view('pages.index', compact("accidents", "variables", "components"));
 }]);
 Route::post('/addaccident', 'AccidentController@add');
 Route::post('/deleteaccident', 'AccidentController@delete');
