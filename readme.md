@@ -15,6 +15,7 @@ Laravel is accessible, yet powerful, providing tools needed for large, robust ap
 
 ```
 #!npm
+npm install -g gulp
 
 
 ```
