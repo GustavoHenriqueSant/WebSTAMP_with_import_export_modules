@@ -12,14 +12,25 @@ Laravel is accessible, yet powerful, providing tools needed for large, robust ap
 
 ## Installation
 
+```
+#!npm
+git clone https://bitbucket.org/FellipeRey/stpatool
+```
 
 ```
 #!npm
 npm install -g gulp
-
-
 ```
 
+```
+#!npm
+npm install
+```
+
+```
+#!composer
+composer install
+```
 
 ## Official Documentation
 
