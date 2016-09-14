@@ -11,4 +11,8 @@ class Accidents extends Model
 		return $this->belongsTo(Projects::class);
 	}
 
+	public function accidentshazards(){
+		return  $this->hasMany(AccidentsHazards::class);
+	}
+
 }

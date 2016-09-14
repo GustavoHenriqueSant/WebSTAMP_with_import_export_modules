@@ -58,12 +58,13 @@ $('body').on('submit', '.add-form', function(event) {
   var activity = form.data("add");
   var activity_name = activity + '-name';
   var name = form.find("#" + activity_name).val();
+  var id = 0;
   // Verifies if activity is system goal
   if (activity === 'systemgoal') {
   	var $newSystemGoal = $('#systemgoals').find(".substep__list");
     axios.post('/addsystemgoal', {
       name: name,
-      id : 4
+      id : id
     })
     .then(function (response) { 
       $newSystemGoal.append(systemgoal(response.data));
@@ -77,7 +78,7 @@ $('body').on('submit', '.add-form', function(event) {
     var $newAccident = $('#accidents').find(".substep__list");
     axios.post('/addaccident', {
       name: name,
-      id : 4
+      id : id
     })
     .then(function (response) { 
       Hazard.addAccident(response.data);
@@ -91,7 +92,7 @@ $('body').on('submit', '.add-form', function(event) {
     var $newHazard = $('#hazards').find(".substep__list");
     axios.post('/addhazard', {
       name : name,
-      id : 4
+      id : id
     })
     .then(function(response) {
       $newHazard.append(hazard(response.data));
@@ -107,7 +108,7 @@ $('body').on('submit', '.add-form', function(event) {
   	axios.post('/addcomponent', {
       name : name,
       type : type,
-      id : 4
+      id : id
     })
     .then(function(response) {
       if (type === 'Controller') {
@@ -129,7 +130,7 @@ $('body').on('submit', '.add-form', function(event) {
       name : name,
       component_id : component_id,
       controller_name : controller_name,
-      id : 4
+      id : id
     })
     .then(function(response) {
     	$newControlAction.append(controlaction(response.data, controller_name));
@@ -143,7 +144,7 @@ $('body').on('submit', '.add-form', function(event) {
   	var $newVariable = $('#variables').find(".substep__list");
     axios.post('/addvariable', {
       name : name,
-      id : 6
+      id : id
     })
     .then(function(response) {
       State.addVariable(response.data);
@@ -162,10 +163,9 @@ $('body').on('submit', '.add-form', function(event) {
       name : name,
       variable_id : variable_id,
       variable_name : variable_name,
-      id : 4
+      id : id
     })
     .then(function(response) {
-    	console.log(response.data);
       $newState.append(state(response.data, variable_name));
     })
     .catch(function(error) {
@@ -174,3 +174,19 @@ $('body').on('submit', '.add-form', function(event) {
   }
   return false;
 });
+
+$('body').on('submit', '.delete-form', function(event) {
+  event.preventDefault();
+  var form = $(event.currentTarget);
+  axios.post('/deleteaccident', {
+      id : id,
+      name: "oi"
+    })
+    .then(function (response) {
+      $("#accident-6").remove();
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    return false;
+  });

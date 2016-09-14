@@ -23,8 +23,9 @@ class ControlActionController extends Controller
 		$controlAction->save();
 
 		return response()->json([
-        	'name' => $request->input('name'),
-        	'component_id' => $request->input('component_id')
+			'id' => $controlAction->id,
+        	'name' => $controlAction->name,
+        	'component_id' => $controlAction->component_id
     	]);
 	}
 

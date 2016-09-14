@@ -21,8 +21,9 @@ class StateController extends Controller
 		$state->save();
 
 		return response()->json([
-        	'name' => $request->input('name'),
-        	'variable_id' => $request->input('variable_id')
+			'id' => $state->id,
+        	'name' => $state->name,
+        	'variable_id' => $state->variable_id
     	]);
 	}
 

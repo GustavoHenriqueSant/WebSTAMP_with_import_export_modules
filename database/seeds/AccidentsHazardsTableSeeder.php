@@ -13,18 +13,18 @@ class AccidentsHazardsTableSeeder extends Seeder
     {
         DB::table('accidents_hazards')->insert([
             'id' => 1,
-            'accident_id' => 2,
-            'hazard_id' => 1
+            'accidents_id' => 2,
+            'hazards_id' => 1
         ]);
         DB::table('accidents_hazards')->insert([
             'id' => 2,
-            'accident_id' => 1,
-            'hazard_id' => 2
+            'accidents_id' => 1,
+            'hazards_id' => 2
         ]);
         DB::table('accidents_hazards')->insert([
             'id' => 3,
-            'accident_id' => 3,
-            'hazard_id' => 3
+            'accidents_id' => 3,
+            'hazards_id' => 3
         ]);
     }
 }

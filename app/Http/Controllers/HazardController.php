@@ -8,7 +8,7 @@ use App\Http\Requests;
 
 use App\Hazards;
 
-use App\Accidents_Hazards;
+// use App\AccidentsHazards;
 
 use Illuminate\Routing\Redirector;
 
@@ -24,8 +24,8 @@ class HazardController extends Controller
 		$hazard->save();
 
 		return response()->json([
-        	'name' => $request->input('name'),
-        	'id' => $request->input('id')
+        	'name' => $hazard->name,
+        	'id' => $hazard->id
     	]);
 	}
 

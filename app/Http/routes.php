@@ -25,6 +25,7 @@ Route::post('/addhazard', 'HazardController@add');
 Route::post('/addsystemgoal', 'SystemGoalController@add');
 Route::post('/addvariable', 'VariableController@add');
 Route::post('/addstate', 'StateController@add');
+Route::post('/addrule', 'RuleController@add');
 Route::get('/stepone', ['as' => 'stepone', function () {
     return view('pages.stepone');
 }]);

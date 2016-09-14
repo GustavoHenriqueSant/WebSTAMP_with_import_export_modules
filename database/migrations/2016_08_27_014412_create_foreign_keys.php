@@ -17,8 +17,8 @@ class CreateForeignKeys extends Migration
         });
 
         Schema::table('accidents_hazards', function ($table) {
-            $table->foreign('accident_id')->references('id')->on('accidents')->onDelete('cascade');
-            $table->foreign('hazard_id')->references('id')->on('hazards')->onDelete('cascade');
+            $table->foreign('accidents_id')->references('id')->on('accidents')->onDelete('cascade');
+            $table->foreign('hazards_id')->references('id')->on('hazards')->onDelete('cascade');
         });
 
         Schema::table('teams', function ($table) {

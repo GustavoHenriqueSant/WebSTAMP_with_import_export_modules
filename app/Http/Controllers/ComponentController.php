@@ -22,9 +22,9 @@ class ComponentController extends Controller
 		$component->save();
 
 		return response()->json([
-        	'name' => $request->input('name'),
-        	'type' => $request->input('type'),
-        	'id' => $request->input('id')
+        	'name' => $component->name,
+        	'type' => $component->type,
+        	'id' => $component->id
     	]);
 	}
 

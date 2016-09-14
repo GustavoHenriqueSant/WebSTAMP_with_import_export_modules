@@ -19,7 +19,6 @@ function init(){
 			controlactions.push(ca[i]);
 		}
 	}
-	console.log(controlactions);
 }
 
 function showControllers(){

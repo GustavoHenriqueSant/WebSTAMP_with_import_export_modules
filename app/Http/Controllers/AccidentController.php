@@ -20,15 +20,16 @@ class AccidentController extends Controller
 		$accident->project_id = 1;
 
 		$accident->save();
+		//$teste = Accidents::where('name', $accident->name)->last();
 
 		return response()->json([
-        	'name' => $request->input('name'),
-        	'id' => $request->input('id')
+        	'name' => $accident->name,
+        	'id' => $accident->id
     	]);
 	}
 
 	public function delete(Request $request){
-		App\Accidents::destroy($request->get("accident_id"));
+		Accidents::destroy($request->input('id'));
 	}
 
 }

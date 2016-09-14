@@ -21,8 +21,8 @@ class VariableController extends Controller
 		$variable->save();
 
 		return response()->json([
-        	'name' => $request->input('name'),
-        	'id' => $request->input('id')
+        	'name' => $variable->name,
+        	'id' => $variable->id
     	]);
 	}
 

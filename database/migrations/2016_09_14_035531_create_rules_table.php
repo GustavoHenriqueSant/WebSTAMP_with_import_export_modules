@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccidentsHazardsTable extends Migration
+class CreateRulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,11 @@ class CreateAccidentsHazardsTable extends Migration
      */
     public function up()
     {
-        Schema::create('accidents_hazards', function (Blueprint $table) {
+        Schema::create('rules', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('accidents_id')->unsigned();
-            $table->integer('hazards_id')->unsigned();
+            $table->integer('index');
+            $table->integer('state_id')->unsigned;
+            $table->integer('controlaction_id')->unsigned;
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateAccidentsHazardsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('accidents_hazards');
+        Schema::drop('rules');
     }
 }

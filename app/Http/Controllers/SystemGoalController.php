@@ -22,8 +22,8 @@ class SystemGoalController extends Controller
 		$systemGoals->save();
 
 		return response()->json([
-        	'name' => $request->input('name'),
-        	'id' => $request->input('id')
+        	'name' => $systemGoals->name,
+        	'id' => $systemGoals->id
     	]);
 	}
 

@@ -14,7 +14,11 @@
                     H-{{$hazard->id}}: {{ $hazard->name }}
                 </div>
                 <div class="item__actions__action">
-                    [A-1]
+                    @if (isset($hazard->accidentshazards[0]))
+                        [A-{{$hazard->accidentshazards[0]->accidents_id}}]
+                    @else
+                        [A-1]
+                    @endif
                 </div>
                 <div class="item__actions">
                     <div class="item__title">
