@@ -65,7 +65,15 @@ php artisan key:generate
 
 
 **Attention!**
-The last step is to create a new .env file. Copy the content of .env.example and modify using your database configuration.
+1. Create a new .env file. Copy the content of .env.example and modify using your database configuration
+2. Create a schema in your database named "stpatool"
+3. To create all tables automatically, just type:
+
+```
+#!mysql
+
+php artisan migrate --seed
+```
 
 
 ## **Running the application**
