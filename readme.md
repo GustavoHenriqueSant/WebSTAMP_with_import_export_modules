@@ -32,7 +32,7 @@ npm install
 ```
 
 
-Some folders Laravel (like the contents of the vendor folder) do not change, so it is not necessary to send them to the repository, it can be obtained through the command:
+Some Laravel folders (like vendor) do not change, so it is not necessary to send them to the repository, it can be obtained through the command:
 
 ```
 #!composer
