@@ -48,6 +48,7 @@ composer install
 ```
 
 
+
 Gulp is the responsible to get all views, css, images and javascripts files(folder resources), compile them and send to the public folder.
 
 ```
@@ -65,9 +66,16 @@ php artisan key:generate
 
 
 **Attention!**
+
 1. Create a new .env file. Copy the content of .env.example and modify using your database configuration
+
+
 2. Create a schema in your database named "stpatool"
+
+
 3. To create all tables automatically, just type:
+
+
 
 ```
 #!mysql
