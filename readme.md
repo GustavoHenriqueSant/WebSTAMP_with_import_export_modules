@@ -1,4 +1,4 @@
-**# A rule-based tool for System-Theoretic Process Analysis (STPA)** 
+# **A rule-based tool for System-Theoretic Process Analysis (STPA)** 
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
 [![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
@@ -10,13 +10,13 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
-**## Prerequisites**
+## **Prerequisites**
 
 For execution of all commands, it is necessary the use of [Composer](https://getcomposer.org/download/) and [Node.js](https://nodejs.org/en/download/)
 
-**## Installation**
+## **Installation**
 
-Open a git bash to clone the repository
+Open a bash/git bash to clone the repository
 
 ```
 #!npm
@@ -68,7 +68,26 @@ php artisan key:generate
 The last step is to create a new .env file. Copy the content of .env.example and modify using your database configuration.
 
 
-## Running the Application
+## **Running the application**
+
+After complete the Installation, you must open two bashes and execute the commands:
+
+```
+#!bash
+
+php artisan serve
+```
+and
+```
+#!bash
+
+gulp watch
+```
+
+**Attention! ** If no change in the resources folder, it is not necessary to run the second command (gulp watch)
+
+
+## Laravel Documentation
 
 Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
 
