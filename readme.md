@@ -16,37 +16,46 @@ For execution of all commands, it is necessary the use of [Composer](https://get
 
 ## Installation
 
+Open a git bash to clone the repository
 ```
 #!npm
 git clone https://bitbucket.org/FellipeRey/stpatool
 ```
 
+In stpatool folder, we need install Gulp, an automated task runner. Typing the command below, a new folder (node_modules) will be created with the content of Gulp.
 ```
 #!npm
 npm install -g gulp
 ```
 
+To install the remaining dependencies, execute the command:
 ```
 #!npm
 npm install
 ```
 
+Some folders Laravel (like the contents of the vendor folder) do not change, so it is not necessary to send them to the repository, it can be obtained through the command:
 ```
 #!composer
 composer install
 ```
 
+Gulp is the responsible to get all views, css, images and javascripts files(folder resources), compile them and send to the public folder.
 ```
 #!composer
 gulp
 ```
 
+A new key must be generated for the new Laravel application. 
 ```
 #!composer
 php artisan key:generate
 ```
 
-## Official Documentation
+**Attention!**
+The last step is to create a new .env file. Copy the content of .env.example and modify using your database configuration.
+
+## Running the Application
 
 Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
 
