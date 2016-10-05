@@ -20,7 +20,7 @@ class RulesTableSeeder extends Seeder
         DB::table('rules')->insert([
             'id' => 2,
             'index' => 1,
-            'state_id' => 4,
+            'state_id' => 0,
             'controlaction_id' => 1
         ]);
         DB::table('rules')->insert([

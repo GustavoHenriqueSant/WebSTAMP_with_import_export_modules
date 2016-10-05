@@ -30,7 +30,7 @@ class ControlActionController extends Controller
 	}
 
 	public function delete(Request $request){
-		
+		CA::destroy($request->input('id'));
 	}
 
 }

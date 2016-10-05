@@ -29,7 +29,7 @@ class ComponentController extends Controller
 	}
 
 	public function delete(Request $request){
-		
+		Components::destroy($request->input('id'));
 	}
 
 }

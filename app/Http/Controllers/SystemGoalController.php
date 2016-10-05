@@ -28,7 +28,7 @@ class SystemGoalController extends Controller
 	}
 
 	public function delete(Request $request){
-		
+		SystemGoals::destroy($request->input('id'));
 	}
 
 

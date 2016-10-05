@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-<?php $fundamentals = ['systemgoals', 'accidents', 'hazards', 'components', 'controlactions', 'variables', 'states']; ?>
+<?php $fundamentals = ['systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components', 'controlactions', 'variables', 'states']; ?>
 
 @section('content')
     @foreach ($fundamentals as $f)
@@ -10,10 +10,12 @@
     @endforeach
 @endsection
 
-<?php $addItens = ['systemgoals', 'accident', 'hazard', 'component', 'controlactions', 'variable', 'state']; ?>
+<?php $addItens = ['systemgoals', 'accident', 'hazard', 'component', 'controlactions', 'variable', 'state', 'systemsafetyconstraint']; ?>
 
 @section('dialogs')
     @foreach ($addItens as $addItem)
         @include('partials.fundamentals.add-' . $addItem)
     @endforeach
 @endsection
+
+@include('partials.fundamentals.edit-accident')

@@ -30,7 +30,7 @@ class HazardController extends Controller
 	}
 
 	public function delete(Request $request){
-		
+		Hazards::destroy($request->input('id'));
 	}
 
 }

@@ -28,7 +28,7 @@ class StateController extends Controller
 	}
 
 	public function delete(Request $request){
-		
+		State::destroy($request->input('id'));
 	}
 
 }

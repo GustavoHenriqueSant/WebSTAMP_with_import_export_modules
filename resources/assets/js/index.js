@@ -5,7 +5,7 @@ var Drop = require('tether-drop');
 Hazard.init();
 State.init();
 ControlActions.init();
-var fundamentals = ['hazard', 'component', 'systemgoal', 'accident', 'controlaction', 'variable', 'state'];
+var fundamentals = ['hazard', 'component', 'systemgoal', 'accident', 'controlaction', 'variable', 'state', 'systemsafetyconstraint'];
 
 fundamentals.forEach(function(f) {
   var drop = new Drop({
@@ -50,6 +50,7 @@ var component = require('./templates/component_template');
 var controlaction = require('./templates/controlaction_template');
 var variable = require('./templates/variable_template');
 var state = require('./templates/state_template');
+var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
 
 var $ = require('jquery');
 $('body').on('submit', '.add-form', function(event) {
@@ -104,7 +105,7 @@ $('body').on('submit', '.add-form', function(event) {
   // Verify if activity is component
   else if (activity === 'component') {
   	var type = form.find("#component-type").val();
-  	var $newComponent = $('#components').find(".substep__list");
+  	var $newComponent = $('#components').find("#add-"  + type.toLowerCase());
   	axios.post('/addcomponent', {
       name : name,
       type : type,
@@ -172,21 +173,134 @@ $('body').on('submit', '.add-form', function(event) {
       console.log(error);
     })
   }
+  // Verify if activity is variable
+  else if (activity === 'systemsafetyconstraint') {
+    var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
+    axios.post('/addsystemsafetyconstraint', {
+      name : name,
+      id : id
+    })
+    .then(function(response) {
+      $newSSC.append(systemsafetyconstraint(response.data));
+    })
+    .catch(function(error) {
+      console.log(error);
+    })
+  }
   return false;
 });
 
 $('body').on('submit', '.delete-form', function(event) {
   event.preventDefault();
   var form = $(event.currentTarget);
-  axios.post('/deleteaccident', {
-      id : id,
-      name: "oi"
-    })
-    .then(function (response) {
-      $("#accident-6").remove();
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-    return false;
+  var activity = form.data("delete");
+  if (activity === 'accident'){
+    var id = form.find("#accident_id").val();
+    axios.post('/deleteaccident', {
+        id : id,
+      })
+      .then(function (response) {
+        $("#accident-" + id).remove();
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      return false;
+  } else if (activity === 'systemgoal'){
+    var id = form.find("#systemgoal_id").val();
+    axios.post('/deletesystemgoal', {
+        id : id,
+      })
+      .then(function (response) {
+        $("#systemgoal-" + id).remove();
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      return false;
+  } else if (activity === 'hazard') {
+    var id = form.find("#hazard_id").val();
+    axios.post('/deletehazard', {
+        id : id,
+      })
+      .then(function (response) {
+        $("#hazard-" + id).remove();
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      return false;
+  } else if (activity === 'component') {
+    var id = form.find("#component_id").val();
+    var type = form.find("#component_type").val().toLowerCase();
+    axios.post('/deletecomponent', {
+        id : id,
+      })
+      .then(function (response) {
+        $("#" + type + "-" + id).remove();
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      return false;
+  } else if (activity === 'controlaction') {
+    var id = form.find("#controlaction_id").val();
+    axios.post('/deletecontrolaction', {
+        id : id,
+      })
+      .then(function (response) {
+        $("#controlaction-" + id).remove();
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      return false;
+  }
+   else if (activity === 'systemsafetyconstraint') {
+    var id = form.find("#systemsafetyconstraint_id").val();
+    axios.post('/deletesystemsafetyconstraint', {
+        id : id,
+      })
+      .then(function (response) {
+        $("#systemsafetyconstraint-" + id).remove();
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      return false;
+  }
+
   });
+
+$(document).ready(function(){
+    $("a[rel=modal]").click( function(ev){
+        ev.preventDefault();
+ 
+        var id = $(this).attr("href");
+ 
+        var screen_height = $(document).height();
+        var screen_width = $(window).width();
+     
+        //colocando o fundo preto
+        $('#modal-mask').css({'width':screen_width,'height':screen_height});
+        $('#modal-mask').fadeIn(1000); 
+        $('#modal-mask').fadeTo("slow",0.8);
+ 
+        var left = ($(window).width() /2) - ( $(id).width() / 2 );
+        var top = ($(window).height() / 2) - ( $(id).height() / 2 );
+     
+        $(id).css({'top':top,'left':left});
+        $(id).show();   
+    });
+ 
+    $("#modal-mask").click( function(){
+        $(this).hide();
+        $(".modal-window").hide();
+    });
+ 
+    $('.modal-close').click(function(ev){
+        ev.preventDefault();
+        $("#modal-mask").hide();
+        $(".modal-window").hide();
+    });
+});

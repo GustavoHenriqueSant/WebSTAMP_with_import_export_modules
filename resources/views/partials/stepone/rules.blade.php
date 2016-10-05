@@ -17,7 +17,7 @@
 
         @foreach (App\Rules::select('index')->distinct()->get() as $rule_index)
         <div class="table-row">
-            <div class="text">{{$rule_index->index}}</div>
+            <div class="text">R{{$rule_index->index}}</div>
             @foreach (App\Rules::where('index', $rule_index->index)->get() as $rule)
                 @if ($rule->state_id == 0)
                     <div class="text">ANY</div>
@@ -26,7 +26,9 @@
                 @endif
             @endforeach
         </div>
-        @endforeach      
+        @endforeach 
+
+        </div>     
 
     </div>
 

@@ -20,7 +20,6 @@ class AccidentController extends Controller
 		$accident->project_id = 1;
 
 		$accident->save();
-		//$teste = Accidents::where('name', $accident->name)->last();
 
 		return response()->json([
         	'name' => $accident->name,

@@ -15,15 +15,16 @@
                 </div>
                 <div class="item__actions">
                     <div class="item__title">
-                        <img src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
+                        <a href="#janela1" rel="modal"><img src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo"></a>
                     </div>
-                    <!-- <form action ="/deleteaccident" method="POST" class="delete-form" data-delete="accident"> -->
+                    <form action ="/deleteaccident" method="POST" class="delete-form ajaxform" data-delete="accident">
                         <div class="item__title">
                             <input type="hidden" name="_token" value="{{csrf_token()}}">
                             <input id="project_id" name="project_id" type="hidden" value="1">
+                            <input id="accident_id" name="accident_id" type="hidden" value="{{$accident->id}}">
                             <input type="image" src="{{ asset('images/delete.ico') }}" alt="Delete" width="20" class="navbar__logo">
                         </div>
-                    <!-- </form> -->
+                    </form>
                 </div>
             </li>
         @endforeach

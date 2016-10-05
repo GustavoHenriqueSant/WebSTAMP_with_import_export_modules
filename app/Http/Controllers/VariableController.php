@@ -27,7 +27,7 @@ class VariableController extends Controller
 	}
 
 	public function delete(Request $request){
-		
+		Variable::destroy($request->input('id'));
 	}
 
 }

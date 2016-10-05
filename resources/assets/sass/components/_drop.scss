@@ -1,5 +1,6 @@
 .drop-element {
   opacity: 0;
+  z-index: 1000;
 
   &.drop-open-transitionend {
     display: block;
