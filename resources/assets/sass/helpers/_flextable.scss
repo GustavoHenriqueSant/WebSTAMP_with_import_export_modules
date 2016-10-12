@@ -3,7 +3,7 @@
   display: flex;           display: -webkit-flex;
   flex-direction: row;     -webkit-flex-direction: row;
   flex-grow: 0;            -webkit-flex-grow: 0;
-  flex-wrap: wrap;         -webkit-flex-wrap: wrap;
+  flex-wrap: nowrap;         -webkit-flex-wrap: nowrap;
   width: 100%;
   padding-left: 15px;
   padding-right: 15px;
@@ -13,7 +13,7 @@
 .text {
   flex-grow: 1;            -webkit-flex-grow: 1;
   overflow: hidden;
-  white-space: nowrap;
+  white-space: wrap;
   text-overflow: ellipsis;
   padding-right: 20px;
 }
@@ -44,7 +44,7 @@ body {
   display: flex;           display: -webkit-flex;
   flex-direction: row;     -webkit-flex-direction: row;
   flex-grow: 0;            -webkit-flex-grow: 0;
-  flex-wrap: wrap;         -webkit-flex-wrap: wrap;
+  flex-wrap: nowrap;         -webkit-flex-wrap: nowrap;
   width: 100%;
   padding-left: 15px;
   padding-right: 15px;

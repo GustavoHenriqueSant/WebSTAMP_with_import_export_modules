@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-<?php $fundamentals = ['systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components', 'controlactions', 'variables', 'states']; ?>
+<?php $fundamentals = ['systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components', 'controlactions', 'variables']; ?>
 
 @section('content')
     @foreach ($fundamentals as $f)

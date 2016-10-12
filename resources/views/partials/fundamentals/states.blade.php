@@ -14,7 +14,7 @@
                     {{ $state->name }}
                 </div>
                 <div class="item__actions__action">
-                    {{ $state->variable->name }}
+                    <span>×</span> {{ $state->variable->name }}
                 </div>
                 <div class="item__actions">
                     <div class="item__title">

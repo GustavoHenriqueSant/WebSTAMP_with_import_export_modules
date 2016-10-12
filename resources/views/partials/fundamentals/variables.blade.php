@@ -13,6 +13,13 @@
                 <div class="item__title">
                     {{ $variable->name }}
                 </div>
+                @foreach(App\State::all() as $state)
+                    @if($state->variable_id == $variable->id)
+                        <div class="item__actions__action">
+                            <span>×</span> {{ $state->name }}
+                        </div>
+                    @endif
+                @endforeach
                 <div class="item__actions">
                     <div class="item__title">
                         <img src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">

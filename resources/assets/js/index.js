@@ -194,6 +194,8 @@ $('body').on('submit', '.delete-form', function(event) {
   event.preventDefault();
   var form = $(event.currentTarget);
   var activity = form.data("delete");
+  var deleteActivity = confirm("Are you sure?");
+  if (deleteActivity)
   if (activity === 'accident'){
     var id = form.find("#accident_id").val();
     axios.post('/deleteaccident', {

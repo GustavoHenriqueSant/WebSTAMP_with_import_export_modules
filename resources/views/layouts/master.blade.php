@@ -35,6 +35,11 @@
           </a>
         </div>
         <div class="navbar__item__substep">
+          <a href="/#systemsafetyconstraint" class="navbar__item__link">
+            Safety Constraint
+          </a>
+        </div>
+        <div class="navbar__item__substep">
           <a href="/#components" class="navbar__item__link">
             Components
           </a>
@@ -49,11 +54,11 @@
             Variable
           </a>
         </div>
-        <div class="navbar__item__substep">
+        <!--<div class="navbar__item__substep">
           <a href="/#states" class="navbar__item__link">
             State
           </a>
-        </div>
+        </div>-->
       </div>
     </div>
 
