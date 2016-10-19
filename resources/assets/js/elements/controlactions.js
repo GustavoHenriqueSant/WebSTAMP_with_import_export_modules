@@ -14,6 +14,7 @@ module.exports = {
 
 function init(){
 	var ca = $("#controlactions_content").data("components");
+	if (ca != null)
 	for (var i = 0; i < ca.length; i++){
 		if (ca[i].type === "Controller"){
 			controlactions.push(ca[i]);

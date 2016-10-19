@@ -31,5 +31,11 @@ class SystemGoalController extends Controller
 		SystemGoals::destroy($request->input('id'));
 	}
 
+	public function edit(Request $request){
+		$systemGoal = SystemGoals::find($request->input('id'));
+		$systemGoal->name = $request->input('name');
+		$systemGoal->save();
+	}
+
 
 }

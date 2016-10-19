@@ -11,12 +11,17 @@
         @foreach (App\SystemGoals::all() as $systemGoal)
             <li class="item" id="systemgoal-{{$systemGoal->id}}">
                 <div class="item__title">
-                    G-{{$systemGoal->id}}: {{$systemGoal->name}}
+                    G-{{$systemGoal->id}}: <input type="text" class="item__input" id="systemgoal-description-{{$systemGoal->id}}" value="{{$systemGoal->name}}">
                 </div>
                 <div class="item__actions">
-                    <div class="item__title">
-                        <img src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
-                    </div>
+                    <form action ="/editsystemgoal" method="POST" class="edit-form ajaxform" data-edit="systemgoal">
+                        <div class="item__title">
+                            <input type="hidden" name="_token" value="{{csrf_token()}}">
+                            <input id="project_id" name="project_id" type="hidden" value="1">
+                            <input id="systemgoal_id" name="systemgoal_id" type="hidden" value="{{$systemGoal->id}}">
+                            <input type="image" src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
+                        </div>
+                    </form>
                     <form action ="/deletesystemgoal" method="POST" class="delete-form ajaxform" data-delete="systemgoal">
                         <div class="item__title">
                             <input type="hidden" name="_token" value="{{csrf_token()}}">

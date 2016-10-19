@@ -1,5 +1,5 @@
 <div class="substep__title">
-    Add new Rule
+    Add new Rule - {{$ca->name}}
 </div>
 
 <div class="substep__content">
@@ -17,6 +17,7 @@
 
         <form action="/addrule" method="POST">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
+            <input type="hidden" name="controlaction_id" value="{{$ca->id}}">
             <div class="table-row">
                 @foreach (App\Variable::all() as $variable)
                     @if ($variable->name != "Default")

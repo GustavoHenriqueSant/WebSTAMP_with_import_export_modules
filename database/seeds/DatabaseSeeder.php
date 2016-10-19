@@ -22,6 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ControlActionsTableSeeder::class);
         $this->call(AccidentsHazardsTableSeeder::class);
         $this->call(RulesTableSeeder::class);
-        $this->call(SystemSafetyContraintTableSeeder::class);
+        $this->call(SystemSafetyConstraintTableSeeder::class);
     }
 }

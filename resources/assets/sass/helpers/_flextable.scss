@@ -7,6 +7,7 @@
   width: 100%;
   padding-left: 15px;
   padding-right: 15px;
+  text-align: center;
 }
 
 // Text based cells: grow, truncate and show ellipsis when there is not enough space
@@ -38,6 +39,7 @@ body {
   border-bottom: 2px solid #e0e0e0;
   border-collapse: collapse;
   padding-top: 5px;
+  text-align: center;
 }
 
 .table-row-without-border {
@@ -49,6 +51,7 @@ body {
   padding-left: 15px;
   padding-right: 15px;
   border-collapse: collapse;
+  text-align: center;
 }
 
 .table-row.header {

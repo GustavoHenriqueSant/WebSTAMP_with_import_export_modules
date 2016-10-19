@@ -25,12 +25,12 @@
         $combination_array[$i] = 0;
         $total_loop *= count($allStates[$i]);
     }
-    $rule = App\Rules::all();
+    $rule = App\Rules::where('controlaction_id', $ca->id)->get();
 
 
 ?>
 <div class="substep__title">
-    Context Table
+    Context Table - {{$ca->name}}
 </div>
 
 <div class="substep__content">
@@ -61,13 +61,16 @@
                     <div class="text">
                         {{$allStates[$i][$combination_array[$i]]}} <br/>
                         <?php
+                        if (count($rule) > 0) {
                             if ($rule[$i]->state_id == 0) {
-                                $rules = "true";
-                            } else if (($allStates[$i][$combination_array[$i]] == App\State::find($rule[$i]->state_id)->name) && $rules == "true"){
+                                if ($rule == "true")
+                                    $rules = "true";
+                            } else if (($allStates[$i][$combination_array[$i]] == App\State::find($rule[$i]->state_id)->name && $rules == "true")){
                                 $rules = "true";
                             } else {
                                 $rules = "false";
                             }
+                        }
                         ?>
                     </div>
                 @endfor
@@ -89,8 +92,11 @@
 
                 <div class="text">
                 <?php
-                    if ($rules == "true")
+                    if ($rules == "true" && count($rule) > 0) {
                         echo "R1";
+                    } else {
+                        $rules = "false";
+                    }
                 ?>
                     <!--Rule Value-->
                 </div>
@@ -126,6 +132,6 @@
             </div>
         @endwhile   
 
+        </div>
     </div>
-
 </div>

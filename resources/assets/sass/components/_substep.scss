@@ -55,6 +55,7 @@
     padding: 0;
     list-style-type: none;
   }
+
 }
 
 .item {
@@ -82,6 +83,16 @@
     font-size: 1rem;
   }
 
+  &__input {
+    border: 0;
+    font-size: 1rem;
+  }
+
+  &__delete__box {
+    color : white;
+    text-decoration: none;
+  }
+
   &__actions {
     float: right;
     font-size: 0;
@@ -96,5 +107,9 @@
       background-color: $color-primary;
       /*cursor: pointer;*/
     }
+  }
+
+  &__no__display {
+    display : none;
   }
 }

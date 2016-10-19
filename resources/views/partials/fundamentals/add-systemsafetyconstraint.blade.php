@@ -6,5 +6,5 @@
     <label for="systemsafetyconstraint-name" class="add-drop__label">
         System Safety Contraint name
     </label>
-    <input id="systemsafetyconstraint-name" name="systemsafetyconstraint-name" type="text" class="add-drop__input">
+    <input id="systemsafetyconstraint-name" name="systemsafetyconstraint-name" type="text" class="add-drop__input" required>
 @overwrite

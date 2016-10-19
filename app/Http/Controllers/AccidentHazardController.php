@@ -18,6 +18,6 @@ class AccidentHazardController extends Controller
 	}
 
 	public function delete(Request $request){
-		
+		AccidentsHazards::destroy($request->input('id'));
 	}
 }

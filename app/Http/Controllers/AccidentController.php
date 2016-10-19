@@ -31,4 +31,10 @@ class AccidentController extends Controller
 		Accidents::destroy($request->input('id'));
 	}
 
+	public function edit(Request $request){
+		$accident = Accidents::find($request->input('id'));
+		$accident->name = $request->input('name');
+		$accident->save();
+	}
+
 }

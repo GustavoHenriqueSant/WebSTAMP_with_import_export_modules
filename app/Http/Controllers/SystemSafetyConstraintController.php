@@ -31,4 +31,10 @@ class SystemSafetyConstraintController extends Controller
 		SystemSafetyConstraints::destroy($request->input('id'));
 	}
 
+	public function edit(Request $request) {
+		$sys_safety_contraint = SystemSafetyConstraints::find($request->input('id'));
+		$sys_safety_contraint->name = $request->input('name');
+		$sys_safety_contraint->save();
+	}
+
 }

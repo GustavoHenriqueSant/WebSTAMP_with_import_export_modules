@@ -30,4 +30,10 @@ class VariableController extends Controller
 		Variable::destroy($request->input('id'));
 	}
 
+	public function edit(Request $request){
+		$variable = Variable::find($request->input('id'));
+		$variable->name = $request->input('name');
+		$variable->save();
+	}
+
 }

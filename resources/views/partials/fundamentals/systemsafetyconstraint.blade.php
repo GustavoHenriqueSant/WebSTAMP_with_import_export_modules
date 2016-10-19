@@ -11,12 +11,17 @@
         @foreach (App\SystemSafetyConstraints::all() as $systemSafetyConstraint)
             <li class="item" id="systemsafetyconstraint-{{$systemSafetyConstraint->id}}">
                 <div class="item__title">
-                    SSC-{{$systemSafetyConstraint->id}}: {{ $systemSafetyConstraint->name }}
+                    SSC-{{$systemSafetyConstraint->id}}: <input type="text" class="item__input" id="systemsafetyconstraint-description-{{$systemSafetyConstraint->id}}" value="{{$systemSafetyConstraint->name}}">
                 </div>
                 <div class="item__actions">
-                    <div class="item__title">
-                        <img src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
-                    </div>
+                    <form action ="/editsystemsafetyconstraint" method="POST" class="edit-form ajaxform" data-edit="systemsafetyconstraint">
+                        <div class="item__title">
+                            <input type="hidden" name="_token" value="{{csrf_token()}}">
+                            <input id="project_id" name="project_id" type="hidden" value="1">
+                            <input id="systemsafetyconstraint_id" name="systemsafetyconstraint_id" type="hidden" value="{{$systemSafetyConstraint->id}}">
+                            <input type="image" src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
+                        </div>
+                    </form>
                     <form action ="/deletesystemsafetyconstraint" method="POST" class="delete-form ajaxform" data-delete="systemsafetyconstraint">
                         <div class="item__title">
                             <input type="hidden" name="_token" value="{{csrf_token()}}">

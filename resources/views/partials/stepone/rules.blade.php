@@ -1,5 +1,5 @@
 <div class="substep__title">
-    Rule
+    Rules - {{$ca->name}}
 </div>
 
 <div class="substep__content">
@@ -15,10 +15,10 @@
             @endforeach
         </div>
 
-        @foreach (App\Rules::select('index')->distinct()->get() as $rule_index)
+        @foreach (App\Rules::where('controlaction_id', $ca->id)->select('index')->distinct()->get() as $rule_index)
         <div class="table-row">
             <div class="text">R{{$rule_index->index}}</div>
-            @foreach (App\Rules::where('index', $rule_index->index)->get() as $rule)
+            @foreach (App\Rules::where('index', $rule_index->index)->where('controlaction_id', $ca->id)->get() as $rule)
                 @if ($rule->state_id == 0)
                     <div class="text">ANY</div>
                 @else

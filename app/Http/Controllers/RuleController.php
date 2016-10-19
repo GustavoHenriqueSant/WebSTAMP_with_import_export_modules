@@ -16,13 +16,13 @@ class RuleController extends Controller
 	public function add(Request $request){
 		$existsVariable = true;
 		$i = 0;
-		$rule_index = Rules::all()->max('index') + 1;
+		$rule_index = Rules::where('controlaction_id', $request->get('controlaction_id'))->max('index') + 1;
 		do {
 			$i++;
 			$rule = new Rules();
 			$rule->index = $rule_index;
 			$rule->state_id = $request->get('variable_id_'.$i);
-			$rule->controlaction_id = 1;
+			$rule->controlaction_id = $request->get('controlaction_id');
 			// $rule->project_id = 1;
 
 			$rule->save();

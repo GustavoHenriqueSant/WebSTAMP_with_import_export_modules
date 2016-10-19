@@ -18,29 +18,38 @@ Route::get('/', ['as' => 'fundamentals', function () {
     return view('pages.index', compact("accidents", "variables", "components"));
 }]);
 
+Route::post('/addsystemgoal', 'SystemGoalController@add');
+Route::post('/editsystemgoal', 'SystemGoalController@edit');
+Route::post('/deletesystemgoal', 'SystemGoalController@delete');
+
 Route::post('/addaccident', 'AccidentController@add');
+Route::post('/editaccident', 'AccidentController@edit');
 Route::post('/deleteaccident', 'AccidentController@delete');
 
 Route::post('/addcomponent', 'ComponentController@add');
+Route::post('/editcomponent', 'ComponentController@edit');
 Route::post('/deletecomponent', 'ComponentController@delete');
 
 Route::post('/addcontrolaction', 'ControlActionController@add');
+Route::post('/editcontrolaction', 'ControlActionController@edit');
 Route::post('/deletecontrolaction', 'ControlActionController@delete');
 
 Route::post('/addhazard', 'HazardController@add');
+Route::post('/edithazard', 'HazardController@edit');
 Route::post('/deletehazard', 'HazardController@delete');
 
-Route::post('/addsystemgoal', 'SystemGoalController@add');
-Route::post('/deletesystemgoal', 'SystemGoalController@delete');
-
 Route::post('/addvariable', 'VariableController@add');
+Route::post('/editvariable', 'VariableController@edit');
 Route::post('/deletevariable', 'VariableController@delete');
 
 Route::post('/addstate', 'StateController@add');
 Route::post('/deletestate', 'StateController@delete');
 
 Route::post('/addsystemsafetyconstraint', 'SystemSafetyConstraintController@add');
+Route::post('/editsystemsafetyconstraint', 'SystemSafetyConstraintController@edit');
 Route::post('/deletesystemsafetyconstraint', 'SystemSafetyConstraintController@delete');
+
+Route::post('/deleteaccidentassociated', 'AccidentHazardController@delete');
 
 Route::post('/addrule', 'RuleController@add');
 
