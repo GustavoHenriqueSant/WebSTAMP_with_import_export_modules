@@ -39,6 +39,7 @@ class CreateForeignKeys extends Migration
 
         Schema::table('variables', function ($table) {
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->foreign('component_id')->references('id')->on('components')->onDelete('cascade');
         });
 
         Schema::table('states', function ($table) {

@@ -1,5 +1,13 @@
+<?php
+    if (!isset($component_id))
+        $component_id = 0;
+?>
 <div class="substep__title">
-    Variables
+    @if($component_id == 0)
+        System Variables
+    @else
+        {{$component_name}} Variables
+    @endif
 </div>
 
 <div class="substep__add" data-component="add-button" data-add="variable">
@@ -8,10 +16,10 @@
 
 <div class="substep__content">
     <ul class="substep__list">
-        @foreach ($variables as $variable)
+        @foreach (App\Variable::where('component_id', $component_id)->get() as $variable)
             <li class="item"  id="variable-{{$variable->id}}">
                 <div class="item__title">
-                    <input type="text" class="item__input" id="variable-description-{{ $variable->id }}" value="{{ $variable->name }}">
+                    <input type="text" class="item__input" id="variable-description-{{ $variable->id }}" value="{{ $variable->name }}" disabled>
                 </div>
                 @foreach(App\State::where('variable_id', $variable->id)->get() as $state)
                     <div class="item__actions__action" id="state-associated-{{$state->id}}">

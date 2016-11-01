@@ -11,7 +11,7 @@
         @foreach (App\SystemSafetyConstraints::all() as $systemSafetyConstraint)
             <li class="item" id="systemsafetyconstraint-{{$systemSafetyConstraint->id}}">
                 <div class="item__title">
-                    SSC-{{$systemSafetyConstraint->id}}: <input type="text" class="item__input" id="systemsafetyconstraint-description-{{$systemSafetyConstraint->id}}" value="{{$systemSafetyConstraint->name}}">
+                    SSC-{{$systemSafetyConstraint->id}}: <input type="text" class="item__input" id="systemsafetyconstraint-description-{{$systemSafetyConstraint->id}}" value="{{$systemSafetyConstraint->name}}" disabled>
                 </div>
                 <div class="item__actions">
                     <form action ="/editsystemsafetyconstraint" method="POST" class="edit-form ajaxform" data-edit="systemsafetyconstraint">

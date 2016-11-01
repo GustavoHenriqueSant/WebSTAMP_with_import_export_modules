@@ -15,16 +15,16 @@
             @endforeach
         </div>
 
-        <form action="/addrule" method="POST">
+        <form action="/addrule" method="POST" class="add-new-rule">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <input type="hidden" name="controlaction_id" value="{{$ca->id}}">
+            <input type="hidden" id="controlaction_id" name="controlaction_id" value="{{$ca->id}}">
             <div class="table-row">
                 @foreach (App\Variable::all() as $variable)
                     @if ($variable->name != "Default")
                     <select id="variable_id_{{$variable->id}}" name="variable_id_{{$variable->id}}" class="text">
-                        <option value="0">ANY</option>
+                        <option value="0" name="ANY">ANY</option>
                         @foreach (App\State::where('variable_id', $variable->id)->get() as $state)
-                            <option value="{{$state->id}}">{{$state->name}}</option>
+                            <option value="{{$state->id}}" name="{{$state->name}}">{{$state->name}}</option>
                         @endforeach
                     </select>
                     @endif

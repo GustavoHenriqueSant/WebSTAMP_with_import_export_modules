@@ -8,13 +8,10 @@
 
 <div class="substep__content" id="controlactions_content" data-components="{{$components}}">
     <ul class="substep__list">
-        @foreach (App\ControlAction::all() as $controlAction)
+        @foreach (App\ControlAction::where('component_id', $component_id)->get() as $controlAction)
             <li class="item" id="controlaction-{{$controlAction->id}}">
                 <div class="item__title">
-                    {{ $controlAction->name }}
-                </div>
-                <div class="item__actions__action">
-                    {{ $controlAction->component->name }}
+                    {{ $controlAction->name }} 
                 </div>
                 <div class="item__actions">
                     <div class="item__title">
@@ -31,5 +28,10 @@
                 </div>
             </li>
         @endforeach
+        @if(App\ControlAction::where('component_id', $component_id)->count() == 0)
+            <div class="item__title">
+                No Control Action was added.
+            </div>
+        @endif
     </ul>
 </div>

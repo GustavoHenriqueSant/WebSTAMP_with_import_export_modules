@@ -14,6 +14,7 @@ class RuleController extends Controller
 {
     
 	public function add(Request $request){
+		/*
 		$existsVariable = true;
 		$i = 0;
 		$rule_index = Rules::where('controlaction_id', $request->get('controlaction_id'))->max('index') + 1;
@@ -31,16 +32,24 @@ class RuleController extends Controller
 		}while($existsVariable);
 
 		return redirect(route('stepone'));
+		*/
 
-		// return response()->json([
-  //       	'id' => $rule->id,
-  //       	'state_id' => $rule->state_id,
-  //       	'controlaction_id' => $rule->state_id
-  //   	]);
+		$rule = new Rules();
+		$rule->index = $request->input('rule_index');
+		$rule->state_id = $request->input('state_id');
+		$rule->controlaction_id = $request->input('controlaction_id');
+		$rule->save();
+
+		 return response()->json([
+         	'id' => $rule->id,
+         	'rule_index' => $rule->index,
+         	'state_id' => $rule->state_id,
+         	'controlaction_id' => $rule->controlaction_id
+     	]);
 	}
 
 	public function delete(Request $request){
-		Rules::destroy($request->get('id'));
+		//Rules::destroy($request->get('id'));
 	}
 
 }

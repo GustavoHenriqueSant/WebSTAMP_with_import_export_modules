@@ -104,10 +104,12 @@ if (actualPage != 'stepone') {
     } else if (activity === 'hazard') { 
       var accidents_associated = form.find("#hazard-accident-association").val();
       var $newHazard = $('#hazards').find(".substep__list");
+      var accidents_associated_id;
       axios.post('/addhazard', {
         name : name,
         id : id,
-        accidents_associated : accidents_associated
+        accidents_associated : accidents_associated,
+        accidents_associated_id : accidents_associated_id
       })
       .then(function(response) {
         $newHazard.append(hazard(response.data));
@@ -309,43 +311,9 @@ if (actualPage != 'stepone') {
     });
 
 
-  // MODAL
-
-  $(document).ready(function(){
-      $("a[rel=modal]").click( function(ev){
-          ev.preventDefault();
-   
-          var id = $(this).attr("href");
-   
-          var screen_height = $(document).height();
-          var screen_width = $(window).width();
-       
-          //colocando o fundo preto
-          $('#modal-mask').css({'width':screen_width,'height':screen_height});
-          $('#modal-mask').fadeIn(1000); 
-          $('#modal-mask').fadeTo("slow",0.8);
-   
-          var left = ($(window).width() /2) - ( $(id).width() / 2 );
-          var top = ($(window).height() / 2) - ( $(id).height() / 2 );
-       
-          $(id).css({'top':top,'left':left});
-          $(id).show();   
-      });
-   
-      $("#modal-mask").click( function(){
-          $(this).hide();
-          $(".modal-window").hide();
-      });
-   
-      $('.modal-close').click(function(ev){
-          ev.preventDefault();
-          $("#modal-mask").hide();
-          $(".modal-window").hide();
-      });
-  });
-
 
 // FUNCTION TO EDIT FUNDAMENTALS
+
 function edit_fundamentals(id, activity) {
   if (activity == "accident") {
     var name = $("#accident-description-"+id).val();
@@ -354,7 +322,7 @@ function edit_fundamentals(id, activity) {
         name : name
       })
       .then(function (response) {
-        $("#accident-description-" + id).replaceWith('<input type="text" class="item__input" id="accident-description-'+id+'" value="'+name+'" size="100">');
+        $("#accident-description-" + id).replaceWith('<input type="text" class="item__input" id="accident-description-'+id+'" value="'+name+'" size="'+name.length+'" disabled>');
       })
       .catch(function (error) {
         console.log(error);
@@ -368,6 +336,7 @@ function edit_fundamentals(id, activity) {
       })
       .then(function (response) {
         $("#hazard-description-" + id).replaceWith('<input type="text" class="item__input" id="hazard-description-'+id+'" value="'+name+'" size="'+name.length+'">');
+        document.getElementById("hazard-description-" + id).disabled = true;
       })
       .catch(function (error) {
         console.log(error);
@@ -381,6 +350,7 @@ function edit_fundamentals(id, activity) {
       })
       .then(function (response) {
         $("#systemgoal-description-" + id).replaceWith('<input type="text" class="item__input" id="systemgoal-description-'+id+'" value="'+name+'" size="100">');
+        document.getElementById("systemgoal-description-" + id).disabled = true;
       })
       .catch(function (error) {
         console.log(error);
@@ -394,6 +364,7 @@ function edit_fundamentals(id, activity) {
       })
       .then(function (response) {
         $("#systemsafetyconstraint-description-" + id).replaceWith('<input type="text" class="item__input" id="systemsafetyconstraint-description-'+id+'" value="'+name+'" size="100">');
+        document.getElementById("systemsafetyconstraint-description-" + id).disabled = true;
       })
       .catch(function (error) {
         console.log(error);
@@ -407,6 +378,8 @@ function edit_fundamentals(id, activity) {
       })
       .then(function (response) {
         $("#variable-description-" + id).replaceWith('<input type="text" class="item__input" id="variable-description-'+id+'" value="'+name+'" size="'+name.length+'">');
+        document.getElementById("variable-description-" + id).className = "item__input";
+        document.getElementById("variable-description-" + id).disabled = true;
       })
       .catch(function (error) {
         console.log(error);
@@ -416,7 +389,7 @@ function edit_fundamentals(id, activity) {
 }
 
 // EDIT WHEN INPUT LOSES FOCUS
-$(".item__input").on('blur', function(event) {
+$("body").on('blur', '.item__input__active', function(event) {
   event.preventDefault();
   var split = event.currentTarget.id.split("-");
   var id = split[2];
@@ -425,7 +398,7 @@ $(".item__input").on('blur', function(event) {
 });
 
 // EDIT WHEN KEY "ENTER" WAS PRESSED
-$(".item__input").keypress(function(event) {
+$("body").on('keypress', '.item__input__active', function(event) {
   if (event.which == 13) {
     event.preventDefault();
     var split = event.currentTarget.id.split("-");
@@ -436,85 +409,39 @@ $(".item__input").keypress(function(event) {
 });
 
 
-  $('body').on('submit', '.edit-form', function(event) {
+  $('body').on('click', '.edit-form', function(event) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var activity = form.data("edit");
     if (activity == "accident") {
       var id = form.find("#accident_id").val();
-      var name = $("#accident-description-"+id).val();
-      axios.post('/editaccident', {
-          id : id,
-          name : name
-        })
-        .then(function (response) {
-          $("#accident-description-" + id).replaceWith('<input type="text" class="item__input" id="accident-description-'+id+'" value="'+name+'" size="100">');
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        return false;
+      $('#accident-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
     } else if (activity == "hazard") {
       var id = form.find("#hazard_id").val();
-      var name = $("#hazard-description-"+id).val();
-      axios.post('/edithazard', {
-          id : id,
-          name : name
-        })
-        .then(function (response) {
-          $("#hazard-description-" + id).replaceWith('<input type="text" class="item__input" id="hazard-description-'+id+'" value="'+name+'" size="'+name.length+'">');
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        return false;
+      $('#hazard-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
     } else if (activity == "systemgoal") {
       var id = form.find("#systemgoal_id").val();
-      var name = $("#systemgoal-description-"+id).val();
-      axios.post('/editsystemgoal', {
-          id : id,
-          name : name
-        })
-        .then(function (response) {
-          $("#systemgoal-description-" + id).replaceWith('<input type="text" class="item__input" id="systemgoal-description-'+id+'" value="'+name+'" size="100">');
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        return false;
+      $('#systemgoal-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
     } else if (activity == "systemsafetyconstraint") {
       var id = form.find("#systemsafetyconstraint_id").val();
-      var name = $("#systemsafetyconstraint-description-"+id).val();
-      axios.post('/editsystemsafetyconstraint', {
-          id : id,
-          name : name
-        })
-        .then(function (response) {
-          $("#systemsafetyconstraint-description-" + id).replaceWith('<input type="text" class="item__input" id="systemsafetyconstraint-description-'+id+'" value="'+name+'" size="100">');
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        return false;
+      $('#systemsafetyconstraint-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
     } else if (activity == "variable") {
       var id = form.find("#variable_id").val();
-      var name = $("#variable-description-"+id).val();
-      axios.post('/editvariable', {
-          id : id,
-          name : name
-        })
-        .then(function (response) {
-          $("#variable-description-" + id).replaceWith('<input type="text" class="item__input" id="variable-description-'+id+'" value="'+name+'" size="'+name.length+'">');
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        return false;
+      $('#variable-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
     }
 
   });
 
   $('.item__input').on('keyup', function(event) {
+    event.currentTarget.size = event.currentTarget.value.length;
+  });
+
+  $('.item__input__active').on('keyup', function(event) {
     event.currentTarget.size = event.currentTarget.value.length;
   });
 
@@ -526,7 +453,7 @@ $(".item__input").keypress(function(event) {
 
   // DELETE BLUE ITEM -> ACCIDENT(HAZARD) AND VARIABLE(STATE))
 
-  $('.item__delete__box').click(function(event) {
+  $('body').on('click', '.item__delete__box', function(event) {
     var id = $(event.currentTarget).data('index');
     var type = $(event.currentTarget).data('type');
     vex.dialog.confirm({
@@ -560,6 +487,19 @@ $(".item__input").keypress(function(event) {
       }
     });
   });
+
+  var acc = document.getElementsByClassName("accordion");
+
+  var index = 0;
+
+  for (index = 0; index < acc.length; index++) {
+      acc[index].onclick = function(){
+          this.classList.toggle("active");
+          this.nextElementSibling.classList.toggle("show");
+    }
+  }
+
+
   // STEP 1
 } else {
   // Require JQuery
@@ -567,7 +507,7 @@ $(".item__input").keypress(function(event) {
 
   $(function() {
     // Get all elements with class step_one
-    var $op1 = $('.testesom');
+    var $op1 = $('.hide-control-actions');
 
     // Verifies if there is Control Actions stored
     if ($op1 != null)
@@ -588,4 +528,34 @@ $(".item__input").keypress(function(event) {
   });
 
 });
+
+  var axios = require('./axios');
+
+  $('body').on('submit', '.add-new-rule', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var controlaction_id = form.find("#controlaction_id").val();
+    var $newRule = $('#rule-control-action-'+controlaction_id).find(".container-fluid");
+    var rule_index = $('#rule-control-action-'+controlaction_id).find(".rules-ca-"+controlaction_id).length+1;
+    var append = '<div class="table-row rules-ca-'+controlaction_id+'"><div class="text">R'+rule_index+'</div>';
+    var variables = form.find('[id^="variable_id_"]').each(function() {
+      var state_id = form.find(this).val();
+      var name = $(this).find('option:selected').attr('name');
+      append += '<div class="text">'+name+'</div>';
+      var id = 0;
+      axios.post('/addrule', {
+        id : id,
+        rule_index: rule_index,
+        state_id : state_id,
+        controlaction_id : controlaction_id
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    });
+    append += '</div>';
+    $newRule.append(append);  
+  });
+
 }
+

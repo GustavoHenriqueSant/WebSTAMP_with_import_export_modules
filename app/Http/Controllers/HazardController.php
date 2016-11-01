@@ -25,18 +25,21 @@ class HazardController extends Controller
 		$hazard->save();
 
 		$accidents = $request->input('accidents_associated');
+		$accidents_associated_id = array();
 
 		foreach($accidents as $accident_id){
 			$accident_associated = new AccidentsHazards();
 			$accident_associated->accidents_id = $accident_id;
 			$accident_associated->hazards_id = $hazard->id;
 			$accident_associated->save();
+			array_push($accidents_associated_id, $accident_associated->id);
 		}
 
 		return response()->json([
         	'name' => $hazard->name,
         	'id' => $hazard->id,
-        	'accidents_associated' => $accidents
+        	'accidents_associated' => $accidents,
+        	'accidents_associated_id' => $accidents_associated_id
     	]);
 	}
 

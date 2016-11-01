@@ -14,27 +14,32 @@ class VariablesTableSeeder extends Seeder
         DB::table('variables')->insert([
         	'id' => 1,
         	'name' => 'Door Position',
-        	'project_id' => 1
+        	'project_id' => 1,
+            'component_id' => 0
         ]);
         DB::table('variables')->insert([
         	'id' => 2,
         	'name' => 'Door Situation',
-        	'project_id' => 1
+        	'project_id' => 1,
+            'component_id' => 0
         ]);
         DB::table('variables')->insert([
         	'id' => 3,
         	'name' => 'Train Position',
-        	'project_id' => 1
+        	'project_id' => 1,
+            'component_id' => 3
         ]);
         DB::table('variables')->insert([
         	'id' => 4,
         	'name' => 'Train Motion',
-        	'project_id' => 1
+        	'project_id' => 1,
+            'component_id' => 3
         ]);
         DB::table('variables')->insert([
         	'id' => 5,
         	'name' => 'Emergency',
-        	'project_id' => 1
+        	'project_id' => 1,
+            'component_id' => 3
         ]);
     }
 }

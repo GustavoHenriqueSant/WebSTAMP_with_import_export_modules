@@ -11,7 +11,7 @@
         @foreach (App\Hazards::all() as $hazard)
             <li class="item" id="hazard-{{$hazard->id}}">
                 <div class="item__title">
-                    H-{{$hazard->id}}: <input type="text" class="item__input" id="hazard-description-{{$hazard->id}}" value="{{ $hazard->name }}">
+                    H-{{$hazard->id}}: <input type="text" class="item__input" id="hazard-description-{{$hazard->id}}" value="{{ $hazard->name }}" disabled>
                 </div>
                 @foreach($hazard->accidentshazards as $accidentshazards)
                     <div class="item__actions__action" id="accident-associated-{{$accidentshazards->id}}">

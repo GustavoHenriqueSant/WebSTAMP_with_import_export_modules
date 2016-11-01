@@ -84,7 +84,16 @@
   }
 
   &__input {
+    background: white;
     border: 0;
+    font-size: 1rem;
+    color: black;
+  }
+
+  &__input__active {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
     font-size: 1rem;
   }
 

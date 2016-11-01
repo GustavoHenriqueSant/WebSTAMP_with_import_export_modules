@@ -1,9 +1,9 @@
 module.exports = function(context) {
     var size = context.name.length;
     var accidents_associated = "";
-    context.accidents_associated.forEach(function(value){
-        accidents_associated += `<div class="item__actions__action">
-                [A-`+value+`]
+    context.accidents_associated.forEach(function(value, index){
+        accidents_associated += `<div class="item__actions__action" id="accident-associated-`+context.accidents_associated_id[index]+`">
+                <a href="javascript:;" class="item__delete__box" data-type="hazard" data-index="`+context.accidents_associated_id[index]+`">×</a> [A-`+value+`]
             </div>`;
     });
     return `
