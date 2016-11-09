@@ -25,7 +25,19 @@ class CreateForeignKeys extends Migration
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
 
-        Schema::table('components', function ($table) {
+        Schema::table('actuators', function ($table) {
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+        });
+
+        Schema::table('controllers', function ($table) {
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+        });
+
+        Schema::table('controlled_processes', function ($table) {
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+        });
+
+        Schema::table('sensors', function ($table) {
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
 
@@ -34,12 +46,12 @@ class CreateForeignKeys extends Migration
         });
 
         Schema::table('control_actions', function ($table) {
-            $table->foreign('component_id')->references('id')->on('components')->onDelete('cascade');
+            $table->foreign('controller_id')->references('id')->on('controllers')->onDelete('cascade');
         });
 
         Schema::table('variables', function ($table) {
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-            $table->foreign('component_id')->references('id')->on('components')->onDelete('cascade');
+            $table->foreign('controller_id')->references('id')->on('controllers')->onDelete('cascade');
         });
 
         Schema::table('states', function ($table) {

@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ControlAction extends Model
 {
-    public function component(){
-		return $this->belongsTo(Components::class);
+    public function controller(){
+		return $this->belongsTo(Controllers::class);
 	}
 
 }

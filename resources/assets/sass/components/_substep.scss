@@ -116,9 +116,24 @@
       background-color: $color-primary;
       /*cursor: pointer;*/
     }
+
+    &__add {
+      display: inline-block;
+      margin-left: 5px;
+      font-size: 0.9rem;
+      border-radius: 3px;
+      padding: 2px 5px;
+      color: $color-white;
+      cursor: pointer;
+    }
+
   }
 
   &__no__display {
     display : none;
   }
+}
+
+.states-associated {
+  width : 100%;
 }

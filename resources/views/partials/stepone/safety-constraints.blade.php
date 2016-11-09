@@ -1,5 +1,5 @@
 <div class="substep__title">
-    Safety Constraints - {{$ca->name}}
+    Unsafe Control Actions and Safety Constraints associated - {{$ca->name}}
 </div>
 
 <div class="substep__content">
@@ -22,7 +22,7 @@
         ?>
         <div class="table-row">
             <div class="text">
-                {{$ca->component->name}}<b> provides</b> {{$ca->name}} <b>when</b>
+                {{$ca->controller->name}}<b> provides</b> {{$ca->name}} <b>when</b>
                 @foreach (App\Rules::where('index', $rule_index->index)->where('controlaction_id', $ca->id)->where('state_id', '>', 0)->get() as $rule)
                     @if($iterations == 0)
                         {{App\State::find($rule->state_id)->name}}

@@ -9,7 +9,7 @@ module.exports = function(context) {
     return `
         <li class="item" id="hazard-${context.id}">
             <div class="item__title">
-                H-${context.id}: <input type="text" class="item__input" id="hazard-description-${context.id}" value="${context.name}" size="${size}" onkeyup="this.size=this.value.length">
+                H-${context.id}: <input type="text" class="item__input" id="hazard-description-${context.id}" value="${context.name}" size="${size}" onkeyup="this.size=this.value.length" disabled>
             </div>
             ${accidents_associated}
             <div class="item__actions">

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ControllersTableSeeder extends Seeder
+class ActuatorsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,9 +11,9 @@ class ControllersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('controllers')->insert([
+        DB::table('actuators')->insert([
             'id' => 1,
-            'name' => 'Train Door Controller',
+            'name' => 'Train Door Actuator',
             'project_id' => 1
         ]);
     }

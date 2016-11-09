@@ -9,8 +9,6 @@ use App\Http\ControlAction;
 // Namespace conflicting. I need to rename to "CA"
 use App\ControlAction as CA;
 
-use Illuminate\Routing\Redirector;
-
 class ControlActionController extends Controller
 {
     
@@ -18,14 +16,14 @@ class ControlActionController extends Controller
 		$controlAction = new CA();
 		$controlAction->name = $request->input('name');
 		$controlAction->description = "Description";
-		$controlAction->component_id = $request->input('component_id');
+		$controlAction->controller_id = $request->input('controller_id');
 
 		$controlAction->save();
 
 		return response()->json([
 			'id' => $controlAction->id,
         	'name' => $controlAction->name,
-        	'component_id' => $controlAction->component_id
+        	'controller_id' => $controlAction->controller_id
     	]);
 	}
 

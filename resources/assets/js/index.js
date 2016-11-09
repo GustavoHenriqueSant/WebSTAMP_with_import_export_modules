@@ -1,6 +1,8 @@
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
 
 if (actualPage != 'stepone') {
+  var $ = require('jquery');
+
   var Hazard = require('./elements/hazards');
   //var State = require('./elements/states');
   var ControlActions = require('./elements/controlactions');
@@ -13,13 +15,19 @@ if (actualPage != 'stepone') {
   Hazard.init();
   //State.init();
   ControlActions.init();
-  var fundamentals = ['hazard', 'component', 'systemgoal', 'accident', 'controlaction', 'variable', 'state', 'systemsafetyconstraint'];
-
+  var fundamentals = ['hazard', 'component', 'systemgoal', 'accident', 'systemsafetyconstraint'];
+  $('.variables-content').each(function(index, f){
+    fundamentals.push(f.id);
+  })
+  $('.controlactions-content').each(function(index, f){
+    fundamentals.push(f.id);
+  })
   fundamentals.forEach(function(f) {
     var drop = new Drop({
       target: document.querySelector('[data-add="' + f + '"]'),
       content: document.querySelector('[data-drop="' + f + '"]'),
       openOn: 'click',
+      remove: true,
       tetherOptions: {
         attachment: 'top left',
         targetAttachment: 'middle right',
@@ -36,16 +44,6 @@ if (actualPage != 'stepone') {
         Hazard.showAccidents();
       }
     })
-    drop.on("open", function() {
-      if (f === "state"){
-        //State.showVariables();
-      }
-    })
-    drop.on("open", function() {
-      if (f === "controlaction"){
-        ControlActions.showControllers();
-      }
-    })
   });
 
   var axios = require('./axios');
@@ -54,6 +52,9 @@ if (actualPage != 'stepone') {
   var systemgoal = require('./templates/systemgoal_template');
   var accident = require('./templates/accident_template');
   var hazard = require('./templates/hazard_template');
+  var actuator = require('./templates/actuator_template');
+  var controlledprocess = require('./templates/controlledprocess_template');
+  var sensor = require('./templates/sensor_template');
   var component = require('./templates/component_template');
   var controlaction = require('./templates/controlaction_template');
   var variable = require('./templates/variable_template');
@@ -63,8 +64,6 @@ if (actualPage != 'stepone') {
 
   // ADD
 
-
-  var $ = require('jquery');
   $('body').on('submit', '.add-form', function(event) {
     event.preventDefault();
     var form = $(event.currentTarget);
@@ -121,51 +120,71 @@ if (actualPage != 'stepone') {
     // Verify if activity is component
     else if (activity === 'component') {
     	var type = form.find("#component-type").val();
-    	var $newComponent = $('#components').find("#add-"  + type.toLowerCase());
-    	axios.post('/addcomponent', {
-        name : name,
-        type : type,
-        id : id
-      })
-      .then(function(response) {
-        if (type === 'Controller') {
-        	ControlActions.addController(response.data);
-        }
-        $newComponent.append(component(response.data));
-      })
-      .catch(function(error) {
-        console.log(error);
-      })
+      if (type === 'Actuator') {
+        var $newComponent = $('#actuators');
+        axios.post('/addactuator', {
+          name : name,
+          type : type,
+          id : id
+        })
+        .then(function(response) {
+          location.reload();
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
+      } else if (type === 'ControlledProcess') {
+        var $newComponent = $('#controlledprocess');
+        axios.post('/addcontrolledprocess', {
+          name : name,
+          id : id
+        })
+        .then(function(response) {
+          location.reload();
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
+      } else if (type === "Controller") { 
+        var $newComponent = $('#controllers');
+        axios.post('/addcontroller', {
+          name : name,
+          id : id
+        })
+        .then(function(response) {
+          location.reload();
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
+      } else if (type === "Sensor"){
+        var $newComponent = $('#sensors');
+        axios.post('/addsensor', {
+          name : name,
+          id : id
+        })
+        .then(function(response) {
+          location.reload();
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
+      }
     }
     // Verify if activity is control control action
-    else if (activity === 'controlaction'){
-    	var component_id = form.find("#controller-association").val();
-    	var t = form.find("#variable-association").val();
-    	var controller_name = form.find("#controller-association option:selected").text();
-    	var $newControlAction = $('#controlactions').find(".substep__list");
+    else if (activity.indexOf("controlaction") != -1){
+    	var controller_id = activity.split("-")[1];
+    	var $newControlAction = $('#controlactions_content-' + controller_id).find(".substep__list");
+      var id = 0;
+      var name = form.find("#controlaction-" + controller_id + "-name").val();
+      console.log(id + " " + controller_id + " " + name);
     	axios.post('/addcontrolaction', {
         name : name,
-        component_id : component_id,
-        controller_name : controller_name,
+        controller_id : controller_id,
         id : id
       })
       .then(function(response) {
-      	$newControlAction.append(controlaction(response.data, controller_name));
-      })
-      .catch(function(error) {
-        console.log(error);
-      })
-    }
-    // Verify if activity is variable
-    else if (activity === 'variable') {
-    	var $newVariable = $('#variables').find(".substep__list");
-      axios.post('/addvariable', {
-        name : name,
-        id : id
-      })
-      .then(function(response) {
-        //State.addVariable(response.data);
-        $newVariable.append(variable(response.data));
+      	$newControlAction.append(controlaction(response.data));
       })
       .catch(function(error) {
         console.log(error);
@@ -189,7 +208,7 @@ if (actualPage != 'stepone') {
         console.log(error);
       })
     }
-    // Verify if activity is variable
+    // Verify if activity is System Safety Constraint
     else if (activity === 'systemsafetyconstraint') {
       var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
       axios.post('/addsystemsafetyconstraint', {
@@ -198,6 +217,37 @@ if (actualPage != 'stepone') {
       })
       .then(function(response) {
         $newSSC.append(systemsafetyconstraint(response.data));
+      })
+      .catch(function(error) {
+        console.log(error);
+      })
+    }
+    // Verify if activity is variable
+    else {
+      var variable_split = activity.split('-');
+      var controller_id = 0;
+      var $newVariable = "";
+      var id = 0;
+      if (variable_split.length > 2){
+        controller_id = variable_split[2];
+        $newVariable = $('#variables-' + controller_id).find(".substep__list");
+      }
+      else
+        $newVariable = $('#variables-0').find(".substep__list");
+      var name = form.find("#variable-" + controller_id + "-name").val();
+      var states = [];
+      form.find(".states-associated").each(function(index){
+        states.push($(this).val());
+      });
+      axios.post('/addvariable', {
+        name : name,
+        id : id,
+        controller_id : controller_id,
+        states : states
+      })
+      .then(function(response) {
+        //State.addVariable(response.data);
+        $newVariable.append(variable(response.data));
       })
       .catch(function(error) {
         console.log(error);
@@ -377,6 +427,7 @@ function edit_fundamentals(id, activity) {
         name : name
       })
       .then(function (response) {
+        $('#state-variable-'+id).hide();
         $("#variable-description-" + id).replaceWith('<input type="text" class="item__input" id="variable-description-'+id+'" value="'+name+'" size="'+name.length+'">');
         document.getElementById("variable-description-" + id).className = "item__input";
         document.getElementById("variable-description-" + id).disabled = true;
@@ -431,6 +482,7 @@ $("body").on('keypress', '.item__input__active', function(event) {
       return false;
     } else if (activity == "variable") {
       var id = form.find("#variable_id").val();
+      $('#state-variable-'+id).show();
       $('#variable-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
       return false;
     }
@@ -488,17 +540,12 @@ $("body").on('keypress', '.item__input__active', function(event) {
     });
   });
 
-  var acc = document.getElementsByClassName("accordion");
+  $('body').on('click', '.accordion', function (event){
+    var accordion = $(event.currentTarget);
+    accordion.toggleClass('active');
+    accordion.next().toggleClass('show')
 
-  var index = 0;
-
-  for (index = 0; index < acc.length; index++) {
-      acc[index].onclick = function(){
-          this.classList.toggle("active");
-          this.nextElementSibling.classList.toggle("show");
-    }
-  }
-
+  });
 
   // STEP 1
 } else {

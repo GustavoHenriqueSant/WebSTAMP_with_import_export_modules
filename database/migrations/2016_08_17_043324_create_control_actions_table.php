@@ -16,7 +16,7 @@ class CreateControlActionsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description');
-            $table->integer('component_id')->unsigned();
+            $table->integer('controller_id')->unsigned();
             $table->timestamps();
         });
     }

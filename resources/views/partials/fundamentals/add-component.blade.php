@@ -12,7 +12,11 @@
     </label>
     <select id="component-type" name="component-type" class="add-drop__select add-drop__input" required>
         <option value="Actuator">Actuator</option>
-        <option value="ControlledProcess">Controlled Process</option>
+        @if (App\ControlledProcess::where('project_id', $project_id)->count() > 0)
+            <option value="ControlledProcess" disabled>Controlled Process</option>
+        @else
+            <option value="ControlledProcess">Controlled Process</option>
+        @endif
         <option value="Controller">Controller</option>
         <option value="Sensor">Sensor</option>
     </select>

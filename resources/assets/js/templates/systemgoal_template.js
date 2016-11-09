@@ -3,7 +3,7 @@ module.exports = function(context) {
     return `
         <li class="item" id="systemgoal-${context.id}">
                 <div class="item__title">
-                    G-${context.id}: <input type="text" class="item__input" id="systemgoal-description-${context.id}" value="${context.name}" size="${size}" onkeypress="this.size=this.value.length">
+                    G-${context.id}: <input type="text" class="item__input" id="systemgoal-description-${context.id}" value="${context.name}" size="${size}" onkeypress="this.size=this.value.length" disabled>
                 </div>
                 <div class="item__actions">
 	                <form action ="/editsystemgoal" method="POST" class="edit-form ajaxform" data-edit="systemgoal">

@@ -44,11 +44,11 @@
             <div class="text">{{$variable->name}}</div>
         @endforeach
         <div class="text">Index Rule</div>
-        <div class="text">CA is provided</div>
-        <div class="text">Wrong time/Order of CA</div>
-        <div class="text">CA provided too early</div>
-        <div class="text">CA provided too late</div>
-        <div class="text">CA not provided</div>
+        <div class="text">Control Action provided</div>
+        <div class="text">Control Action not provided</div>
+        <div class="text">Wrong time/order of Control Action</div>
+        <div class="text">Control Action provided too early</div>
+        <div class="text">Control Action provided too late</div>
         </div>
 
         @while($total_loop > 0)
