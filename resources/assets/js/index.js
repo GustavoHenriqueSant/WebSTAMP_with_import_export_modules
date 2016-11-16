@@ -15,11 +15,14 @@ if (actualPage != 'stepone') {
   Hazard.init();
   //State.init();
   ControlActions.init();
-  var fundamentals = ['hazard', 'component', 'systemgoal', 'accident', 'systemsafetyconstraint'];
+  var fundamentals = ['hazard', 'component', 'systemgoal', 'accident', 'systemsafetyconstraint', 'variable-0'];
   $('.variables-content').each(function(index, f){
     fundamentals.push(f.id);
   })
   $('.controlactions-content').each(function(index, f){
+    fundamentals.push(f.id);
+  })
+  $('.connections-content').each(function(index, f){
     fundamentals.push(f.id);
   })
   fundamentals.forEach(function(f) {
@@ -56,8 +59,10 @@ if (actualPage != 'stepone') {
   var controlledprocess = require('./templates/controlledprocess_template');
   var sensor = require('./templates/sensor_template');
   var component = require('./templates/component_template');
+  var connection = require('./templates/connection_template');
   var controlaction = require('./templates/controlaction_template');
   var variable = require('./templates/variable_template');
+  var accident = require('./templates/connection_template');
   var state = require('./templates/state_template');
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
 
@@ -223,7 +228,33 @@ if (actualPage != 'stepone') {
       })
     }
     // Verify if activity is variable
-    else {
+    else if (activity.indexOf("connections") != -1){
+      var type_output = activity.split("-")[1];
+      var output_component_id = activity.split("-")[2];
+      var output_name = form.find("#" + activity + " option:selected").text();
+      var input_name = form.find('#component_name').val();
+      var input = form.find("#" + activity + " option:selected").val();
+      var type_input = input.split("-")[0];
+      var input_component_id = input.split("-")[1];
+      var id = 0;
+      var $newConnection = $('#connection-' + type_output + '-' + output_component_id).find(".substep__list");
+      axios.post('/addconnections', {
+        input_component_id : input_component_id,
+        type_input : type_input,
+        input_name : input_name,
+        output_component_id : output_component_id,
+        type_output : type_output,
+        output_name : output_name,
+        id : id
+      })
+      .then(function(response) {
+        $newConnection.append(connection(response.data));
+      })
+      .catch(function(error) {
+        console.log(error);
+      })
+
+    }else {
       var variable_split = activity.split('-');
       var controller_id = 0;
       var $newVariable = "";
@@ -246,8 +277,8 @@ if (actualPage != 'stepone') {
         states : states
       })
       .then(function(response) {
-        //State.addVariable(response.data);
-        $newVariable.append(variable(response.data));
+        $newVariable.append(variable(response.data, true));
+        $('.variables-content').find(".substep__list").append(variable(response.data, false));
       })
       .catch(function(error) {
         console.log(error);
@@ -347,7 +378,22 @@ if (actualPage != 'stepone') {
                 id : id,
               })
               .then(function (response) {
+                console.log("#variable-" + id);
+                $(".variable-" + id).remove();
                 $("#variable-" + id).remove();
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+              return false;
+          } else if (activity === 'connection') {
+            var id = form.find("#connection_id").val();
+            console.log("Id: " + connection_id);
+            axios.post('/deleteconnections', {
+                id : id,
+              })
+              .then(function (response) {
+                $("#connection-" + id).remove();
               })
               .catch(function (error) {
                 console.log(error);
@@ -529,6 +575,7 @@ $("body").on('keypress', '.item__input__active', function(event) {
                 })
                 .then(function (response) {
                   $("#state-associated-" + id).remove();
+                  $(".state-associated-" + id).remove();
                 })
                 .catch(function (error) {
                   console.log(error);
@@ -543,10 +590,20 @@ $("body").on('keypress', '.item__input__active', function(event) {
   $('body').on('click', '.accordion', function (event){
     var accordion = $(event.currentTarget);
     accordion.toggleClass('active');
-    accordion.next().toggleClass('show')
-
+    accordion.next().toggleClass('show');
   });
 
+/*
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+    acc[i].onclick = function(){
+        this.classList.toggle("active");
+        this.nextElementSibling.classList.toggle("show");
+    }
+}
+*/
   // STEP 1
 } else {
   // Require JQuery

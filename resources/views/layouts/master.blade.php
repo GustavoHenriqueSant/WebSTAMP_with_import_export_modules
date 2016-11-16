@@ -36,7 +36,7 @@
         </div>
         <div class="navbar__item__substep">
           <a href="/#systemsafetyconstraint" class="navbar__item__link">
-            Safety Constraint
+            System Safety Constraints
           </a>
         </div>
         <div class="navbar__item__substep">
@@ -44,17 +44,17 @@
             Components
           </a>
         </div>
-        <div class="navbar__item__substep">
+        <!--<div class="navbar__item__substep">
           <a href="/#controlactions" class="navbar__item__link">
-            Control Action
+            Control Actions
           </a>
         </div>
         <div class="navbar__item__substep">
           <a href="/#variables" class="navbar__item__link">
-            Variable
+            Variables
           </a>
         </div>
-        <!--<div class="navbar__item__substep">
+        <div class="navbar__item__substep">
           <a href="/#states" class="navbar__item__link">
             State
           </a>

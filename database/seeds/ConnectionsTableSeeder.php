@@ -14,30 +14,30 @@ class ConnectionsTableSeeder extends Seeder
         DB::table('connections')->insert([
             'id' => 1,
             'output_component_id' => 1,
-            'type_output' => 'Controller',
-            'input_component_id' => 0,
-            'type_input' => 'Actuator'
+            'type_output' => 'controller',
+            'input_component_id' => 1,
+            'type_input' => 'actuator'
         ]);
         DB::table('connections')->insert([
             'id' => 2,
-            'output_component_id' => 0,
-            'type_output' => 'Actuator',
+            'output_component_id' => 1,
+            'type_output' => 'actuator',
             'input_component_id' => 1,
-            'type_input' => 'Controlled Process'
+            'type_input' => 'controlled_process'
         ]);
         DB::table('connections')->insert([
             'id' => 3,
-            'output_component_id' => 0,
-            'type_output' => 'Controlled Process',
+            'output_component_id' => 1,
+            'type_output' => 'controlled_process',
             'input_component_id' => 1,
-            'type_input' => 'Sensor'
+            'type_input' => 'sensor'
         ]);
         DB::table('connections')->insert([
             'id' => 4,
             'output_component_id' => 1,
-            'type_output' => 'Sensor',
-            'input_component_id' => 0,
-            'type_input' => 'Controller'
+            'type_output' => 'sensor',
+            'input_component_id' => 1,
+            'type_input' => 'controller'
         ]);
     }
 }

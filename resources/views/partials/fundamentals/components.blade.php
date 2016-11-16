@@ -13,6 +13,10 @@
             <button class="accordion"><b>[Controller]</b> {{$component->name}}</button>
             <div class="panel">
                 
+                <div class="substep substep--connections" id="connection-controller-{{$component->id}}">
+                    @include('partials.fundamentals.connections', ['component_id' => $component->id, 'name' => $component->name, 'type' => 'controller'])
+                </div>
+
                 <div class="substep substep--controlactions" id="controlaction-{{$component->id}}">
                     @include('partials.fundamentals.controlactions', ['component_id'=> $component->id])
                 </div>
@@ -52,6 +56,9 @@
                             </li>
                     @endforeach
                 </ul>
+                <div class="substep substep--connections" id="connection-actuator-{{$component->id}}">
+                    @include('partials.fundamentals.connections', ['component_id' => $component->id, 'name' => $component->name, 'type' => 'actuator'])
+                </div>
             </div>
         @endforeach
     </div>
@@ -83,6 +90,10 @@
                         </li>
                     @endforeach
                 </ul>
+                <div class="substep substep--connections" id="connection-controlled_process-{{$component->id}}">
+                    @include('partials.fundamentals.connections', ['component_id' => $component->id, 'name' => $component->name, 'type' => 'controlled_process'])
+                </div>
+                
                 <div class="substep substep--variables-associated" id="variables-0">
                     @include('partials.fundamentals.variables')
                 </div>
@@ -117,6 +128,9 @@
                         </li>
                     @endforeach
                 </ul>
+                <div class="substep substep--connections" id="connection-sensor-{{$component->id}}">
+                    @include('partials.fundamentals.connections', ['component_id' => $component->id, 'name' => $component->name, 'type' => 'sensor'])
+                </div>               
             </div>
         @endforeach
     </div>

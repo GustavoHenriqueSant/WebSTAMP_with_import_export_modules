@@ -53,12 +53,16 @@ Route::post('/addvariable', 'VariableController@add');
 Route::post('/editvariable', 'VariableController@edit');
 Route::post('/deletevariable', 'VariableController@delete');
 
-Route::post('/addstate', 'StateController@add');
-Route::post('/deletestate', 'StateController@delete');
-
 Route::post('/addsystemsafetyconstraint', 'SystemSafetyConstraintController@add');
 Route::post('/editsystemsafetyconstraint', 'SystemSafetyConstraintController@edit');
 Route::post('/deletesystemsafetyconstraint', 'SystemSafetyConstraintController@delete');
+
+Route::post('/addconnections', 'ConnectionController@add');
+Route::post('/deleteconnections', 'ConnectionController@delete');
+
+Route::post('/addstate', 'StateController@add');
+Route::post('/deletestate', 'StateController@delete');
+
 
 Route::post('/deleteaccidentassociated', 'AccidentHazardController@delete');
 

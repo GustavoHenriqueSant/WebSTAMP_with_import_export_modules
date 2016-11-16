@@ -20,13 +20,19 @@ class CreateConnectionsTable extends Migration
             $table->string('type_input');
             $table->timestamps();
         });
+        
         /*
         Schema::table('connections', function ($table) {
-            $table->foreign('controller_id')->references('id')->on('controllers')->onDelete('cascade');
-            $table->foreign('actuator_id')->references('id')->on('actuators')->onDelete('cascade');
-            $table->foreign('controlledprocess_id')->references('id')->on('controlled_processes')->onDelete('cascade');
-            $table->foreign('sensor_id')->references('id')->on('sensors')->onDelete('cascade');
-        });*/
+            $table->foreign('output_component_id')->references('id')->on('controllers')->onDelete('cascade');
+            $table->foreign('output_component_id')->references('id')->on('actuators')->onDelete('cascade');
+            $table->foreign('output_component_id')->references('id')->on('controlled_processes')->onDelete('cascade');
+            $table->foreign('output_component_id')->references('id')->on('sensors')->onDelete('cascade');
+            $table->foreign('input_component_id')->references('id')->on('controllers')->onDelete('cascade');
+            $table->foreign('input_component_id')->references('id')->on('actuators')->onDelete('cascade');
+            $table->foreign('input_component_id')->references('id')->on('controlled_processes')->onDelete('cascade');
+            $table->foreign('input_component_id')->references('id')->on('sensors')->onDelete('cascade');
+        });
+        */
     }
 
     /**

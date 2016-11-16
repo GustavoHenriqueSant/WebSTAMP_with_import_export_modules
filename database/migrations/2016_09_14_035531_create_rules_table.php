@@ -15,6 +15,7 @@ class CreateRulesTable extends Migration
         Schema::create('rules', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('index');
+            $table->integer('variable_id')->unsigned;
             $table->integer('state_id')->unsigned;
             $table->integer('controlaction_id')->unsigned;
             $table->timestamps();
