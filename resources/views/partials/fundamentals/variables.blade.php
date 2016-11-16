@@ -35,8 +35,8 @@
                         <a href="javascript:;" class="item__delete__box" data-type="variable" data-index="{{$state->id}}">×</a> {{$state->name}}
                     </div>
                 @endforeach
-                <div class="substep__add item__actions__add" data-component="add-button" data-add="states-{{$data_add}}" style="display: none;" id="states-variable-{{$variable->id}}">
-                    +
+                <div class="item__actions__add" style="display: none;" id="state-variable-{{$variable->id}}">
+                    <input type="image" src="{{ asset('images/plus.png') }}" alt="Add State" width=13" class="navbar__logo">
                 </div>
                 <div class="item__actions">
                     <form action ="/editvariable" method="POST" class="edit-form ajaxform" data-edit="variable">
@@ -66,7 +66,7 @@
                         <input type="text" class="item__input variable-description-{{ $variable->id }}" value="{{ $variable->name }}" disabled>
                     </div>
                     @foreach(App\State::where('variable_id', $variable->id)->get() as $state)
-                        <div class="item__actions__action state-associated-{{$state->id}}">
+                        <div class="item__actions__action" id="state-associated-{{$state->id}}">
                             <a href="javascript:;" class="item__delete__box" data-type="variable" data-index="{{$state->id}}">×</a> {{$state->name}}
                         </div>
                     @endforeach
