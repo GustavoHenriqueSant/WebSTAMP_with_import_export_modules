@@ -1,18 +1,11 @@
-<?php $add = 'state'; ?>
+<?php $add = 'state-variable-' . $variable_id; ?>
 
 @extends('partials.drop')
 
 @section('content-add')
-    <label for="state-name" class="add-drop__label">
+    <label for="state-name-{{$variable_id}}" class="add-drop__label">
         State name
     </label>
-    <input id="state-name" name="state-name" type="text" class="add-drop__input">
-    <label for="variable-association" class="add-drop__label">
-        Variable Associated
-    </label>
-    <select id="variable-association" name="variable-association" class="add-drop__select add-drop__input">
-        @foreach ($variables as $variable)
-        	<option value="{{$variable->id}}">{{$variable->name}}</option>
-        @endforeach
-    </select>
+    <input id="state-name-{{$variable_id}}" name="state-name-{{$variable_id}}" type="text" class="add-drop__input">
+    <input type="hidden" name="variable_id" id="variable_id" value="{{$variable_id}}">
 @overwrite

@@ -22,9 +22,9 @@
                 @foreach (App\Variable::all() as $variable)
                     @if ($variable->name != "Default")
                     <select id="variable_id_{{$variable->id}}" name="variable_id_{{$variable->id}}" class="text">
-                        <option value="0" name="ANY">ANY</option>
+                        <option value="{{$variable->id}}-0" name="ANY">ANY</option>
                         @foreach (App\State::where('variable_id', $variable->id)->get() as $state)
-                            <option value="{{$state->id}}" name="{{$state->name}}">{{$state->name}}</option>
+                            <option value="{{$variable->id}}-{{$state->id}}" name="{{$state->name}}">{{$state->name}}</option>
                         @endforeach
                     </select>
                     @endif

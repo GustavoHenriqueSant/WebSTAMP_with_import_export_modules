@@ -25,6 +25,9 @@ if (actualPage != 'stepone') {
   $('.connections-content').each(function(index, f){
     fundamentals.push(f.id);
   })
+  $('.item__actions__add').each(function(index, f){
+    fundamentals.push(f.id);
+  })
   fundamentals.forEach(function(f) {
     var drop = new Drop({
       target: document.querySelector('[data-add="' + f + '"]'),
@@ -64,6 +67,7 @@ if (actualPage != 'stepone') {
   var variable = require('./templates/variable_template');
   var accident = require('./templates/connection_template');
   var state = require('./templates/state_template');
+  var addstate = require('./templates/add-state_template');
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
 
 
@@ -182,7 +186,6 @@ if (actualPage != 'stepone') {
     	var $newControlAction = $('#controlactions_content-' + controller_id).find(".substep__list");
       var id = 0;
       var name = form.find("#controlaction-" + controller_id + "-name").val();
-      console.log(id + " " + controller_id + " " + name);
     	axios.post('/addcontrolaction', {
         name : name,
         controller_id : controller_id,
@@ -196,18 +199,21 @@ if (actualPage != 'stepone') {
       })
     }
     // Verify if activity is state
-    else if (activity === 'state') {
-    	var variable_id = form.find("#variable-association").val();
-    	var variable_name = form.find("#variable-association option:selected").text();
-    	var $newState = $('#states').find(".substep__list");
+    else if (activity.indexOf("state") != -1) {
+    	var variable_id = form.find("#variable_id").val();
+      var name = form.find("#state-name-" + variable_id).val();
+      var id = 0;
       axios.post('/addstate', {
         name : name,
         variable_id : variable_id,
-        variable_name : variable_name,
         id : id
       })
       .then(function(response) {
-        $newState.append(state(response.data, variable_name));
+        var $newState = $('#variable-' + response.data.variable_id).find(".states-associated");
+        console.log($newState);
+        $newState.append(state(response.data, true));
+       $newState = $('.variable-' + response.data.variable_id).find(".states-associated");
+        $newState.append(state(response.data, false));
       })
       .catch(function(error) {
         console.log(error);
@@ -261,10 +267,10 @@ if (actualPage != 'stepone') {
       var id = 0;
       if (variable_split.length > 2){
         controller_id = variable_split[2];
-        $newVariable = $('#variables-' + controller_id).find(".substep__list");
+        $newVariable = $('#variables-' + controller_id).find(".controller_variable");
       }
       else
-        $newVariable = $('#variables-0').find(".substep__list");
+        $newVariable = $('#variables-0').find(".controller_variable");
       var name = form.find("#variable-" + controller_id + "-name").val();
       var states = [];
       form.find(".states-associated").each(function(index){
@@ -277,8 +283,50 @@ if (actualPage != 'stepone') {
         states : states
       })
       .then(function(response) {
-        $newVariable.append(variable(response.data, true));
-        $('.variables-content').find(".substep__list").append(variable(response.data, false));
+        if (response.data.controller_id > 0){
+          $newVariable.append(variable(response.data, true));
+          $('body').append(addstate(response.data));
+          var state_variable = 'state-variable-' + response.data.id;
+          var drop = new Drop({
+            target: document.querySelector('[data-add="' + state_variable + '"]'),
+            content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
+            openOn: 'click',
+            remove: true,
+            tetherOptions: {
+              attachment: 'top left',
+              targetAttachment: 'middle right',
+              constraints: [
+                {
+                  to: 'scrollParent',
+                  attachment: 'together'
+                }
+              ]
+            }
+        });
+        }
+        else {
+          $newVariable.append(variable(response.data, true));
+          $('.variables-content').find(".substep__list").append(variable(response.data, false));
+          $('body').append(addstate(response.data));
+          var state_variable = 'state-variable-' + response.data.id;
+          var drop = new Drop({
+            target: document.querySelector('[data-add="' + state_variable + '"]'),
+            content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
+            openOn: 'click',
+            remove: true,
+            tetherOptions: {
+              attachment: 'top left',
+              targetAttachment: 'middle right',
+              constraints: [
+                {
+                  to: 'scrollParent',
+                  attachment: 'together'
+                }
+              ]
+            }
+        });
+
+        }
       })
       .catch(function(error) {
         console.log(error);
@@ -378,7 +426,6 @@ if (actualPage != 'stepone') {
                 id : id,
               })
               .then(function (response) {
-                console.log("#variable-" + id);
                 $(".variable-" + id).remove();
                 $("#variable-" + id).remove();
               })
@@ -388,7 +435,6 @@ if (actualPage != 'stepone') {
               return false;
           } else if (activity === 'connection') {
             var id = form.find("#connection_id").val();
-            console.log("Id: " + connection_id);
             axios.post('/deleteconnections', {
                 id : id,
               })
@@ -574,8 +620,8 @@ $("body").on('keypress', '.item__input__active', function(event) {
                   id : id,
                 })
                 .then(function (response) {
-                  $("#state-associated-" + id).remove();
                   $(".state-associated-" + id).remove();
+                  $("#state-associated-" + id).remove();
                 })
                 .catch(function (error) {
                   console.log(error);
@@ -643,13 +689,16 @@ for (i = 0; i < acc.length; i++) {
     var rule_index = $('#rule-control-action-'+controlaction_id).find(".rules-ca-"+controlaction_id).length+1;
     var append = '<div class="table-row rules-ca-'+controlaction_id+'"><div class="text">R'+rule_index+'</div>';
     var variables = form.find('[id^="variable_id_"]').each(function() {
-      var state_id = form.find(this).val();
+      var ids = form.find(this).val().split("-");
+      var variable_id = ids[0];
+      var state_id = ids[1];
       var name = $(this).find('option:selected').attr('name');
       append += '<div class="text">'+name+'</div>';
       var id = 0;
       axios.post('/addrule', {
         id : id,
         rule_index: rule_index,
+        variable_id : variable_id,
         state_id : state_id,
         controlaction_id : controlaction_id
       })

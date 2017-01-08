@@ -23,6 +23,11 @@
     	@include('partials.fundamentals.add-variable', ['component_id' => $controller->id])
     @endforeach
 
+    <!-- Including states for each Variables -->
+    @foreach(App\Variable::where('project_id', $project_id)->get() as $variable)
+        @include('partials.fundamentals.add-state', ['variable_id' => $variable->id])
+    @endforeach
+
     <!-- Including Control Actions for each Controller -->
     @foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
         @include('partials.fundamentals.add-controlactions', ['controller_id' => $controller->id])

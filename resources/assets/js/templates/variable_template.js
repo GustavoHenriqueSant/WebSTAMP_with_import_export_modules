@@ -1,6 +1,6 @@
 module.exports = function(context, firstAppend) {
     var size = context.name.length;
-    var statesList = "";
+    var statesList = `<span class="states-associated">`;
     context.states.forEach(function(value, index) {
         if (firstAppend)
             statesList += `<div class="item__actions__action" id="state-associated-`+ value.id +`">
@@ -11,6 +11,7 @@ module.exports = function(context, firstAppend) {
                             <a href="javascript:;" class="item__delete__box" data-type="variable" data-index="`+ value.id +`">×</a> `+ value.name +`
                         </div>`;
     });
+    statesList += `</span>`;
     var edit_delete = `<div class="item__actions">
                     <form action ="/editvariable" method="POST" class="edit-form ajaxform" data-edit="variable">
                         <div class="item__title">
@@ -36,7 +37,7 @@ module.exports = function(context, firstAppend) {
                     <input type="text" class="item__input" id="variable-description-${context.id}" value="${context.name}" size="${size}" disabled>
                 </div>
                 ` + statesList + `
-                <div class="item__actions__add" style="display: none;" id="state-variable-${context.id}">
+                <div class="item__actions__add drop-target" style="display: none;" id="state-variable-${context.id}" data-component="add-button" data-add="state-variable-${context.id}">
                     <input type="image" src="/images/plus.png" alt="Add State" width=13" class="navbar__logo">
                 </div>
                 ` + edit_delete + `

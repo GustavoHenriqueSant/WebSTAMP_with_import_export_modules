@@ -36,6 +36,7 @@ class RuleController extends Controller
 
 		$rule = new Rules();
 		$rule->index = $request->input('rule_index');
+		$rule->variable_id = $request->input('variable_id');
 		$rule->state_id = $request->input('state_id');
 		$rule->controlaction_id = $request->input('controlaction_id');
 		$rule->save();
@@ -44,7 +45,8 @@ class RuleController extends Controller
          	'id' => $rule->id,
          	'rule_index' => $rule->index,
          	'state_id' => $rule->state_id,
-         	'controlaction_id' => $rule->controlaction_id
+         	'controlaction_id' => $rule->controlaction_id,
+         	'variable_id' => $rule->variable_id
      	]);
 	}
 

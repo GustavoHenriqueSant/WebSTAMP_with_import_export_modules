@@ -27,6 +27,14 @@
     }
     $rule = App\Rules::where('controlaction_id', $ca->id)->get();
 
+    $total_index = App\Rules::distinct()->select('index')->where('controlaction_id', $ca->id)->get();
+    $rle = [];
+    if (count($total_index) > 0) {
+        foreach($total_index as $index) {
+            array_push($rle, App\Rules::where('controlaction_id', $ca->id)->where('index', $index->index)->orderBy('index', 'asc')->orderBy('variable_id', 'asc')->get());
+        }
+    }
+
 
 ?>
 <div class="substep__title">
@@ -49,11 +57,16 @@
         <div class="text">Wrong time/order of Control Action</div>
         <div class="text">Control Action provided too early</div>
         <div class="text">Control Action provided too late</div>
+        <div class="text">Control Action stopped too soon</div>
+        <div class="text">Control Action applied too long</div>
         </div>
 
         @while($total_loop > 0)
         <?php
-            $rules = "true";
+            $rules = [];
+            foreach($total_index as $index) {
+                array_push($rules, "true");
+            }
         ?>
             <div class="table-row">
 
@@ -61,7 +74,21 @@
                     <div class="text">
                         {{$allStates[$i][$combination_array[$i]]}} <br/>
                         <?php
-                        if (count($rule) > 0) {
+                        if(count($rle) > 0) {
+                            foreach($rle as $key => $r) {
+                                if (count($r) > 0) {
+                                    if($r[$i]->state_id == 0){
+                                        if ($rules[$key] == "true")
+                                            $rules[$key] = "true";
+                                    } else if ( ($allStates[$i][$combination_array[$i]] == App\State::find($r[$i]->state_id)->name) && ($rules[$key] == "true") ){
+                                        $rules[$key] = "true";
+                                    } else {
+                                        $rules[$key] = "false";
+                                    }
+                                }
+                            }
+                        }
+                        /*if (count($rule) > 0) {
                             if ($rule[$i]->state_id == 0) {
                                 if ($rule == "true")
                                     $rules = "true";
@@ -70,7 +97,7 @@
                             } else {
                                 $rules = "false";
                             }
-                        }
+                        }*/
                         ?>
                     </div>
                 @endfor
@@ -92,10 +119,12 @@
 
                 <div class="text">
                 <?php
-                    if ($rules == "true" && count($rule) > 0) {
-                        echo "R1";
-                    } else {
-                        $rules = "false";
+                    foreach ($rules as $key => $r) {
+                        if ($r == "true" && count($r) > 0) {
+                            echo "R".($key+1)." ";
+                        } else {
+                            $r[$key] = "false";
+                        }
                     }
                 ?>
                     <!--Rule Value-->
@@ -107,6 +136,16 @@
                     @else
                         <option>True</option>
                     @endif
+                    <option>False</option>
+                </select>
+                <select class="text">
+                    <option selected>-</option>
+                    <option>True</option>
+                    <option>False</option>
+                </select>
+                <select class="text">
+                    <option selected>-</option>
+                    <option>True</option>
                     <option>False</option>
                 </select>
                 <select class="text">
