@@ -15,6 +15,7 @@ class CreateControllersTable extends Migration
         Schema::create('controllers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('type');
             $table->integer('project_id')->unsigned();
             $table->timestamps();
         });

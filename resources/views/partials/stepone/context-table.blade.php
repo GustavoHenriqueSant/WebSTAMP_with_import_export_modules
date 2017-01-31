@@ -73,7 +73,9 @@
                 @for($i = 0; $i < count($allStates); $i++)
                     <div class="text">
                         {{$allStates[$i][$combination_array[$i]]}} <br/>
-                        <?php
+                    </div>
+                    <?php
+                        // Verifying if the rule fits
                         if(count($rle) > 0) {
                             foreach($rle as $key => $r) {
                                 if (count($r) > 0) {
@@ -88,18 +90,7 @@
                                 }
                             }
                         }
-                        /*if (count($rule) > 0) {
-                            if ($rule[$i]->state_id == 0) {
-                                if ($rule == "true")
-                                    $rules = "true";
-                            } else if (($allStates[$i][$combination_array[$i]] == App\State::find($rule[$i]->state_id)->name && $rules == "true")){
-                                $rules = "true";
-                            } else {
-                                $rules = "false";
-                            }
-                        }*/
-                        ?>
-                    </div>
+                    ?>
                 @endfor
 
                 <?php
@@ -117,7 +108,7 @@
                     $total_loop--;
                 ?>                
 
-                <div class="text">
+                <div class="text" id="rule-row-{{$total_loop}}" name="rule-row-{{$total_loop}}">
                 <?php
                     foreach ($rules as $key => $r) {
                         if ($r == "true" && count($r) > 0) {
@@ -127,9 +118,10 @@
                         }
                     }
                 ?>
-                    <!--Rule Value-->
                 </div>
-                <select class="text">
+
+                <!--Control Action Provided-->
+                <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}">
                     <option>-</option>
                     @if ($rules == "true")
                         <option selected>True</option>
@@ -138,32 +130,42 @@
                     @endif
                     <option>False</option>
                 </select>
-                <select class="text">
+
+                <!--Control action not provided-->
+                <select class="text" id="notprovided-row-{{$total_loop}}" name="ca-not-provided-row-{{$total_loop}}">
                     <option selected>-</option>
                     <option>True</option>
                     <option>False</option>
                 </select>
-                <select class="text">
+
+                <!--Wrong time or order causes hazard-->
+                <select class="text" id="wrongtime-row-{{$total_loop}}" name="wrongtime-row-{{$total_loop}}">
                     <option selected>-</option>
                     <option>True</option>
                     <option>False</option>
                 </select>
-                <select class="text">
+
+                <!--Control Action provided too early-->
+                <select class="text" id="early-row-{{$total_loop}}" name="early-row-{{$total_loop}}">
                     <option selected>-</option>
                     <option>True</option>
                     <option>False</option>
                 </select>
-                <select class="text">
+
+                <!--Control Action provided too late-->
+                <select class="text" id="late-row-{{$total_loop}}" name="late-row-{{$total_loop}}">
                     <option selected>-</option>
                     <option>True</option>
                     <option>False</option>
                 </select>
-                <select class="text">
+                <!--Control action stopped too soon-->
+                <select class="text" id="soon-row-{{$total_loop}}" name="soon-row-{{$total_loop}}">
                     <option selected>-</option>
                     <option>True</option>
                     <option>False</option>
                 </select>
-                <select class="text">
+                <!--Control Action applied too long-->
+                <select class="text" id="long-row-{{$total_loop}}" name="long-row-{{$total_loop}}">
                     <option selected>-</option>
                     <option>True</option>
                     <option>False</option>

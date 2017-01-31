@@ -20,4 +20,13 @@
         <option value="Controller">Controller</option>
         <option value="Sensor">Sensor</option>
     </select>
+    <span id="actuator-type" name="actuator-type" class="add-drop__label">
+        <label for="select-actuator-type" class="add-drop__label">
+            Actuator type
+        </label>
+        <select id="select-actuator-type" name="select-actuator-type" class="add-drop__select add-drop__input">
+            <option value="Automatized">Automatized</option>
+            <option value="Human">Human</option>
+        </select>
+    </span>
 @overwrite

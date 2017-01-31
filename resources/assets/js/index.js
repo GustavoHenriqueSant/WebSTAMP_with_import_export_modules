@@ -639,6 +639,15 @@ $("body").on('keypress', '.item__input__active', function(event) {
     accordion.next().toggleClass('show');
   });
 
+  $('body').on('change', '#component-type', function (event){
+    var component_type = $(event.currentTarget).find(":selected").text();
+    if (component_type !== "Controller"){
+      $("#actuator-type").hide();
+    } else {
+      $("#actuator-type").show();
+    }
+  });
+
 /*
 var acc = document.getElementsByClassName("accordion");
 var i;
