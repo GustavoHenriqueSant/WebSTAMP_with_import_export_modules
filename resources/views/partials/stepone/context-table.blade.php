@@ -47,132 +47,137 @@
 
         <div class="container-fluid" style="margin-top: 10px">
 
-        <div class="table-row header">
-        @foreach ($variables as $variable)
-            <div class="text">{{$variable->name}}</div>
-        @endforeach
-        <div class="text">Index Rule</div>
-        <div class="text">Control Action provided</div>
-        <div class="text">Control Action not provided</div>
-        <div class="text">Wrong time/order of Control Action</div>
-        <div class="text">Control Action provided too early</div>
-        <div class="text">Control Action provided too late</div>
-        <div class="text">Control Action stopped too soon</div>
-        <div class="text">Control Action applied too long</div>
-        </div>
+            <form action="/savecontexttable" method="POST">
 
-        @while($total_loop > 0)
-        <?php
-            $rules = [];
-            foreach($total_index as $index) {
-                array_push($rules, "true");
-            }
-        ?>
-            <div class="table-row">
+            <input type="hidden" id="total_rows_{{$ca->id}}" name="total_rows" value="{{$total_loop}}">
 
-                @for($i = 0; $i < count($allStates); $i++)
-                    <div class="text">
-                        {{$allStates[$i][$combination_array[$i]]}} <br/>
-                    </div>
-                    <?php
-                        // Verifying if the rule fits
-                        if(count($rle) > 0) {
-                            foreach($rle as $key => $r) {
-                                if (count($r) > 0) {
-                                    if($r[$i]->state_id == 0){
-                                        if ($rules[$key] == "true")
-                                            $rules[$key] = "true";
-                                    } else if ( ($allStates[$i][$combination_array[$i]] == App\State::find($r[$i]->state_id)->name) && ($rules[$key] == "true") ){
-                                        $rules[$key] = "true";
-                                    } else {
-                                        $rules[$key] = "false";
-                                    }
-                                }
-                            }
-                        }
-                    ?>
-                @endfor
-
-                <?php
-
-                    $loop++;
-                    for ($i = 0; $i < count($combination_array); $i++) {
-                        $multiple = (count($combination_array)-($i+1));
-                        $divisor = 2 ** $multiple;
-                        $resto = $loop % $divisor;
-                        if ($resto == 0) {
-                            $combination_array[$i] = ($combination_array[$i]+1 >= $number_of_states[$i]) ? 0 : $combination_array[$i]+1;
-                        }
-                    }
-                    
-                    $total_loop--;
-                ?>                
-
-                <div class="text" id="rule-row-{{$total_loop}}" name="rule-row-{{$total_loop}}">
-                <?php
-                    foreach ($rules as $key => $r) {
-                        if ($r == "true" && count($r) > 0) {
-                            echo "R".($key+1)." ";
-                        } else {
-                            $r[$key] = "false";
-                        }
-                    }
-                ?>
+                <div class="table-row header">
+                @foreach ($variables as $variable)
+                    <div class="text">{{$variable->name}}</div>
+                @endforeach
+                <div class="text">Index Rule</div>
+                <div class="text">Control Action provided</div>
+                <div class="text">Control Action not provided</div>
+                <div class="text">Wrong time/order of Control Action</div>
+                <div class="text">Control Action provided too early</div>
+                <div class="text">Control Action provided too late</div>
+                <div class="text">Control Action stopped too soon</div>
+                <div class="text">Control Action applied too long</div>
                 </div>
 
-                <!--Control Action Provided-->
-                <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}">
-                    <option>-</option>
-                    @if ($rules == "true")
-                        <option selected>True</option>
-                    @else
-                        <option>True</option>
-                    @endif
-                    <option>False</option>
-                </select>
+                @while($total_loop > 0)
+                <?php
+                    $rules = [];
+                    foreach($total_index as $index) {
+                        array_push($rules, "true");
+                    }
+                ?>
+                    <div class="table-row">
 
-                <!--Control action not provided-->
-                <select class="text" id="notprovided-row-{{$total_loop}}" name="ca-not-provided-row-{{$total_loop}}">
-                    <option selected>-</option>
-                    <option>True</option>
-                    <option>False</option>
-                </select>
+                        @for($i = 0; $i < count($allStates); $i++)
+                            <div class="text">
+                                {{$allStates[$i][$combination_array[$i]]}} <br/>
+                            </div>
+                            <?php
+                                // Verifying if the rule fits
+                                if(count($rle) > 0) {
+                                    foreach($rle as $key => $r) {
+                                        if (count($r) > 0) {
+                                            if($r[$i]->state_id == 0){
+                                                if ($rules[$key] == "true")
+                                                    $rules[$key] = "true";
+                                            } else if ( ($allStates[$i][$combination_array[$i]] == App\State::find($r[$i]->state_id)->name) && ($rules[$key] == "true") ){
+                                                $rules[$key] = "true";
+                                            } else {
+                                                $rules[$key] = "false";
+                                            }
+                                        }
+                                    }
+                                }
+                            ?>
+                        @endfor
 
-                <!--Wrong time or order causes hazard-->
-                <select class="text" id="wrongtime-row-{{$total_loop}}" name="wrongtime-row-{{$total_loop}}">
-                    <option selected>-</option>
-                    <option>True</option>
-                    <option>False</option>
-                </select>
+                        <?php
 
-                <!--Control Action provided too early-->
-                <select class="text" id="early-row-{{$total_loop}}" name="early-row-{{$total_loop}}">
-                    <option selected>-</option>
-                    <option>True</option>
-                    <option>False</option>
-                </select>
+                            $loop++;
+                            for ($i = 0; $i < count($combination_array); $i++) {
+                                $multiple = (count($combination_array)-($i+1));
+                                $divisor = 2 ** $multiple;
+                                $resto = $loop % $divisor;
+                                if ($resto == 0) {
+                                    $combination_array[$i] = ($combination_array[$i]+1 >= $number_of_states[$i]) ? 0 : $combination_array[$i]+1;
+                                }
+                            }
+                            
+                            $total_loop--;
+                        ?>                
 
-                <!--Control Action provided too late-->
-                <select class="text" id="late-row-{{$total_loop}}" name="late-row-{{$total_loop}}">
-                    <option selected>-</option>
-                    <option>True</option>
-                    <option>False</option>
-                </select>
-                <!--Control action stopped too soon-->
-                <select class="text" id="soon-row-{{$total_loop}}" name="soon-row-{{$total_loop}}">
-                    <option selected>-</option>
-                    <option>True</option>
-                    <option>False</option>
-                </select>
-                <!--Control Action applied too long-->
-                <select class="text" id="long-row-{{$total_loop}}" name="long-row-{{$total_loop}}">
-                    <option selected>-</option>
-                    <option>True</option>
-                    <option>False</option>
-                </select>
-            </div>
-        @endwhile   
+                        <div class="text" id="rule-row-{{$total_loop}}" name="rule-row-{{$total_loop}}">
+                        <?php
+                            foreach ($rules as $key => $r) {
+                                if ($r == "true" && count($r) > 0) {
+                                    echo "R".($key+1)." ";
+                                } else {
+                                    $r[$key] = "false";
+                                }
+                            }
+                        ?>
+                        </div>
 
+                        <!--Control Action Provided-->
+                        <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}">
+                            <option>-</option>
+                            @if ($rules == "true")
+                                <option selected>True</option>
+                            @else
+                                <option value="true">True</option>
+                            @endif
+                            <option value="false">False</option>
+                        </select>
+
+                        <!--Control action not provided-->
+                        <select class="text" id="notprovided-row-{{$total_loop}}" name="ca-not-provided-row-{{$total_loop}}">
+                            <option selected>-</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+
+                        <!--Wrong time or order causes hazard-->
+                        <select class="text" id="wrongtime-row-{{$total_loop}}" name="wrongtime-row-{{$total_loop}}">
+                            <option selected>-</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+
+                        <!--Control Action provided too early-->
+                        <select class="text" id="early-row-{{$total_loop}}" name="early-row-{{$total_loop}}">
+                            <option selected>-</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+
+                        <!--Control Action provided too late-->
+                        <select class="text" id="late-row-{{$total_loop}}" name="late-row-{{$total_loop}}">
+                            <option selected>-</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                        <!--Control action stopped too soon-->
+                        <select class="text" id="soon-row-{{$total_loop}}" name="soon-row-{{$total_loop}}">
+                            <option selected>-</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                        <!--Control Action applied too long-->
+                        <select class="text" id="long-row-{{$total_loop}}" name="long-row-{{$total_loop}}">
+                            <option selected>-</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+                @endwhile
+                <center><button>Save</button></center>  
+            </form>
         </div>
     </div>
 </div>

@@ -71,3 +71,5 @@ Route::post('/addrule', 'RuleController@add');
 Route::get('/stepone', ['as' => 'stepone', function () {
     return view('pages.stepone');
 }]);
+
+Route::post('/savecontexttable', 'ContextTable@save');

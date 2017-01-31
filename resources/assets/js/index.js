@@ -719,5 +719,6 @@ for (i = 0; i < acc.length; i++) {
     $newRule.append(append);  
   });
 
+  console.log($('total_rows_0'));
 }
 
