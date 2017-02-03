@@ -20,7 +20,7 @@
         <option value="Controller">Controller</option>
         <option value="Sensor">Sensor</option>
     </select>
-    <span id="actuator-type" name="actuator-type" class="add-drop__label">
+    <span id="actuator-type" name="actuator-type" class="add-drop__label" style="display: none;">
         <label for="select-actuator-type" class="add-drop__label">
             Actuator type
         </label>

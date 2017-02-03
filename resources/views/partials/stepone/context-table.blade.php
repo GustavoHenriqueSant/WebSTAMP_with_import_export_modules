@@ -19,12 +19,15 @@
         }
         $variable_index++;
     }
+    print_r($allStates);
     $total_loop = 1;
     for ($i = 0; $i < count($allStates); $i++) {
         $number_of_states[$i] = count($allStates[$i]);
         $combination_array[$i] = 0;
         $total_loop *= count($allStates[$i]);
     }
+
+
     $rule = App\Rules::where('controlaction_id', $ca->id)->get();
 
     $total_index = App\Rules::distinct()->select('index')->where('controlaction_id', $ca->id)->get();
@@ -114,9 +117,13 @@
 
                         <div class="text" id="rule-row-{{$total_loop}}" name="rule-row-{{$total_loop}}">
                         <?php
+
+                            $thereAreRule = "false";
+
                             foreach ($rules as $key => $r) {
                                 if ($r == "true" && count($r) > 0) {
                                     echo "R".($key+1)." ";
+                                    $thereAreRule = "true";
                                 } else {
                                     $r[$key] = "false";
                                 }
@@ -125,15 +132,19 @@
                         </div>
 
                         <!--Control Action Provided-->
-                        <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}">
-                            <option>-</option>
-                            @if ($rules == "true")
-                                <option selected>True</option>
-                            @else
-                                <option value="true">True</option>
-                            @endif
-                            <option value="false">False</option>
-                        </select>
+                        @if ($thereAreRule == "true")
+                            <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}" disabled>
+                        @else
+                            <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}">
+                        @endif
+                                <option>-</option>
+                                @if ($thereAreRule == "true")
+                                    <option selected>True</option>
+                                @else
+                                    <option value="true">True</option>
+                                @endif
+                                <option value="false">False</option>
+                            </select>
 
                         <!--Control action not provided-->
                         <select class="text" id="notprovided-row-{{$total_loop}}" name="ca-not-provided-row-{{$total_loop}}">
