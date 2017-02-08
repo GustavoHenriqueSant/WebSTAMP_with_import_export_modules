@@ -10,6 +10,8 @@ use App\Rules;
 
 use Illuminate\Routing\Redirector;
 
+use Illuminate\Http\RedirectResponse;
+
 class RuleController extends Controller
 {
     
@@ -41,7 +43,11 @@ class RuleController extends Controller
 		$rule->controlaction_id = $request->input('controlaction_id');
 		$rule->save();
 
-		 return response()->json([
+		//return redirect()->route('stepone', ['controlaction_id', $rule->controlaction_id]);
+
+		return redirect(route('stepone'));
+
+		return response()->json([
          	'id' => $rule->id,
          	'rule_index' => $rule->index,
          	'state_id' => $rule->state_id,
@@ -51,7 +57,7 @@ class RuleController extends Controller
 	}
 
 	public function delete(Request $request){
-		//Rules::destroy($request->get('id'));
+		Rules::where('index', $request->input('rule_index'))->where('controlaction_id', $request->input('controlaction_id'))->delete();
 	}
 
 }

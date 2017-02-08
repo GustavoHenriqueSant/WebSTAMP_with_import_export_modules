@@ -67,9 +67,11 @@ Route::post('/deletestate', 'StateController@delete');
 Route::post('/deleteaccidentassociated', 'AccidentHazardController@delete');
 
 Route::post('/addrule', 'RuleController@add');
+Route::post('/refreshPage', 'RuleController@refreshPage');
+Route::post('/deleterule', 'RuleController@delete');
 
 Route::get('/stepone', ['as' => 'stepone', function () {
     return view('pages.stepone');
 }]);
 
-Route::post('/savecontexttable', 'ContextTable@save');
+Route::post('/savecontexttable', 'ContextTableController@save');

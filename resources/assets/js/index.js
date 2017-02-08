@@ -1,6 +1,6 @@
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
 
-if (actualPage != 'stepone') {
+if (!actualPage.includes('stepone')) {
   var $ = require('jquery');
 
   var Hazard = require('./elements/hazards');
@@ -82,7 +82,7 @@ if (actualPage != 'stepone') {
     var id = 0;
     // Verifies if activity is system goal
     if (activity === 'systemgoal') {
-    	var $newSystemGoal = $('#systemgoals').find(".substep__list");
+      var $newSystemGoal = $('#systemgoals').find(".substep__list");
       axios.post('/addsystemgoal', {
         name: name,
         id : id
@@ -128,7 +128,7 @@ if (actualPage != 'stepone') {
     }
     // Verify if activity is component
     else if (activity === 'component') {
-    	var type = form.find("#component-type").val();
+      var type = form.find("#component-type").val();
       if (type === 'Actuator') {
         var $newComponent = $('#actuators');
         axios.post('/addactuator', {
@@ -182,17 +182,17 @@ if (actualPage != 'stepone') {
     }
     // Verify if activity is control control action
     else if (activity.indexOf("controlaction") != -1){
-    	var controller_id = activity.split("-")[1];
-    	var $newControlAction = $('#controlactions_content-' + controller_id).find(".substep__list");
+      var controller_id = activity.split("-")[1];
+      var $newControlAction = $('#controlactions_content-' + controller_id).find(".substep__list");
       var id = 0;
       var name = form.find("#controlaction-" + controller_id + "-name").val();
-    	axios.post('/addcontrolaction', {
+      axios.post('/addcontrolaction', {
         name : name,
         controller_id : controller_id,
         id : id
       })
       .then(function(response) {
-      	$newControlAction.append(controlaction(response.data));
+        $newControlAction.append(controlaction(response.data));
       })
       .catch(function(error) {
         console.log(error);
@@ -200,7 +200,7 @@ if (actualPage != 'stepone') {
     }
     // Verify if activity is state
     else if (activity.indexOf("state") != -1) {
-    	var variable_id = form.find("#variable_id").val();
+      var variable_id = form.find("#variable_id").val();
       var name = form.find("#state-name-" + variable_id).val();
       var id = 0;
       axios.post('/addstate', {
@@ -669,10 +669,19 @@ for (i = 0; i < acc.length; i++) {
     var $op1 = $('.hide-control-actions');
 
     // Verifies if there is Control Actions stored
-    if ($op1 != null)
-      // Show the first control action (with lower id)
-      $($op1[0]).show();
-  
+    if ($op1 != null) {
+      //
+      var ca_id = window.location.search.substr(1).split("=");
+      if (ca_id[1] > 0) {
+        // Show the selected rule
+        $('#control-action-'+ca_id[1]).show();
+        // Show the selected control action
+        $('#control-actions-select').val(ca_id[1]);
+      } else {
+        // Show the first control action (with lower id)
+        $($op1[0]).show();
+      }
+    }
   // function to hide all elements with class step_one
   var hideAll = function() {
     $op1.hide();
@@ -684,39 +693,131 @@ for (i = 0; i < acc.length; i++) {
       hideAll();
       // Shows the content of selected control action
       $('#control-action-'+e.target.value).show();
+      var ca_id = window.location.search.substr(1).split("=");
   });
 
 });
 
   var axios = require('./axios');
+  var vex = require('vex-js');
+  vex.registerPlugin(require('vex-dialog'));
+  vex.defaultOptions.className = 'vex-theme-os';
 
+
+  // Add rules
   $('body').on('submit', '.add-new-rule', function(event) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var controlaction_id = form.find("#controlaction_id").val();
     var $newRule = $('#rule-control-action-'+controlaction_id).find(".container-fluid");
-    var rule_index = $('#rule-control-action-'+controlaction_id).find(".rules-ca-"+controlaction_id).length+1;
-    var append = '<div class="table-row rules-ca-'+controlaction_id+'"><div class="text">R'+rule_index+'</div>';
+    var rule_index = $('#rule-control-action-'+controlaction_id).find(".rules-table").length+1;
+    var append = '<div class="table-row rules-table rules-ca-'+controlaction_id+'-rule-'+rule_index+'"><div class="text">R'+rule_index+'</div>';
+    // Save each variable of the rule
     var variables = form.find('[id^="variable_id_"]').each(function() {
-      var ids = form.find(this).val().split("-");
-      var variable_id = ids[0];
-      var state_id = ids[1];
-      var name = $(this).find('option:selected').attr('name');
-      append += '<div class="text">'+name+'</div>';
-      var id = 0;
-      axios.post('/addrule', {
-        id : id,
-        rule_index: rule_index,
-        variable_id : variable_id,
-        state_id : state_id,
-        controlaction_id : controlaction_id
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        console.log("Entrou!");
+        var ids = form.find(this).val().split("-");
+        var variable_id = ids[0];
+        var state_id = ids[1];
+        var name = $(this).find('option:selected').attr('name');
+        append += '<div class="text">'+name+'</div>';
+        var id = 0;
+        axios.post('/addrule', {
+            id : id,
+            rule_index: rule_index,
+            variable_id : variable_id,
+            state_id : state_id,
+            controlaction_id : controlaction_id
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     });
+
+    //location.reload();
+    var ca = window.location.search.substr(1).split("=");
+    console.log(ca);
+    if (ca.length > 1){
+      var currentURL = window.location.href.split("?");
+      window.location.href = currentURL[0] + '?ca='+controlaction_id;
+    }
+    else{
+      window.location.href += '?ca='+controlaction_id;
+    }
+
+    append += '<div class="text">' +
+                  '<form action="/deleterule" class="delete-form" data-delete="rules" method="POST">' +
+                      '<input type="hidden" name="_token" value="{{csrf_token()}}">' +
+                      '<input type="hidden" name="controlaction_id" id="controlaction_id" value="' + controlaction_id + '">' +
+                      '<input type="hidden" name="rule_index" id="rule_index" value="' + rule_index + '">' +
+                      '<input type="image" src="/images/delete.ico" alt="Delete" width="20" class="navbar__logo">' +
+                  '</form>' +
+              '</div>';
     append += '</div>';
-    $newRule.append(append);  
+    //$newRule.append(append);  
+  });
+
+
+  // DELETE RULES
+  $('body').on('submit', '.delete-form', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var activity = form.data("delete");
+    vex.dialog.confirm({
+      message: 'Are you sure you want to delete this item?',
+      callback: function (value) {
+        if (value) {
+          if(activity == 'rules'){
+            var rule_index = form.find("#rule_index").val();
+            var controlaction_id = form.find('#controlaction_id').val();
+            axios.post('/deleterule', {
+                rule_index : rule_index,
+                controlaction_id : controlaction_id
+              })
+              .then(function (response) {
+                $(".rules-ca-" + controlaction_id + "-rule-" + rule_index).remove();
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+              return false;
+          }
+        }
+      }
+    });
+  });
+
+  $('body').on('submit', '.save-context-table', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var controlaction_id = form.find("#controlaction_id").val();
+    var total_rows = form.find("#total_rows").val() - 1;
+    while (total_rows >= 0) {
+      var states = form.find("#all_states_" + total_rows).val();
+      var provided = form.find("#provided-row-" + total_rows).val();
+      var not_provided = form.find("#notprovided-row-" + total_rows).val();
+      var wrong_time = form.find("#wrongtime-row-" + total_rows).val();
+      var early = form.find("#early-row-" + total_rows).val();
+      var late = form.find("#late-row-" + total_rows).val();
+      var soon = form.find("#soon-row-" + total_rows).val();
+      var long = form.find("#long-row-" + total_rows).val();
+      console.log(states + " " + provided + " " + not_provided + " " + wrong_time + " " + early + " " + late + " " + soon + " " + long);
+      axios.post('/savecontexttable', {
+            controlaction_id : controlaction_id,
+            states : states,
+            provided : provided,
+            not_provided: not_provided,
+            wrong_time : wrong_time,
+            early : early,
+            late : late,
+            soon : soon,
+            long : long
+        })
+      .catch(function (error) {
+          console.log(error);
+      });
+      total_rows--;
+    }
+    console.log("Salvo com sucesso!");
   });
 
 }
