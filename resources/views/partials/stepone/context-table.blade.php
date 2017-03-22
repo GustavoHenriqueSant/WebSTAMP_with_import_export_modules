@@ -289,7 +289,7 @@
                         @else
                             <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}">
                         @endif
-                                <option value="nada">-</option>
+                                <option value="null">-</option>
                                 @if ($thereAreRule == "true")
                                     <option value="true" selected>True</option>
                                 @else
@@ -300,40 +300,40 @@
 
                             <!--Control action not provided-->
                             <select class="text" id="notprovided-row-{{$total_loop}}" name="ca-not-provided-row-{{$total_loop}}">
-                                <option value="nada" selected>-</option>
+                                <option value="null" selected>-</option>
                                 <option value="true">True</option>
                                 <option value="false">False</option>
                             </select>
 
                             <!--Wrong time or order causes hazard-->
                             <select class="text" id="wrongtime-row-{{$total_loop}}" name="wrongtime-row-{{$total_loop}}">
-                                <option value="nada" selected>-</option>
+                                <option value="null" selected>-</option>
                                 <option value="true">True</option>
                                 <option value="false">False</option>
                             </select>
 
                             <!--Control Action provided too early-->
                             <select class="text" id="early-row-{{$total_loop}}" name="early-row-{{$total_loop}}">
-                                <option value="nada" selected>-</option>
+                                <option value="null" selected>-</option>
                                 <option value="true">True</option>
                                 <option value="false">False</option>
                             </select>
 
                             <!--Control Action provided too late-->
                             <select class="text" id="late-row-{{$total_loop}}" name="late-row-{{$total_loop}}">
-                                <option value="nada" selected>-</option>
+                                <option value="null" selected>-</option>
                                 <option value="true">True</option>
                                 <option value="false">False</option>
                             </select>
                             <!--Control action stopped too soon-->
                             <select class="text" id="soon-row-{{$total_loop}}" name="soon-row-{{$total_loop}}">
-                                <option value="nada" selected>-</option>
+                                <option value="null" selected>-</option>
                                 <option value="true">True</option>
                                 <option value="false">False</option>
                             </select>
                             <!--Control Action applied too long-->
                             <select class="text" id="long-row-{{$total_loop}}" name="long-row-{{$total_loop}}">
-                                <option value="nada" selected>-</option>
+                                <option value="null" selected>-</option>
                                 <option value="true">True</option>
                                 <option value="false">False</option>
                             </select>

@@ -10,7 +10,7 @@
    
    <div id="controllers">
         @foreach (App\Controllers::where('project_id', $project_id)->get() as $component)
-            <button class="accordion"><b>[Controller]</b> {{$component->name}}</button>
+            <button class="accordion" id="controller-{{$component->id}}"><b>[Controller]</b> {{$component->name}}</button>
             <div class="panel">
                 
                 <div class="substep substep--connections" id="connection-controller-{{$component->id}}">
@@ -31,18 +31,23 @@
 
     <div id="actuators">
         @foreach (App\Actuators::where('project_id', $project_id)->get() as $component)
-            <button class="accordion"><b>[Actuator]</b> {{$component->name}}</button>
+            <button class="accordion" id="actuator-{{$component->id}}"><b>[Actuator]</b> {{$component->name}}</button>
             <div class="panel">
                 <ul class="substep__list" id="add-actuator">
                     @foreach (App\Actuators::where('project_id', $project_id)->where('id', $component->id)->get() as $component)
                             <li class="item" id="actuator-{{$component->id}}">
                                 <div class="item__title">
-                                    {{ $component->name }}
+                                    <input type="text" class="item__input" id="actuator-description-{{ $component->id }}" value="{{ $component->name }}" disabled>
                                 </div>
                                 <div class="item__actions">
+                                    <form action ="/editactuator" method="POST" class="edit-form ajaxform" data-edit="actuator">
                                     <div class="item__title">
-                                        <img src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                        <input id="project_id" name="project_id" type="hidden" value="1">
+                                        <input id="actuator_id" name="actuator_id" type="hidden" value="{{$component->id}}">
+                                        <input type="image" src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
                                     </div>
+                                </form>
                                     <form action ="/deletecomponent" method="POST" class="delete-form ajaxform" data-delete="component">
                                         <div class="item__title">
                                             <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -65,18 +70,23 @@
 
     <div id="controlledprocess">
         @foreach (App\ControlledProcess::where('project_id', $project_id)->get() as $component)
-            <button class="accordion"><b>[Controlled Process]</b> {{$component->name}}</button>
+            <button class="accordion" id="controlledprocess-{{$component->id}}"><b>[Controlled Process]</b> {{$component->name}}</button>
             <div class="panel">
                 <ul class="substep__list" id="add-controlledprocess">
                     @foreach (App\ControlledProcess::where('project_id', $project_id)->where('id', $component->id)->get() as $component)
                         <li class="item" id="actuator-{{$component->id}}">
                             <div class="item__title">
-                                {{ $component->name }}
+                                <input type="text" class="item__input" id="controlledprocess-description-{{ $component->id }}" value="{{ $component->name }}" disabled>
                             </div>
                             <div class="item__actions">
-                                <div class="item__title">
-                                    <img src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
-                                </div>
+                                <form action ="/editcontrolledprocess" method="POST" class="edit-form ajaxform" data-edit="controlledprocess">
+                                    <div class="item__title">
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                        <input id="project_id" name="project_id" type="hidden" value="1">
+                                        <input id="controlledprocess_id" name="controlledprocess_id" type="hidden" value="{{$component->id}}">
+                                        <input type="image" src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
+                                    </div>
+                                </form>
                                 <form action ="/deletecomponent" method="POST" class="delete-form ajaxform" data-delete="component">
                                     <div class="item__title">
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -103,18 +113,23 @@
 
     <div id="sensors">
         @foreach (App\Sensors::where('project_id', $project_id)->get() as $component)
-            <button class="accordion"><b>[Sensor]</b> {{$component->name}}</button>
+            <button class="accordion" id="sensor-{{$component->id}}"><b>[Sensor]</b> {{$component->name}}</button>
             <div class="panel">
                 <ul class="substep__list" id="add-sensor">
                     @foreach (App\Sensors::where('project_id', $project_id)->where('id', $component->id)->get() as $component)
                         <li class="item" id="actuator-{{$component->id}}">
                             <div class="item__title">
-                                {{ $component->name }}
+                                <input type="text" class="item__input" id="sensor-description-{{ $component->id }}" value="{{ $component->name }}" disabled>
                             </div>
                             <div class="item__actions">
-                                <div class="item__title">
-                                    <img src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
-                                </div>
+                                <form action ="/editsensor" method="POST" class="edit-form ajaxform" data-edit="sensor">
+                                    <div class="item__title">
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                        <input id="project_id" name="project_id" type="hidden" value="1">
+                                        <input id="sensor_id" name="sensor_id" type="hidden" value="{{$component->id}}">
+                                        <input type="image" src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
+                                    </div>
+                                </form>
                                 <form action ="/deletecomponent" method="POST" class="delete-form ajaxform" data-delete="component">
                                     <div class="item__title">
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">

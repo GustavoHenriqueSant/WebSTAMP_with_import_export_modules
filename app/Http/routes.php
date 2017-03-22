@@ -74,4 +74,8 @@ Route::get('/stepone', ['as' => 'stepone', function () {
     return view('pages.stepone');
 }]);
 
+Route::get('/steptwo', ['as' => 'steptwo', function () {
+    return view('pages.steptwo');
+}]);
+
 Route::post('/savecontexttable', 'ContextTableController@save');

@@ -1,6 +1,6 @@
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
 
-if (!actualPage.includes('stepone')) {
+if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   var $ = require('jquery');
 
   var Hazard = require('./elements/hazards');
@@ -528,6 +528,39 @@ function edit_fundamentals(id, activity) {
         console.log(error);
       })
       return false;
+    } else if(activity == "actuator"){
+      var name = $("#actuator-description-"+id).val();
+      axios.post('/editactuator', {
+        id : id,
+        name : name
+      })
+      .then(function(response) {
+        $("#actuator-description-" + id).replaceWith('<input type="text" class="item__input" id="actuator-description-'+id+'" value="'+name+'" size="100">');
+        $("#actuator-" + id).replaceWith('<button class="accordion" id="actuator-' + id + '"><b>[Actuator]</b> ' + name + '</button>');
+        document.getElementById("actuator-description-" + id).disabled = true;
+      })
+      } else if(activity == "controlledprocess"){
+        var name = $("#controlledprocess-description-"+id).val();
+        axios.post('/editcontrolledprocess', {
+          id : id,
+          name : name
+        })
+        .then(function(response) {
+          $("#controlledprocess-description-" + id).replaceWith('<input type="text" class="item__input" id="controlledprocess-description-'+id+'" value="'+name+'" size="100">');
+          $("#controlledprocess-" + id).replaceWith('<button class="accordion" id="controlledprocess-' + id + '"><b>[Controlled Process]</b> ' + name + '</button>');
+          document.getElementById("controlledprocess-description-" + id).disabled = true;
+        })
+    } else if(activity == "sensor"){
+      var name = $("#sensor-description-"+id).val();
+      axios.post('/editsensor', {
+        id : id,
+        name : name
+      })
+      .then(function(response) {
+        $("#sensor-description-" + id).replaceWith('<input type="text" class="item__input" id="sensor-description-'+id+'" value="'+name+'" size="100">');
+        $("#sensor-" + id).replaceWith('<button class="accordion" id="sensor-' + id + '"><b>[Sensor]</b> ' + name + '</button>');
+        document.getElementById("sensor-description-" + id).disabled = true;
+      })
     }
 }
 
@@ -577,7 +610,36 @@ $("body").on('keypress', '.item__input__active', function(event) {
       $('#state-variable-'+id).show();
       $('#variable-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
       return false;
-    }
+    } else if (activity == "actuator"){
+      var id = form.find("#actuator_id").val();
+      $('#actuator-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
+    } else if (activity == "controlledprocess"){
+      console.log("alo");
+      var id = form.find("#controlledprocess_id").val();
+      $('#controlledprocess-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
+    } else if (activity == "controller"){
+      var id = form.find("#controller_id").val();
+      $('#controller-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
+    } else if (activity == "actuator") {
+      var id = form.find("#actuator_id").val();
+      $('#actuator-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
+    } else if (activity == "controlledprocess") {
+      var id = form.find("#controlledprocess_id").val();
+      $('#controlledprocess-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
+    } else if (activity == "controller") {
+      var id = form.find("#controller_id").val();
+      $('#controller-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
+    } else if (activity == "sensor") {
+      var id = form.find("#sensor_id").val();
+      $('#sensor-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
+    } else {}
 
   });
 
@@ -660,7 +722,7 @@ for (i = 0; i < acc.length; i++) {
 }
 */
   // STEP 1
-} else {
+} else if(!actualPage.includes('steptwo')) {
   // Require JQuery
   var $ = require('jquery');
 
@@ -820,5 +882,27 @@ for (i = 0; i < acc.length; i++) {
     console.log("Salvo com sucesso!");
   });
 
-}
+} else {
+  // Require JQuery
+  var $ = require('jquery');
 
+  var Drop = require('tether-drop');
+
+  var drop = new Drop({
+      target: document.querySelector('[data-add="guideword"]'),
+      content: document.querySelector('[data-drop="guideword"]'),
+      openOn: 'click',
+      remove: true,
+      tetherOptions: {
+        attachment: 'top left',
+        targetAttachment: 'middle right',
+        constraints: [
+          {
+            to: 'scrollParent',
+            attachment: 'together'
+          }
+        ]
+      }
+    });
+
+}

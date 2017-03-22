@@ -16,7 +16,13 @@ elixir(function(mix) {
     mix.sass('style.scss', './public/css/style.css');
     mix.browserify('index.js', './public/js/app.js');
     mix.copy('./resources/assets/images', './public/images');
+    mix.scripts([
+    	'./public/js/app.js',
+        './node_modules/jquery/dist/jquery.min.js',
+        './node_modules/fancybox/dist/js/jquery.fancybox.js'
+    	], './public/js/app.js');
     mix.styles([
-        './node_modules/handsontable/dist/handsontable.full.css',
-    ], 'public/assets/css' /* <- caminho do arquivo de saida */);
+        './public/css/style.css',
+        './node_modules/fancybox/dist/css/jquery.fancybox.css',
+    ], './public/css/style.css');
 });

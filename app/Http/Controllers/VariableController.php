@@ -16,6 +16,8 @@ use App\Controllers;
 
 use App\ControlAction as CA;
 
+use DB;
+
 use Illuminate\Routing\Redirector;
 
 class VariableController extends Controller
@@ -46,6 +48,7 @@ class VariableController extends Controller
 				foreach(Rules::distinct()->select('index')->where('controlaction_id', $control_action->id)->get() as $rules) {
 					$rule = new Rules();
 					$rule->index = $rules->index;
+					$rule->variable_id = $variable->id;
 					$rule->state_id = 0;
 					$rule->controlaction_id = $control_action->id;
 					$rule->save();
@@ -76,6 +79,13 @@ class VariableController extends Controller
 
 	public function delete(Request $request){
 		Rules::where('variable_id', $request->input('id'))->delete();
+		$states = State::where('variable_id', $request->input('id'))->get();
+		foreach($states as $state) {
+			DB::select(DB::raw("UPDATE context_tables SET context = REPLACE(context, ',".$state->id.",', ',') WHERE context like '%,".$state->id.",%'"));
+			DB::select(DB::raw("UPDATE context_tables SET context = REPLACE(context, ',".$state->id."', '') WHERE context like '%,".$state->id."'"));
+			DB::select(DB::raw("UPDATE context_tables SET context = REPLACE(context, '".$state->id.",', '') WHERE context like '".$state->id.",%'"));
+			State::destroy($state->id);			
+		}
 		Variable::destroy($request->input('id'));
 	}
 

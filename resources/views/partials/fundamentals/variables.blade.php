@@ -10,7 +10,7 @@
     @if($component_id == 0)
         System Variables
     @else
-        {{$component_name}} Variables
+        {{$component_name}} Variables (Process Model)
     @endif
 </div>
 

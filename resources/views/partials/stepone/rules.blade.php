@@ -33,7 +33,7 @@
                             <input type="hidden" name="_token" value="{{csrf_token()}}">
                             <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
                             <input type="hidden" name="rule_index" id="rule_index" value="{{$rule_index->index}}">
-                            <input type="image" src="{{ asset('images/delete.ico') }}" alt="Delete" width="20" class="navbar__logo">
+                            <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
                         </form>
                     </div>
                 </div>
