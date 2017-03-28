@@ -11,11 +11,14 @@
 	    	@include('partials.steptwo.steptwotable')
 	    </div>
     @endforeach
-<a id="inline" href="#data">This shows content of element who has id="data"</a>
+    
+    @include('partials.steptwo.associated-causal-factors')
 
-<div style="display:none"><div id="data">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div></div>
 @endsection
 
 @section('dialogs')
-	@include('partials.steptwo.add-guideword')
+	@foreach(App\SafetyConstraints::all() as $sc)
+		@include('partials.steptwo.add-guideword', ['uca_id' => $sc->id])
+	@endforeach
+
 @endsection

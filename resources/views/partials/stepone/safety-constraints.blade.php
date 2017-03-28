@@ -2,7 +2,11 @@
     Unsafe Control Actions and Safety Constraints associated - {{$ca->name}}
 </div>
 
-<div class="substep__content">
+<div class="substep__add" data-component="add-button" data-add="uca-{{$ca->id}}">
+    +
+</div>
+
+<div class="substep__content add-uca" id="uca-{{$ca->id}}">
 
     <div class="container">
 
@@ -41,12 +45,85 @@
             -->
 
             @foreach(App\SafetyConstraints::where('controlaction_id', $ca->id)->get() as $sc)
-                <div class="table-row">
-                    <div class="text">
-                        {{$sc->unsafe_control_action}}
+                <div class="table-row" id="uca-row-{{$sc->id}}">
+                    
+                    <div class="text item__title">
+                        <input type="text" class="item__input" id="unsafe_control_action-{{$sc->id}}" value="{{$sc->unsafe_control_action}}" disabled>
                     </div>
-                    <div class="text">
-                        {{$sc->safety_constraint}}
+                    
+                    <div class="text" style="display: inline-block;">
+                        <div>
+                        <select id="type-{{$sc->id}}" style="-webkit-appearance: none; box-shadow: none !important; border: 0;" disabled>
+                            @if($sc->type == "Provided")
+                                <option value="Provided" selected>[Provided]</option>
+                            @else
+                                <option value="Provided">[Provided]</option>
+                            @endif
+
+                            @if($sc->type == "Not Provided")
+                                <option value="Not Provided" selected>[Not Provided]</option>
+                            @else
+                                <option value="Not Provided">[Not Provided]</option>
+                            @endif
+
+                            @if($sc->type == "Wrong Time")
+                                <option value="Wrong Time" selected>[Wrong time]</option>
+                            @else
+                                <option value="Wrong Time">[Wrong time]</option>
+                            @endif
+
+                            @if($sc->type == "Wrong Order")
+                                <option value="Wrong Order" selected>[Wrong order]</option>
+                            @else
+                                <option value="Wrong Order">[Wrong order]</option>
+                            @endif
+
+                            @if($sc->type == "Provided too early")
+                                <option value="Provided too early" selected>[Provided too early]</option>
+                            @else
+                                <option value="Provided too early">[Provided too early]</option>
+                            @endif
+
+                            @if($sc->type == "Provided too late")
+                                <option value="Provided too late" selected>[Provided too late]</option>
+                            @else
+                                <option value="Provided too late">[Provided too late]</option>
+                            @endif
+
+                            @if($sc->type == "Stopped too soon")
+                                <option value="Stopped too soon" selected>[Stopped too soon]</option>
+                            @else
+                                <option value="Stopped too soon">[Stopped too soon]</option>
+                            @endif
+
+                            @if($sc->type == "Applied too long")
+                                <option value="Applied too long" selected>[Applied too long]</option>
+                            @else
+                                <option value="Applied too long">[Applied too long]</option>
+                            @endif
+                        </select>
+                        </div>
+
+                        <div class="item__title">
+                            <input type="text" class="item__input" id="safety_constraint-{{$sc->id}}" value="{{$sc->safety_constraint}}" disabled>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <form action="/edituca" class="edit-form" data-edit="uca" method="POST">
+                            <input type="hidden" name="_token" value="{{csrf_token()}}">
+                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
+                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">
+                            <input type="image" src="{{ asset('images/edit.ico') }}" alt="Delete" width="20" class="navbar__logo">
+                        </form>
+                    </div>
+                    <div>
+                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST">
+                            <input type="hidden" name="_token" value="{{csrf_token()}}">
+                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
+                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">
+                            <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
+                        </form>
                     </div>
                 </div>
             @endforeach

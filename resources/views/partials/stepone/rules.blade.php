@@ -20,15 +20,15 @@
 
             @foreach (App\Rules::where('controlaction_id', $ca->id)->orderBy('id', 'asc')->select('index')->distinct()->get() as $rule_index)
                 <div class="table-row rules-table rules-ca-{{$ca->id}}-rule-{{$rule_index->index}}">
-                    <div class="text">R{{$rule_index->index}}</div>
+                    <div class="text center">R{{$rule_index->index}}</div>
                     @foreach (App\Rules::where('index', $rule_index->index)->where('controlaction_id', $ca->id)->orderBy('variable_id', 'asc')->get() as $rule)
                         @if ($rule->state_id == 0)
-                            <div class="text">ANY</div>
+                            <div class="text center">ANY</div>
                         @else
-                            <div class="text">{{App\State::find($rule->state_id)->name}}</div>
+                            <div class="text center">{{App\State::find($rule->state_id)->name}}</div>
                         @endif
                     @endforeach
-                    <div class="text">
+                    <div class="text center">
                         <form action="/deleterule" class="delete-form" data-delete="rules" method="POST">
                             <input type="hidden" name="_token" value="{{csrf_token()}}">
                             <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">

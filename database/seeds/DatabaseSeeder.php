@@ -29,5 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SensorsTableSeeder::class);
         $this->call(ConnectionsTableSeeder::class);
         $this->call(SafetyConstraintsTableSeeder::class);
+        $this->call(GuidewordsTableSeeder::class);
+        $this->call(CausalAnalysisTableSeeder::class);
     }
 }

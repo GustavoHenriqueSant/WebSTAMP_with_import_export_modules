@@ -95,7 +95,7 @@
                         array_push($rules, "true");
                     }
                 ?>
-                    <div class="table-row">
+                    <div class="table-row center">
 
                         @for($i = 0; $i < count($allStates); $i++)
                             

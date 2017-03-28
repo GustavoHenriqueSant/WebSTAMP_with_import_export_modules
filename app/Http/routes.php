@@ -63,6 +63,10 @@ Route::post('/deleteconnections', 'ConnectionController@delete');
 Route::post('/addstate', 'StateController@add');
 Route::post('/deletestate', 'StateController@delete');
 
+Route::post('/adduca', 'SafetyConstraintsController@add');
+Route::post('/edituca', 'SafetyConstraintsController@edit');
+Route::post('/deleteuca', 'SafetyConstraintsController@delete');
+
 
 Route::post('/deleteaccidentassociated', 'AccidentHazardController@delete');
 

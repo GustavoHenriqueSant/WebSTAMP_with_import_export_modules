@@ -384,16 +384,52 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
               return false;
           } else if (activity === 'component') {
             var id = form.find("#component_id").val();
-            var type = form.find("#component_type").val().toLowerCase();
-            axios.post('/deletecomponent', {
+            var type = form.find("#component_type").val();
+            if (type === 'actuator') {
+              axios.post('/deleteactuator', {
                 id : id,
               })
               .then(function (response) {
                 $("#" + type + "-" + id).remove();
+                $("#panel-" + type + "-" + id).remove();
               })
               .catch(function (error) {
                 console.log(error);
               })
+            } else if (type === 'controlledprocess') {
+              axios.post('/deletecontrolledprocess', {
+                id : id,
+              })
+              .then(function (response) {
+                $("#" + type + "-" + id).remove();
+                $("#panel-" + type + "-" + id).remove();
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+            } else if (type === 'controller') {
+              axios.post('/deletecontroller', {
+                id : id,
+              })
+              .then(function (response) {
+                $("#" + type + "-" + id).remove();
+                $("#panel-" + type + "-" + id).remove();
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+            } else if (type === 'sensor') {
+              axios.post('/deletesensor', {
+                id : id,
+              })
+              .then(function (response) {
+                $("#" + type + "-" + id).remove();
+                $("#panel-" + type + "-" + id).remove();
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+            }
               return false;
           } else if (activity === 'controlaction') {
             var id = form.find("#controlaction_id").val();
@@ -549,6 +585,17 @@ function edit_fundamentals(id, activity) {
           $("#controlledprocess-description-" + id).replaceWith('<input type="text" class="item__input" id="controlledprocess-description-'+id+'" value="'+name+'" size="100">');
           $("#controlledprocess-" + id).replaceWith('<button class="accordion" id="controlledprocess-' + id + '"><b>[Controlled Process]</b> ' + name + '</button>');
           document.getElementById("controlledprocess-description-" + id).disabled = true;
+        })
+    } else if(activity == "controller"){
+        var name = $("#controller-description-"+id).val();
+        axios.post('/editcontroller', {
+          id : id,
+          name : name
+        })
+        .then(function(response) {
+          $("#controller-description-" + id).replaceWith('<input type="text" class="item__input" id="controller-description-'+id+'" value="'+name+'" size="100">');
+          $("#controller-" + id).replaceWith('<button class="accordion" id="controller-' + id + '"><b>[Controller]</b> ' + name + '</button>');
+          document.getElementById("controller-description-" + id).disabled = true;
         })
     } else if(activity == "sensor"){
       var name = $("#sensor-description-"+id).val();
@@ -726,6 +773,135 @@ for (i = 0; i < acc.length; i++) {
   // Require JQuery
   var $ = require('jquery');
 
+  var axios = require('./axios');
+
+  var Drop = require('tether-drop');
+
+  var vex = require('vex-js');
+  vex.registerPlugin(require('vex-dialog'));
+  vex.defaultOptions.className = 'vex-theme-os';
+
+  var UCA = require('./templates/unsafecontrolaction_template');
+
+  var uca = [];
+
+  $('.item__input').on('keyup', function(event) {
+    event.currentTarget.size = event.currentTarget.value.length;
+  });
+
+  $('.item__input__active').on('keyup', function(event) {
+    event.currentTarget.size = event.currentTarget.value.length;
+  });
+
+  $(window).load(function(event) {
+    $('.item__input').each(function(){
+      this.size = this.value.length;
+    });
+  });
+
+  $("body").on('blur', '.item__input__active', function(event) {
+  event.preventDefault();
+  var split = event.currentTarget.id.split("-");
+  var id = split[1];
+  var activity = split[0];
+  edit_uca_sc(id);
+});
+
+  function edit_uca_sc(id) {
+    var unsafe_control_action = $("#unsafe_control_action-" + id).val();
+    var type = $("#type-" + id + " option:selected").val();
+    var safety_constraint = $("#safety_constraint-" + id).val();
+    axios.post('/edituca', {
+      id : id,
+      unsafe_control_action : unsafe_control_action,
+      type : type,
+      safety_constraint : safety_constraint
+    })
+    .then(function(response) {
+      $('#unsafe_control_action-'+id).attr('class', 'item__input').prop('disabled', true);
+      $('#type-'+id).attr('class', 'item__input').prop('disabled', true);
+      $('#safety_constraint-'+id).attr('class', 'item__input').prop('disabled', true);
+    })
+    .catch(function(error) {
+      console.log(error);
+    })
+  }
+
+// EDIT WHEN KEY "ENTER" WAS PRESSED
+$("body").on('keypress', '.item__input__active', function(event) {
+  if (event.which == 13) {
+    event.preventDefault();
+    var split = event.currentTarget.id.split("-");
+    var id = split[2];
+    var activity = split[0];
+    edit_uca_sc(id, activity);
+  }
+});
+
+
+
+  $('.add-uca').each(function(index, f){
+    uca.push(f.id);
+  })
+  uca.forEach(function(f) {
+    var drop = new Drop({
+      target: document.querySelector('[data-add="' + f + '"]'),
+      content: document.querySelector('[data-drop="' + f + '"]'),
+      openOn: 'click',
+      remove: true,
+      tetherOptions: {
+        attachment: 'top left',
+        targetAttachment: 'middle right',
+        constraints: [
+          {
+            to: 'scrollParent',
+            attachment: 'together'
+          }
+        ]
+      }
+    });
+  });
+
+  // Add UCA and Safety Constraint Associated
+  $('body').on('submit', '.add-form', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var controlaction_id = form.data("add").split("-")[1];
+    var unsafe_control_action = form.find("#uca-name-" + controlaction_id).val();
+    var safety_constraint = form.find("#sc-name-" + controlaction_id).val();
+    var type = form.find("#type-uca-" + controlaction_id + " option:selected").val();
+    // Rule_is is always zero when the analyst add it.
+    var rule_id = 0;
+    var id = 0;
+    axios.post('/adduca', {
+      id : id,
+      unsafe_control_action : unsafe_control_action,
+      safety_constraint : safety_constraint,
+      type : type,
+      controlaction_id : controlaction_id,
+      rule_id : rule_id
+    })
+    .then(function (response) {
+      $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  });
+
+  $('body').on('click', '.edit-form', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var activity = form.data("edit");
+    var controlaction_id = form.find("#controlaction_id").val();
+    var safety_constraint_id = form.find("#safety_constraint_id").val();
+    if (activity === "uca") {
+      $('#unsafe_control_action-'+safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
+      $('#type-'+safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
+      $('#safety_constraint-'+safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
+    }
+  });
+
   $(function() {
     // Get all elements with class step_one
     var $op1 = $('.hide-control-actions');
@@ -760,11 +936,6 @@ for (i = 0; i < acc.length; i++) {
 
 });
 
-  var axios = require('./axios');
-  var vex = require('vex-js');
-  vex.registerPlugin(require('vex-dialog'));
-  vex.defaultOptions.className = 'vex-theme-os';
-
 
   // Add rules
   $('body').on('submit', '.add-new-rule', function(event) {
@@ -776,7 +947,6 @@ for (i = 0; i < acc.length; i++) {
     var append = '<div class="table-row rules-table rules-ca-'+controlaction_id+'-rule-'+rule_index+'"><div class="text">R'+rule_index+'</div>';
     // Save each variable of the rule
     var variables = form.find('[id^="variable_id_"]').each(function() {
-        console.log("Entrou!");
         var ids = form.find(this).val().split("-");
         var variable_id = ids[0];
         var state_id = ids[1];
@@ -819,7 +989,7 @@ for (i = 0; i < acc.length; i++) {
   });
 
 
-  // DELETE RULES
+  // DELETE RULES AND UCA/SC
   $('body').on('submit', '.delete-form', function(event) {
     event.preventDefault();
     var form = $(event.currentTarget);
@@ -842,6 +1012,18 @@ for (i = 0; i < acc.length; i++) {
                 console.log(error);
               })
               return false;
+          } else {
+            var id = form.find("#safety_constraint_id").val();
+            axios.post('/deleteuca', {
+              id : id
+            })
+            .then(function(response) {
+              $("#uca-row-" + id).remove();
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            return false;
           }
         }
       }
@@ -888,9 +1070,34 @@ for (i = 0; i < acc.length; i++) {
 
   var Drop = require('tether-drop');
 
-  var drop = new Drop({
-      target: document.querySelector('[data-add="guideword"]'),
-      content: document.querySelector('[data-drop="guideword"]'),
+ var guidewords = [];
+  $('.unsafe_control_action').each(function(index, f){
+    guidewords.push(f.id);
+  })
+
+  var vex = require('vex-js');
+  vex.registerPlugin(require('vex-dialog'));
+  vex.defaultOptions.className = 'vex-theme-default';
+
+  $('body').on('click', '.teste-vex', function(event) {
+    console.log($(testezika));
+    vex.open({
+      unsafeContent: $(testezika).html(),
+      buttons: [
+        $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+      ],
+      showCloseButton: false,
+      contentClassName: 'teste1'
+    });
+  });
+  
+
+
+  guidewords.forEach(function(f) {
+    var drop = new Drop({
+      target: document.querySelector('[data-add="'+f+'"]'),
+      content: document.querySelector('[data-drop="'+f+'"]'),
       openOn: 'click',
       remove: true,
       tetherOptions: {
@@ -904,5 +1111,5 @@ for (i = 0; i < acc.length; i++) {
         ]
       }
     });
-
+  });
 }

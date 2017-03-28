@@ -1,4 +1,4 @@
-<?php $add = 'guideword'; ?>
+<?php $add = 'guideword-' . $uca_id; ?>
 
 @extends('partials.drop')
 
@@ -6,7 +6,7 @@
     <label for="guideword-name" class="add-drop__label">
         Guideword name
     </label>
-    <select>
+    <select id="guideword-{{$uca_id}}">
     	<option disabled style="background: black; color: white;" style="background: black; color: white;">External ↔ Controller</option>
     		<option>Control input or external information wrong or missing</option>
     	<option disabled style="background: black; color: white;">Controller</option>

@@ -20,8 +20,14 @@
 		    <div class="substep substep--safety-constraints" id="safety-constraints">
 		        @include('partials.stepone.safety-constraints')
 		    </div>
-
+		    @include('partials.stepone.add-unsafecontrolaction', ['controlaction_id' => $ca->id])
 		</div>
     @endforeach
 
+@endsection
+
+@section('dialogs')
+	@foreach(App\ControlAction::all() as $ca)
+		 @include('partials.stepone.add-unsafecontrolaction', ['controlaction_id' => $ca->id])
+	@endforeach
 @endsection

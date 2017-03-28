@@ -11,8 +11,35 @@
    <div id="controllers">
         @foreach (App\Controllers::where('project_id', $project_id)->get() as $component)
             <button class="accordion" id="controller-{{$component->id}}"><b>[Controller]</b> {{$component->name}}</button>
-            <div class="panel">
-                
+            <div class="panel" id="panel-controller-{{$component->id}}">
+
+                <ul class="substep__list" id="add-controller">
+                            <li class="item" id="controller-{{$component->id}}">
+                                <div class="item__title">
+                                    <input type="text" class="item__input" id="controller-description-{{ $component->id }}" value="{{ $component->name }}" disabled>
+                                </div>
+                                <div class="item__actions">
+                                    <form action ="/editcontroller" method="POST" class="edit-form ajaxform" data-edit="controller">
+                                    <div class="item__title">
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                        <input id="project_id" name="project_id" type="hidden" value="1">
+                                        <input id="controller_id" name="controller_id" type="hidden" value="{{$component->id}}">
+                                        <input type="image" src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
+                                    </div>
+                                </form>
+                                    <form action ="/deletecomponent" method="POST" class="delete-form ajaxform" data-delete="component">
+                                        <div class="item__title">
+                                            <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                            <input id="project_id" name="project_id" type="hidden" value="1">
+                                            <input id="component_id" name="component_id" type="hidden" value="{{$component->id}}">
+                                            <input id="component_type" name="component_type" type="hidden" value="controller">
+                                            <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                </ul>
+
                 <div class="substep substep--connections" id="connection-controller-{{$component->id}}">
                     @include('partials.fundamentals.connections', ['component_id' => $component->id, 'name' => $component->name, 'type' => 'controller'])
                 </div>
@@ -32,7 +59,7 @@
     <div id="actuators">
         @foreach (App\Actuators::where('project_id', $project_id)->get() as $component)
             <button class="accordion" id="actuator-{{$component->id}}"><b>[Actuator]</b> {{$component->name}}</button>
-            <div class="panel">
+            <div class="panel" id="panel-actuator-{{$component->id}}">
                 <ul class="substep__list" id="add-actuator">
                     @foreach (App\Actuators::where('project_id', $project_id)->where('id', $component->id)->get() as $component)
                             <li class="item" id="actuator-{{$component->id}}">
@@ -53,8 +80,8 @@
                                             <input type="hidden" name="_token" value="{{csrf_token()}}">
                                             <input id="project_id" name="project_id" type="hidden" value="1">
                                             <input id="component_id" name="component_id" type="hidden" value="{{$component->id}}">
-                                            <input id="component_type" name="component_type" type="hidden" value="{{$component->type}}">
-                                            <input type="image" src="{{ asset('images/delete.ico') }}" alt="Delete" width="20" class="navbar__logo">
+                                            <input id="component_type" name="component_type" type="hidden" value="actuator">
+                                            <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
                                         </div>
                                     </form>
                                 </div>
@@ -71,7 +98,7 @@
     <div id="controlledprocess">
         @foreach (App\ControlledProcess::where('project_id', $project_id)->get() as $component)
             <button class="accordion" id="controlledprocess-{{$component->id}}"><b>[Controlled Process]</b> {{$component->name}}</button>
-            <div class="panel">
+            <div class="panel" id="panel-controlledprocess-{{$component->id}}">
                 <ul class="substep__list" id="add-controlledprocess">
                     @foreach (App\ControlledProcess::where('project_id', $project_id)->where('id', $component->id)->get() as $component)
                         <li class="item" id="actuator-{{$component->id}}">
@@ -92,8 +119,8 @@
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                                         <input id="project_id" name="project_id" type="hidden" value="1">
                                         <input id="component_id" name="component_id" type="hidden" value="{{$component->id}}">
-                                        <input id="component_type" name="component_type" type="hidden" value="{{$component->type}}">
-                                        <input type="image" src="{{ asset('images/delete.ico') }}" alt="Delete" width="20" class="navbar__logo">
+                                        <input id="component_type" name="component_type" type="hidden" value="controlledprocess">
+                                        <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
                                     </div>
                                 </form>
                             </div>
@@ -114,7 +141,7 @@
     <div id="sensors">
         @foreach (App\Sensors::where('project_id', $project_id)->get() as $component)
             <button class="accordion" id="sensor-{{$component->id}}"><b>[Sensor]</b> {{$component->name}}</button>
-            <div class="panel">
+            <div class="panel" id="panel-sensor-{{$component->id}}">
                 <ul class="substep__list" id="add-sensor">
                     @foreach (App\Sensors::where('project_id', $project_id)->where('id', $component->id)->get() as $component)
                         <li class="item" id="actuator-{{$component->id}}">
@@ -135,8 +162,8 @@
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                                         <input id="project_id" name="project_id" type="hidden" value="1">
                                         <input id="component_id" name="component_id" type="hidden" value="{{$component->id}}">
-                                        <input id="component_type" name="component_type" type="hidden" value="{{$component->type}}">
-                                        <input type="image" src="{{ asset('images/delete.ico') }}" alt="Delete" width="20" class="navbar__logo">
+                                        <input id="component_type" name="component_type" type="hidden" value="sensor">
+                                        <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
                                     </div>
                                 </form>
                             </div>

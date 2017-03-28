@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "axios": "^0.14.0",
-    "fancybox": "^3.0.0",
     "handsontable": "^0.28.4",
     "jquery": "^2.2.4",
     "tether-drop": "^1.2.2",

@@ -16,6 +16,7 @@ class CreateCaSafetyConstraintTable extends Migration
             $table->increments('id');
             $table->text('unsafe_control_action');
             $table->text('safety_constraint');
+            $table->text('type');
             $table->integer('controlaction_id')->unsigned();
             $table->integer('rule_id')->unsigned();
             $table->timestamps();
