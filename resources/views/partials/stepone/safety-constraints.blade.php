@@ -51,7 +51,7 @@
                         <input type="text" class="item__input" id="unsafe_control_action-{{$sc->id}}" value="{{$sc->unsafe_control_action}}" disabled>
                     </div>
                     
-                    <div class="text" style="display: inline-block;">
+                    <div class="text">
                         <div>
                         <select id="type-{{$sc->id}}" style="-webkit-appearance: none; box-shadow: none !important; border: 0;" disabled>
                             @if($sc->type == "Provided")

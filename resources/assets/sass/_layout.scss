@@ -89,3 +89,35 @@
 .dialogs {
   display: none;
 }
+
+.step2_textarea {
+  /*overflow: hidden;*/
+  resize: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: 0;
+  width: 100%;
+
+  &__modal {
+    resize: none;
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: 0;
+    width: 100%;
+    background-color: #f0f0f0;
+    height: 100px;
+  }
+  
+}
+
+.guideword-combo {
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: 0;
+}
+
+.guideword-option {
+  background: black;
+  color: white;
+  disabled: true;
+}

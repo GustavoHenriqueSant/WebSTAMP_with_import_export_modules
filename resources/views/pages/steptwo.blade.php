@@ -19,6 +19,7 @@
 @section('dialogs')
 	@foreach(App\SafetyConstraints::all() as $sc)
 		@include('partials.steptwo.add-guideword', ['uca_id' => $sc->id])
+		@include('partials.steptwo.add-tuple')
 	@endforeach
 
 @endsection

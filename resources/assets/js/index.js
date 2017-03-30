@@ -1091,8 +1091,33 @@ $("body").on('keypress', '.item__input__active', function(event) {
       contentClassName: 'teste1'
     });
   });
-  
 
+  $('body').on('click', '.test-vex', function(event) {
+    vex.open({
+      unsafeContent: $("#add-tuple").html(),
+      buttons: [
+        $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+      ],
+      showCloseButton: false,
+      contentClassName: 'teste1'
+    });
+  });
+  
+  $('textarea').on('keyup change onpaste', function () {
+    var alturaScroll = this.scrollHeight;
+    var alturaCaixa = $(this).height();
+
+    if (alturaScroll > (alturaCaixa + 10)) {
+        if (alturaScroll > 500) return;
+        $(this).css('height', alturaScroll);
+    }
+
+    if( $(this).val() == '' ){
+        // retonando ao height padrão de 40px
+        $(this).css('height', '40px');
+    }
+  });
 
   guidewords.forEach(function(f) {
     var drop = new Drop({
