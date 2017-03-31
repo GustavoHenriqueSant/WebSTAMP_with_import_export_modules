@@ -800,12 +800,23 @@ for (i = 0; i < acc.length; i++) {
   });
 
   $("body").on('blur', '.item__input__active', function(event) {
-  event.preventDefault();
-  var split = event.currentTarget.id.split("-");
-  var id = split[1];
-  var activity = split[0];
-  edit_uca_sc(id);
-});
+    event.preventDefault();
+    var split = event.currentTarget.id.split("-");
+    var id = split[1];
+    var activity = split[0];
+    edit_uca_sc(id);
+  });
+
+  // EDIT WHEN KEY "ENTER" WAS PRESSED
+  $("body").on('keypress', '.item__input__active', function(event) {
+    if (event.which == 13) {
+      event.preventDefault();
+      var split = event.currentTarget.id.split("-");
+      var id = split[2];
+      var activity = split[0];
+      edit_uca_sc(id, activity);
+    }
+  });
 
   function edit_uca_sc(id) {
     var unsafe_control_action = $("#unsafe_control_action-" + id).val();
@@ -826,18 +837,6 @@ for (i = 0; i < acc.length; i++) {
       console.log(error);
     })
   }
-
-// EDIT WHEN KEY "ENTER" WAS PRESSED
-$("body").on('keypress', '.item__input__active', function(event) {
-  if (event.which == 13) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[2];
-    var activity = split[0];
-    edit_uca_sc(id, activity);
-  }
-});
-
 
 
   $('.add-uca').each(function(index, f){
@@ -1068,19 +1067,157 @@ $("body").on('keypress', '.item__input__active', function(event) {
   // Require JQuery
   var $ = require('jquery');
 
-  var Drop = require('tether-drop');
+  // Require axios
+  var axios = require('./axios');
 
- var guidewords = [];
-  $('.unsafe_control_action').each(function(index, f){
-    guidewords.push(f.id);
-  })
+  var newCausal = require('./templates/causal_template');
 
   var vex = require('vex-js');
   vex.registerPlugin(require('vex-dialog'));
   vex.defaultOptions.className = 'vex-theme-default';
 
+  $('body').on('submit', '.adding-tuple', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var scenario = form.find("#scenario").val();
+    var associated = form.find("#associated").val();
+    var requirement = form.find("#requirement").val();
+    var role = form.find("#role").val();
+    var rationale = form.find("#rationale").val();
+    var guideword = form.find("#guideword option:selected").val();
+    var safety = form.find("#uca").val();
+    var id = 0;
+    //console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
+    axios.post('/addtuple', {
+      id, id,
+      scenario : scenario,
+      associated : associated,
+      requirement : requirement,
+      role : role,
+      rationale : rationale,
+      guideword : guideword,
+      safety : safety
+    })
+    .then(function(response){
+      console.log($("#safety-"+safety).find(".container-fluid"));
+      $("#safety-"+safety).find(".table-content").append(newCausal(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  });
+
+  $('body').on('submit', '.delete-form', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var id = form.find("#causal_id").val();
+    vex.dialog.confirm({
+      message: 'Are you sure you want to delete this item?',
+      callback: function (value) {
+        if (value && id > 0) {
+          axios.post('deletetuple', {
+            id : id
+          })
+          .then(function(response) {
+            $("#causal-row-" + id).remove();
+          })
+          .catch(function(error) {
+            console.log(error);
+          })
+        }
+      }
+    }); 
+  });
+
+  $('body').on('submit', '.edit-form', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var id = form.find("#causal_id").val();
+    // Disabling the textarea
+    $("#guideword-"+id).prop('disabled', false);
+    $("#scenario-"+id).prop('disabled', false);
+    $("#associated-"+id).prop('disabled', false);
+    $("#requirement-"+id).prop('disabled', false);
+    $("#role-"+id).prop('disabled', false);
+    $("#rationale-"+id).prop('disabled', false);
+  });
+
+  $("body").on('blur', '.step2_textarea', function(event) {
+    event.preventDefault();
+    var split = event.currentTarget.id.split("-");
+    var id = split[1];
+    var activity = split[0];
+    edit_causal_analysis(id);
+  });
+
+  $("body").on('change', '.guideword-combo', function(event) {
+    event.preventDefault();
+    var split = event.currentTarget.id.split("-");
+    var id = split[1];
+    var activity = split[0];
+    edit_causal_analysis(id);
+  });
+
+  // EDIT WHEN KEY "ENTER" WAS PRESSED
+  $("body").on('keypress', '.step2_textarea', function(event) {
+    if (event.which == 13) {
+      event.preventDefault();
+      var split = event.currentTarget.id.split("-");
+      var id = split[1];
+      var activity = split[0];
+      edit_causal_analysis(id);
+    }
+  });
+
+  function edit_causal_analysis(id){
+    var guideword = $("#guideword-"+id+" option:selected").val(); 
+    var scenario = $("#scenario-"+id).val();
+    var associated = $("#associated-"+id).val();
+    var requirement = $("#requirement-"+id).val();
+    var role = $("#role-"+id).val();
+    var rationale = $("#rationale-"+id).val();
+    axios.post('/edittuple', {
+      id : id,
+      guideword : guideword,
+      scenario : scenario,
+      associated : associated,
+      requirement : requirement,
+      role : role,
+      rationale : rationale
+    })
+    .then(function(response){
+      $("#guideword-"+id).prop('disabled', true);
+      $("#scenario-"+id).prop('disabled', true);
+      $("#associated-"+id).prop('disabled', true);
+      $("#requirement-"+id).prop('disabled', true);
+      $("#role-"+id).prop('disabled', true);
+      $("#rationale-"+id).prop('disabled', true);
+    })
+    .catch(function(error){
+      console.log(error)
+    })
+    /*if (activity === 'scenario') {
+      console.log("Katiau!");
+    } else if (activity === 'associated') {
+      console.log("Katiuga");
+    } else if(activity === "requirement") {
+      console.log("Relampago marquinhos");
+    } else if(activity === "role") {
+      console.log("Tom mate");
+    } else if(activity === "rationale") {
+      console.log("Rudisson rornet");
+    }*/
+  }
+
   $('body').on('click', '.teste-vex', function(event) {
-    console.log($(testezika));
+    event.preventDefault();
+    console.log("Entrou");
+    var form = $(event.currentTarget);
+    // Gets the id of the UCA
+    var value = form.data("id");
+    // Change de hidden value to the actual UCA id
+    $("#testezika").find("#uca").val(value);
+    console.log($("#testezika").find("#uca").val());
     vex.open({
       unsafeContent: $(testezika).html(),
       buttons: [
@@ -1093,14 +1230,15 @@ $("body").on('keypress', '.item__input__active', function(event) {
   });
 
   $('body').on('click', '.test-vex', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    // Gets the id of the UCA
+    var value = form.data("id");
+    // Change de hidden value to the actual UCA id
+    $("#add-tuple").find("#uca").val(value);
+    //Opens the modal
     vex.open({
-      unsafeContent: $("#add-tuple").html(),
-      buttons: [
-        $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
-        $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
-      ],
-      showCloseButton: false,
-      contentClassName: 'teste1'
+      unsafeContent: $("#add-tuple").html()
     });
   });
   
@@ -1119,22 +1257,42 @@ $("body").on('keypress', '.item__input__active', function(event) {
     }
   });
 
-  guidewords.forEach(function(f) {
-    var drop = new Drop({
-      target: document.querySelector('[data-add="'+f+'"]'),
-      content: document.querySelector('[data-drop="'+f+'"]'),
-      openOn: 'click',
-      remove: true,
-      tetherOptions: {
-        attachment: 'top left',
-        targetAttachment: 'middle right',
-        constraints: [
-          {
-            to: 'scrollParent',
-            attachment: 'together'
-          }
-        ]
-      }
-    });
+  $('body').on('click', ".testesom", function(event) {
+
   });
+
+
+  $('body').on('submit', ".add-causal", function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    form.find(".associated-checkbox:checked").each(function(index, f){
+      console.log(f.id);
+    })
+  });
+
+  $(function() {
+    // Get all elements with class step_one
+    var $op1 = $('.hide-control-actions');
+
+    // Verifies if there is Control Actions stored
+    if ($op1 != null) {
+        // Show the first control action (with lower id)
+        $($op1[0]).show();
+    }
+  // function to hide all elements with class step_one
+  var hideAll = function() {
+    $op1.hide();
+  };
+
+  // Function to alter the visibility of the control action under analysis
+  $('#control-actions-select').change(function(e) {
+      // Hide all elements of all control actions
+      hideAll();
+      console.log(e.target.value);
+      // Shows the content of selected control action
+      $('#showtable-'+e.target.value).show();
+  });
+
+});
+
 }

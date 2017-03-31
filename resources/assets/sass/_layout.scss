@@ -107,6 +107,15 @@
     background-color: #f0f0f0;
     height: 100px;
   }
+
+  &:disabled{
+    resize: none;
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: 0;
+    width: 100%;
+    background-color: white;
+  }
   
 }
 
@@ -116,8 +125,15 @@
   border: 0;
 }
 
+.guideword-combo-tuple {
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: 0;
+  background-color: #f0f0f0;
+  max-width: 100%;
+}
+
 .guideword-option {
   background: black;
   color: white;
-  disabled: true;
 }

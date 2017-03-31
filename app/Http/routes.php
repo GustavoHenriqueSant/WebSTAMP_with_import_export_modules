@@ -67,6 +67,10 @@ Route::post('/adduca', 'SafetyConstraintsController@add');
 Route::post('/edituca', 'SafetyConstraintsController@edit');
 Route::post('/deleteuca', 'SafetyConstraintsController@delete');
 
+Route::post('/addtuple', 'CausalAnalysisController@add');
+Route::post('/edittuple', 'CausalAnalysisController@edit');
+Route::post('/deletetuple', 'CausalAnalysisController@delete');
+
 
 Route::post('/deleteaccidentassociated', 'AccidentHazardController@delete');
 

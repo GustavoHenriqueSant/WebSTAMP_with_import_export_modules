@@ -15,6 +15,7 @@ class CreateGuidewordTable extends Migration
         Schema::create('guidewords', function (Blueprint $table) {
             $table->increments('id');
             $table->text('guideword');
+            $table->timestamps();
         });
     }
 

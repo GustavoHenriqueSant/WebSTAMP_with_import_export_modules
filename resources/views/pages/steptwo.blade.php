@@ -7,7 +7,7 @@
 	</div>
 	    
     @foreach(App\ControlAction::all() as $ca)
-	    <div class="substep substep--showtable-{{$ca->id}}" id="showtable-{{$ca->id}}">
+	    <div class="substep substep--showtable-{{$ca->id}} hide-control-actions" id="showtable-{{$ca->id}}" style="display: none;">
 	    	@include('partials.steptwo.steptwotable')
 	    </div>
     @endforeach
@@ -17,9 +17,5 @@
 @endsection
 
 @section('dialogs')
-	@foreach(App\SafetyConstraints::all() as $sc)
-		@include('partials.steptwo.add-guideword', ['uca_id' => $sc->id])
-		@include('partials.steptwo.add-tuple')
-	@endforeach
-
+	@include('partials.steptwo.add-tuple')
 @endsection

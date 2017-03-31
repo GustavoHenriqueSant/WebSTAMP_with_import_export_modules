@@ -20,8 +20,10 @@ class CreateCausalAnalysisTable extends Migration
             $table->text('role');
             $table->text('rationale');
             $table->integer('guideword_id')->unsigned();
+            $table->foreign('guideword_id')->references('id')->on('guidewords')->onDelete('cascade');
             $table->integer('safety_constraint_id')->unsigned();
             $table->foreign('safety_constraint_id')->references('id')->on('safety_constraints')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
