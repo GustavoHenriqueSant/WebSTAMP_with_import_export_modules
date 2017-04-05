@@ -20,8 +20,8 @@ class CreateCaSafetyConstraintTable extends Migration
             $table->integer('controlaction_id')->unsigned();
             $table->integer('rule_id')->unsigned();
             $table->timestamps();
-            $table->foreign('controlaction_id')->references('id')->on('control_actions')->onDelete('cascade');
-            $table->foreign('rule_id')->references('id')->on('rules')->onDelete('cascade');
+            //$table->foreign('controlaction_id')->references('id')->on('control_actions')->onDelete('cascade');
+            //$table->foreign('rule_id')->references('id')->on('rules')->onDelete('cascade');
         });
     }
 

@@ -24,7 +24,7 @@ class CreateContextTable extends Migration
             $table->string('ca_too_soon');
             $table->string('ca_too_long');
             $table->timestamps();
-            $table->foreign('controlaction_id')->references('id')->on('control_actions')->onDelete('cascade');
+            //$table->foreign('controlaction_id')->references('id')->on('control_actions')->onDelete('cascade');
         });
     }
 
