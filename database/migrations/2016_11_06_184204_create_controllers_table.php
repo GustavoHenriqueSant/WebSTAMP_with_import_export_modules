@@ -19,9 +19,9 @@ class CreateControllersTable extends Migration
             $table->integer('project_id')->unsigned();
             $table->timestamps();
         });
-        Schema::table('controllers', function ($table) {
+        /*Schema::table('controllers', function ($table) {
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-        });
+        });*/
     }
 
     /**

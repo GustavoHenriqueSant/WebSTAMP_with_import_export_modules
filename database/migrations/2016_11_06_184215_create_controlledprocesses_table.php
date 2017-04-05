@@ -18,9 +18,9 @@ class CreateControlledprocessesTable extends Migration
             $table->integer('project_id')->unsigned();
             $table->timestamps();
         });
-        Schema::table('controlled_processes', function ($table) {
+        /*Schema::table('controlled_processes', function ($table) {
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-        });
+        });*/
     }
 
     /**
