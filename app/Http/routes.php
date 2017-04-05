@@ -87,3 +87,6 @@ Route::get('/steptwo', ['as' => 'steptwo', function () {
 }]);
 
 Route::post('/savecontexttable', 'ContextTableController@save');
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
