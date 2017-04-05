@@ -46,7 +46,7 @@
 
                     @foreach(App\CausalAnalysis::where('safety_constraint_id', $safety_constraint->id)->get() as $causal)
                     <div class="table-row" id="causal-row-{{$causal->id}}">
-                        <div class="text center">
+                        <div class="text">
                             <select id="guideword-{{$causal->id}}" class="guideword-combo" disabled>
                                 <option disabled>[GUIDEWORD]</option> 
                                 @foreach(App\Guidewords::all() as $guideword)
@@ -93,7 +93,7 @@
                                 <button>Import Data</button>
                             </form>
                             <form action="/testeUCA" class="test-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
-                                <button>Add New Scenario</button></div>
+                                <button><img src="/images/plus.png" width="15"/> Add New Scenario</button></div>
                                 <input type="hidden" id="tst" name="tst" value="{{$safety_constraint->id}}">
                             </form>
                         <div class="text center"></div>

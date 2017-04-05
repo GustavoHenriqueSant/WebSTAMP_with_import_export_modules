@@ -47,54 +47,54 @@ var select = `<select id="guideword-${context.id}" class="guideword-combo" disab
         select += `<option value="9" title="Changes over time">[Changes over time]</option>`;
     
     if(context.guideword == 10) 
-        select += `<option value="10" title="Process Input missing or wrong selected">[Process Input missing or wrong]</option>`;
+        select += `<option value="10" title="Process Input missing or wrong" selected>[Process Input missing or wrong]</option>`;
     else
         select += `<option value="10" title="Process Input missing or wrong">[Process Input missing or wrong]</option>`;
      
     if(context.guideword == 11) 
-        select += `<option value="11" title="Unidentified or out-of-range disturbance selected">[Unidentified or out-of-range disturbance]</option>`;
+        select += `<option value="11" title="Unidentified or out-of-range disturbance" selected>[Unidentified or out-of-range disturbance]</option>`;
     else
         select += `<option value="11" title="Unidentified or out-of-range disturbance">[Unidentified or out-of-range disturbance]</option>`;
      
     if(context.guideword == 12) 
-        select += `<option value="12" title="Process output contributes to hazard selected">[Process output contributes to hazard]</option>`;
+        select += `<option value="12" title="Process output contributes to hazard" selected>[Process output contributes to hazard]</option>`;
     else
         select += `<option value="12" title="Process output contributes to hazard">[Process output contributes to hazard]</option>`;
      
     if(context.guideword == 13) 
-        select += `<option value="13" title="Feedback delays selected">[Feedback delays]</option>`;
+        select += `<option value="13" title="Feedback delays" selected>[Feedback delays]</option>`;
     else
         select += `<option value="13" title="Feedback delays">[Feedback delays]</option>`;
      
     if(context.guideword == 14) 
-        select += `<option value="14" title="Measurement inaccuracies selected">[Measurement inaccuracies]</option>`;
+        select += `<option value="14" title="Measurement inaccuracies" selected>[Measurement inaccuracies]</option>`;
     else
         select += `<option value="14" title="Measurement inaccuracies">[Measurement inaccuracies]</option>`;
      
     if(context.guideword == 15) 
-        select += `<option value="15" title="Incorrect or no information provided selected">[Incorrect or no information provided]</option>`;
+        select += `<option value="15" title="Incorrect or no information provided" selected>[Incorrect or no information provided]</option>`;
     else
         select += `<option value="15" title="Incorrect or no information provided">[Incorrect or no information provided]</option>`;
      
     if(context.guideword == 16) 
-        select += `<option value="16" title="Inadequate Operation selected">[Inadequate Operation]</option>`;
+        select += `<option value="16" title="Inadequate Operation" selected>[Inadequate Operation]</option>`;
     else
         select += `<option value="16" title="Inadequate Operation">[Inadequate Operation]</option>`;
      
     if(context.guideword == 17) 
-        select += `<option value="17" title="Feedback Delays selected">[Feedback Delays]</option>`;
+        select += `<option value="17" title="Feedback Delays" selected>[Feedback Delays]</option>`;
     else
         select += `<option value="17" title="Feedback Delays">[Feedback Delays]</option>`;
      
     if(context.guideword == 18) 
-        select += `<option value="18" title="Inadequate or missing feedback selected">[Inadequate or missing feedback]</option>`;
+        select += `<option value="18" title="Inadequate or missing feedback" selected>[Inadequate or missing feedback]</option>`;
      else
         select += `<option value="18" title="Inadequate or missing feedback">[Inadequate or missing feedback]</option>`;
 
 select += `</select>`; 
 
 return `<div class="table-row" id="causal-row-${context.id}"">
-            <div class="text center">
+            <div class="text">
                 ${select}<br/>
             <textarea class="step2_textarea" name="scenario-${context.id}" id="scenario-${context.id}" placeholder="Scenario" disabled>${context.scenario}</textarea>
             </div>

@@ -1064,6 +1064,11 @@ for (i = 0; i < acc.length; i++) {
   });
 
 } else {
+
+
+
+
+
   // Require JQuery
   var $ = require('jquery');
 
@@ -1087,7 +1092,6 @@ for (i = 0; i < acc.length; i++) {
     var guideword = form.find("#guideword option:selected").val();
     var safety = form.find("#uca").val();
     var id = 0;
-    //console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
     axios.post('/addtuple', {
       id, id,
       scenario : scenario,
@@ -1211,15 +1215,13 @@ for (i = 0; i < acc.length; i++) {
 
   $('body').on('click', '.teste-vex', function(event) {
     event.preventDefault();
-    console.log("Entrou");
     var form = $(event.currentTarget);
     // Gets the id of the UCA
     var value = form.data("id");
     // Change de hidden value to the actual UCA id
-    $("#testezika").find("#uca").val(value);
-    console.log($("#testezika").find("#uca").val());
+    $("#approach-"+value).find("#uca").val(value);
     vex.open({
-      unsafeContent: $(testezika).html(),
+      unsafeContent: $("#approach-"+value).html(),
       buttons: [
         $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
         $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
@@ -1265,8 +1267,36 @@ for (i = 0; i < acc.length; i++) {
   $('body').on('submit', ".add-causal", function(event) {
     event.preventDefault();
     var form = $(event.currentTarget);
+    var checked = [];
     form.find(".associated-checkbox:checked").each(function(index, f){
-      console.log(f.id);
+      var causal_id = f.id.split("-")[1];
+      console.log(causal_id);
+      var scenario = form.find("#guideword-scenario-" + causal_id).text();
+      var associated = form.find("#guideword-associated-" + causal_id).text();
+      var requirement = form.find("#guideword-requirement-" + causal_id).text();
+      var role = form.find("#guideword-role-" + causal_id).text();
+      var rationale = form.find("#guideword-rationale-" + causal_id).text();
+      var guideword = form.find("#guideword-" + causal_id).val();
+      var safety = form.find("#uca").val();
+      console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
+      var id = 0;
+      axios.post('/addtuple', {
+        id, id,
+        scenario : scenario,
+        associated : associated,
+        requirement : requirement,
+        role : role,
+        rationale : rationale,
+        guideword : guideword,
+        safety : safety
+      })
+      .then(function(response){
+        console.log($("#safety-"+safety).find(".container-fluid"));
+        $("#safety-"+safety).find(".table-content").append(newCausal(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
     })
   });
 

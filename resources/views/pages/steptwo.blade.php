@@ -10,9 +10,10 @@
 	    <div class="substep substep--showtable-{{$ca->id}} hide-control-actions" id="showtable-{{$ca->id}}" style="display: none;">
 	    	@include('partials.steptwo.steptwotable')
 	    </div>
+	    @foreach(App\SafetyConstraints::where('controlaction_id', $ca->id)->get() as $uca)
+	    	@include('partials.steptwo.associated-causal-factors', ['uca_id' => $uca->id])
+	    @endforeach
     @endforeach
-    
-    @include('partials.steptwo.associated-causal-factors')
 
 @endsection
 
