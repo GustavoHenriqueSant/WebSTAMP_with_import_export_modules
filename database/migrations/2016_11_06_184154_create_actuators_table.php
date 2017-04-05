@@ -18,9 +18,9 @@ class CreateActuatorsTable extends Migration
             $table->integer('project_id')->unsigned();
             $table->timestamps();
         });
-        Schema::table('actuators', function ($table) {
+        /*Schema::table('actuators', function ($table) {
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-        });
+        });*/
     }
 
     /**
