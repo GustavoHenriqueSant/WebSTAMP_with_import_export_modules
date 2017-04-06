@@ -13,4 +13,6 @@ class CausalAnalysis extends Model
 		return $this->belongsTo(Guidewords::class);
 	}
 
+	/*teste*/
+
 }
