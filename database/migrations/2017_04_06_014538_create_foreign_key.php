@@ -12,7 +12,7 @@ class CreateForeignKey extends Migration
      */
     public function up()
     {
-        Schema::table('accidents', function ($table) {
+        /*Schema::table('accidents', function ($table) {
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
 
@@ -87,7 +87,7 @@ class CreateForeignKey extends Migration
         Schema::table('causal_analysis', function (Blueprint $table) {
             $table->foreign('guideword_id')->references('id')->on('guidewords')->onDelete('cascade');
             $table->foreign('safety_constraint_id')->references('id')->on('safety_constraints')->onDelete('cascade');
-        });
+        });*/
 
     }
 
