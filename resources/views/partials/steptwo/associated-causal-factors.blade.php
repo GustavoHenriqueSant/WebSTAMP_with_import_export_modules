@@ -67,7 +67,7 @@
 			        					<span id="getting-scenario-{{$causal->id}}">
 			        						{{$causal->scenario}}
 			        					</span>
-			        					</div>
+			        				</div>
 			        				<div class="text" id="guideword-associated-{{$causal->id}}">
 			        					<?php
 			        						$causal->associated_causal_factor = str_replace("[CONTROLLER]", $controller, $causal->associated_causal_factor);
@@ -125,12 +125,14 @@
 			        						$causal->scenario = str_replace("[SENSOR]", $sensor->name, $causal->scenario);
 			        					?>
 			        					<span class="listing-guideword">
-			        						[<b style="font-size: 16px; text-align: center;">{{$causal->guideword->guideword}}</b>] <br/>
+			        						@foreach(App\Guidewords::where('id', $causal->guideword_id)->get() as $guideword)
+			        							[<b style="font-size: 16px; text-align: center;">{{$guideword->guideword}}</b>] <br/>
+			        						@endforeach
 			        					</span>
 			        					<span id="getting-scenario-{{$causal->id}}">
 			        						{{$causal->scenario}}
 			        					</span>
-			        					</div>
+			        				</div>
 			        				<div class="text" id="guideword-associated-{{$causal->id}}">
 			        					<?php
 			        						$causal->associated_causal_factor = str_replace("[CONTROLLER]", $controller, $causal->associated_causal_factor);
