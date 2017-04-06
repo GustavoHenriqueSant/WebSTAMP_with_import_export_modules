@@ -16869,6 +16869,9 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var form = $(event.currentTarget);
       // Gets the id of the UCA
       var value = form.data("id");
+      console.log($("#table-left-" + value));
+      $("#table-left-" + value).show();
+      $("#table-right" + value).hide();
       // Change de hidden value to the actual UCA id
       $("#approach-" + value).find("#uca").val(value);
       vex.open({
@@ -16907,8 +16910,6 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       }
     });
 
-    $('body').on('click', ".testesom", function (event) {});
-
     $('body').on('submit', ".add-causal", function (event) {
       event.preventDefault();
       var form = $(event.currentTarget);
@@ -16938,7 +16939,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       });
     });
 
-    $('body').on('change', "#show-guidewords-1", function (e) {
+    $('body').on('change', ".choose-guideword", function (e) {
       if (e.target.value === 'left') {
         $(".showtable-left").show();
         $(".showtable-right").hide();

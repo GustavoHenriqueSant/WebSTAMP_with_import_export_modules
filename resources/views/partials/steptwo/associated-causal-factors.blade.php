@@ -30,7 +30,7 @@
 				<input type="hidden" name="uca" id="uca" value="0">
 
 				<div class="center">
-					<select id="show-guidewords-{{$uca_id}}">
+					<select id="show-guidewords-{{$uca_id}}" class="choose-guideword">
 						<option value="left">Left side: Safe control action provided but not followed or executed</option>
 						<option value="right">Right side: Unsafe control action provided or safe control action required but not provided</option>
 					</select>
@@ -47,7 +47,7 @@
 		    				<div class="text">Include?</div>
 		    			</div>
 
-		    			<div class="hidding-guidewords showtable-left" style="display: none;">
+		    			<div id="table-left-{{$uca_id}}" class="hidding-guidewords showtable-left" style="display: none;">
 		        			@foreach(App\CausalAnalysis::where('safety_constraint_id', 0)->where('guideword_id', '>', 3)->where('guideword_id', '<', 13)->get() as $causal)
 			        			@if($controller_2 != false || $causal->guideword_id != 7)
 			        			<div class="table-row" id="guidewords-{{$causal->id}}">
@@ -112,7 +112,7 @@
 		        		</div>
 
 
-		        		<div class="hidding-guidewords showtable-right" style="display: none;">
+		        		<div id="table-right-{{$uca_id}}" class="hidding-guidewords showtable-right" style="display: none;">
 		        			@foreach(App\CausalAnalysis::where('safety_constraint_id', 0)->whereNotBetween('guideword_id', [4,12])->get() as $causal)
 			        			@if($controller_2 != false || $causal->guideword_id != 7)
 			        			<div class="table-row" id="guidewords-{{$causal->id}}">
