@@ -12,14 +12,17 @@ class CreateForeignKey extends Migration
      */
     public function up()
     {
-        /*Schema::table('accidents', function ($table) {
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-        });
 
         Schema::table('accidents_hazards', function ($table) {
             $table->foreign('accidents_id')->references('id')->on('accidents')->onDelete('cascade');
             $table->foreign('hazards_id')->references('id')->on('hazards')->onDelete('cascade');
         });
+        
+        /*Schema::table('accidents', function ($table) {
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+        });
+
+        
 
         Schema::table('teams', function ($table) {
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
