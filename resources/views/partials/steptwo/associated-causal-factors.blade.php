@@ -60,9 +60,7 @@
 			        						$causal->scenario = str_replace("[SENSOR]", $sensor->name, $causal->scenario);
 			        					?>
 			        					<span class="listing-guideword">
-			        						@foreach(App\Guidewords::where('id', $causal->guideword_id)->get() as $guideword)
-			        							[<b style="font-size: 16px; text-align: center;">{{$guideword->guideword}}</b>] <br/>
-			        						@endforeach
+		        							[<b style="font-size: 16px; text-align: center;">{{$causal->guideword->guideword}}</b>] <br/>
 			        					</span>
 			        					<span id="getting-scenario-{{$causal->id}}">
 			        						{{$causal->scenario}}
@@ -125,9 +123,7 @@
 			        						$causal->scenario = str_replace("[SENSOR]", $sensor->name, $causal->scenario);
 			        					?>
 			        					<span class="listing-guideword">
-			        						@foreach(App\Guidewords::where('id', $causal->guideword_id)->get() as $guideword)
-			        							[<b style="font-size: 16px; text-align: center;">{{$guideword->guideword}}</b>] <br/>
-			        						@endforeach
+			        						[<b style="font-size: 16px; text-align: center;">{{$causal->guideword->guideword}}</b>] <br/>
 			        					</span>
 			        					<span id="getting-scenario-{{$causal->id}}">
 			        						{{$causal->scenario}}
