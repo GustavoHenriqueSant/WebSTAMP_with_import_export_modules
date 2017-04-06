@@ -172,14 +172,6 @@
 		        			@endforeach
 		        		</div>
 
-		        		<div>
-		        			@foreach(App\Guidewords::all() as $guideword)
-    							[<b style="font-size: 16px; text-align: center;">[{{$guideword->id}}] - {{$guideword->guideword}}</b>] <br/>
-    						@endforeach
-		        		</div>
-
-
-
 		    		</div>
 		    	</div>
 		    	<div class="vex-dialog-input"></div>
