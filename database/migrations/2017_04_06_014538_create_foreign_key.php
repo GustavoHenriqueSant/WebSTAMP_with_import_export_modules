@@ -61,22 +61,7 @@ class CreateForeignKey extends Migration
         Schema::table('rules', function ($table) {
             $table->foreign('variable_id')->references('id')->on('variables')->onDelete('cascade');
             $table->foreign('state_id')->references('id')->on('states')->onDelete('cascade');
-        });
-
-        Schema::table('actuators', function ($table) {
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-        });
-
-        Schema::table('controllers', function ($table) {
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-        });
-
-        Schema::table('controlled_processes', function ($table) {
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-        });
-
-        Schema::table('sensors', function ($table) {
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->foreign('controlaction_id')->references('id')->on('control_actions')->onDelete('cascade');
         });
 
         Schema::table('connections', function ($table) {
@@ -103,7 +88,7 @@ class CreateForeignKey extends Migration
             $table->foreign('guideword_id')->references('id')->on('guidewords')->onDelete('cascade');
             $table->foreign('safety_constraint_id')->references('id')->on('safety_constraints')->onDelete('cascade');
         });
-        
+
     }
 
     /**
