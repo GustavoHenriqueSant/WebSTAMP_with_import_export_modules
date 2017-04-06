@@ -1428,6 +1428,17 @@ html, body {
   background: black;
   color: white; }
 
+.steptwo-button {
+  vertical-align: bottom; }
+
+.font-button {
+  font-family: Georgia; }
+
+.steptwo-include {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle; }
+
 .substep {
   border-radius: 8px;
   border: 2px solid #2c3e50;

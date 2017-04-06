@@ -90,10 +90,10 @@
                         <div class="text center"></div>
                         <div class="text center">
                             <form action="/" class="teste-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
-                                <button>Import Data</button>
+                                <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Import Data</button>
                             </form>
                             <form action="/testeUCA" class="test-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
-                                <button><img src="/images/plus.png" width="15"/> Add New Scenario</button></div>
+                                <button class="font-button"><img src="/images/plus.png" class="steptwo-button" width="15"/> Add New Scenario</button></div>
                                 <input type="hidden" id="tst" name="tst" value="{{$safety_constraint->id}}">
                             </form>
                         <div class="text center"></div>

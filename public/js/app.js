@@ -16918,7 +16918,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
 
         var causal_id = f.id.split("-")[1];
         console.log(causal_id);
-        var scenario = form.find("#guideword-scenario-" + causal_id).text();
+        form.find("#guideword-scenario-" + causal_id).remove(".listing-guidewords");
+        var scenario = form.find("#getting-scenario-" + causal_id).text();
         var associated = form.find("#guideword-associated-" + causal_id).text();
         var requirement = form.find("#guideword-requirement-" + causal_id).text();
         var role = form.find("#guideword-role-" + causal_id).text();
@@ -16937,15 +16938,32 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       });
     });
 
+    $('body').on('change', "#show-guidewords-1", function (e) {
+      if (e.target.value === 'left') {
+        $(".showtable-left").show();
+        $(".showtable-right").hide();
+      } else {
+        $(".showtable-left").hide();
+        $(".showtable-right").show();
+      }
+    });
+
     $(function () {
       // Get all elements with class step_one
       var $op1 = $('.hide-control-actions');
+      var $op2 = $('.hidding-guidewords');
 
       // Verifies if there is Control Actions stored
       if ($op1 != null) {
         // Show the first control action (with lower id)
         $($op1[0]).show();
       }
+
+      if ($op2 != null) {
+        // Show the first control action (with lower id)
+        $($op2[0]).show();
+      }
+
       // function to hide all elements with class step_one
       var hideAll = function hideAll() {
         $op1.hide();
@@ -16955,7 +16973,6 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       $('#control-actions-select').change(function (e) {
         // Hide all elements of all control actions
         hideAll();
-        console.log(e.target.value);
         // Shows the content of selected control action
         $('#showtable-' + e.target.value).show();
       });
