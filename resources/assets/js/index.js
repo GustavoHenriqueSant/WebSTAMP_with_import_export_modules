@@ -1043,7 +1043,7 @@ for (i = 0; i < acc.length; i++) {
       var late = form.find("#late-row-" + total_rows).val();
       var soon = form.find("#soon-row-" + total_rows).val();
       var long = form.find("#long-row-" + total_rows).val();
-      console.log(states + " " + provided + " " + not_provided + " " + wrong_time + " " + early + " " + late + " " + soon + " " + long);
+      //console.log(states + " " + provided + " " + not_provided + " " + wrong_time + " " + early + " " + late + " " + soon + " " + long);
       axios.post('/savecontexttable', {
             controlaction_id : controlaction_id,
             states : states,
@@ -1060,7 +1060,7 @@ for (i = 0; i < acc.length; i++) {
       });
       total_rows--;
     }
-    console.log("Salvo com sucesso!");
+    vex.dialog.alert("Context table saved successfully");
   });
 
 } else {
@@ -1200,17 +1200,7 @@ for (i = 0; i < acc.length; i++) {
     .catch(function(error){
       console.log(error)
     })
-    /*if (activity === 'scenario') {
-      console.log("Katiau!");
-    } else if (activity === 'associated') {
-      console.log("Katiuga");
-    } else if(activity === "requirement") {
-      console.log("Relampago marquinhos");
-    } else if(activity === "role") {
-      console.log("Tom mate");
-    } else if(activity === "rationale") {
-      console.log("Rudisson rornet");
-    }*/
+
   }
 
   $('body').on('click', '.teste-vex', function(event) {

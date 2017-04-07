@@ -87,6 +87,8 @@ Route::get('/steptwo', ['as' => 'steptwo', function () {
 }]);
 
 Route::post('/savecontexttable', 'ContextTableController@save');
+Route::post('/generateUCA', 'ContextTableController@generateUCA');
+
 Route::auth();
 
 Route::get('/home', 'HomeController@index');

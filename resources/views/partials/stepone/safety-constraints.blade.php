@@ -12,6 +12,12 @@
 
         <div class="container-fluid" style="margin-top: 10px">
 
+            <form action="/generateUCA" method="POST">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
+                <input type="submit"/>
+            </form>
+
             <div class="table-row header">
                 <div class="text">Unsafe Control Actions</div>
                 <div class="text">Safety Constraint Associated</div>
