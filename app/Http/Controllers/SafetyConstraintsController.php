@@ -18,6 +18,7 @@ class SafetyConstraintsController extends Controller
 		$safety_constraint->type = $request->input('type');
 		$safety_constraint->controlaction_id = $request->input('controlaction_id');
 		$safety_constraint->rule_id = $request->input('rule_id');
+		$safety_constraint->context = $request->input('context');
 
 		$safety_constraint->save();
 
@@ -27,7 +28,8 @@ class SafetyConstraintsController extends Controller
         	'safety_constraint' => $safety_constraint->safety_constraint,
         	'type' => $safety_constraint->type,
         	'controlaction_id' => $safety_constraint->controlaction_id,
-        	'rule_id' => $safety_constraint->rule_id
+        	'rule_id' => $safety_constraint->rule_id,
+        	'context' => $safety_constraint->context
     	]);
 
 	}

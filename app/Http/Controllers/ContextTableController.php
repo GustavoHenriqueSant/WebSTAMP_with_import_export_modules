@@ -42,8 +42,12 @@ class ContextTableController extends Controller
     	]);
     }
 
-    public function generateUCA(){
-        $controlaction_id = 1;  
+    public function delete(Request $request) {
+        ContextTable::where('controlaction_id', $request->input('controlaction_id'))->delete();
+    }
+
+    public function generateUCA(Request $request){
+        $controlaction_id = $request->get("controlaction_id");  
         $provided = [];
         $not_provided = [];
         $wrong_time = [];

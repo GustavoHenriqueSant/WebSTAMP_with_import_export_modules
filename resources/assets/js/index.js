@@ -861,6 +861,191 @@ for (i = 0; i < acc.length; i++) {
     });
   });
 
+  function convertType(type){
+    if (type == "provided")
+      return "Provided";
+    else if (type == "not provided")
+      return "Not provided";
+    else if (type == "wrong time")
+      return "Provided in wrong time";
+    else if (type == "wrong order")
+      return "Provided in wrong order";
+    else if (type == "too early")
+      return "Provided too early";
+    else if (type == "too late")
+      return "Provided too late";
+    else if (type == "too soon")
+      return "Stopped too soon";
+    else if (type == "too long")
+      return "Applied too long";
+  }
+
+
+  $('body').on('click', '.add-new-uca', function(event){
+    event.preventDefault();
+    $(".unsafe-control").each(function(){
+      $(this).html("");
+    });
+    $(".safety-control").each(function(){
+      $(this).html("");
+    });
+    var form = $(event.currentTarget);
+    var controlaction_id = form.attr("id").split("-")[1];
+    vex.closeAll();
+    vex.open({
+      unsafeContent: $("#add-new-uca-" + controlaction_id).html(),
+      buttons: [
+        $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+      ],
+      showCloseButton: true,
+      className: "vex-theme-default"
+    });
+  });
+
+  $('body').on('submit', '.adding-uca', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var controlaction_id = form.find("#controlaction_id").val();
+    var controller_name = form.find("#controller_name").val();
+    var controlaction_name = form.find("#controlaction_name").val();
+    var type = "";
+    $(".type-uca").each(function(index, f){
+      if (index > 0 && f.id.split("-")[2] == controlaction_id){
+        type = $(f).find("option:selected").val();         
+      }
+    });
+    var states = [];
+    var states_name = [];
+    form.find(".uca-row-" + controlaction_id + " option:selected").each(function(index, f){
+      if (f.value.split("-")[0] > 0){
+        states.push(f.value.split("-")[0]);
+        states_name.push(f.value.split("-")[1] + " is " + f.text);
+      }
+    })
+    var unsafe_control_action = "";
+    var safety_constraint = "";
+    if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")){
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+    } else if (type.includes("wrong time") || type.includes("wrong order")){
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+    } else{
+      unsafe_control_action = controller_name.toLowerCase() + " " + type.toLowerCase() + " " + controlaction_name.toLowerCase() + " when";
+      if (type.includes("not provided")){
+        safety_constraint = controller_name.toLowerCase() + " must provide " + controlaction_name.toLowerCase() + " when";
+      } else {
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " when";
+      }
+    }
+    unsafe_control_action = unsafe_control_action[0].toUpperCase() + unsafe_control_action.slice(1);
+    safety_constraint = safety_constraint[0].toUpperCase() + safety_constraint.slice(1);
+    var states_size = states_name.length;
+    states_name.forEach(function(f, index) {
+      if (index != states_size - 1){
+        unsafe_control_action += ", " + f.toLowerCase();
+        safety_constraint += ", " + f.toLowerCase();
+      }
+      else{
+        unsafe_control_action += " and " + f.toLowerCase();
+        safety_constraint += ", " + f.toLowerCase();
+      }
+    })
+    unsafe_control_action = unsafe_control_action.replace("when and", "when");
+    unsafe_control_action = unsafe_control_action.replace("when,", "when");
+    safety_constraint = safety_constraint.replace("when and", "when");
+    safety_constraint = safety_constraint.replace("when,", "when");
+    if(states_name.length > 0){
+      $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/> " + unsafe_control_action + ".");
+      $(".safety-control").html("<br/><center><b>Safety constraint associated:</b></center><br/> " + safety_constraint + ".");
+    }
+    var id = 0;
+    var rule_id = 0;
+    type = convertType(type);
+    var context = "";
+    states.forEach(function(f, index) {
+      console.log(f);
+      if (index == 0)
+        context += f;
+      else if (index < states.length)
+        context += "," + f;
+    })
+    axios.post('/adduca', {
+      id : id,
+      unsafe_control_action : unsafe_control_action,
+      safety_constraint : safety_constraint,
+      type : type,
+      controlaction_id : controlaction_id,
+      rule_id : rule_id,
+      context : context
+    })
+    .then(function (response) {
+      $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  });
+
+  $('body').on('change', '.mudanca', function(event) {
+    var form = $(event.currentTarget).closest(".adding-uca");
+    var controlaction_id = form.find("#controlaction_id").val();
+    var controller_name = form.find("#controller_name").val();
+    var controlaction_name = form.find("#controlaction_name").val();
+    var type = "";
+    $(".type-uca").each(function(index, f){
+      if (index > 0 && f.id.split("-")[2] == controlaction_id){
+        type = $(f).find("option:selected").val();         
+      }
+    });
+    var states = [];
+    var states_name = [];
+    $(".uca-row-" + controlaction_id + " option:selected").each(function(index, f){
+      if (f.value.split("-")[0] > 0){
+        states.push(f.value.split("-")[0]);
+        states_name.push(f.value.split("-")[1] + " is " + f.text);
+      }
+    })
+    var unsafe_control_action = "";
+    var safety_constraint = "";
+    if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")){
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+    } else if (type.includes("wrong time") || type.includes("wrong order")){
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+    } else{
+      unsafe_control_action = controller_name.toLowerCase() + " " + type.toLowerCase() + " " + controlaction_name.toLowerCase() + " when";
+      if (type.includes("not provided")){
+        safety_constraint = controller_name.toLowerCase() + " must provide " + controlaction_name.toLowerCase() + " when";
+      } else {
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " when";
+      }
+    }
+    unsafe_control_action = unsafe_control_action[0].toUpperCase() + unsafe_control_action.slice(1);
+    safety_constraint = safety_constraint[0].toUpperCase() + safety_constraint.slice(1);
+    var states_size = states_name.length;
+    states_name.forEach(function(f, index) {
+      if (index != states_size - 1){
+        unsafe_control_action += ", " + f.toLowerCase();
+        safety_constraint += ", " + f.toLowerCase();
+      }
+      else{
+        unsafe_control_action += " and " + f.toLowerCase();
+        safety_constraint += ", " + f.toLowerCase();
+      }
+    })
+    unsafe_control_action = unsafe_control_action.replace("when and", "when");
+    unsafe_control_action = unsafe_control_action.replace("when,", "when");
+    safety_constraint = safety_constraint.replace("when and", "when");
+    safety_constraint = safety_constraint.replace("when,", "when");
+    if(states_name.length > 0){
+      $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/> " + unsafe_control_action + ".");
+      $(".safety-control").html("<br/><center><b>Safety constraint associated:</b></center><br/> " + safety_constraint + ".");
+    }
+  });
+
   // Add UCA and Safety Constraint Associated
   $('body').on('submit', '.add-form', function(event) {
     event.preventDefault();
@@ -1034,6 +1219,12 @@ for (i = 0; i < acc.length; i++) {
     var form = $(event.currentTarget);
     var controlaction_id = form.find("#controlaction_id").val();
     var total_rows = form.find("#total_rows").val() - 1;
+    axios.post('/deletecontexttable', {
+      controlaction_id : controlaction_id
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
     while (total_rows >= 0) {
       var states = form.find("#all_states_" + total_rows).val();
       var provided = form.find("#provided-row-" + total_rows).val();

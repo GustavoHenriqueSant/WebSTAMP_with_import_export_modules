@@ -87,6 +87,7 @@ Route::get('/steptwo', ['as' => 'steptwo', function () {
 }]);
 
 Route::post('/savecontexttable', 'ContextTableController@save');
+Route::post('/deletecontexttable', 'ContextTableController@delete');
 Route::post('/generateUCA', 'ContextTableController@generateUCA');
 
 Route::auth();

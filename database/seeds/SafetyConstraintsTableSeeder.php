@@ -17,6 +17,7 @@ class SafetyConstraintsTableSeeder extends Seeder
             'safety_constraint' => 'In an emergency, the door always must open.',
             'type' => 'Provided',
             'rule_id' => 0,
+            'context' => '10',
             'controlaction_id' => 1
         ]); 
         DB::table('safety_constraints')->insert([
@@ -25,6 +26,7 @@ class SafetyConstraintsTableSeeder extends Seeder
             'safety_constraint' => 'The door never must close if there is a person or object in the doorway.',
             'type' => 'Not Provided',
             'rule_id' => 0,
+            'context' => '4',
             'controlaction_id' => 1
         ]); 
         DB::table('safety_constraints')->insert([
@@ -33,6 +35,7 @@ class SafetyConstraintsTableSeeder extends Seeder
             'safety_constraint' => 'The door only opens aligned at platform or in emergencies.',
             'type' => 'Provided too early',
             'rule_id' => 0,
+            'context' => '8',
             'controlaction_id' => 1
         ]); 
         DB::table('safety_constraints')->insert([
@@ -41,6 +44,7 @@ class SafetyConstraintsTableSeeder extends Seeder
             'safety_constraint' => 'The train should be unable to move if the door is not completely closed.',
             'type' => 'Wrong Time',
             'rule_id' => 0,
+            'context' => '8',
             'controlaction_id' => 2
         ]); 
         DB::table('safety_constraints')->insert([
@@ -49,6 +53,7 @@ class SafetyConstraintsTableSeeder extends Seeder
             'safety_constraint' => 'Sensors should prevent the door from closing when there is an obstacle in the doorway.',
             'type' => 'Applied too long',
             'rule_id' => 0,
+            'context' => '4',
             'controlaction_id' => 2
         ]); 
         DB::table('safety_constraints')->insert([
@@ -57,6 +62,7 @@ class SafetyConstraintsTableSeeder extends Seeder
             'safety_constraint' => 'During an emergency, the doors should be fully open.',
             'type' => 'Stopped too soon',
             'rule_id' => 0,
+            'context' => '10',
             'controlaction_id' => 2
         ]); 
     }

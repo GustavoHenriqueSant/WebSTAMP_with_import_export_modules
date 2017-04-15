@@ -10,7 +10,7 @@
 
             <div class="table-row header">
                 <div class="text">Rule Index</div>
-                @foreach (App\Variable::where("project_id", 1)->get() as $variable)
+                @foreach (App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get() as $variable)
                     <div class="text">{{$variable->name}}</div>
                 @endforeach
                 <div class="text">

@@ -8,7 +8,7 @@
 
 
         <div class="table-row header">
-            @foreach (App\Variable::where('project_id', 1)->get() as $variable)
+            @foreach (App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get() as $variable)
                 @if ($variable->name != "Default")
                 <div class="text">{{$variable->name}}</div>
                 @endif
@@ -19,7 +19,7 @@
             <input type="hidden" name="_token" value="{{csrf_token()}}">
             <input type="hidden" id="controlaction_id" name="controlaction_id" value="{{$ca->id}}">
             <div class="table-row">
-                @foreach (App\Variable::where('project_id', 1)->get() as $variable)
+                @foreach (App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get() as $variable)
                     @if ($variable->name != "Default")
                     <select id="variable_id_{{$variable->id}}" name="variable_id_{{$variable->id}}" class="text">
                         <option value="{{$variable->id}}-0" name="ANY">ANY</option>
@@ -30,7 +30,7 @@
                     @endif
                 @endforeach
             </div>
-            </br><center><button>Add new Rule</button></center>
+            </br><center><button class="font-button"><img src="/images/plus.png" class="steptwo-button" width="15"/> Add new rule</button></center>
             <input type="hidden" name="uca-associated-{{$ca->id}}" id="uca-associated-{{$ca->id}}" value="{{$ca->controller->name}} provides {{$ca->name}} when"/>
         </form>
     </div>

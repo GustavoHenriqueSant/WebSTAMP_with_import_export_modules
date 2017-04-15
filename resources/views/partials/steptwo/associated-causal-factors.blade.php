@@ -21,6 +21,24 @@
 	$sensor = $sensor[0]->input_component_id;
 	$sensor = App\Sensors::find($sensor);
 
+	$variable = "";
+	$context = [];
+	$contexts = explode(",", $uca_context);
+
+	foreach($contexts as $state_id){
+		foreach(App\State::where('id', $state_id)->get() as $c){
+			array_push($context, $c->variable->name);
+		}
+	}
+	
+	foreach ($context as $key => $value) {
+		if ($key == 0)
+			$variable .= $value;
+		else if ($key == count($context)-1)
+			$variable .= " and " . $value;
+		else
+			$variable .= ", " . $value;
+	}
 ?>
 
 <div id="approach-{{$uca_id}}" style="display: none;">
@@ -58,6 +76,7 @@
 			        						$causal->scenario = str_replace("[ACTUATOR]", $actuator->name, $causal->scenario);
 			        						$causal->scenario = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->scenario);
 			        						$causal->scenario = str_replace("[SENSOR]", $sensor->name, $causal->scenario);
+			        						$causal->scenario = str_replace("[VARIABLE]", $variable, $causal->scenario);
 			        					?>
 			        					<span class="listing-guideword">
 		        							[<b style="font-size: 16px; text-align: center;">{{$causal->guideword->guideword}}</b>] <br/>
@@ -72,6 +91,7 @@
 			        						$causal->associated_causal_factor = str_replace("[ACTUATOR]", $actuator->name, $causal->associated_causal_factor);
 			        						$causal->associated_causal_factor = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->associated_causal_factor);
 			        						$causal->associated_causal_factor = str_replace("[SENSOR]", $sensor->name, $causal->associated_causal_factor);
+			        						$causal->associated_causal_factor = str_replace("[VARIABLE]", $variable, $causal->associated_causal_factor);
 			        					?>
 			        					{{$causal->associated_causal_factor}}
 			        				</div>
@@ -81,6 +101,7 @@
 			        						$causal->requirement = str_replace("[ACTUATOR]", $actuator->name, $causal->requirement);
 			        						$causal->requirement = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->requirement);
 			        						$causal->requirement = str_replace("[SENSOR]", $sensor->name, $causal->requirement);
+			        						$causal->requirement = str_replace("[VARIABLE]", $variable, $causal->requirement);
 			        					?>
 			        					{{$causal->requirement}}
 			        				</div>
@@ -90,6 +111,7 @@
 			        						$causal->role = str_replace("[ACTUATOR]", $actuator->name, $causal->role);
 			        						$causal->role = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->role);
 			        						$causal->role = str_replace("[SENSOR]", $sensor->name, $causal->role);
+			        						$causal->role = str_replace("[VARIABLE]", $variable, $causal->role);
 			        					?>
 			        					{{$causal->role}}
 			        				</div>
@@ -99,6 +121,7 @@
 			        						$causal->rationale = str_replace("[ACTUATOR]", $actuator->name, $causal->rationale);
 			        						$causal->rationale = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->rationale);
 			        						$causal->rationale = str_replace("[SENSOR]", $sensor->name, $causal->rationale);
+			        						$causal->rationale = str_replace("[VARIABLE]", $variable, $causal->rationale);
 			        					?>
 			        					{{$causal->rationale}}
 			        				</div>
@@ -121,6 +144,7 @@
 			        						$causal->scenario = str_replace("[ACTUATOR]", $actuator->name, $causal->scenario);
 			        						$causal->scenario = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->scenario);
 			        						$causal->scenario = str_replace("[SENSOR]", $sensor->name, $causal->scenario);
+			        						$causal->scenario = str_replace("[VARIABLE]", $variable, $causal->scenario);
 			        					?>
 			        					<span class="listing-guideword">
 			        						[<b style="font-size: 16px; text-align: center;">{{$causal->guideword->guideword}}</b>] <br/>
@@ -135,6 +159,7 @@
 			        						$causal->associated_causal_factor = str_replace("[ACTUATOR]", $actuator->name, $causal->associated_causal_factor);
 			        						$causal->associated_causal_factor = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->associated_causal_factor);
 			        						$causal->associated_causal_factor = str_replace("[SENSOR]", $sensor->name, $causal->associated_causal_factor);
+			        						$causal->associated_causal_factor = str_replace("[VARIABLE]", $variable, $causal->associated_causal_factor);
 			        					?>
 			        					{{$causal->associated_causal_factor}}
 			        				</div>
@@ -144,6 +169,7 @@
 			        						$causal->requirement = str_replace("[ACTUATOR]", $actuator->name, $causal->requirement);
 			        						$causal->requirement = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->requirement);
 			        						$causal->requirement = str_replace("[SENSOR]", $sensor->name, $causal->requirement);
+			        						$causal->requirement = str_replace("[VARIABLE]", $variable, $causal->requirement);
 			        					?>
 			        					{{$causal->requirement}}
 			        				</div>
@@ -153,6 +179,7 @@
 			        						$causal->role = str_replace("[ACTUATOR]", $actuator->name, $causal->role);
 			        						$causal->role = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->role);
 			        						$causal->role = str_replace("[SENSOR]", $sensor->name, $causal->role);
+			        						$causal->role = str_replace("[VARIABLE]", $variable, $causal->role);
 			        					?>
 			        					{{$causal->role}}
 			        				</div>
@@ -162,6 +189,7 @@
 			        						$causal->rationale = str_replace("[ACTUATOR]", $actuator->name, $causal->rationale);
 			        						$causal->rationale = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->rationale);
 			        						$causal->rationale = str_replace("[SENSOR]", $sensor->name, $causal->rationale);
+			        						$causal->rationale = str_replace("[VARIABLE]", $variable, $causal->rationale);
 			        					?>
 			        					{{$causal->rationale}}
 			        				</div>
@@ -178,7 +206,6 @@
 		        	<button class="vex-dialog-button-primary vex-dialog-button vex-first"> Import </button>
 		        	<div style="display: table; margin: 0 auto;">
 		        		<button class="vex-dialog-button-primary vex-dialog-button vex-first"> Add </button>
-		        		<!--<button class="vex-dialog-button-secondary vex-dialog-button vex-last"> Cancel </button>-->
 		        	</div>
 		        </div>
 	        </form>

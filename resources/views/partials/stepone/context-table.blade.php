@@ -1,8 +1,15 @@
 <?php
     // Getting all variables
-    $variables = App\Variable::all();
+    $variables = App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get();
     // Getting all States
-    $states = App\State::all();
+    $states = [];
+    foreach($variables as $variable){
+        $state = App\State::where('variable_id', $variable->id)->get();
+        foreach ($state as $s) {
+            array_push($states, $s);
+        }
+    }
+    //App\State::all();
     // Index of current variable (pivot_2 for the loop)
     $variable_index = 0;
     // Fix pivot to last element in array
@@ -175,27 +182,27 @@
                                 @endif
                                         <option value="null">-</option>
                                         @if ($thereAreRule == "true")
-                                            <option value="true" selected>True</option>
+                                            <option value="true" selected>Unsafe</option>
                                         @else
-                                            <option value="true">True</option>
+                                            <option value="true">Unsafe</option>
                                         @endif
-                                        <option value="false">False</option>
+                                        <option value="false">Safe</option>
                                     </select>
 
                                 <!--Control action not provided-->
                                 <select class="text" id="notprovided-row-{{$total_loop}}" name="ca-not-provided-row-{{$total_loop}}">
                                     @if($context_table->ca_not_provided == "null")
                                         <option value="null" selected>-</option>
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @elseif($context_table->ca_not_provided == "true")
                                         <option value="null">-</option>
-                                        <option value="true" selected>True</option>
-                                        <option value="false">False</option>
+                                        <option value="true" selected>Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @else
                                         <option value="null">-</option>
-                                        <option value="true">True</option>
-                                        <option value="false" selected>False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false" selected>Safe</option>
                                     @endif
                                 </select>
 
@@ -203,16 +210,16 @@
                                 <select class="text" id="wrongtime-row-{{$total_loop}}" name="wrongtime-row-{{$total_loop}}">
                                     @if($context_table->wrong_time_order == "null")
                                         <option value="null" selected>-</option>
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @elseif($context_table->wrong_time_order == "true")
                                         <option value="null">-</option>
-                                        <option value="true" selected>True</option>
-                                        <option value="false">False</option>
+                                        <option value="true" selected>Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @else
                                         <option value="null">-</option>
-                                        <option value="true">True</option>
-                                        <option value="false" selected>False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false" selected>Safe</option>
                                     @endif
                                 </select>
 
@@ -220,16 +227,16 @@
                                 <select class="text" id="early-row-{{$total_loop}}" name="early-row-{{$total_loop}}">
                                     @if($context_table->ca_too_early == "null")
                                         <option value="null" selected>-</option>
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @elseif($context_table->ca_too_early == "true")
                                         <option value="null">-</option>
-                                        <option value="true" selected>True</option>
-                                        <option value="false">False</option>
+                                        <option value="true" selected>Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @else
                                         <option value="null">-</option>
-                                        <option value="true">True</option>
-                                        <option value="false" selected>False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false" selected>Safe</option>
                                     @endif
                                 </select>
 
@@ -237,48 +244,48 @@
                                 <select class="text" id="late-row-{{$total_loop}}" name="late-row-{{$total_loop}}">
                                     @if($context_table->ca_too_late == "null")
                                         <option value="null" selected>-</option>
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @elseif($context_table->ca_too_late == "true")
                                         <option value="null">-</option>
-                                        <option value="true" selected>True</option>
-                                        <option value="false">False</option>
+                                        <option value="true" selected>Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @else
                                         <option value="null">-</option>
-                                        <option value="true">True</option>
-                                        <option value="false" selected>False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false" selected>Safe</option>
                                     @endif
                                 </select>
                                 <!--Control action stopped too soon-->
                                 <select class="text" id="soon-row-{{$total_loop}}" name="soon-row-{{$total_loop}}">
                                     @if($context_table->ca_too_soon == "null")
                                         <option value="null" selected>-</option>
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @elseif($context_table->ca_too_soon == "true")
                                         <option value="null">-</option>
-                                        <option value="true" selected>True</option>
-                                        <option value="false">False</option>
+                                        <option value="true" selected>Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @else
                                         <option value="null">-</option>
-                                        <option value="true">True</option>
-                                        <option value="false" selected>False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false" selected>Safe</option>
                                     @endif
                                 </select>
                                 <!--Control Action applied too long-->
                                 <select class="text" id="long-row-{{$total_loop}}" name="long-row-{{$total_loop}}">
                                     @if($context_table->ca_too_long == "null")
                                         <option value="null" selected>-</option>
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @elseif($context_table->ca_too_long == "true")
                                         <option value="null">-</option>
-                                        <option value="true" selected>True</option>
-                                        <option value="false">False</option>
+                                        <option value="true" selected>Unsafe</option>
+                                        <option value="false">Safe</option>
                                     @else
                                         <option value="null">-</option>
-                                        <option value="true">True</option>
-                                        <option value="false" selected>False</option>
+                                        <option value="true">Unsafe</option>
+                                        <option value="false" selected>Safe</option>
                                     @endif
                                 </select>
                             
@@ -291,51 +298,51 @@
                         @endif
                                 <option value="null">-</option>
                                 @if ($thereAreRule == "true")
-                                    <option value="true" selected>True</option>
+                                    <option value="true" selected>Unsafe</option>
                                 @else
-                                    <option value="true">True</option>
+                                    <option value="true">Unsafe</option>
                                 @endif
-                                <option value="false">False</option>
+                                <option value="false">Safe</option>
                             </select>
 
                             <!--Control action not provided-->
                             <select class="text" id="notprovided-row-{{$total_loop}}" name="ca-not-provided-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
-                                <option value="true">True</option>
-                                <option value="false">False</option>
+                                <option value="true">Unsafe</option>
+                                <option value="false">Safe</option>
                             </select>
 
                             <!--Wrong time or order causes hazard-->
                             <select class="text" id="wrongtime-row-{{$total_loop}}" name="wrongtime-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
-                                <option value="true">True</option>
-                                <option value="false">False</option>
+                                <option value="true">Unsafe</option>
+                                <option value="false">Safe</option>
                             </select>
 
                             <!--Control Action provided too early-->
                             <select class="text" id="early-row-{{$total_loop}}" name="early-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
-                                <option value="true">True</option>
-                                <option value="false">False</option>
+                                <option value="true">Unsafe</option>
+                                <option value="false">Safe</option>
                             </select>
 
                             <!--Control Action provided too late-->
                             <select class="text" id="late-row-{{$total_loop}}" name="late-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
-                                <option value="true">True</option>
-                                <option value="false">False</option>
+                                <option value="true">Unsafe</option>
+                                <option value="false">Safe</option>
                             </select>
                             <!--Control action stopped too soon-->
                             <select class="text" id="soon-row-{{$total_loop}}" name="soon-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
-                                <option value="true">True</option>
-                                <option value="false">False</option>
+                                <option value="true">Unsafe</option>
+                                <option value="false">Safe</option>
                             </select>
                             <!--Control Action applied too long-->
                             <select class="text" id="long-row-{{$total_loop}}" name="long-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
-                                <option value="true">True</option>
-                                <option value="false">False</option>
+                                <option value="true">Unsafe</option>
+                                <option value="false">Safe</option>
                             </select>
 
                         @endif

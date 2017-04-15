@@ -2,7 +2,7 @@
     Unsafe Control Actions and Safety Constraints associated - {{$ca->name}}
 </div>
 
-<div class="substep__add" data-component="add-button" data-add="uca-{{$ca->id}}">
+<div class="substep__add add-new-uca" id="ca-{{$ca->id}}">
     +
 </div>
 
@@ -11,13 +11,19 @@
     <div class="container">
 
         <div class="container-fluid" style="margin-top: 10px">
-
+            <!--
             <form action="/generateUCA" method="POST">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
                 <input type="submit"/>
             </form>
 
+            <form action="/addnewuca" method="POST" class="add-new-uca">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
+                <input type="submit"/>
+            </form>
+            -->
             <div class="table-row header">
                 <div class="text">Unsafe Control Actions</div>
                 <div class="text">Safety Constraint Associated</div>
@@ -60,49 +66,49 @@
                     <div class="text">
                         <div>
                         <select id="type-{{$sc->id}}" style="-webkit-appearance: none; box-shadow: none !important; border: 0;" disabled>
-                            @if($sc->type == "Provided")
+                            @if($sc->type == "Provided" || $sc->type == "provided")
                                 <option value="Provided" selected>[Provided]</option>
                             @else
                                 <option value="Provided">[Provided]</option>
                             @endif
 
-                            @if($sc->type == "Not Provided")
+                            @if($sc->type == "Not Provided" || $sc->type == "Not provided")
                                 <option value="Not Provided" selected>[Not Provided]</option>
                             @else
                                 <option value="Not Provided">[Not Provided]</option>
                             @endif
 
-                            @if($sc->type == "Wrong Time")
+                            @if($sc->type == "Wrong Time" || $sc->type == "Provided in wrong time")
                                 <option value="Wrong Time" selected>[Wrong time]</option>
                             @else
                                 <option value="Wrong Time">[Wrong time]</option>
                             @endif
 
-                            @if($sc->type == "Wrong Order")
+                            @if($sc->type == "Wrong Order" || $sc->type == "Provided in wrong order")
                                 <option value="Wrong Order" selected>[Wrong order]</option>
                             @else
                                 <option value="Wrong Order">[Wrong order]</option>
                             @endif
 
-                            @if($sc->type == "Provided too early")
+                            @if($sc->type == "Provided too early" || $sc->type == "Provided too early")
                                 <option value="Provided too early" selected>[Provided too early]</option>
                             @else
                                 <option value="Provided too early">[Provided too early]</option>
                             @endif
 
-                            @if($sc->type == "Provided too late")
+                            @if($sc->type == "Provided too late" || $sc->type == "Provided too late")
                                 <option value="Provided too late" selected>[Provided too late]</option>
                             @else
                                 <option value="Provided too late">[Provided too late]</option>
                             @endif
 
-                            @if($sc->type == "Stopped too soon")
+                            @if($sc->type == "Stopped too soon" || $sc->type == "Stopped too soon")
                                 <option value="Stopped too soon" selected>[Stopped too soon]</option>
                             @else
                                 <option value="Stopped too soon">[Stopped too soon]</option>
                             @endif
 
-                            @if($sc->type == "Applied too long")
+                            @if($sc->type == "Applied too long" || $sc->type == "Applied too long")
                                 <option value="Applied too long" selected>[Applied too long]</option>
                             @else
                                 <option value="Applied too long">[Applied too long]</option>

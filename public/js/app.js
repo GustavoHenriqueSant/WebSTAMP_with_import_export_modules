@@ -16476,6 +16476,10 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       });
     };
 
+    var convertType = function convertType(type) {
+      if (type == "provided") return "Provided";else if (type == "not provided") return "Not provided";else if (type == "wrong time") return "Provided in wrong time";else if (type == "wrong order") return "Provided in wrong order";else if (type == "too early") return "Provided too early";else if (type == "too late") return "Provided too late";else if (type == "too soon") return "Stopped too soon";else if (type == "too long") return "Applied too long";
+    };
+
     // Require JQuery
     $ = require('jquery');
     axios = require('./axios');
@@ -16540,6 +16544,161 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
           }]
         }
       });
+    });
+
+    $('body').on('click', '.add-new-uca', function (event) {
+      event.preventDefault();
+      $(".unsafe-control").each(function () {
+        $(this).html("");
+      });
+      $(".safety-control").each(function () {
+        $(this).html("");
+      });
+      var form = $(event.currentTarget);
+      var controlaction_id = form.attr("id").split("-")[1];
+      vex.closeAll();
+      vex.open({
+        unsafeContent: $("#add-new-uca-" + controlaction_id).html(),
+        buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
+        showCloseButton: true,
+        className: "vex-theme-default"
+      });
+    });
+
+    $('body').on('submit', '.adding-uca', function (event) {
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      var controlaction_id = form.find("#controlaction_id").val();
+      var controller_name = form.find("#controller_name").val();
+      var controlaction_name = form.find("#controlaction_name").val();
+      var type = "";
+      $(".type-uca").each(function (index, f) {
+        if (index > 0 && f.id.split("-")[2] == controlaction_id) {
+          type = $(f).find("option:selected").val();
+        }
+      });
+      var states = [];
+      var states_name = [];
+      form.find(".uca-row-" + controlaction_id + " option:selected").each(function (index, f) {
+        if (f.value.split("-")[0] > 0) {
+          states.push(f.value.split("-")[0]);
+          states_name.push(f.value.split("-")[1] + " is " + f.text);
+        }
+      });
+      var unsafe_control_action = "";
+      var safety_constraint = "";
+      if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
+        unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      } else if (type.includes("wrong time") || type.includes("wrong order")) {
+        unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+      } else {
+        unsafe_control_action = controller_name.toLowerCase() + " " + type.toLowerCase() + " " + controlaction_name.toLowerCase() + " when";
+        if (type.includes("not provided")) {
+          safety_constraint = controller_name.toLowerCase() + " must provide " + controlaction_name.toLowerCase() + " when";
+        } else {
+          safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " when";
+        }
+      }
+      unsafe_control_action = unsafe_control_action[0].toUpperCase() + unsafe_control_action.slice(1);
+      safety_constraint = safety_constraint[0].toUpperCase() + safety_constraint.slice(1);
+      var states_size = states_name.length;
+      states_name.forEach(function (f, index) {
+        if (index != states_size - 1) {
+          unsafe_control_action += ", " + f.toLowerCase();
+          safety_constraint += ", " + f.toLowerCase();
+        } else {
+          unsafe_control_action += " and " + f.toLowerCase();
+          safety_constraint += ", " + f.toLowerCase();
+        }
+      });
+      unsafe_control_action = unsafe_control_action.replace("when and", "when");
+      unsafe_control_action = unsafe_control_action.replace("when,", "when");
+      safety_constraint = safety_constraint.replace("when and", "when");
+      safety_constraint = safety_constraint.replace("when,", "when");
+      if (states_name.length > 0) {
+        $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/> " + unsafe_control_action + ".");
+        $(".safety-control").html("<br/><center><b>Safety constraint associated:</b></center><br/> " + safety_constraint + ".");
+      }
+      var id = 0;
+      var rule_id = 0;
+      type = convertType(type);
+      var context = "";
+      states.forEach(function (f, index) {
+        console.log(f);
+        if (index == 0) context += f;else if (index < states.length) context += "," + f;
+      });
+      axios.post('/adduca', {
+        id: id,
+        unsafe_control_action: unsafe_control_action,
+        safety_constraint: safety_constraint,
+        type: type,
+        controlaction_id: controlaction_id,
+        rule_id: rule_id,
+        context: context
+      }).then(function (response) {
+        $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
+      }).catch(function (error) {
+        console.log(error);
+      });
+    });
+
+    $('body').on('change', '.mudanca', function (event) {
+      var form = $(event.currentTarget).closest(".adding-uca");
+      var controlaction_id = form.find("#controlaction_id").val();
+      var controller_name = form.find("#controller_name").val();
+      var controlaction_name = form.find("#controlaction_name").val();
+      var type = "";
+      $(".type-uca").each(function (index, f) {
+        if (index > 0 && f.id.split("-")[2] == controlaction_id) {
+          type = $(f).find("option:selected").val();
+        }
+      });
+      var states = [];
+      var states_name = [];
+      $(".uca-row-" + controlaction_id + " option:selected").each(function (index, f) {
+        if (f.value.split("-")[0] > 0) {
+          states.push(f.value.split("-")[0]);
+          states_name.push(f.value.split("-")[1] + " is " + f.text);
+        }
+      });
+      var unsafe_control_action = "";
+      var safety_constraint = "";
+      if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
+        unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      } else if (type.includes("wrong time") || type.includes("wrong order")) {
+        unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+      } else {
+        unsafe_control_action = controller_name.toLowerCase() + " " + type.toLowerCase() + " " + controlaction_name.toLowerCase() + " when";
+        if (type.includes("not provided")) {
+          safety_constraint = controller_name.toLowerCase() + " must provide " + controlaction_name.toLowerCase() + " when";
+        } else {
+          safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " when";
+        }
+      }
+      unsafe_control_action = unsafe_control_action[0].toUpperCase() + unsafe_control_action.slice(1);
+      safety_constraint = safety_constraint[0].toUpperCase() + safety_constraint.slice(1);
+      var states_size = states_name.length;
+      states_name.forEach(function (f, index) {
+        if (index != states_size - 1) {
+          unsafe_control_action += ", " + f.toLowerCase();
+          safety_constraint += ", " + f.toLowerCase();
+        } else {
+          unsafe_control_action += " and " + f.toLowerCase();
+          safety_constraint += ", " + f.toLowerCase();
+        }
+      });
+      unsafe_control_action = unsafe_control_action.replace("when and", "when");
+      unsafe_control_action = unsafe_control_action.replace("when,", "when");
+      safety_constraint = safety_constraint.replace("when and", "when");
+      safety_constraint = safety_constraint.replace("when,", "when");
+      if (states_name.length > 0) {
+        $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/> " + unsafe_control_action + ".");
+        $(".safety-control").html("<br/><center><b>Safety constraint associated:</b></center><br/> " + safety_constraint + ".");
+      }
     });
 
     // Add UCA and Safety Constraint Associated
@@ -16697,6 +16856,11 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var form = $(event.currentTarget);
       var controlaction_id = form.find("#controlaction_id").val();
       var total_rows = form.find("#total_rows").val() - 1;
+      axios.post('/deletecontexttable', {
+        controlaction_id: controlaction_id
+      }).catch(function (error) {
+        console.log(error);
+      });
       while (total_rows >= 0) {
         var states = form.find("#all_states_" + total_rows).val();
         var provided = form.find("#provided-row-" + total_rows).val();
@@ -17118,27 +17282,31 @@ module.exports = function (context) {
 'use strict';
 
 module.exports = function (context) {
-    var type = '<select style="-webkit-appearance: none; box-shadow: none !important; border: 0; direction: rtl;" disabled>';
 
-    if (context.type === 'Provided') type += '<option value="Provided" selected>[Provided]</option>';else type += '<option value="Provided">[Provided]</option>';
+    var uca_size = context.unsafe_control_action.length;
+    var sc_size = context.safety_constraint.length;
 
-    if (context.type === 'Not Provided') type += '<option value="Not Provided" selected>[Not Provided]</option>';else type += '<option value="Not Provided">[Not Provided]</option>';
+    var type = '<select id="type-' + context.id + '" style="-webkit-appearance: none; box-shadow: none !important; border: 0;" disabled>';
 
-    if (context.type === 'Wrong Time') type += '<option value="Wrong Time" selected>[Wrong Time]</option>';else type += '<option value="Wrong Time">[Wrong Time]</option>';
+    if (context.type === 'provided' || context.type === 'Provided') type += '<option value="Provided" selected>[Provided]</option>';else type += '<option value="Provided">[Provided]</option>';
 
-    if (context.type === 'Wrong Order') type += '<option value="Wrong Order" selected>[Wrong Order]</option>';else type += '<option value="Wrong Order">[Wrong Order]</option>';
+    if (context.type === 'not provided' || context.type === 'Not provided') type += '<option value="Not Provided" selected>[Not Provided]</option>';else type += '<option value="Not Provided">[Not Provided]</option>';
 
-    if (context.type === 'Provided too early') type += '<option value="Provided too early" selected>[Provided too early]</option>';else type += '<option value="Provided too early">[Provided too early]</option>';
+    if (context.type === 'wrong time' || context.type === 'Provided in wrong time') type += '<option value="Wrong Time" selected>[Wrong Time]</option>';else type += '<option value="Wrong Time">[Wrong Time]</option>';
 
-    if (context.type === 'Provided too late') type += '<option value="Provided too late" selected>[Provided too late]</option>';else type += '<option value="Provided too late">[Provided too late]</option>';
+    if (context.type === 'wrong order' || context.type === 'Provided in wrong order') type += '<option value="Wrong Order" selected>[Wrong Order]</option>';else type += '<option value="Wrong Order">[Wrong Order]</option>';
 
-    if (context.type === 'Stopped too soon') type += '<option value="Stopped too soon" selected>[Stopped too soon]</option>';else type += '<option value="Stopped too soon">[Stopped too soon]</option>';
+    if (context.type === 'too early' || context.type === 'Provided too early') type += '<option value="Provided too early" selected>[Provided too early]</option>';else type += '<option value="Provided too early">[Provided too early]</option>';
 
-    if (context.type === 'Applied too long') type += '<option value="Applied too long" selected>[Applied too long]</option>';else type += '<option value="Applied too long">[Applied too long]</option>';
+    if (context.type === 'too late' || context.type === 'Provided too late') type += '<option value="Provided too late" selected>[Provided too late]</option>';else type += '<option value="Provided too late">[Provided too late]</option>';
+
+    if (context.type === 'too soon' || context.type === 'Stopped too soon') type += '<option value="Stopped too soon" selected>[Stopped too soon]</option>';else type += '<option value="Stopped too soon">[Stopped too soon]</option>';
+
+    if (context.type === 'too long' || context.type === 'Applied too long') type += '<option value="Applied too long" selected>[Applied too long]</option>';else type += '<option value="Applied too long">[Applied too long]</option>';
 
     type += '</select>';
 
-    return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text">\n                        ' + context.unsafe_control_action + '\n                    </div>\n                    \n                    <div class="text">\n                        ' + type + '\n                        ' + context.safety_constraint + '\n                    </div>\n                    \n                    <div>\n                        <form action="/edituca" class="delete-form" data-delete="uca" method="POST">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n                    <div>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n                </div>';
+    return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text item__title">\n                        <input type="text" class="item__input" id="unsafe_control_action-' + context.id + '" value="' + context.unsafe_control_action + '" size="' + uca_size + '" disabled>\n                    </div>\n                    \n                    <div class="text">\n                        <div>\n                            ' + type + '\n                        </div>\n                        <div class="item__title">\n                            <input type="text" class="item__input" id="safety_constraint-' + context.id + '" value="' + context.safety_constraint + '" size="' + sc_size + '" disabled>\n                        </div>\n                    </div>\n                    \n                    <div>\n                        <form action="/edituca" class="delete-form" data-delete="uca" method="POST">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n                    <div>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n                </div>';
 };
 
 },{}],52:[function(require,module,exports){
