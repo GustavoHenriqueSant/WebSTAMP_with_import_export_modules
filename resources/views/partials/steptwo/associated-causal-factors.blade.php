@@ -203,7 +203,7 @@
 		    	</div>
 		    	<div class="vex-dialog-input"></div>
 		    	<div class="vex-dialog-buttons">
-		        	<button class="vex-dialog-button-primary vex-dialog-button vex-first"> Import </button>
+		        	<!--<button class="vex-dialog-button-primary vex-dialog-button vex-first"> Import </button>-->
 		        	<div style="display: table; margin: 0 auto;">
 		        		<button class="vex-dialog-button-primary vex-dialog-button vex-first"> Add </button>
 		        	</div>

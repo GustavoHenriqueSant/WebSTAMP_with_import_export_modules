@@ -19,7 +19,7 @@ module.exports = function(context) {
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                         <input id="project_id" name="project_id" type="hidden" value="1">
                         <input id="accident_id" name="accident_id" type="hidden" value="${context.id}">
-                        <input type="image" src="/images/delete.ico" alt="Delete" width="20" class="navbar__logo">
+                        <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">
                     </div>
                 </form>
             </div>

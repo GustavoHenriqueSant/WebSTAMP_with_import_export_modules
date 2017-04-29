@@ -34,14 +34,7 @@
                     <div class="text center">Requirements</div>
                     <div class="text center">Allocated to</div>
                     <div class="text center">Rationales</div>
-                    <div class="text center">
-                        <form action="/edituca" class="edit-form" data-edit="uca" method="POST">
-                            <input type="hidden" name="_token" value="{{csrf_token()}}">
-                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="1">
-                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="1">
-                            <input type="image" src="{{ asset('images/plus.png') }}" alt="Delete" width="20" class="navbar__logo"> Add new line
-                        </form>
-                    </div>
+                    <div class="text center"><!-- Edit/Delete --></div>
                 </div>
 
                     @foreach(App\CausalAnalysis::where('safety_constraint_id', $safety_constraint->id)->get() as $causal)

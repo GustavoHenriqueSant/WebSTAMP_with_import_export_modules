@@ -7,9 +7,9 @@
         </div>
         <div class="add-drop__buttons">
             @section('buttons')
-                <button class="add-drop__action">
+                <!--<button class="add-drop__action">
                   Cancel
-                </button>
+                </button>-->
                 <button type="submit" class="add-drop__action">
                   Add
                 </button>

@@ -47,13 +47,13 @@ class RuleController extends Controller
 
 		return redirect(route('stepone'));
 
-		return response()->json([
+		/*return response()->json([
          	'id' => $rule->id,
          	'rule_index' => $rule->index,
          	'state_id' => $rule->state_id,
          	'controlaction_id' => $rule->controlaction_id,
          	'variable_id' => $rule->variable_id
-     	]);
+     	]);*/
 	}
 
 	public function delete(Request $request){

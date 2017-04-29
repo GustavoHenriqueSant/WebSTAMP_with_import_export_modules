@@ -1,10 +1,10 @@
 <?php
     // Getting all variables
-    $variables = App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get();
+    $variables = App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->orderBy('id')->get();
     // Getting all States
     $states = [];
     foreach($variables as $variable){
-        $state = App\State::where('variable_id', $variable->id)->get();
+        $state = App\State::where('variable_id', $variable->id)->orderBy('id')->get();
         foreach ($state as $s) {
             array_push($states, $s);
         }
@@ -31,7 +31,7 @@
         $allStates[$variable_index] = [];
         $allStatesId[$variable_index] = [];
         for ($j = 0; $j < count($states); $j++) {
-            if ($variables[$i]->id == $states[$j]->variable_id){
+            if ($variables[$i]->id == $states[$j]->variable_id){    
                 array_push($allStates[$variable_index], $states[$j]->name);
                 array_push($allStatesId[$variable_index], $states[$j]->id);
             }
@@ -51,6 +51,8 @@
         $total_loop *= count($allStates[$i]);
     }
 
+    $rows_number = $total_loop;
+
     // Select all rules associated with the selected control action
     $rule = App\Rules::where('controlaction_id', $ca->id)->get();
     // Get the number of rules
@@ -59,10 +61,9 @@
     $rle = [];
     if (count($total_index) > 0) {
         foreach($total_index as $index) {
-            array_push($rle, App\Rules::where('controlaction_id', $ca->id)->where('index', $index->index)->orderBy('index', 'asc')->orderBy('variable_id', 'asc')->get());
+            array_push($rle, App\Rules::where('controlaction_id', $ca->id)->where('index', $index->index)->orderBy('index')->orderBy('variable_id')->get());
         }
     }
-
 
 ?>
 <div class="substep__title">
@@ -70,6 +71,12 @@
 </div>
 
 <div class="substep__content">
+
+    @if ($rows_number > 1)
+        This context table has <b>{{$rows_number}}</b> rows
+    @else
+        This context table has <b>{{$rows_number}}</b> row
+    @endif
 
     <div class="container">
 
@@ -114,8 +121,8 @@
                                 // Verifying if the rule fits
                                 if(count($rle) > 0) {
                                     foreach($rle as $key => $r) {
-                                        if (count($r) > 0) {
-                                            if($r[$i]->state_id == 0){
+                                        if (count($r) > 0) {                                        
+                                            if($r[$i]->state_id == 0){                                            
                                                 if ($rules[$key] == "true")
                                                     $rules[$key] = "true";
                                             } else if ( ($allStates[$i][$combination_array[$i]] == App\State::find($r[$i]->state_id)->name) && ($rules[$key] == "true") ){
@@ -134,8 +141,10 @@
                             $loop++;
                             for ($i = 0; $i < count($combination_array); $i++) {
                                 $multiple = (count($combination_array)-($i+1));
-                                $divisor = 2 ** $multiple;
+                                //echo count($combination_array)-($i+1);
+                                $divisor = ($multiple > 0 ) ? count($number_of_states) * $multiple : 1;//2 ** $multiple;
                                 $resto = $loop % $divisor;
+                                //echo "Multiplo: " . $multiple . "<br>Divisor: " . $divisor . "<br>Resto: " . $resto . "<br><br>";
                                 if ($resto == 0) {
                                     $combination_array[$i] = ($combination_array[$i]+1 >= $number_of_states[$i]) ? 0 : $combination_array[$i]+1;
                                 }
@@ -155,6 +164,7 @@
                             $thereAreRule = "false";
 
                             foreach ($rules as $key => $r) {
+                                //echo  $r;
                                 if ($r == "true" && count($r) > 0) {
                                     echo "R".($key+1)." ";
                                     $thereAreRule = "true";
@@ -163,7 +173,7 @@
                                 }
                             }
 
-                            $context_table = DB::select('SELECT * FROM context_tables WHERE controlaction_id = ? and ? like concat("%",context,"%")', [1, $array_for_compare]);
+                            $context_table = DB::select('SELECT * FROM context_tables WHERE controlaction_id = ? and ? like concat("%",context,"%") ORDER BY context', [1, $array_for_compare]);
                             $context_table = (count($context_table) > 0) ? $context_table[0] : "";
 
                         ?>
@@ -348,7 +358,7 @@
                         @endif
                     </div>
                 @endwhile
-                <center><button>Save</button></center>  
+                <br/><center><button class="font-button"><img src="/images/save.ico" class="context-table-button" width="15"/> Save Context Table</button></center>
             </form>
         </div>
     </div>

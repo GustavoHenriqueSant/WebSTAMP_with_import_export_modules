@@ -1,5 +1,5 @@
 <div class="substep__title">
-    Unsafe Control Actions and Safety Constraints associated - {{$ca->name}}
+    Unsafe Control Actions and Associated Safety Constraints - {{$ca->name}}
 </div>
 
 <div class="substep__add add-new-uca" id="ca-{{$ca->id}}">
@@ -26,7 +26,7 @@
             -->
             <div class="table-row header">
                 <div class="text">Unsafe Control Actions</div>
-                <div class="text">Safety Constraint Associated</div>
+                <div class="text">Associated Safety Constraint</div>
             </div>
 
             <!--

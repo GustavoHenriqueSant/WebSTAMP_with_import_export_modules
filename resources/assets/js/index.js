@@ -65,7 +65,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   var connection = require('./templates/connection_template');
   var controlaction = require('./templates/controlaction_template');
   var variable = require('./templates/variable_template');
-  var accident = require('./templates/connection_template');
+  var connection = require('./templates/connection_template');
   var state = require('./templates/state_template');
   var addstate = require('./templates/add-state_template');
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
@@ -102,6 +102,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         id : id
       })
       .then(function (response) { 
+        console.log("Entrou!");
         Hazard.addAccident(response.data);
         $newAccident.append(accident(response.data));
       })
@@ -1131,26 +1132,37 @@ for (i = 0; i < acc.length; i++) {
     var append = '<div class="table-row rules-table rules-ca-'+controlaction_id+'-rule-'+rule_index+'"><div class="text">R'+rule_index+'</div>';
     // Save each variable of the rule
     var variables = form.find('[id^="variable_id_"]').each(function() {
-        var ids = form.find(this).val().split("-");
-        var variable_id = ids[0];
-        var state_id = ids[1];
-        var name = $(this).find('option:selected').attr('name');
-        append += '<div class="text">'+name+'</div>';
-        var id = 0;
-        axios.post('/addrule', {
-            id : id,
-            rule_index: rule_index,
-            variable_id : variable_id,
-            state_id : state_id,
-            controlaction_id : controlaction_id
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+      var ids = form.find(this).val().split("-");
+      var variable_id = ids[0];
+      var state_id = ids[1];
+      var name = $(this).find('option:selected').attr('name');
+      append += '<div class="text">'+name+'</div>';
+      var id = 0;
+      if (rule_index > 0)
+      axios.post('/addrule', {
+          id : id,
+          rule_index: rule_index,
+          variable_id : variable_id,
+          state_id : state_id,
+          controlaction_id : controlaction_id
+      })
+      .catch(function (error) {
+          console.log(error);
+      });
     });
-
-    //location.reload();
-    var ca = window.location.search.substr(1).split("=");
+    setTimeout(function(){
+      var ca = window.location.search.substr(1).split("=");
+      console.log(ca);
+      if (ca.length > 1){
+        var currentURL = window.location.href.split("?");
+        window.location.href = currentURL[0] + '?ca='+controlaction_id;
+      }
+      else{
+        window.location.href += '?ca='+controlaction_id;
+      } 
+    }, 2000);
+    
+    /*var ca = window.location.search.substr(1).split("=");
     console.log(ca);
     if (ca.length > 1){
       var currentURL = window.location.href.split("?");
@@ -1158,7 +1170,7 @@ for (i = 0; i < acc.length; i++) {
     }
     else{
       window.location.href += '?ca='+controlaction_id;
-    }
+    } */
 
     append += '<div class="text">' +
                   '<form action="/deleterule" class="delete-form" data-delete="rules" method="POST">' +
@@ -1191,6 +1203,7 @@ for (i = 0; i < acc.length; i++) {
               })
               .then(function (response) {
                 $(".rules-ca-" + controlaction_id + "-rule-" + rule_index).remove();
+                location.reload();
               })
               .catch(function (error) {
                 console.log(error);
@@ -1251,7 +1264,10 @@ for (i = 0; i < acc.length; i++) {
       });
       total_rows--;
     }
-    vex.dialog.alert("Context table saved successfully");
+    setTimeout(function(){
+      vex.dialog.alert("Context table saved successfully");
+    }, 2000);
+    
   });
 
 } else {
