@@ -16868,6 +16868,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var form = $(event.currentTarget);
       var controlaction_id = form.find("#controlaction_id").val();
       var total_rows = form.find("#total_rows").val() - 1;
+      console.log("CA: " + controlaction_id);
       axios.post('/deletecontexttable', {
         controlaction_id: controlaction_id
       }).catch(function (error) {
@@ -16875,13 +16876,14 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       });
       while (total_rows >= 0) {
         var states = form.find("#all_states_" + total_rows).val();
-        var provided = form.find("#provided-row-" + total_rows).val();
-        var not_provided = form.find("#notprovided-row-" + total_rows).val();
-        var wrong_time = form.find("#wrongtime-row-" + total_rows).val();
-        var early = form.find("#early-row-" + total_rows).val();
-        var late = form.find("#late-row-" + total_rows).val();
-        var soon = form.find("#soon-row-" + total_rows).val();
-        var long = form.find("#long-row-" + total_rows).val();
+        var provided = form.find("#provided-ca-" + controlaction_id + "-row-" + total_rows).val();
+        var not_provided = form.find("#notprovided-ca-" + controlaction_id + "-row-" + total_rows).val();
+        console.log(not_provided);
+        var wrong_time = form.find("#wrongtime-ca-" + controlaction_id + "-row-" + total_rows).val();
+        var early = form.find("#early-ca-" + controlaction_id + "-row-" + total_rows).val();
+        var late = form.find("#late-ca-" + controlaction_id + "-row-" + total_rows).val();
+        var soon = form.find("#soon-ca-" + controlaction_id + "-row-" + total_rows).val();
+        var long = form.find("#long-ca-" + controlaction_id + "-row-" + total_rows).val();
         //console.log(states + " " + provided + " " + not_provided + " " + wrong_time + " " + early + " " + late + " " + soon + " " + long);
         axios.post('/savecontexttable', {
           controlaction_id: controlaction_id,

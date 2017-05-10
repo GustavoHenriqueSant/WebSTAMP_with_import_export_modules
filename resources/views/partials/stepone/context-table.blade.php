@@ -173,7 +173,7 @@
                                 }
                             }
 
-                            $context_table = DB::select('SELECT * FROM context_tables WHERE controlaction_id = ? and ? like concat("%",context,"%") ORDER BY context', [1, $array_for_compare]);
+                            $context_table = DB::select('SELECT * FROM context_tables WHERE controlaction_id = ? and ? like concat("%",context,"%") ORDER BY context', [$ca->id, $array_for_compare]);
                             $context_table = (count($context_table) > 0) ? $context_table[0] : "";
 
                         ?>
@@ -186,21 +186,27 @@
 
                                 <!--Control Action Provided-->
                                 @if ($thereAreRule == "true")
-                                    <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}" disabled>
+                                    <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
                                 @else
-                                    <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}">
+                                    <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                                 @endif
-                                        <option value="null">-</option>
-                                        @if ($thereAreRule == "true")
+                                        @if($context_table->ca_provided == "true" || $thereAreRule == "true")
+                                            <option value="null">-</option>
                                             <option value="true" selected>Unsafe</option>
-                                        @else
+                                            <option value="false">Safe</option>
+                                        @elseif($context_table->ca_provided == "null")
+                                            <option value="null" selected>-</option>
                                             <option value="true">Unsafe</option>
+                                            <option value="false">Safe</option>
+                                        @else
+                                            <option value="null">-</option>
+                                            <option value="true">Unsafe</option>
+                                            <option value="false" selected>Safe</option>
                                         @endif
-                                        <option value="false">Safe</option>
                                     </select>
 
                                 <!--Control action not provided-->
-                                <select class="text" id="notprovided-row-{{$total_loop}}" name="ca-not-provided-row-{{$total_loop}}">
+                                <select class="text" id="notprovided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-not-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                                     @if($context_table->ca_not_provided == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -217,7 +223,7 @@
                                 </select>
 
                                 <!--Wrong time or order causes hazard-->
-                                <select class="text" id="wrongtime-row-{{$total_loop}}" name="wrongtime-row-{{$total_loop}}">
+                                <select class="text" id="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" name="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}">
                                     @if($context_table->wrong_time_order == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -234,7 +240,7 @@
                                 </select>
 
                                 <!--Control Action provided too early-->
-                                <select class="text" id="early-row-{{$total_loop}}" name="early-row-{{$total_loop}}">
+                                <select class="text" id="early-ca-{{$ca->id}}-row-{{$total_loop}}" name="early-ca-{{$ca->id}}-row-{{$total_loop}}">
                                     @if($context_table->ca_too_early == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -251,7 +257,7 @@
                                 </select>
 
                                 <!--Control Action provided too late-->
-                                <select class="text" id="late-row-{{$total_loop}}" name="late-row-{{$total_loop}}">
+                                <select class="text" id="late-ca-{{$ca->id}}-row-{{$total_loop}}" name="late-ca-{{$ca->id}}-row-{{$total_loop}}">
                                     @if($context_table->ca_too_late == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -267,7 +273,7 @@
                                     @endif
                                 </select>
                                 <!--Control action stopped too soon-->
-                                <select class="text" id="soon-row-{{$total_loop}}" name="soon-row-{{$total_loop}}">
+                                <select class="text" id="soon-ca-{{$ca->id}}-row-{{$total_loop}}" name="soon-ca-{{$ca->id}}-row-{{$total_loop}}">
                                     @if($context_table->ca_too_soon == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -283,7 +289,7 @@
                                     @endif
                                 </select>
                                 <!--Control Action applied too long-->
-                                <select class="text" id="long-row-{{$total_loop}}" name="long-row-{{$total_loop}}">
+                                <select class="text" id="long-ca-{{$ca->id}}-row-{{$total_loop}}" name="long-ca-{{$ca->id}}-row-{{$total_loop}}">
                                     @if($context_table->ca_too_long == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -302,9 +308,9 @@
                         @else
                             <!--Control Action Provided-->
                         @if ($thereAreRule == "true")
-                            <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}" disabled>
+                            <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
                         @else
-                            <select class="text" id="provided-row-{{$total_loop}}" name="ca-provided-row-{{$total_loop}}">
+                            <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                         @endif
                                 <option value="null">-</option>
                                 @if ($thereAreRule == "true")
@@ -316,40 +322,40 @@
                             </select>
 
                             <!--Control action not provided-->
-                            <select class="text" id="notprovided-row-{{$total_loop}}" name="ca-not-provided-row-{{$total_loop}}">
+                            <select class="text" id="notprovided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-not-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
                                 <option value="true">Unsafe</option>
                                 <option value="false">Safe</option>
                             </select>
 
                             <!--Wrong time or order causes hazard-->
-                            <select class="text" id="wrongtime-row-{{$total_loop}}" name="wrongtime-row-{{$total_loop}}">
+                            <select class="text" id="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" name="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
                                 <option value="true">Unsafe</option>
                                 <option value="false">Safe</option>
                             </select>
 
                             <!--Control Action provided too early-->
-                            <select class="text" id="early-row-{{$total_loop}}" name="early-row-{{$total_loop}}">
+                            <select class="text" id="early-ca-{{$ca->id}}-row-{{$total_loop}}" name="early-ca-{{$ca->id}}-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
                                 <option value="true">Unsafe</option>
                                 <option value="false">Safe</option>
                             </select>
 
                             <!--Control Action provided too late-->
-                            <select class="text" id="late-row-{{$total_loop}}" name="late-row-{{$total_loop}}">
+                            <select class="text" id="late-ca-{{$ca->id}}-row-{{$total_loop}}" name="late-ca-{{$ca->id}}-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
                                 <option value="true">Unsafe</option>
                                 <option value="false">Safe</option>
                             </select>
                             <!--Control action stopped too soon-->
-                            <select class="text" id="soon-row-{{$total_loop}}" name="soon-row-{{$total_loop}}">
+                            <select class="text" id="soon-ca-{{$ca->id}}-row-{{$total_loop}}" name="soon-ca-{{$ca->id}}-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
                                 <option value="true">Unsafe</option>
                                 <option value="false">Safe</option>
                             </select>
                             <!--Control Action applied too long-->
-                            <select class="text" id="long-row-{{$total_loop}}" name="long-row-{{$total_loop}}">
+                            <select class="text" id="long-ca-{{$ca->id}}-row-{{$total_loop}}" name="long-ca-{{$ca->id}}-row-{{$total_loop}}">
                                 <option value="null" selected>-</option>
                                 <option value="true">Unsafe</option>
                                 <option value="false">Safe</option>
