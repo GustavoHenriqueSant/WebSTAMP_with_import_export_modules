@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         //$this->call(UsersTableSeeder::class);
         $this->call(ProjectsTableSeeder::class);
-        /*$this->call(SystemGoalsTableSeeder::class);
+        $this->call(SystemGoalsTableSeeder::class);
         $this->call(AccidentsTableSeeder::class);
         $this->call(HazardsTableSeeder::class);
         $this->call(AccidentsHazardsTableSeeder::class);
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ControlActionsTableSeeder::class);
         $this->call(RulesTableSeeder::class);
         $this->call(SystemSafetyConstraintTableSeeder::class);
-        $this->call(SafetyConstraintsTableSeeder::class);*/
+        $this->call(SafetyConstraintsTableSeeder::class);
         $this->call(GuidewordsTableSeeder::class);
         $this->call(CausalAnalysisTableSeeder::class);
     }
