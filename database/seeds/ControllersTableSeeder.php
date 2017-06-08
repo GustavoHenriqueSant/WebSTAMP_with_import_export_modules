@@ -13,7 +13,7 @@ class ControllersTableSeeder extends Seeder
     {
         DB::table('controllers')->insert([
             'id' => 1,
-            'name' => 'Controller',
+            'name' => 'Train Door Controller',
             'type' => 'Automatized',
             'project_id' => 1
         ]);

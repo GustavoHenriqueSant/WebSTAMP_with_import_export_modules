@@ -13,7 +13,7 @@ class SensorsTableSeeder extends Seeder
     {
         DB::table('sensors')->insert([
             'id' => 1,
-            'name' => 'Sensor',
+            'name' => 'Train Door Sensor',
             'project_id' => 1
         ]);
     }

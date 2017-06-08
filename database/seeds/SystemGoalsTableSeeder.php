@@ -13,19 +13,25 @@ class SystemGoalsTableSeeder extends Seeder
     {
         DB::table('system_goals')->insert([
             'id' => 1,
-            'name' => 'Ensure a safe passage along the level crossing.',
+            'name' => 'Provide an easy way to control the door.',
             'description' => 'Description',
             'project_id' => 1
         ]); 
         DB::table('system_goals')->insert([
             'id' => 2,
-            'name' => 'Avoid collisions.',
+            'name' => 'Ensure the safety of passengers in boarding and landing at stations.',
             'description' => 'Description',
             'project_id' => 1
         ]); 
         DB::table('system_goals')->insert([
             'id' => 3,
-            'name' => 'Protect the train, vehicles and passengers.',
+            'name' => 'Avoid any type of injury to passengers.',
+            'description' => 'Description',
+            'project_id' => 1
+        ]);
+        DB::table('system_goals')->insert([
+            'id' => 4,
+            'name' => 'Make a safe trip between stations.',
             'description' => 'Description',
             'project_id' => 1
         ]);

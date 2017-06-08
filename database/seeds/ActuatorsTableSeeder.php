@@ -13,7 +13,7 @@ class ActuatorsTableSeeder extends Seeder
     {
         DB::table('actuators')->insert([
             'id' => 1,
-            'name' => 'Actuator',
+            'name' => 'Train Door Actuator',
             'project_id' => 1
         ]);
     }

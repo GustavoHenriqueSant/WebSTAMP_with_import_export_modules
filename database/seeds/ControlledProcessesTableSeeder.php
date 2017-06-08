@@ -13,7 +13,7 @@ class ControlledProcessesTableSeeder extends Seeder
     {
         DB::table('controlled_processes')->insert([
             'id' => 1,
-            'name' => 'Crossing Gate',
+            'name' => 'Train Door',
             'project_id' => 1
         ]);
     }

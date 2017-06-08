@@ -13,31 +13,19 @@ class SystemSafetyConstraintTableSeeder extends Seeder
     {
         DB::table('system_safety_constraint')->insert([
             'id' => 1,
-            'name' => 'The crossing gate must be closed when approaching the level crossing.',
+            'name' => 'Door must not be opened when train is in motion.',
             'description' => 'Description',
             'project_id' => 1
         ]); 
         DB::table('system_safety_constraint')->insert([
             'id' => 2,
-            'name' => 'Minimum distance between vehicles must be assured.',
+            'name' => 'When in Emergency situation, door must be opened.',
             'description' => 'Description',
             'project_id' => 1
         ]);
         DB::table('system_safety_constraint')->insert([
             'id' => 3,
-            'name' => 'Minimum distance between vehicles must be assured.',
-            'description' => 'Description',
-            'project_id' => 1
-        ]);
-        DB::table('system_safety_constraint')->insert([
-            'id' => 4,
-            'name' => 'Vehicles must not be in the railway when train is approaching the level crossing .',
-            'description' => 'Description',
-            'project_id' => 1
-        ]);
-        DB::table('system_safety_constraint')->insert([
-            'id' => 5,
-            'name' => 'Vehicles must not pass though the crossing gate when it is being closed.',
+            'name' => 'Door must not be closed when exist a person or object in the doorway.',
             'description' => 'Description',
             'project_id' => 1
         ]);

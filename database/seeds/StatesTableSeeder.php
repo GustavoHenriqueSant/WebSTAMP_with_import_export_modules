@@ -28,28 +28,43 @@ class StatesTableSeeder extends Seeder
         ]);
         DB::table('states')->insert([
             'id' => 4,
-            'name' => 'Vehicle Passing',
+            'name' => 'Person or object in doorway',
             'variable_id' => 2
         ]);
         DB::table('states')->insert([
             'id' => 5,
-            'name' => 'No vehicle passing',
+            'name' => 'Nothing in doorway',
             'variable_id' => 2
         ]);
         DB::table('states')->insert([
             'id' => 6,
-            'name' => 'Closer of crossing gate',
+            'name' => 'Aligned at platform',
             'variable_id' => 3
         ]);
         DB::table('states')->insert([
             'id' => 7,
-            'name' => 'In crossing gate',
+            'name' => 'Not aligned at platform',
             'variable_id' => 3
         ]);
         DB::table('states')->insert([
             'id' => 8,
-            'name' => 'Far from crossing gate',
-            'variable_id' => 3
+            'name' => 'In Movement',
+            'variable_id' => 4
+        ]);
+        DB::table('states')->insert([
+            'id' => 9,
+            'name' => 'Stopped',
+            'variable_id' => 4
+        ]);
+        DB::table('states')->insert([
+            'id' => 10,
+            'name' => 'Evacuation Required',
+            'variable_id' => 5
+        ]);
+        DB::table('states')->insert([
+            'id' => 11,
+            'name' => 'No Emergency',
+            'variable_id' => 5
         ]);
     }
 }

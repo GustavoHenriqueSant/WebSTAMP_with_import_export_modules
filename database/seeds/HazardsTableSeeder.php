@@ -13,27 +13,17 @@ class HazardsTableSeeder extends Seeder
     {
         DB::table('hazards')->insert([
             'id' => 1,
-            'name' => 'The crossing gate does not close when train is approaching the level crossing.',
+            'name' => 'Door close on a person in the doorway.',
             'description' => 'Description'
         ]);
         DB::table('hazards')->insert([
             'id' => 2,
-            'name' => 'Minimum distance between vehicles is not assured.',
+            'name' => 'Door open when the train is moving or not in a station.',
             'description' => 'Description'
         ]); 
         DB::table('hazards')->insert([
             'id' => 3,
-            'name' => 'Poor signaling and poor street lighting.',
-            'description' => 'Description'
-        ]);
-        DB::table('hazards')->insert([
-            'id' => 4,
-            'name' => 'Vehicle on the railway.',
-            'description' => 'Description'
-        ]);
-        DB::table('hazards')->insert([
-            'id' => 5,
-            'name' => 'Vehicle is passing through the crossing gate.',
+            'name' => 'Passengers/staff are unable to exit during an emergency.',
             'description' => 'Description'
         ]);
     }

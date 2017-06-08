@@ -13,25 +13,19 @@ class AccidentsTableSeeder extends Seeder
     {
         DB::table('accidents')->insert([
             'id' => 1,
-            'name' => 'Collision between car and train, causing damage loss and human injury or death.',
+            'name' => 'Injury to a person by falling out of the train.',
             'description' => 'Description',
             'project_id' => 1
         ]);
         DB::table('accidents')->insert([
             'id' => 2,
-            'name' => 'Collision between cars, causing damage loss and human injury or death.',
+            'name' => 'Being hit by a closing door.',
             'description' => 'Description',
             'project_id' => 1
         ]);
         DB::table('accidents')->insert([
             'id' => 3,
-            'name' => 'Collision between car and crossing gate.',
-            'description' => 'Description',
-            'project_id' => 1
-        ]);
-        DB::table('accidents')->insert([
-            'id' => 4,
-            'name' => 'Train derailment.',
+            'name' => 'Being trapped inside a train during an emergency.',
             'description' => 'Description',
             'project_id' => 1
         ]);
