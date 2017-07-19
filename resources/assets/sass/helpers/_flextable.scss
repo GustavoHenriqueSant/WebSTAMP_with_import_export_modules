@@ -13,10 +13,18 @@
 // Text based cells: grow, truncate and show ellipsis when there is not enough space
 .text {
   flex-grow: 1;            -webkit-flex-grow: 1;
+  white-space: wrap;
+  text-overflow: ellipsis;
+  padding-right: 20px;
+}
+
+.text_uca {
+  flex-grow: 1;            -webkit-flex-grow: 1;
   overflow: hidden;
   white-space: wrap;
   text-overflow: ellipsis;
   padding-right: 20px;
+  width: 180px;
 }
 
 // Fix the minimum width of the leaf level cells

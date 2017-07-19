@@ -15,7 +15,7 @@ class CausalAnalysisController extends Controller
     	$causal->scenario = $request->input('scenario');
     	$causal->associated_causal_factor = $request->input('associated');
     	$causal->requirement = $request->input('requirement');
-    	$causal->role = $request->input('role');
+    	// $causal->role = $request->input('role');
     	$causal->rationale = $request->input('rationale');
     	$causal->guideword_id = $request->input('guideword');
     	$causal->safety_constraint_id = $request->input('safety');
@@ -27,7 +27,7 @@ class CausalAnalysisController extends Controller
         	'scenario' => $causal->scenario,
         	'associated' => $causal->associated_causal_factor,
         	'requirement' => $causal->requirement,
-        	'role' => $causal->role,
+        	// 'role' => $causal->role,
         	'rationale' => $causal->rationale,
         	'guideword' => $causal->guideword_id,
         	'safety_constraint_id' => $causal->safety_constraint_id
@@ -44,7 +44,7 @@ class CausalAnalysisController extends Controller
     	$causal->scenario = $request->input('scenario');
     	$causal->associated_causal_factor = $request->input('associated');
     	$causal->requirement = $request->input('requirement');
-    	$causal->role = $request->input('role');
+    	// $causal->role = $request->input('role');
     	$causal->rationale = $request->input('rationale');
     	$causal->guideword_id = $request->input('guideword');
     	//$causal->safety_constraint_id = isset($request->input('safety')) ? isset($request->input('safety') : $causal->safety_constraint_id;

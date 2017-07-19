@@ -59,11 +59,11 @@
             @foreach(App\SafetyConstraints::where('controlaction_id', $ca->id)->get() as $sc)
                 <div class="table-row" id="uca-row-{{$sc->id}}">
                     
-                    <div class="text item__title">
+                    <div class="text_uca item__title">
                         <input type="text" class="item__input" id="unsafe_control_action-{{$sc->id}}" value="{{$sc->unsafe_control_action}}" disabled>
                     </div>
                     
-                    <div class="text">
+                    <div class="text_uca">
                         <div>
                         <select id="type-{{$sc->id}}" style="-webkit-appearance: none; box-shadow: none !important; border: 0;" disabled>
                             @if($sc->type == "Provided" || $sc->type == "provided")

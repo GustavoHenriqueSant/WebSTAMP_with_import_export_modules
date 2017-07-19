@@ -31,8 +31,8 @@
                 <div class="table-row header">
                     <div class="text center">Scenarios</div>
                     <div class="text center">Associated Causal Factors</div>
-                    <div class="text center">Requirements</div>
-                    <div class="text center">Allocated to</div>
+                    <div class="text center">Recommendations</div>
+                    <!-- <div class="text center">Allocated to</div> -->
                     <div class="text center">Rationales</div>
                     <div class="text center"><!-- Edit/Delete --></div>
                 </div>
@@ -58,7 +58,7 @@
 
                         <div class="text center"><br/><textarea class="step2_textarea" id="associated-{{$causal->id}}" placeholder="Associated Causal Factors" disabled>{{$causal->associated_causal_factor}}</textarea></div>
                         <div class="text center"><br/><textarea class="step2_textarea" id="requirement-{{$causal->id}}" placeholder="Requirements" disabled>{{$causal->requirement}}</textarea></div>
-                        <div class="text center"><br/><textarea class="step2_textarea" id="role-{{$causal->id}}" placeholder="Role" disabled>{{$causal->role}}</textarea></div>
+                        <!-- <div class="text center"><br/><textarea class="step2_textarea" id="role-{{$causal->id}}" placeholder="Role" disabled>{{$causal->role}}</textarea></div> -->
                         <div class="text center"><br/><textarea class="step2_textarea" id="rationale-{{$causal->id}}" placeholder="Rationales" disabled>{{$causal->rationale}}</textarea></div>
                         <div class="text center">
                             <div style="display: inline-block;">
@@ -83,7 +83,7 @@
                         <div class="text center"></div>
                         <div class="text center">
                             <form action="/" class="teste-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
-                                <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Import Data</button>
+                                <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Guide Words</button>
                             </form>
                             <form action="/testeUCA" class="test-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
                                 <button class="font-button"><img src="/images/plus.png" class="steptwo-button" width="15"/> Add New Scenario</button></div>

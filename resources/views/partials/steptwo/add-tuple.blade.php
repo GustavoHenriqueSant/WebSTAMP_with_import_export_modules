@@ -7,8 +7,8 @@
         			<div class="table-row header">
         				<div class="text">Scenario</div>
         				<div class="text">Associated Causal Factors</div>
-        				<div class="text">Requirements</div>
-        				<div class="text">Role</div>
+        				<div class="text">Recommendations</div>
+        				<!-- <div class="text">Role</div> -->
         				<div class="text">Rationale</div>
         			</div>
 
@@ -26,11 +26,11 @@
                         	<textarea class="step2_textarea__modal" name="associated" id="associated" placeholder="Add the associated causal factors here"></textarea>
                         </div>
                         <div class="text center"><br/>
-                        	<textarea class="step2_textarea__modal" name="requirement" id="requirement" placeholder="Add the requirements here"></textarea>
+                        	<textarea class="step2_textarea__modal" name="requirement" id="requirement" placeholder="Add the recommendations here"></textarea>
                         </div>
-                        <div class="text center"><br/>
+<!--                         <div class="text center"><br/>
                         	<textarea class="step2_textarea__modal" name="role" id="role" placeholder="Add the role here"></textarea>
-                        </div>
+                        </div> -->
                         <div class="text center"><br/>
                         	<textarea class="step2_textarea__modal" name="rationale" id="rationale" placeholder="Add the rationales here"></textarea>
                         </div>

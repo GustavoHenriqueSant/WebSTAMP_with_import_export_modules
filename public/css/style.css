@@ -24,10 +24,19 @@
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-flex-grow: 1;
-  overflow: hidden;
   white-space: wrap;
   text-overflow: ellipsis;
   padding-right: 20px; }
+
+.text_uca {
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-grow: 1;
+  overflow: hidden;
+  white-space: wrap;
+  text-overflow: ellipsis;
+  padding-right: 20px;
+  width: 180px; }
 
 .text {
   width: 180px; }

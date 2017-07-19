@@ -59,8 +59,8 @@
 		    			<div class="table-row header">
 		    				<div class="text">Scenario</div>
 		    				<div class="text">Associated Causal Factors</div>
-		    				<div class="text">Requirements</div>
-		    				<div class="text">Role</div>
+		    				<div class="text">Recommendations</div>
+		    				<!-- <div class="text">Role</div> -->
 		    				<div class="text">Rationale</div>
 		    				<div class="text">Include?</div>
 		    			</div>
@@ -105,7 +105,7 @@
 			        					?>
 			        					{{$causal->requirement}}
 			        				</div>
-			        				<div class="text" id="guideword-role-{{$causal->id}}">
+<!-- 			        				<div class="text" id="guideword-role-{{$causal->id}}">
 			        					<?php
 			        						$causal->role = str_replace("[CONTROLLER]", $controller, $causal->role);
 			        						$causal->role = str_replace("[ACTUATOR]", $actuator->name, $causal->role);
@@ -114,7 +114,7 @@
 			        						$causal->role = str_replace("[VARIABLE]", $variable, $causal->role);
 			        					?>
 			        					{{$causal->role}}
-			        				</div>
+			        				</div> -->
 			        				<div class="text" id="guideword-rationale-{{$causal->id}}">
 			        					<?php
 			        						$causal->rationale = str_replace("[CONTROLLER]", $controller, $causal->rationale);
@@ -173,7 +173,7 @@
 			        					?>
 			        					{{$causal->requirement}}
 			        				</div>
-			        				<div class="text" id="guideword-role-{{$causal->id}}">
+<!-- 			        				<div class="text" id="guideword-role-{{$causal->id}}">
 			        					<?php
 			        						$causal->role = str_replace("[CONTROLLER]", $controller, $causal->role);
 			        						$causal->role = str_replace("[ACTUATOR]", $actuator->name, $causal->role);
@@ -182,7 +182,7 @@
 			        						$causal->role = str_replace("[VARIABLE]", $variable, $causal->role);
 			        					?>
 			        					{{$causal->role}}
-			        				</div>
+			        				</div> -->
 			        				<div class="text" id="guideword-rationale-{{$causal->id}}">
 			        					<?php
 			        						$causal->rationale = str_replace("[CONTROLLER]", $controller, $causal->rationale);
