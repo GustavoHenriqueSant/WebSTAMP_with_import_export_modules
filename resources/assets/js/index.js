@@ -1296,7 +1296,7 @@ for (i = 0; i < acc.length; i++) {
     var scenario = form.find("#scenario").val();
     var associated = form.find("#associated").val();
     var requirement = form.find("#requirement").val();
-    // var role = form.find("#role").val();
+    var role = form.find("#role").val();
     var rationale = form.find("#rationale").val();
     var guideword = form.find("#guideword option:selected").val();
     var safety = form.find("#uca").val();
@@ -1306,7 +1306,7 @@ for (i = 0; i < acc.length; i++) {
       scenario : scenario,
       associated : associated,
       requirement : requirement,
-      // role : role,
+      role : role,
       rationale : rationale,
       guideword : guideword,
       safety : safety
@@ -1351,7 +1351,7 @@ for (i = 0; i < acc.length; i++) {
     $("#scenario-"+id).prop('disabled', false);
     $("#associated-"+id).prop('disabled', false);
     $("#requirement-"+id).prop('disabled', false);
-    // $("#role-"+id).prop('disabled', false);
+    $("#role-"+id).prop('disabled', false);
     $("#rationale-"+id).prop('disabled', false);
   });
 
@@ -1387,7 +1387,7 @@ for (i = 0; i < acc.length; i++) {
     var scenario = $("#scenario-"+id).val();
     var associated = $("#associated-"+id).val();
     var requirement = $("#requirement-"+id).val();
-    // var role = $("#role-"+id).val();
+    var role = $("#role-"+id).val();
     var rationale = $("#rationale-"+id).val();
     axios.post('/edittuple', {
       id : id,
@@ -1395,7 +1395,7 @@ for (i = 0; i < acc.length; i++) {
       scenario : scenario,
       associated : associated,
       requirement : requirement,
-      // role : role,
+      role : role,
       rationale : rationale
     })
     .then(function(response){
@@ -1403,7 +1403,7 @@ for (i = 0; i < acc.length; i++) {
       $("#scenario-"+id).prop('disabled', true);
       $("#associated-"+id).prop('disabled', true);
       $("#requirement-"+id).prop('disabled', true);
-      // $("#role-"+id).prop('disabled', true);
+      $("#role-"+id).prop('disabled', true);
       $("#rationale-"+id).prop('disabled', true);
     })
     .catch(function(error){

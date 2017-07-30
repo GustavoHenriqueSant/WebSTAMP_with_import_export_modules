@@ -16917,7 +16917,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var scenario = $("#scenario-" + id).val();
       var associated = $("#associated-" + id).val();
       var requirement = $("#requirement-" + id).val();
-      // var role = $("#role-"+id).val();
+      var role = $("#role-" + id).val();
       var rationale = $("#rationale-" + id).val();
       axios.post('/edittuple', {
         id: id,
@@ -16925,14 +16925,14 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         scenario: scenario,
         associated: associated,
         requirement: requirement,
-        // role : role,
+        role: role,
         rationale: rationale
       }).then(function (response) {
         $("#guideword-" + id).prop('disabled', true);
         $("#scenario-" + id).prop('disabled', true);
         $("#associated-" + id).prop('disabled', true);
         $("#requirement-" + id).prop('disabled', true);
-        // $("#role-"+id).prop('disabled', true);
+        $("#role-" + id).prop('disabled', true);
         $("#rationale-" + id).prop('disabled', true);
       }).catch(function (error) {
         console.log(error);
@@ -16959,13 +16959,13 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var scenario = form.find("#scenario").val();
       var associated = form.find("#associated").val();
       var requirement = form.find("#requirement").val();
-      // var role = form.find("#role").val();
+      var role = form.find("#role").val();
       var rationale = form.find("#rationale").val();
       var guideword = form.find("#guideword option:selected").val();
       var safety = form.find("#uca").val();
       var id = 0;
       axios.post('/addtuple', (_axios$post = {
-        id: id }, _defineProperty(_axios$post, 'id', id), _defineProperty(_axios$post, 'scenario', scenario), _defineProperty(_axios$post, 'associated', associated), _defineProperty(_axios$post, 'requirement', requirement), _defineProperty(_axios$post, 'rationale', rationale), _defineProperty(_axios$post, 'guideword', guideword), _defineProperty(_axios$post, 'safety', safety), _axios$post)).then(function (response) {
+        id: id }, _defineProperty(_axios$post, 'id', id), _defineProperty(_axios$post, 'scenario', scenario), _defineProperty(_axios$post, 'associated', associated), _defineProperty(_axios$post, 'requirement', requirement), _defineProperty(_axios$post, 'role', role), _defineProperty(_axios$post, 'rationale', rationale), _defineProperty(_axios$post, 'guideword', guideword), _defineProperty(_axios$post, 'safety', safety), _axios$post)).then(function (response) {
         console.log($("#safety-" + safety).find(".container-fluid"));
         $("#safety-" + safety).find(".table-content").append(newCausal(response.data));
       }).catch(function (error) {
@@ -17002,7 +17002,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       $("#scenario-" + id).prop('disabled', false);
       $("#associated-" + id).prop('disabled', false);
       $("#requirement-" + id).prop('disabled', false);
-      // $("#role-"+id).prop('disabled', false);
+      $("#role-" + id).prop('disabled', false);
       $("#rationale-" + id).prop('disabled', false);
     });
 
@@ -17219,7 +17219,7 @@ module.exports = function (context) {
 
     select += "</select>";
 
-    return "<div class=\"table-row\" id=\"causal-row-" + context.id + "\"\">\n            <div class=\"text\">\n                " + select + "<br/>\n            <textarea class=\"step2_textarea\" name=\"scenario-" + context.id + "\" id=\"scenario-" + context.id + "\" placeholder=\"Scenario\" disabled>" + context.scenario + "</textarea>\n            </div>\n\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"associated-" + context.id + "\" placeholder=\"Associated Causal Factors\" disabled>" + context.associated + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"requirement-" + context.id + "\" placeholder=\"Requirements\" disabled>" + context.requirement + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"rationale-" + context.id + "\" placeholder=\"Rationales\" disabled>" + context.rationale + "</textarea></div>\n    <div class=\"text center\">\n        <div style=\"display: inline-block;\">\n            <br/>\n            <form action=\"/edittuple\" class=\"edit-form\" data-edit=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n            <form action=\"/deletetuple\" class=\"delete-form\" data-delete=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n        </div>\n    </div>\n</div>";
+    return "<div class=\"table-row\" id=\"causal-row-" + context.id + "\"\">\n            <div class=\"text\">\n                " + select + "<br/>\n            <textarea class=\"step2_textarea\" name=\"scenario-" + context.id + "\" id=\"scenario-" + context.id + "\" placeholder=\"Scenario\" disabled>" + context.scenario + "</textarea>\n            </div>\n\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"associated-" + context.id + "\" placeholder=\"Associated Causal Factors\" disabled>" + context.associated + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"requirement-" + context.id + "\" placeholder=\"Requirements\" disabled>" + context.requirement + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"role-" + context.id + "\" placeholder=\"Role\" disabled>" + context.role + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"rationale-" + context.id + "\" placeholder=\"Rationales\" disabled>" + context.rationale + "</textarea></div>\n    <div class=\"text center\">\n        <div style=\"display: inline-block;\">\n            <br/>\n            <form action=\"/edittuple\" class=\"edit-form\" data-edit=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n            <form action=\"/deletetuple\" class=\"delete-form\" data-delete=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n        </div>\n    </div>\n</div>";
 };
 
 },{}],42:[function(require,module,exports){

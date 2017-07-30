@@ -101,6 +101,7 @@ return `<div class="table-row" id="causal-row-${context.id}"">
 
     <div class="text center"><br/><textarea class="step2_textarea" id="associated-${context.id}" placeholder="Associated Causal Factors" disabled>${context.associated}</textarea></div>
     <div class="text center"><br/><textarea class="step2_textarea" id="requirement-${context.id}" placeholder="Requirements" disabled>${context.requirement}</textarea></div>
+    <div class="text center"><br/><textarea class="step2_textarea" id="role-${context.id}" placeholder="Role" disabled>${context.role}</textarea></div>
     <div class="text center"><br/><textarea class="step2_textarea" id="rationale-${context.id}" placeholder="Rationales" disabled>${context.rationale}</textarea></div>
     <div class="text center">
         <div style="display: inline-block;">
