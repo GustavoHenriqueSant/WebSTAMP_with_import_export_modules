@@ -102,6 +102,89 @@
                 <div class="text">Control Action applied too long</div>
                 </div>
 
+                @while($total_loop > 0)
+                <?php
+                    $rules = [];
+                    foreach($total_index as $index) {
+                        array_push($rules, "true");
+                    }
+                ?>
+                    <div class="table-row center">
+
+                        @for($i = 0; $i < count($allStates); $i++)
+                            
+                            <div class="text">
+                                {{$allStates[$i][$combination_array[$i]]}} <br/>
+                            </div>
+                            <?php
+                                array_push($arr, $allStatesId[$i][$combination_array[$i]]);
+                                // Verifying if the rule fits
+                                if(count($rle) > 0) {
+                                    foreach($rle as $key => $r) {
+                                        if (count($r) > 0) {                                        
+                                            if($r[$i]->state_id == 0){                                            
+                                                if ($rules[$key] == "true")
+                                                    $rules[$key] = "true";
+                                            } else if ( ($allStates[$i][$combination_array[$i]] == App\State::find($r[$i]->state_id)->name) && ($rules[$key] == "true") ){
+                                                $rules[$key] = "true";
+                                            } else {
+                                                $rules[$key] = "false";
+                                            }
+                                        }
+                                    }
+                                }
+                            ?>
+                        @endfor
+
+                        <?php
+                        $arr = json_encode($arr);
+                            $loop++;
+                            for ($i = 0; $i < count($combination_array); $i++) {
+                                $multiple = (count($combination_array)-($i+1));
+                                //echo count($combination_array)-($i+1);
+                                //$divisor = ($multiple > 0 ) ? count($number_of_states) * $multiple : 1;//
+                                $divisor = 3 ** $multiple;
+                                $resto = $loop % $divisor;
+                                //echo "Multiplo: " . $multiple . "<br>Divisor: " . $divisor . "<br>Resto: " . $resto . "<br><br>";
+                                if ($resto == 0) {
+                                    $combination_array[$i] = ($combination_array[$i]+1 >= $number_of_states[$i]) ? 0 : $combination_array[$i]+1;
+                                }
+                            }
+                            
+                            $total_loop--;
+                        ?>                
+
+                        
+
+                        <div class="text" id="rule-row-{{$total_loop}}" name="rule-row-{{$total_loop}}">
+                        <?php
+                            $array_for_compare = $arr;
+                            $array_for_compare = str_replace("[", "", $array_for_compare);
+                            $array_for_compare = str_replace("]", "", $array_for_compare);
+                            $arr = array();
+                            $thereAreRule = "false";
+
+                            foreach ($rules as $key => $r) {
+                                //echo  $r;
+                                if ($r == "true" && count($r) > 0) {
+                                    echo "R".($key+1)." ";
+                                    $thereAreRule = "true";
+                                } else {
+                                    $r[$key] = "false";
+                                }
+                            }
+
+                            $context_table = DB::select('SELECT * FROM context_tables WHERE controlaction_id = ? and ? like concat("%",context,"%") ORDER BY context', [$ca->id, $array_for_compare]);
+                            $context_table = (count($context_table) > 0) ? $context_table[0] : "";
+
+                        ?>
+                        </div>
+
+                        <input type="hidden" id="all_states_{{$total_loop}}" name="all_states_{{$total_loop}}" value="{{$array_for_compare}}">
+
+                        
+                    </div>
+                @endwhile
                 <br/><center><button class="font-button"><img src="/images/save.ico" class="context-table-button" width="15"/> Save Context Table</button></center>
             </form>
         </div>
