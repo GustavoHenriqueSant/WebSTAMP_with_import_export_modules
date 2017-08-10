@@ -48,15 +48,6 @@ Gulp is the responsible to get all views, css, images and javascripts files(fold
 gulp
 ```
 
-
-A new key must be generated for the new Laravel application. 
-
-```
-#!composer
-php artisan key:generate
-```
-
-
 **Attention!**
 
 1. Create a new .env file. Copy the content of .env.example and modify using your database configuration
@@ -67,6 +58,14 @@ php artisan key:generate
 
 3. To create all tables automatically, just type:
 
+
+
+A new key must be generated for the new Laravel application. 
+
+```
+#!composer
+php artisan key:generate
+```
 
 
 ```
