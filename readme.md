@@ -48,6 +48,8 @@ Gulp is the responsible to get all views, css, images and javascripts files(fold
 gulp
 ```
 
+
+
 **Attention!**
 
 1. Create a new .env file. Copy the content of .env.example and modify using your database configuration
@@ -60,6 +62,8 @@ gulp
 
 
 
+
+
 A new key must be generated for the new Laravel application. 
 
 ```
@@ -67,6 +71,7 @@ A new key must be generated for the new Laravel application.
 php artisan key:generate
 ```
 
+To create the database
 
 ```
 #!mysql
