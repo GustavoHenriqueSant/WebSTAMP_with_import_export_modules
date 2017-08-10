@@ -11,7 +11,7 @@
         @foreach (App\ControlAction::where('controller_id', $component_id)->get() as $controlAction)
             <li class="item" id="controlaction-{{$controlAction->id}}">
                 <div class="item__title">
-                    {{ $controlAction->name }} 
+                    {{ $controlAction->name }} - {{ $controlAction->id }} 
                 </div>
                 <div class="item__actions">
                     <div class="item__title">
