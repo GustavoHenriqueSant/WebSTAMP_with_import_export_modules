@@ -184,7 +184,7 @@
 
                         @if (App\ContextTable::where('controlaction_id', $ca->id)->count() > 0)
                             
-
+                            @if ($context_table != null)
                                 <!--Control Action Provided-->
                                 @if ($thereAreRule == "true")
                                     <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
@@ -305,6 +305,7 @@
                                         <option value="false" selected>Safe</option>
                                     @endif
                                 </select>
+                            @endif
                             
                         @else
                             <!--Control Action Provided-->
