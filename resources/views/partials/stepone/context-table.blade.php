@@ -308,13 +308,13 @@
                             @else
                             <?php
                                 $oi = App\ContextTable::where('controlaction_id', $ca->id)->get();
-                                echo isset($oi->ca_provided) ? $oi->ca_provided : "Provided";
-                                echo isset($oi->ca_not_provided) ? $oi->ca_not_provided : "Not Provided";
-                                echo isset($oi->wrong_time_order) ? $oi->wrong_time_order : "Provided Time";
-                                echo isset($oi->ca_too_late) ? $oi->ca_too_late : "Provided Late";
-                                echo isset($oi->ca_too_early) ? $oi->ca_too_early : "Provided Early";
-                                echo isset($oi->ca_too_soon) ? $oi->ca_too_soon : "Provided Soon";
-                                echo isset($oi->ca_too_long) ? $oi->ca_too_long : "Provided Long";
+                                echo isset($context_table->ca_provided) ? $context_table->ca_provided : "Provided";
+                                echo isset($context_table->ca_not_provided) ? $context_table->ca_not_provided : "Not Provided";
+                                echo isset($context_table->wrong_time_order) ? $context_table->wrong_time_order : "Provided Time";
+                                echo isset($context_table->ca_too_late) ? $context_table->ca_too_late : "Provided Late";
+                                echo isset($context_table->ca_too_early) ? $context_table->ca_too_early : "Provided Early";
+                                echo isset($context_table->ca_too_soon) ? $context_table->ca_too_soon : "Provided Soon";
+                                echo isset($context_table->ca_too_long) ? $context_table->ca_too_long : "Provided Long";
                             ?>
                                 Deu erro aqui.
                             @endif
