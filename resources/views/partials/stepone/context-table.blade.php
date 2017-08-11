@@ -307,8 +307,8 @@
                                 </select>
                             @else
                             <?php
-                                $oi = App\ContextTable::where('controlaction_id', $ca->id)->count();
-                                echo $oi;
+                                $oi = App\ContextTable::where('controlaction_id', $ca->id)->get();
+                                print_r($oi);
                             ?>
                                 Deu erro aqui.
                             @endif
