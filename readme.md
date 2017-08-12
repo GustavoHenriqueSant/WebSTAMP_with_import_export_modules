@@ -49,13 +49,6 @@ gulp
 ```
 
 
-A new key must be generated for the new Laravel application. 
-
-```
-#!composer
-php artisan key:generate
-```
-
 
 **Attention!**
 
@@ -68,6 +61,17 @@ php artisan key:generate
 3. To create all tables automatically, just type:
 
 
+
+
+
+A new key must be generated for the new Laravel application. 
+
+```
+#!composer
+php artisan key:generate
+```
+
+To create the database
 
 ```
 #!mysql
