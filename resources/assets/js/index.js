@@ -1229,27 +1229,27 @@ for (i = 0; i < acc.length; i++) {
 
   $('body').on('submit', '.save-context-table', function(event) {
     event.preventDefault();
+    vex.dialog.alert("Saving data, please wait...");
     var form = $(event.currentTarget);
     var controlaction_id = form.find("#controlaction_id").val();
     var total_rows = form.find("#total_rows").val() - 1;
-    console.log("CA: " + controlaction_id);
     axios.post('/deletecontexttable', {
       controlaction_id : controlaction_id
     })
     .catch(function (error) {
       console.log(error);
     });
+    var row = 0;
+    var max_row = total_rows;
     while (total_rows >= 0) {
       var states = form.find("#all_states_" + total_rows).val();
       var provided = form.find("#provided-ca-" + controlaction_id + "-row-" + total_rows).val();
       var not_provided = form.find("#notprovided-ca-" + controlaction_id + "-row-" + total_rows).val();
-      console.log(not_provided);
       var wrong_time = form.find("#wrongtime-ca-" + controlaction_id + "-row-" + total_rows).val();
       var early = form.find("#early-ca-" + controlaction_id + "-row-" + total_rows).val();
       var late = form.find("#late-ca-" + controlaction_id + "-row-" + total_rows).val();
       var soon = form.find("#soon-ca-" + controlaction_id + "-row-" + total_rows).val();
       var long = form.find("#long-ca-" + controlaction_id + "-row-" + total_rows).val();
-      //console.log(states + " " + provided + " " + not_provided + " " + wrong_time + " " + early + " " + late + " " + soon + " " + long);
       axios.post('/savecontexttable', {
             controlaction_id : controlaction_id,
             states : states,
@@ -1261,14 +1261,19 @@ for (i = 0; i < acc.length; i++) {
             soon : soon,
             long : long
         })
+      .then(function(response){
+        row++;
+        console.log(row);
+        if (row == max_row){
+          vex.closeAll();
+          vex.dialog.alert("Context table successfully saved");
+        }
+      })
       .catch(function (error) {
-          console.log(error);
+        console.log(error);
       });
       total_rows--;
     }
-    setTimeout(function(){
-      vex.dialog.alert("Context table saved successfully");
-    }, 2000);
     
   });
 
