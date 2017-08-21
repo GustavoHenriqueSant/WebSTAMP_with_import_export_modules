@@ -2,7 +2,7 @@
 	$unsafe = App\SafetyConstraints::where('id', $uca_id)->get()[0];
 	$controller = $unsafe->controlaction->controller->name;
 
-	$controller_2 = App\Connections::where('output_component_id', $unsafe->controlaction->controller->id)->where('type_output', 'controller')->where('type_input', 'controller')->get();
+	//$controller_2 = App\Connections::where('output_component_id', $unsafe->controlaction->controller->id)->where('type_output', 'controller')->where('type_input', 'controller')->get();
 	//$controller_2 = $controller_2[0]->input_component_id;
 	if (count($controller_2))
 		$controller_2 = false;

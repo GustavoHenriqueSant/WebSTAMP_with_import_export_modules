@@ -142,8 +142,8 @@
                             for ($i = 0; $i < count($combination_array); $i++) {
                                 $multiple = (count($combination_array)-($i+1));
                                 //echo count($combination_array)-($i+1);
-                                //$divisor = ($multiple > 0 ) ? count($number_of_states) * $multiple : 1;//
-                                $divisor = 3 ** $multiple;
+                                $divisor = ($multiple > 0 ) ? count($number_of_states) * $multiple : 1;//
+                                //$divisor = 3 ** $multiple;
                                 $resto = $loop % $divisor;
                                 //echo "Multiplo: " . $multiple . "<br>Divisor: " . $divisor . "<br>Resto: " . $resto . "<br><br>";
                                 if ($resto == 0) {
