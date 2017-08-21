@@ -19,7 +19,7 @@
                 $context = array_pad(explode("when ", $safety_constraint->unsafe_control_action, 2), 2, null)[1];
                 //$context = $context[1];
             ?>
-            <b>Guide Question</b>: What are the causal factors that make the <b>{{$ca->name}}</b> to be <b>{{$type}}</b> by the <b>{{$operator}}</b> when <b>{{$context}}</b>
+            <b>Guide Question</b>: What are the causal factors that make the <b>{{$ca->name}}</b> to be <b>{{$type}}</b> by the <b>{{$operator}}</b> when <b>{{$context}}</b>?
         </div>
 
         <div class="container" id="safety-{{$safety_constraint->id}}">
