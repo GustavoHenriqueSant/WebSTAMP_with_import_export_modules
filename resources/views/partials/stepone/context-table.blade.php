@@ -3,6 +3,8 @@
     $variables = App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->orderBy('id')->get();
     // Getting all States
     $states = [];
+    //Selecting the divisor
+    $divisor_num = [];
     foreach($variables as $variable){
         $state = App\State::where('variable_id', $variable->id)->orderBy('id')->get();
         foreach ($state as $s) {
@@ -49,6 +51,11 @@
         $number_of_states[$i] = count($allStates[$i]);
         $combination_array[$i] = 0;
         $total_loop *= count($allStates[$i]);
+    }
+
+    $divisor_num[count($allStates)-1] = 1;
+    for ($i = count($allStates)-1; $i > 0; $i--) {
+        $divisor_num[$i-1] = $divisor_num[$i] * $number_of_states[$i];
     }
 
     $rows_number = $total_loop;
@@ -143,7 +150,8 @@
                                 $multiple = (count($combination_array)-($i+1));
                                 //echo count($combination_array)-($i+1);
                                 //$divisor = ($multiple > 0 ) ? count($number_of_states) * $multiple : 1;//
-                                $divisor = 2 ** $multiple;
+                                //$divisor = 2 ** $multiple;
+                                $divisor = $divisor_num[$i];
                                 $resto = $loop % $divisor;
                                 //echo "Multiplo: " . $multiple . "<br>Divisor: " . $divisor . "<br>Resto: " . $resto . "<br><br>";
                                 if ($resto == 0) {
