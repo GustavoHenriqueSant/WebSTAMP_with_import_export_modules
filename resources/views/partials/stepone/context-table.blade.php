@@ -111,6 +111,7 @@
 
                 @while($total_loop > 0)
                 <?php
+                    $columns = [];
                     $rules = [];
                     foreach($total_index as $index) {
                         array_push($rules, "true");
@@ -130,8 +131,10 @@
                                     foreach($rle as $key => $r) {
                                         if (count($r) > 0) {                                        
                                             if($r[$i]->state_id == 0){                                            
-                                                if ($rules[$key] == "true")
+                                                if ($rules[$key] == "true"){
                                                     $rules[$key] = "true";
+                                                    $columns[$key] = $r[$i]->column;
+                                                }
                                             } else if ( ($allStates[$i][$combination_array[$i]] == App\State::find($r[$i]->state_id)->name) && ($rules[$key] == "true") ){
                                                 $rules[$key] = "true";
                                             } else {
@@ -171,17 +174,26 @@
                             $array_for_compare = str_replace("]", "", $array_for_compare);
                             $arr = array();
                             $thereAreRule = "false";
+                            $column_name = array (
+                                "Provided" => false,
+                                "Not Provided" => false,
+                                "Provided too early" => false,
+                                "Provided too late" => false,
+                                "Wrong order" => false,
+                                "Stopped too soon" => false,
+                                "Applied too long" => false
+                            );
 
                             foreach ($rules as $key => $r) {
                                 //echo  $r;
                                 if ($r == "true" && count($r) > 0) {
                                     echo "R".($key+1)." ";
                                     $thereAreRule = "true";
+                                    $column_name[$columns[$key]] = true;                                    
                                 } else {
                                     $r[$key] = "false";
                                 }
-                            }
-
+                            }                            
                             $context_table = DB::select('SELECT * FROM context_tables WHERE controlaction_id = ? and ? like concat("%",context,"%") ORDER BY context', [$ca->id, $array_for_compare]);
                             $context_table = (count($context_table) > 0) ? $context_table[0] : "";
 
@@ -194,12 +206,12 @@
                             
                             @if ($context_table != null)
                                 <!--Control Action Provided-->
-                                @if ($thereAreRule == "true")
+                                @if ($thereAreRule == "true" && $column_name["Provided"] == true)
                                     <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
                                 @else
                                     <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                                 @endif
-                                        @if($context_table->ca_provided == "true" || $thereAreRule == "true")
+                                        @if($context_table->ca_provided == "true")
                                             <option value="null">-</option>
                                             <option value="true" selected>Unsafe</option>
                                             <option value="false">Safe</option>
@@ -215,7 +227,11 @@
                                     </select>
 
                                 <!--Control action not provided-->
-                                <select class="text" id="notprovided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-not-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @if ($thereAreRule == "true" && $column_name["Not Provided"] == true)
+                                    <select class="text" id="notprovided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-not-provided-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                                @else
+                                    <select class="text" id="notprovided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-not-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @endif
                                     @if($context_table->ca_not_provided == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -231,8 +247,12 @@
                                     @endif
                                 </select>
 
-                                <!--Wrong time or order causes hazard-->
-                                <select class="text" id="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" name="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                <!-- Wrong time or order causes hazard-->
+                                @if ($thereAreRule == "true" && $column_name["Wrong order"] == true)
+                                    <select class="text" id="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" name="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                                @else
+                                    <select class="text" id="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" name="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @endif
                                     @if($context_table->wrong_time_order == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -249,7 +269,11 @@
                                 </select>
 
                                 <!--Control Action provided too early-->
-                                <select class="text" id="early-ca-{{$ca->id}}-row-{{$total_loop}}" name="early-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @if ($thereAreRule == "true" && $column_name["Provided too early"] == true)
+                                    <select class="text" id="early-ca-{{$ca->id}}-row-{{$total_loop}}" name="early-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                                @else
+                                    <select class="text" id="early-ca-{{$ca->id}}-row-{{$total_loop}}" name="early-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @endif
                                     @if($context_table->ca_too_early == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -266,7 +290,11 @@
                                 </select>
 
                                 <!--Control Action provided too late-->
-                                <select class="text" id="late-ca-{{$ca->id}}-row-{{$total_loop}}" name="late-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @if ($thereAreRule == "true" && $column_name["Provided too late"] == true)
+                                    <select class="text" id="late-ca-{{$ca->id}}-row-{{$total_loop}}" name="late-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                                @else
+                                    <select class="text" id="late-ca-{{$ca->id}}-row-{{$total_loop}}" name="late-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @endif
                                     @if($context_table->ca_too_late == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -282,7 +310,11 @@
                                     @endif
                                 </select>
                                 <!--Control action stopped too soon-->
-                                <select class="text" id="soon-ca-{{$ca->id}}-row-{{$total_loop}}" name="soon-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @if ($thereAreRule == "true" && $column_name["Stopped too soon"] == true)
+                                    <select class="text" id="soon-ca-{{$ca->id}}-row-{{$total_loop}}" name="soon-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                                @else
+                                    <select class="text" id="soon-ca-{{$ca->id}}-row-{{$total_loop}}" name="soon-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @endif
                                     @if($context_table->ca_too_soon == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -298,7 +330,11 @@
                                     @endif
                                 </select>
                                 <!--Control Action applied too long-->
-                                <select class="text" id="long-ca-{{$ca->id}}-row-{{$total_loop}}" name="long-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @if ($thereAreRule == "true" && $column_name["Applied too long"] == true)
+                                    <select class="text" id="long-ca-{{$ca->id}}-row-{{$total_loop}}" name="long-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                                @else
+                                    <select class="text" id="long-ca-{{$ca->id}}-row-{{$total_loop}}" name="long-ca-{{$ca->id}}-row-{{$total_loop}}">
+                                @endif
                                     @if($context_table->ca_too_long == "null")
                                         <option value="null" selected>-</option>
                                         <option value="true">Unsafe</option>
@@ -313,29 +349,16 @@
                                         <option value="false" selected>Safe</option>
                                     @endif
                                 </select>
-                            @else
-                            <?php
-                                $oi = App\ContextTable::where('controlaction_id', $ca->id)->get();
-                                echo isset($context_table->ca_provided) ? $context_table->ca_provided : "Provided";
-                                echo isset($context_table->ca_not_provided) ? $context_table->ca_not_provided : "Not Provided";
-                                echo isset($context_table->wrong_time_order) ? $context_table->wrong_time_order : "Provided Time";
-                                echo isset($context_table->ca_too_late) ? $context_table->ca_too_late : "Provided Late";
-                                echo isset($context_table->ca_too_early) ? $context_table->ca_too_early : "Provided Early";
-                                echo isset($context_table->ca_too_soon) ? $context_table->ca_too_soon : "Provided Soon";
-                                echo isset($context_table->ca_too_long) ? $context_table->ca_too_long : "Provided Long";
-                            ?>
-                                Deu erro aqui.
                             @endif
-                            
                         @else
                             <!--Control Action Provided-->
-                        @if ($thereAreRule == "true")
+                        @if ($thereAreRule == "true" && $column_name["Provided"] == true)
                             <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
                         @else
                             <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                         @endif
                                 <option value="null">-</option>
-                                @if ($thereAreRule == "true")
+                                @if ($thereAreRule == "true" && $column_name["Provided"] == true)
                                     <option value="true" selected>Unsafe</option>
                                 @else
                                     <option value="true">Unsafe</option>
@@ -343,45 +366,95 @@
                                 <option value="false">Safe</option>
                             </select>
 
-                            <!--Control action not provided-->
+                        <!--Control action not provided-->
+                        @if ($thereAreRule == "true" && $column_name["Not Provided"] == true)
+                            <select class="text" id="notprovided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-not-provided-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                        @else
                             <select class="text" id="notprovided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-not-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
-                                <option value="null" selected>-</option>
+                        @endif
+                            <option value="null">-</option>
+                            @if ($thereAreRule == "true" && $column_name["Not Provided"] == true)
+                                <option value="true" selected>Unsafe</option>
+                            @else
                                 <option value="true">Unsafe</option>
-                                <option value="false">Safe</option>
-                            </select>
+                            @endif
+                            <option value="false">Safe</option>
+                        </select>
 
-                            <!--Wrong time or order causes hazard-->
+                        <!--Wrong time or order causes hazard-->
+                        @if ($thereAreRule == "true" && $column_name["Wrong order"] == true)
+                            <select class="text" id="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" name="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                        @else
                             <select class="text" id="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" name="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}">
-                                <option value="null" selected>-</option>
+                        @endif
+                            <option value="null">-</option>
+                            @if ($thereAreRule == "true" && $column_name["Wrong order"] == true)
+                                <option value="true" selected>Unsafe</option>
+                            @else
                                 <option value="true">Unsafe</option>
-                                <option value="false">Safe</option>
-                            </select>
+                            @endif
+                            <option value="false">Safe</option>
+                        </select>
 
-                            <!--Control Action provided too early-->
+                        <!--Control Action provided too early-->
+                        @if ($thereAreRule == "true" && $column_name["Provided too early"] == true)
+                            <select class="text" id="early-ca-{{$ca->id}}-row-{{$total_loop}}" name="early-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                        @else
                             <select class="text" id="early-ca-{{$ca->id}}-row-{{$total_loop}}" name="early-ca-{{$ca->id}}-row-{{$total_loop}}">
-                                <option value="null" selected>-</option>
+                        @endif
+                            <option value="null">-</option>
+                            @if ($thereAreRule == "true" && $column_name["Provided too early"] == true)
+                                <option value="true" selected>Unsafe</option>
+                            @else
                                 <option value="true">Unsafe</option>
-                                <option value="false">Safe</option>
-                            </select>
+                            @endif
+                            <option value="false">Safe</option>
+                        </select>
 
-                            <!--Control Action provided too late-->
+                        <!--Control Action provided too late-->
+                        @if ($thereAreRule == "true" && $column_name["Provided too late"] == true)
+                            <select class="text" id="late-ca-{{$ca->id}}-row-{{$total_loop}}" name="late-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                        @else
                             <select class="text" id="late-ca-{{$ca->id}}-row-{{$total_loop}}" name="late-ca-{{$ca->id}}-row-{{$total_loop}}">
-                                <option value="null" selected>-</option>
+                        @endif
+                            <option value="null">-</option>
+                            @if ($thereAreRule == "true" && $column_name["Provided too late"] == true)
+                                <option value="true" selected>Unsafe</option>
+                            @else
                                 <option value="true">Unsafe</option>
-                                <option value="false">Safe</option>
-                            </select>
-                            <!--Control action stopped too soon-->
+                            @endif
+                            <option value="false">Safe</option>
+                        </select>
+
+                        <!--Control action stopped too soon-->
+                        @if ($thereAreRule == "true" && $column_name["Stopped too soon"] == true)
+                            <select class="text" id="soon-ca-{{$ca->id}}-row-{{$total_loop}}" name="soon-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                        @else
                             <select class="text" id="soon-ca-{{$ca->id}}-row-{{$total_loop}}" name="soon-ca-{{$ca->id}}-row-{{$total_loop}}">
-                                <option value="null" selected>-</option>
+                        @endif
+                            <option value="null">-</option>
+                            @if ($thereAreRule == "true" && $column_name["Stopped too soon"] == true)
+                                <option value="true" selected>Unsafe</option>
+                            @else
                                 <option value="true">Unsafe</option>
-                                <option value="false">Safe</option>
-                            </select>
-                            <!--Control Action applied too long-->
+                            @endif
+                            <option value="false">Safe</option>
+                        </select>
+
+                        <!--Control Action applied too long-->
+                        @if ($thereAreRule == "true" && $column_name["Applied too long"] == true)
+                            <select class="text" id="long-ca-{{$ca->id}}-row-{{$total_loop}}" name="long-ca-{{$ca->id}}-row-{{$total_loop}}" disabled>
+                        @else
                             <select class="text" id="long-ca-{{$ca->id}}-row-{{$total_loop}}" name="long-ca-{{$ca->id}}-row-{{$total_loop}}">
-                                <option value="null" selected>-</option>
+                        @endif
+                            <option value="null">-</option>
+                            @if ($thereAreRule == "true" && $column_name["Applied too long"] == true)
+                                <option value="true" selected>Unsafe</option>
+                            @else
                                 <option value="true">Unsafe</option>
-                                <option value="false">Safe</option>
-                            </select>
+                            @endif
+                            <option value="false">Safe</option>
+                        </select>
 
                         @endif
                     </div>

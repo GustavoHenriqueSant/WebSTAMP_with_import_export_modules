@@ -1129,6 +1129,8 @@ for (i = 0; i < acc.length; i++) {
     var controlaction_id = form.find("#controlaction_id").val();
     var $newRule = $('#rule-control-action-'+controlaction_id).find(".container-fluid");
     var rule_index = $('#rule-control-action-'+controlaction_id).find(".rules-table").length+1;
+    var column = form.find("#rule_column").val();
+    console.log("Coluna: " + column);
     var append = '<div class="table-row rules-table rules-ca-'+controlaction_id+'-rule-'+rule_index+'"><div class="text">R'+rule_index+'</div>';
     // Save each variable of the rule
     var variables = form.find('[id^="variable_id_"]').each(function() {
@@ -1144,7 +1146,8 @@ for (i = 0; i < acc.length; i++) {
           rule_index: rule_index,
           variable_id : variable_id,
           state_id : state_id,
-          controlaction_id : controlaction_id
+          controlaction_id : controlaction_id,
+          column : column
       })
       .catch(function (error) {
           console.log(error);

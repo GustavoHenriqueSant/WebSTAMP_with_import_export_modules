@@ -8,7 +8,7 @@
 
 
         <div class="table-row header">
-<!--             <div class="text">Apply the Rule to the columns</div> -->
+            <div class="text">Apply the Rule to the columns</div>
             @foreach (App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get() as $variable)
                 @if ($variable->name != "Default")
                 <div class="text">{{$variable->name}}</div>
@@ -20,15 +20,15 @@
             <input type="hidden" name="_token" value="{{csrf_token()}}">
             <input type="hidden" id="controlaction_id" name="controlaction_id" value="{{$ca->id}}">
             <div class="table-row">
-<!--                 <select class="text">
-                    <option>Provided</option>
-                    <option>Not Provided</option>
-                    <option>Provided too early</option>
-                    <option>Provided too late</option>
-                    <option>Provided in wrong order</option>
-                    <option>Stopped too soon</option>
-                    <option>Applied too long</option>
-                </select> -->
+                <select id="rule_column" name="rule_column" class="text">
+                    <option value="Provided">Provided</option>
+                    <option value="Not Provided">Not Provided</option>
+                    <option value="Provided too early">Provided too early</option>
+                    <option value="Provided too late">Provided too late</option>
+                    <option value="Wrong order">Provided in wrong order</option>
+                    <option value="Stopped too soon">Stopped too soon</option>
+                    <option value="Applied too long">Applied too long</option>
+                </select>
                 @foreach (App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get() as $variable)
                     @if ($variable->name != "Default")
                     <select id="variable_id_{{$variable->id}}" name="variable_id_{{$variable->id}}" class="text">

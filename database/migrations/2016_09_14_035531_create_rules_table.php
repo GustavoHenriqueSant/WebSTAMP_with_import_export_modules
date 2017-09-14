@@ -18,6 +18,7 @@ class CreateRulesTable extends Migration
             $table->integer('variable_id')->unsigned;
             $table->integer('state_id')->unsigned;
             $table->integer('controlaction_id')->unsigned;
+            $table->string('column');
             $table->timestamps();
         });
     }

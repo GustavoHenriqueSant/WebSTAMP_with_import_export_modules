@@ -10,6 +10,7 @@
 
             <div class="table-row header">
                 <div class="text">Rule Index</div>
+                <div class="text">Column</div>
                 @foreach (App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get() as $variable)
                     <div class="text">{{$variable->name}}</div>
                 @endforeach
@@ -18,9 +19,10 @@
                 </div>
             </div>
 
-            @foreach (App\Rules::where('controlaction_id', $ca->id)->orderBy('id', 'asc')->select('index')->distinct()->get() as $rule_index)
+            @foreach (App\Rules::where('controlaction_id', $ca->id)->orderBy('id', 'asc')->select('index', 'column')->distinct()->get() as $rule_index)
                 <div class="table-row rules-table rules-ca-{{$ca->id}}-rule-{{$rule_index->index}}">
                     <div class="text center">R{{$rule_index->index}}</div>
+                    <div class="text center">{{$rule_index->column}}</div>
                     @foreach (App\Rules::where('index', $rule_index->index)->where('controlaction_id', $ca->id)->orderBy('variable_id', 'asc')->get() as $rule)
                         @if ($rule->state_id == 0)
                             <div class="text center">ANY</div>
