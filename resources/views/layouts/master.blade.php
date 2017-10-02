@@ -9,7 +9,7 @@
 <body>
   <nav class="navbar">
     <div class="navbar__item">
-      <img src="{{ asset('images/logo-ita.png') }}" alt="ITA" class="navbar__logo">
+      <!-- <img src="{{ asset('images/logo-ita.png') }}" alt="ITA" class="navbar__logo"> -->
     </div>
 
     <div class="navbar__item">

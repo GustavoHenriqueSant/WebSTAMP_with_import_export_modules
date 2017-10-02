@@ -11,6 +11,7 @@ class SafetyConstraintsTableSeeder extends Seeder
      */
     public function run()
     {
+    	/*
         DB::table('safety_constraints')->insert([
             'id' => 1,
             'unsafe_control_action' => 'Train door controller not provide open door command when emergency.',
@@ -64,6 +65,6 @@ class SafetyConstraintsTableSeeder extends Seeder
             'rule_id' => 0,
             'context' => '10',
             'controlaction_id' => 2
-        ]); 
+        ]); */
     }
 }

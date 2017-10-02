@@ -31,7 +31,7 @@
                 <div class="table-row header">
                     <div class="text center">Scenarios</div>
                     <div class="text center">Associated Causal Factors</div>
-                    <div class="text center">Recommendations</div>
+                    <div class="text center">Safety Requirements</div>
                     <!-- <div class="text center">Allocated to</div> -->
                     <div class="text center">Rationales</div>
                     <div class="text center"><!-- Edit/Delete --></div>
@@ -86,7 +86,7 @@
                                 <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Guide Words</button>
                             </form>
                             <form action="/testeUCA" class="test-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
-                                <button class="font-button"><img src="/images/plus.png" class="steptwo-button" width="15"/> Add New Scenario</button></div>
+                                <button class="font-button"><img src="/images/plus.png" class="steptwo-button" width="15"/> Add New 4-tuple</button></div>
                                 <input type="hidden" id="tst" name="tst" value="{{$safety_constraint->id}}">
                             </form>
                         <div class="text center"></div>
