@@ -240,6 +240,30 @@ html, body {
     background-color: white;
     height: 80px; }
 
+.uca_list_textarea {
+  /*overflow: hidden;*/
+  resize: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: 0;
+  width: 100%; }
+  .uca_list_textarea__modal {
+    resize: none;
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: 0;
+    width: 100%;
+    background-color: #f0f0f0;
+    height: 100px; }
+  .uca_list_textarea:disabled {
+    resize: none;
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: 0;
+    width: 100%;
+    background-color: white;
+    height: 80px; }
+
 .guideword-combo {
   -webkit-appearance: none;
   box-shadow: none;
@@ -266,6 +290,10 @@ html, body {
   display: inline-block;
   height: 100%;
   vertical-align: middle; }
+
+.image {
+  max-width: 50%;
+  max-height: 50%; }
 
 .substep {
   border-radius: 8px;

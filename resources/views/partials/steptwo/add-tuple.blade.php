@@ -1,4 +1,15 @@
 <div id="add-tuple" style="display: none;">
+        <!-- @begin Showing the Generic Control Loop -->
+        <div class="center">
+                <button class="gcl2" name="gcl2">Show Generic Control Loop</button>
+        </div>
+
+        <br/>
+        
+        <div class="gcl center" name="gcl" style="display: none;">
+                <img src="{{ asset('images/GCL.png') }}" alt="Generic Control Loop" class="image" syle="visible: false;">
+        </div>
+        <!-- @end Showing the Generic Control Loop -->
 	<form action="/addtuple" class="adding-tuple" method="POST">
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 		<div class="vex-dialog-form">

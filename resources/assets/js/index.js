@@ -786,21 +786,36 @@ for (i = 0; i < acc.length; i++) {
 
   var uca = [];
 
-  $('.item__input').on('keyup', function(event) {
-    event.currentTarget.size = event.currentTarget.value.length;
+  // $('.item__input').on('keyup', function(event) {
+  //   event.currentTarget.size = event.currentTarget.value.length;
+  // });
+
+  // $('.item__input__active').on('keyup', function(event) {
+  //   event.currentTarget.size = event.currentTarget.value.length;
+  // });
+
+  // $(window).load(function(event) {
+  //   $('.item__input').each(function(){
+  //     this.size = this.value.length;
+  //   });
+  // });
+
+  $('textarea').on('keyup change onpaste', function () {
+    var alturaScroll = this.scrollHeight;
+    var alturaCaixa = $(this).height();
+
+    if (alturaScroll > (alturaCaixa + 10)) {
+        if (alturaScroll > 500) return;
+        $(this).css('height', alturaScroll);
+    }
+
+    if( $(this).val() == '' ){
+        // retonando ao height padrão de 40px
+        $(this).css('height', '40px');
+    }
   });
 
-  $('.item__input__active').on('keyup', function(event) {
-    event.currentTarget.size = event.currentTarget.value.length;
-  });
-
-  $(window).load(function(event) {
-    $('.item__input').each(function(){
-      this.size = this.value.length;
-    });
-  });
-
-  $("body").on('blur', '.item__input__active', function(event) {
+  $("body").on('blur', '.uca_list_textarea', function(event) {
     event.preventDefault();
     var split = event.currentTarget.id.split("-");
     var id = split[1];
@@ -809,7 +824,7 @@ for (i = 0; i < acc.length; i++) {
   });
 
   // EDIT WHEN KEY "ENTER" WAS PRESSED
-  $("body").on('keypress', '.item__input__active', function(event) {
+  $("body").on('keypress', '.uca_list_textarea', function(event) {
     if (event.which == 13) {
       event.preventDefault();
       var split = event.currentTarget.id.split("-");
@@ -818,6 +833,15 @@ for (i = 0; i < acc.length; i++) {
       edit_uca_sc(id, activity);
     }
   });
+
+  $("body").on('change', '.type-combo', function(event) {
+    event.preventDefault();
+    var split = event.currentTarget.id.split("-");
+    var id = split[1];
+    var activity = split[0];
+    edit_causal_analysis(id);
+  });
+
 
   function edit_uca_sc(id) {
     var unsafe_control_action = $("#unsafe_control_action-" + id).val();
@@ -830,9 +854,9 @@ for (i = 0; i < acc.length; i++) {
       safety_constraint : safety_constraint
     })
     .then(function(response) {
-      $('#unsafe_control_action-'+id).attr('class', 'item__input').prop('disabled', true);
-      $('#type-'+id).attr('class', 'item__input').prop('disabled', true);
-      $('#safety_constraint-'+id).attr('class', 'item__input').prop('disabled', true);
+      $("#unsafe_control_action-"+id).prop('disabled', true);
+      $("#type-"+id).prop('disabled', true);
+      $("#safety_constraint-"+id).prop('disabled', true);
     })
     .catch(function(error) {
       console.log(error);
@@ -1081,9 +1105,9 @@ for (i = 0; i < acc.length; i++) {
     var controlaction_id = form.find("#controlaction_id").val();
     var safety_constraint_id = form.find("#safety_constraint_id").val();
     if (activity === "uca") {
-      $('#unsafe_control_action-'+safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
+      $('#unsafe_control_action-'+safety_constraint_id).prop('disabled', false);
       $('#type-'+safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
-      $('#safety_constraint-'+safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
+      $('#safety_constraint-'+safety_constraint_id).prop('disabled', false);
     }
   });
 
@@ -1436,7 +1460,7 @@ for (i = 0; i < acc.length; i++) {
         $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
         $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
       ],
-      showCloseButton: false,
+      showCloseButton: true,
       contentClassName: 'teste1'
     });
   });
@@ -1545,6 +1569,23 @@ for (i = 0; i < acc.length; i++) {
       hideAll();
       // Shows the content of selected control action
       $('#showtable-'+e.target.value).show();
+  });
+
+  $('body').on('click', ".gcl2", function(e) {
+    var img = $('.gcl');
+    if (!img.is(":visible")){
+      $(img).show();
+      $(".gcl2").html('Hide Generic Control Loop');
+    } else {
+      $(img).hide();
+      $(".gcl2").html('Show Generic Control Loop');
+    }
+  });
+
+  $('body').on('click', '.accordion', function (event){
+    var accordion = $(event.currentTarget);
+    accordion.toggleClass('active');
+    accordion.next().toggleClass('show');
   });
 
 

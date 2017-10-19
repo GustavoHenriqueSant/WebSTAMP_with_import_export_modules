@@ -27,6 +27,7 @@
             <div class="table-row header">
                 <div class="text">Unsafe Control Actions</div>
                 <div class="text">Associated Safety Constraint</div>
+                <div class="text"><!-- Edit/Delete icons --></div>
             </div>
 
             <!--
@@ -59,13 +60,13 @@
             @foreach(App\SafetyConstraints::where('controlaction_id', $ca->id)->get() as $sc)
                 <div class="table-row" id="uca-row-{{$sc->id}}">
                     
-                    <div class="text_uca item__title">
-                        <input type="text" class="item__input" id="unsafe_control_action-{{$sc->id}}" value="{{$sc->unsafe_control_action}}" disabled>
+                    <div class="text">
+                        <br/>
+                        <textarea class="uca_list_textarea" id="unsafe_control_action-{{$sc->id}}" disabled>{{$sc->unsafe_control_action}}</textarea>
                     </div>
                     
-                    <div class="text_uca">
-                        <div>
-                        <select id="type-{{$sc->id}}" style="-webkit-appearance: none; box-shadow: none !important; border: 0;" disabled>
+                    <div class="text">
+                        <select id="type-{{$sc->id}}" class="type-combo" style="-webkit-appearance: none; box-shadow: none !important; border: 0;" disabled>
                             @if($sc->type == "Provided" || $sc->type == "provided")
                                 <option value="Provided" selected>[Provided]</option>
                             @else
@@ -114,28 +115,25 @@
                                 <option value="Applied too long">[Applied too long]</option>
                             @endif
                         </select>
-                        </div>
 
-                        <div class="item__title">
-                            <input type="text" class="item__input" id="safety_constraint-{{$sc->id}}" value="{{$sc->safety_constraint}}" disabled>
-                        </div>
+                        <textarea class="uca_list_textarea" id="safety_constraint-{{$sc->id}}" disabled>{{$sc->safety_constraint}}</textarea>
                     </div>
                     
-                    <div>
-                        <form action="/edituca" class="edit-form" data-edit="uca" method="POST">
-                            <input type="hidden" name="_token" value="{{csrf_token()}}">
-                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
-                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">
-                            <input type="image" src="{{ asset('images/edit.ico') }}" alt="Delete" width="20" class="navbar__logo">
-                        </form>
-                    </div>
-                    <div>
-                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST">
-                            <input type="hidden" name="_token" value="{{csrf_token()}}">
-                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
-                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">
-                            <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
-                        </form>
+                    <div class="text center">
+                        <div style="display: inline-block;">
+                            <form action="/edituca" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
+                                <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">
+                                <input type="image" src="{{ asset('images/edit.ico') }}" alt="Delete" width="20" class="navbar__logo">
+                            </form>
+                            <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
+                                <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">
+                                <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
+                            </form>
+                        </div>
                     </div>
                 </div>
             @endforeach

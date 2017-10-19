@@ -16453,9 +16453,9 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       type: type,
       safety_constraint: safety_constraint
     }).then(function (response) {
-      $('#unsafe_control_action-' + id).attr('class', 'item__input').prop('disabled', true);
-      $('#type-' + id).attr('class', 'item__input').prop('disabled', true);
-      $('#safety_constraint-' + id).attr('class', 'item__input').prop('disabled', true);
+      $("#unsafe_control_action-" + id).prop('disabled', true);
+      $("#type-" + id).prop('disabled', true);
+      $("#safety_constraint-" + id).prop('disabled', true);
     }).catch(function (error) {
       console.log(error);
     });
@@ -16480,21 +16480,36 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
 
   var uca = [];
 
-  $('.item__input').on('keyup', function (event) {
-    event.currentTarget.size = event.currentTarget.value.length;
+  // $('.item__input').on('keyup', function(event) {
+  //   event.currentTarget.size = event.currentTarget.value.length;
+  // });
+
+  // $('.item__input__active').on('keyup', function(event) {
+  //   event.currentTarget.size = event.currentTarget.value.length;
+  // });
+
+  // $(window).load(function(event) {
+  //   $('.item__input').each(function(){
+  //     this.size = this.value.length;
+  //   });
+  // });
+
+  $('textarea').on('keyup change onpaste', function () {
+    var alturaScroll = this.scrollHeight;
+    var alturaCaixa = $(this).height();
+
+    if (alturaScroll > alturaCaixa + 10) {
+      if (alturaScroll > 500) return;
+      $(this).css('height', alturaScroll);
+    }
+
+    if ($(this).val() == '') {
+      // retonando ao height padrão de 40px
+      $(this).css('height', '40px');
+    }
   });
 
-  $('.item__input__active').on('keyup', function (event) {
-    event.currentTarget.size = event.currentTarget.value.length;
-  });
-
-  $(window).load(function (event) {
-    $('.item__input').each(function () {
-      this.size = this.value.length;
-    });
-  });
-
-  $("body").on('blur', '.item__input__active', function (event) {
+  $("body").on('blur', '.uca_list_textarea', function (event) {
     event.preventDefault();
     var split = event.currentTarget.id.split("-");
     var id = split[1];
@@ -16503,7 +16518,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   });
 
   // EDIT WHEN KEY "ENTER" WAS PRESSED
-  $("body").on('keypress', '.item__input__active', function (event) {
+  $("body").on('keypress', '.uca_list_textarea', function (event) {
     if (event.which == 13) {
       event.preventDefault();
       var split = event.currentTarget.id.split("-");
@@ -16511,6 +16526,14 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var activity = split[0];
       edit_uca_sc(id, activity);
     }
+  });
+
+  $("body").on('change', '.type-combo', function (event) {
+    event.preventDefault();
+    var split = event.currentTarget.id.split("-");
+    var id = split[1];
+    var activity = split[0];
+    edit_causal_analysis(id);
   });
 
   $('.add-uca').each(function (index, f) {
@@ -16720,9 +16743,9 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     var controlaction_id = form.find("#controlaction_id").val();
     var safety_constraint_id = form.find("#safety_constraint_id").val();
     if (activity === "uca") {
-      $('#unsafe_control_action-' + safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
+      $('#unsafe_control_action-' + safety_constraint_id).prop('disabled', false);
       $('#type-' + safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
-      $('#safety_constraint-' + safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
+      $('#safety_constraint-' + safety_constraint_id).prop('disabled', false);
     }
   });
 
@@ -16898,7 +16921,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     }
   });
 } else {
-  var edit_causal_analysis = function edit_causal_analysis(id) {
+  var _edit_causal_analysis = function _edit_causal_analysis(id) {
     var guideword = $("#guideword-" + id + " option:selected").val();
     var scenario = $("#scenario-" + id).val();
     var associated = $("#associated-" + id).val();
@@ -16997,7 +17020,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     var split = event.currentTarget.id.split("-");
     var id = split[1];
     var activity = split[0];
-    edit_causal_analysis(id);
+    _edit_causal_analysis(id);
   });
 
   $("body").on('change', '.guideword-combo', function (event) {
@@ -17005,7 +17028,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     var split = event.currentTarget.id.split("-");
     var id = split[1];
     var activity = split[0];
-    edit_causal_analysis(id);
+    _edit_causal_analysis(id);
   });
 
   // EDIT WHEN KEY "ENTER" WAS PRESSED
@@ -17015,7 +17038,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var split = event.currentTarget.id.split("-");
       var id = split[1];
       var activity = split[0];
-      edit_causal_analysis(id);
+      _edit_causal_analysis(id);
     }
   });
 
@@ -17032,7 +17055,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     vex.open({
       unsafeContent: $("#approach-" + value).html(),
       buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
-      showCloseButton: false,
+      showCloseButton: true,
       contentClassName: 'teste1'
     });
   });
@@ -17132,6 +17155,23 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       // Shows the content of selected control action
       $('#showtable-' + e.target.value).show();
     });
+
+    $('body').on('click', ".gcl2", function (e) {
+      var img = $('.gcl');
+      if (!img.is(":visible")) {
+        $(img).show();
+        $(".gcl2").html('Hide Generic Control Loop');
+      } else {
+        $(img).hide();
+        $(".gcl2").html('Show Generic Control Loop');
+      }
+    });
+
+    $('body').on('click', '.accordion', function (event) {
+      var accordion = $(event.currentTarget);
+      accordion.toggleClass('active');
+      accordion.next().toggleClass('show');
+    });
   });
 }
 
@@ -17204,7 +17244,7 @@ module.exports = function (context) {
 
     select += "</select>";
 
-    return "<div class=\"table-row\" id=\"causal-row-" + context.id + "\"\">\n            <div class=\"text\">\n                " + select + "<br/>\n            <textarea class=\"step2_textarea\" name=\"scenario-" + context.id + "\" id=\"scenario-" + context.id + "\" placeholder=\"Scenario\" disabled>" + context.scenario + "</textarea>\n            </div>\n\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"associated-" + context.id + "\" placeholder=\"Associated Causal Factors\" disabled>" + context.associated + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"requirement-" + context.id + "\" placeholder=\"Requirements\" disabled>" + context.requirement + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"role-" + context.id + "\" placeholder=\"Role\" disabled>" + context.role + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"rationale-" + context.id + "\" placeholder=\"Rationales\" disabled>" + context.rationale + "</textarea></div>\n    <div class=\"text center\">\n        <div style=\"display: inline-block;\">\n            <br/>\n            <form action=\"/edittuple\" class=\"edit-form\" data-edit=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n            <form action=\"/deletetuple\" class=\"delete-form\" data-delete=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n        </div>\n    </div>\n</div>";
+    return "<div class=\"table-row\" id=\"causal-row-" + context.id + "\"\">\n            <div class=\"text\">\n                " + select + "<br/>\n            <textarea class=\"step2_textarea\" name=\"scenario-" + context.id + "\" id=\"scenario-" + context.id + "\" placeholder=\"Scenario\" disabled>" + context.scenario + "</textarea>\n            </div>\n\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"associated-" + context.id + "\" placeholder=\"Associated Causal Factors\" disabled>" + context.associated + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"requirement-" + context.id + "\" placeholder=\"Requirements\" disabled>" + context.requirement + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"rationale-" + context.id + "\" placeholder=\"Rationales\" disabled>" + context.rationale + "</textarea></div>\n    <div class=\"text center\">\n        <div style=\"display: inline-block;\">\n            <br/>\n            <form action=\"/edittuple\" class=\"edit-form\" data-edit=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n            <form action=\"/deletetuple\" class=\"delete-form\" data-delete=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n        </div>\n    </div>\n</div>";
 };
 
 },{}],42:[function(require,module,exports){
