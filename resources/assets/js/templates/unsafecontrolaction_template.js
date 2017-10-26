@@ -50,34 +50,31 @@ module.exports = function(context) {
     return `
         <div class="table-row" id="uca-row-${context.id}">
                     
-                    <div class="text item__title">
-                        <input type="text" class="item__input" id="unsafe_control_action-${context.id}" value="${context.unsafe_control_action}" size="${uca_size}" disabled>
+                    <div class="text">
+                        <br/>
+                        <textarea class="uca_list_textarea" id="unsafe_control_action-${context.id}" disabled>${context.unsafe_control_action}</textarea>
                     </div>
                     
                     <div class="text">
-                        <div>
-                            ${type}
-                        </div>
-                        <div class="item__title">
-                            <input type="text" class="item__input" id="safety_constraint-${context.id}" value="${context.safety_constraint}" size="${sc_size}" disabled>
-                        </div>
+                        ${type}
+                        <textarea class="uca_list_textarea" id="safety_constraint-${context.id}" disabled>${context.safety_constraint}</textarea>
                     </div>
                     
-                    <div>
-                        <form action="/edituca" class="delete-form" data-delete="uca" method="POST">
-                            <input type="hidden" name="_token" value="{{csrf_token()}}">
-                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
-                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">
-                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">
-                        </form>
+                    <div class="text center">
+                        <div style="display: inline-block;">
+                            <form action="/edituca" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <input type="hidden" name="controlaction_id" id="controlaction_id" value="${context.id}">
+                                <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="${context.id}">
+                                <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">
+                            </form>
+                            <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <input type="hidden" name="controlaction_id" id="controlaction_id" value="${context.id}">
+                                <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="${context.id}">
+                                <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">
+                            </form>
+                        </div>
                     </div>
-                    <div>
-                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST">
-                            <input type="hidden" name="_token" value="{{csrf_token()}}">
-                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
-                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">
-                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">
-                        </form>
-                    </div>
-                </div>`;
+        </div>`;
 };

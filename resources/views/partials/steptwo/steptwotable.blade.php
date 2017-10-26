@@ -21,13 +21,13 @@
     ?>
     <button class="accordion" id="causal_analysis-{{$ca->id}}"><b>[UCA - {{$safety_constraint->id}}]</b> {{$safety_constraint->unsafe_control_action}} <br/> <b>[Guide Question]</b> {{$guidequestion}}</button>
         <div class="panel" id="panel-UCA-{{$safety_constraint->id}}">
-            <div class="center unsafe_control_action">
+            <!-- <div class="center unsafe_control_action">
                 <b>Unsafe Control Action</b>: {{$safety_constraint->unsafe_control_action}}
             </div>
             <div class="center">
                 
                 <b>Guide Question</b>: What are the causal factors that make the <b>{{$ca->name}}</b> to be <b>{{$type}}</b> by the <b>{{$operator}}</b> when <b>{{$context}}</b>?
-            </div>
+            </div> -->
 
             <div class="container" id="safety-{{$safety_constraint->id}}">
 
@@ -91,11 +91,11 @@
                             <div class="text center">
                                 <form action="/" class="teste-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
                                     <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Template Instantiation</button>
-                                    <input type="hidden" id="UCA" name="UCA" value="{{$safety_constraint->unsafe_control_action}}">
-                                    <input type="hidden" id="GQ" name="GQ" value="{{$guidequestion}}">
                                 </form>
                                 <form action="/testeUCA" class="test-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
                                     <button class="font-button"><img src="/images/plus.png" class="steptwo-button" width="15"/> Add New 4-tuple</button></div>
+                                    <input type="hidden" id="uca_name_{{$safety_constraint->id}}" name="uca_name_{{$safety_constraint->id}}" value="{{$safety_constraint->unsafe_control_action}}">
+                                    <input type="hidden" id="GQ_{{$safety_constraint->id}}" name="GQ_{{$safety_constraint->id}}" value="{{$guidequestion}}">
                                     <input type="hidden" id="tst" name="tst" value="{{$safety_constraint->id}}">
                                 </form>
                             <div class="text center"></div>

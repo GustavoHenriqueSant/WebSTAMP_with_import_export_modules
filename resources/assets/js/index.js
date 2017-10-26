@@ -930,6 +930,8 @@ for (i = 0; i < acc.length; i++) {
 
   $('body').on('submit', '.adding-uca', function(event) {
     event.preventDefault();
+    vex.closeAll();
+    console.log("Adicionou!");
     var form = $(event.currentTarget);
     var controlaction_id = form.find("#controlaction_id").val();
     var controller_name = form.find("#controller_name").val();
@@ -1470,8 +1472,16 @@ for (i = 0; i < acc.length; i++) {
     var form = $(event.currentTarget);
     // Gets the id of the UCA
     var value = form.data("id");
+    // Gets the UCA
+    var UCA = $("#uca_name_" + value).val();
+    // Gets the Guide Question
+    var GQ = $("#GQ_" + value).val();
     // Change de hidden value to the actual UCA id
     $("#add-tuple").find("#uca").val(value);
+    // Put the UCA text on the <span>
+    $('#4tupleUCA').html(UCA);
+    // Put the UCA text on the <span>
+    $('#4tupleGQ').html(GQ);
     //Opens the modal
     vex.open({
       unsafeContent: $("#add-tuple").html()

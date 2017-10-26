@@ -1,4 +1,10 @@
 <div id="add-tuple" style="display: none;">
+        <div class="center">
+                <b>Unsafe Control Action</b>: <span name="4tupleUCA" id="4tupleUCA"></span>
+        </div>
+        <div class="center">
+                <b>Guide Question</b>: <span name="4tupleGQ" id="4tupleGQ"></span>
+        </div>
         <!-- @begin Showing the Generic Control Loop -->
         <div class="center">
                 <button class="gcl2" name="gcl2">Show Generic Control Loop</button>

@@ -16577,6 +16577,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
 
   $('body').on('submit', '.adding-uca', function (event) {
     event.preventDefault();
+    vex.closeAll();
+    console.log("Adicionou!");
     var form = $(event.currentTarget);
     var controlaction_id = form.find("#controlaction_id").val();
     var controller_name = form.find("#controller_name").val();
@@ -17065,8 +17067,16 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     var form = $(event.currentTarget);
     // Gets the id of the UCA
     var value = form.data("id");
+    // Gets the UCA
+    var UCA = $("#uca_name_" + value).val();
+    // Gets the Guide Question
+    var GQ = $("#GQ_" + value).val();
     // Change de hidden value to the actual UCA id
     $("#add-tuple").find("#uca").val(value);
+    // Put the UCA text on the <span>
+    $('#4tupleUCA').html(UCA);
+    // Put the UCA text on the <span>
+    $('#4tupleGQ').html(GQ);
     //Opens the modal
     vex.open({
       unsafeContent: $("#add-tuple").html()
@@ -17359,7 +17369,7 @@ module.exports = function (context) {
 
     type += '</select>';
 
-    return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text item__title">\n                        <input type="text" class="item__input" id="unsafe_control_action-' + context.id + '" value="' + context.unsafe_control_action + '" size="' + uca_size + '" disabled>\n                    </div>\n                    \n                    <div class="text">\n                        <div>\n                            ' + type + '\n                        </div>\n                        <div class="item__title">\n                            <input type="text" class="item__input" id="safety_constraint-' + context.id + '" value="' + context.safety_constraint + '" size="' + sc_size + '" disabled>\n                        </div>\n                    </div>\n                    \n                    <div>\n                        <form action="/edituca" class="delete-form" data-delete="uca" method="POST">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n                    <div>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="{{$sc->id}}">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n                </div>';
+    return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="unsafe_control_action-' + context.id + '" disabled>' + context.unsafe_control_action + '</textarea>\n                    </div>\n                    \n                    <div class="text">\n                        ' + type + '\n                        <textarea class="uca_list_textarea" id="safety_constraint-' + context.id + '" disabled>' + context.safety_constraint + '</textarea>\n                    </div>\n                    \n                    <div class="text center">\n                        <div style="display: inline-block;">\n                            <form action="/edituca" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">\n                                <input type="hidden" name="_token" value="{{csrf_token()}}">\n                                <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                                <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                                <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                            </form>\n                            <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">\n                                <input type="hidden" name="_token" value="{{csrf_token()}}">\n                                <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                                <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                                <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                            </form>\n                        </div>\n                    </div>\n        </div>';
 };
 
 },{}],52:[function(require,module,exports){
