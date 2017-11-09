@@ -16465,6 +16465,42 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     if (type == "provided") return "Provided";else if (type == "not provided") return "Not provided";else if (type == "wrong time") return "Provided in wrong time";else if (type == "wrong order") return "Provided in wrong order";else if (type == "too early") return "Provided too early";else if (type == "too late") return "Provided too late";else if (type == "too soon") return "Stopped too soon";else if (type == "too long") return "Applied too long";
   };
 
+  var generateUCAText = function generateUCAText(controlaction_id, controller_name, controlaction_name, type, states_name) {
+    var unsafe_control_action = "";
+    var safety_constraint = "";
+    if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+    } else if (type.includes("wrong time") || type.includes("wrong order")) {
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+    } else {
+      unsafe_control_action = controller_name.toLowerCase() + " " + type.toLowerCase() + " " + controlaction_name.toLowerCase() + " when";
+      if (type.includes("not provided")) {
+        safety_constraint = controller_name.toLowerCase() + " must provide " + controlaction_name.toLowerCase() + " when";
+      } else {
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " when";
+      }
+    }
+    unsafe_control_action = unsafe_control_action[0].toUpperCase() + unsafe_control_action.slice(1);
+    safety_constraint = safety_constraint[0].toUpperCase() + safety_constraint.slice(1);
+    var states_size = states_name.length;
+    states_name.forEach(function (f, index) {
+      if (index != states_size - 1) {
+        unsafe_control_action += ", " + f.toLowerCase();
+        safety_constraint += ", " + f.toLowerCase();
+      } else {
+        unsafe_control_action += " and " + f.toLowerCase();
+        safety_constraint += ", " + f.toLowerCase();
+      }
+    });
+    unsafe_control_action = unsafe_control_action.replace("when and", "when");
+    unsafe_control_action = unsafe_control_action.replace("when,", "when");
+    safety_constraint = safety_constraint.replace("when and", "when");
+    safety_constraint = safety_constraint.replace("when,", "when");
+    return { unsafe_control_action: unsafe_control_action, safety_constraint: safety_constraint };
+  };
+
   // Require JQuery
   var $ = require('jquery');
 
@@ -16575,6 +16611,57 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     });
   });
 
+  $('body').on('click', '.legend-button', function (event) {
+    event.preventDefault();
+    vex.closeAll();
+    vex.open({
+      unsafeContent: $(".legend-contexttable").html(),
+      buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
+      showCloseButton: true,
+      className: "vex-theme-default"
+    });
+  });
+
+  $(window).load(function (event) {
+    // Getting the total rows of the Context Table
+    var total_rows = $("#total_rows").val();
+    // Control Actions with problems
+    var control_actions = [];
+    var t = [];
+    // For each .text_error, stores the number of the row
+    $('.text_error').each(function () {
+      control_actions.push(this.id.split("-")[2]);
+      var c = { row: total_rows - this.id.split("-")[4], ca_id: this.id.split("-")[2] };
+      t.push(c);
+    });
+    // Removes the repeated elements of the CA
+    var ca_without_repetition = control_actions.filter(function (elem, pos, self) {
+      return self.indexOf(elem) == pos;
+    });
+    ca_without_repetition.forEach(function (ca_id) {
+      // Array that stores the lines with problem (with class "text_error")
+      var lines_with_problem = [];
+      var lines_without_repetition = [];
+      t.forEach(function (elem) {
+        if (elem.ca_id == ca_id) lines_with_problem.push(elem.row);
+        // Removes the repeated elements of the rows
+        lines_without_repetition = lines_with_problem.filter(function (elem, pos, self) {
+          return self.indexOf(elem) == pos;
+        });
+      });
+      console.log("BUP!");
+      $("#warning-message-ca-" + ca_id).html("Warning: An error occured on saving the data. Please, revise the following row(s): [" + lines_without_repetition + "]").show();
+    });
+    //$("#warning-message-ca-" + ca_id).html("Warning: An error occured on saving the data. Please, revise the following row(s): [" + uniqueArray + "]").show();
+    // $("#warning-message-ca-" + ca_id).
+  });
+
+  $(window).load(function (event) {
+    $('.item__input').each(function () {
+      this.size = this.value.length;
+    });
+  });
+
   $('body').on('submit', '.adding-uca', function (event) {
     event.preventDefault();
     vex.closeAll();
@@ -16597,41 +16684,12 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         states_name.push(f.value.split("-")[1] + " is " + f.text);
       }
     });
-    var unsafe_control_action = "";
-    var safety_constraint = "";
-    if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
-      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
-      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
-    } else if (type.includes("wrong time") || type.includes("wrong order")) {
-      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
-      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
-    } else {
-      unsafe_control_action = controller_name.toLowerCase() + " " + type.toLowerCase() + " " + controlaction_name.toLowerCase() + " when";
-      if (type.includes("not provided")) {
-        safety_constraint = controller_name.toLowerCase() + " must provide " + controlaction_name.toLowerCase() + " when";
-      } else {
-        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " when";
-      }
-    }
-    unsafe_control_action = unsafe_control_action[0].toUpperCase() + unsafe_control_action.slice(1);
-    safety_constraint = safety_constraint[0].toUpperCase() + safety_constraint.slice(1);
-    var states_size = states_name.length;
-    states_name.forEach(function (f, index) {
-      if (index != states_size - 1) {
-        unsafe_control_action += ", " + f.toLowerCase();
-        safety_constraint += ", " + f.toLowerCase();
-      } else {
-        unsafe_control_action += " and " + f.toLowerCase();
-        safety_constraint += ", " + f.toLowerCase();
-      }
-    });
-    unsafe_control_action = unsafe_control_action.replace("when and", "when");
-    unsafe_control_action = unsafe_control_action.replace("when,", "when");
-    safety_constraint = safety_constraint.replace("when and", "when");
-    safety_constraint = safety_constraint.replace("when,", "when");
+    var uca_sc = generateUCAText(controlaction_id, controller_name, controlaction_name, type, states_name);
+    var unsafe_control_action = uca_sc.unsafe_control_action;
+    var safety_constraint = uca_sc.safety_constraint;
     if (states_name.length > 0) {
       $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/> " + unsafe_control_action + ".");
-      $(".safety-control").html("<br/><center><b>Safety constraint associated:</b></center><br/> " + safety_constraint + ".");
+      $(".safety-control").html("<br/><center><b>Associated safety constraint:</b></center><br/> " + safety_constraint + ".");
     }
     var id = 0;
     var rule_id = 0;
@@ -16709,7 +16767,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     safety_constraint = safety_constraint.replace("when,", "when");
     if (states_name.length > 0) {
       $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/> " + unsafe_control_action + ".");
-      $(".safety-control").html("<br/><center><b>Safety constraint associated:</b></center><br/> " + safety_constraint + ".");
+      $(".safety-control").html("<br/><center><b>Associated safety constraint:</b></center><br/> " + safety_constraint + ".");
     }
   });
 
@@ -16787,56 +16845,75 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   // Add rules
   $('body').on('submit', '.add-new-rule', function (event) {
     event.preventDefault();
-    var form = $(event.currentTarget);
-    var controlaction_id = form.find("#controlaction_id").val();
-    var $newRule = $('#rule-control-action-' + controlaction_id).find(".container-fluid");
-    var rule_index = $('#rule-control-action-' + controlaction_id).find(".rules-table").length + 1;
-    var column = form.find("#rule_column").val();
-    console.log("Coluna: " + column);
-    var append = '<div class="table-row rules-table rules-ca-' + controlaction_id + '-rule-' + rule_index + '"><div class="text">R' + rule_index + '</div>';
-    // Save each variable of the rule
-    var variables = form.find('[id^="variable_id_"]').each(function () {
-      var ids = form.find(this).val().split("-");
-      var variable_id = ids[0];
-      var state_id = ids[1];
-      var name = $(this).find('option:selected').attr('name');
-      append += '<div class="text">' + name + '</div>';
-      var id = 0;
-      if (rule_index > 0) axios.post('/addrule', {
-        id: id,
-        rule_index: rule_index,
-        variable_id: variable_id,
-        state_id: state_id,
-        controlaction_id: controlaction_id,
-        column: column
-      }).catch(function (error) {
-        console.log(error);
-      });
-    });
-    setTimeout(function () {
-      var ca = window.location.search.substr(1).split("=");
-      console.log(ca);
-      if (ca.length > 1) {
-        var currentURL = window.location.href.split("?");
-        window.location.href = currentURL[0] + '?ca=' + controlaction_id;
-      } else {
-        window.location.href += '?ca=' + controlaction_id;
+    vex.dialog.confirm({
+      message: 'Add a new rule implies on refresh the page. All unsaved data will be lost.  Are you sure?',
+      callback: function callback(value) {
+        if (value) {
+          var form = $(event.currentTarget);
+          var controlaction_id = form.find("#controlaction_id").val();
+          var $newRule = $('#rule-control-action-' + controlaction_id).find(".container-fluid");
+          var rule_index = $('#rule-control-action-' + controlaction_id).find(".rules-table").length + 1;
+          var column = form.find("#rule_column").val();
+          console.log("Coluna: " + column);
+          var append = '<div class="table-row rules-table rules-ca-' + controlaction_id + '-rule-' + rule_index + '"><div class="text">R' + rule_index + '</div>';
+          var variables_array = [];
+          var states_name = [];
+          var id = 0;
+          // Save each variable of the rule
+          var variables = form.find('[id^="variable_id_"]').each(function () {
+            var ids = form.find(this).val().split("-");
+            var variable_id = ids[0];
+            var state_id = ids[1];
+            if (state_id > 0) variables_array.push(state_id);
+            var name = $(this).find('option:selected').attr('name');
+            console.log(name);
+            if (name !== "ANY") states_name.push(name);
+            append += '<div class="text">' + name + '</div>';
+            if (rule_index > 0) axios.post('/addrule', {
+              id: id,
+              rule_index: rule_index,
+              variable_id: variable_id,
+              state_id: state_id,
+              controlaction_id: controlaction_id,
+              column: column
+            }).catch(function (error) {
+              console.log(error);
+            });
+          });
+          var sc = generateUCAText(controlaction_id, "Train Door Controller", "Open door command", column.toLowerCase(), states_name);
+          var context = "";
+          variables_array.forEach(function (f, index) {
+            console.log(f);
+            if (index == 0) context += f;else if (index < variables_array.length) context += "," + f;
+          });
+          axios.post('/adduca', {
+            id: id,
+            unsafe_control_action: sc.unsafe_control_action,
+            safety_constraint: sc.safety_constraint,
+            type: column,
+            controlaction_id: controlaction_id,
+            rule_id: id,
+            context: context
+          }).catch(function (error) {
+            console.log(error);
+          });
+          console.log(sc.unsafe_control_action);
+          setTimeout(function () {
+            var ca = window.location.search.substr(1).split("=");
+            console.log(ca);
+            if (ca.length > 1) {
+              var currentURL = window.location.href.split("?");
+              window.location.href = currentURL[0] + '?ca=' + controlaction_id;
+            } else {
+              window.location.href += '?ca=' + controlaction_id;
+            }
+          }, 2000);
+
+          append += '<div class="text">' + '<form action="/deleterule" class="delete-form" data-delete="rules" method="POST">' + '<input type="hidden" name="_token" value="{{csrf_token()}}">' + '<input type="hidden" name="controlaction_id" id="controlaction_id" value="' + controlaction_id + '">' + '<input type="hidden" name="rule_index" id="rule_index" value="' + rule_index + '">' + '<input type="image" src="/images/delete.ico" alt="Delete" width="20" class="navbar__logo">' + '</form>' + '</div>';
+          append += '</div>';
+        }
       }
-    }, 2000);
-
-    /*var ca = window.location.search.substr(1).split("=");
-    console.log(ca);
-    if (ca.length > 1){
-      var currentURL = window.location.href.split("?");
-      window.location.href = currentURL[0] + '?ca='+controlaction_id;
-    }
-    else{
-      window.location.href += '?ca='+controlaction_id;
-    } */
-
-    append += '<div class="text">' + '<form action="/deleterule" class="delete-form" data-delete="rules" method="POST">' + '<input type="hidden" name="_token" value="{{csrf_token()}}">' + '<input type="hidden" name="controlaction_id" id="controlaction_id" value="' + controlaction_id + '">' + '<input type="hidden" name="rule_index" id="rule_index" value="' + rule_index + '">' + '<input type="image" src="/images/delete.ico" alt="Delete" width="20" class="navbar__logo">' + '</form>' + '</div>';
-    append += '</div>';
-    //$newRule.append(append);  
+    });
   });
 
   // DELETE RULES AND UCA/SC
@@ -16921,6 +16998,10 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       });
       total_rows--;
     }
+    // Hide the warning message
+    $("#warning-message-ca-" + controlaction_id).hide();
+    // Paint in white the yellow selectors
+    form.find(".text_error").removeClass("text_error").addClass("text");
   });
 } else {
   var _edit_causal_analysis = function _edit_causal_analysis(id) {

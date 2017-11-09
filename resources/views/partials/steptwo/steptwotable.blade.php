@@ -41,7 +41,7 @@
                         <div class="text center">Safety Requirements</div>
                         <!-- <div class="text center">Allocated to</div> -->
                         <div class="text center">Rationales</div>
-                        <div class="text center"><!-- Edit/Delete --></div>
+                        <div class="content-uca"><!-- Edit/Delete --></div>
                     </div>
 
                         @foreach(App\CausalAnalysis::where('safety_constraint_id', $safety_constraint->id)->get() as $causal)
@@ -67,20 +67,17 @@
                             <div class="text center"><br/><textarea class="step2_textarea" id="requirement-{{$causal->id}}" placeholder="Requirements" disabled>{{$causal->requirement}}</textarea></div>
                             <!-- <div class="text center"><br/><textarea class="step2_textarea" id="role-{{$causal->id}}" placeholder="Role" disabled>{{$causal->role}}</textarea></div> -->
                             <div class="text center"><br/><textarea class="step2_textarea" id="rationale-{{$causal->id}}" placeholder="Rationales" disabled>{{$causal->rationale}}</textarea></div>
-                            <div class="text center">
-                                <div style="display: inline-block;">
-                                    <br/>
-                                    <form action="/edittuple" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">
-                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
-                                        <input type="hidden" name="causal_id" id="causal_id" value="{{$causal->id}}">
-                                        <input type="image" src="{{ asset('images/edit.ico') }}" alt="Delete" width="20" class="navbar__logo">
-                                    </form>
-                                    <form action="/deletetuple" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">
-                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
-                                        <input type="hidden" name="causal_id" id="causal_id" value="{{$causal->id}}">
-                                        <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
-                                    </form>
-                                </div>
+                            <div class="content-uca">
+                                <form action="/edittuple" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">
+                                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                    <input type="hidden" name="causal_id" id="causal_id" value="{{$causal->id}}">
+                                    <input type="image" src="{{ asset('images/edit.ico') }}" alt="Delete" width="20" class="navbar__logo">
+                                </form>
+                                <form action="/deletetuple" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">
+                                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                    <input type="hidden" name="causal_id" id="causal_id" value="{{$causal->id}}">
+                                    <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
+                                </form>
                             </div>
                         </div>
                         @endforeach

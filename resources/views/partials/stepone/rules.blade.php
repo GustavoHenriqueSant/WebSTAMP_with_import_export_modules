@@ -14,7 +14,7 @@
                 @foreach (App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get() as $variable)
                     <div class="text">{{$variable->name}}</div>
                 @endforeach
-                <div class="text">
+                <div class="content-uca">
                     <!-- Header to delete a rule -->
                 </div>
             </div>
@@ -30,7 +30,7 @@
                             <div class="text center">{{App\State::find($rule->state_id)->name}}</div>
                         @endif
                     @endforeach
-                    <div class="text center">
+                    <div class="content-uca">
                         <form action="/deleterule" class="delete-form" data-delete="rules" method="POST">
                             <input type="hidden" name="_token" value="{{csrf_token()}}">
                             <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">

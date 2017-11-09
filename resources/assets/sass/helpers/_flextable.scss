@@ -18,6 +18,15 @@
   padding-right: 20px;
 }
 
+.text_error {
+  flex-grow: 1;            -webkit-flex-grow: 1;
+  white-space: wrap;
+  text-overflow: ellipsis;
+  padding-right: 20px;
+  width: 180px;
+  background: #fef65b;
+}
+
 .text_uca {
   flex-grow: 1;            -webkit-flex-grow: 1;
   overflow: hidden;
@@ -66,6 +75,16 @@ body {
   padding-top: 8px;
   padding-bottom: 8px;
   text-align: center;
+}
+
+.table-row.header-blue {
+  background-color: #2c3e50;
+  font-weight: bold;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-align: center;
+  color: white;
+  border-radius: 10px;
 }
 
 .container-fluid {
