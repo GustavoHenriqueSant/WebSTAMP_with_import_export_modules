@@ -72,6 +72,22 @@
         }
     }
 
+    // BubbleSort to order the rules. For some reason, the sql "orderBy" is not working.
+    if (count($rle) > 0){
+        for ($i = 0; $i < count($rle)-1; $i++){
+            for ($j = $i+1; $j < count($rle); $j++){
+                if ($rle[$i][0]["index"] > $rle[$j][0]["index"]){
+                    $aux = $rle[$i];
+                    $rle[$i] = $rle[$j];
+                    $rle[$j] = $aux;
+                }
+            }
+        }
+    }
+
+    
+    
+
 ?>
 <div class="substep__title">
     Context Table - {{$ca->name}}
@@ -146,6 +162,7 @@
                 <div class="text">Control Action provided too late</div>
                 <div class="text">Control Action stopped too soon</div>
                 <div class="text">Control Action applied too long</div>
+
                 </div>
 
                 @while($total_loop > 0)
@@ -173,7 +190,7 @@
                                 array_push($arr, $allStatesId[$i][$combination_array[$i]]);
                                 // Verifying if the rule fits
                                 if(count($rle) > 0) {
-                                    foreach($rle as $key => $r) {
+                                    foreach($rle as $key => $r) {                                        
                                         if (count($r) > 0) {                                        
                                             if($r[$i]->state_id == 0){                                            
                                                 if ($rules[$key] == "true"){
@@ -184,24 +201,22 @@
                                                 $rules[$key] = "true";
                                             } else {
                                                 $rules[$key] = "false";
-                                            }
+                                            }                                            
                                         }
                                     }
                                 }
+
                             ?>
                         @endfor
 
                         <?php
+                        // Logic to do all combinations of the context table
                         $arr = json_encode($arr);
                             $loop++;
                             for ($i = 0; $i < count($combination_array); $i++) {
                                 $multiple = (count($combination_array)-($i+1));
-                                //echo count($combination_array)-($i+1);
-                                //$divisor = ($multiple > 0 ) ? count($number_of_states) * $multiple : 1;//
-                                //$divisor = 2 ** $multiple;
                                 $divisor = $divisor_num[$i];
                                 $resto = $loop % $divisor;
-                                //echo "Multiplo: " . $multiple . "<br>Divisor: " . $divisor . "<br>Resto: " . $resto . "<br><br>";
                                 if ($resto == 0) {
                                     $combination_array[$i] = ($combination_array[$i]+1 >= $number_of_states[$i]) ? 0 : $combination_array[$i]+1;
                                 }
@@ -230,11 +245,13 @@
                             );
 
                             foreach ($rules as $key => $r) {
-                                //echo  $r;
                                 if ($r == "true" && count($r) > 0) {
                                     echo "R".($key+1)." ";
                                     $thereAreRule = "true";
-                                    $column_name[$columns[$key]] = true;                                    
+                                    $columns_that_rule_can_be_applied = explode(";", $columns[$key]);
+                                    //print_r($columns_that_rule_can_be_applied);
+                                    foreach($columns_that_rule_can_be_applied as $column_rule)
+                                        $column_name[$column_rule] = true;                                    
                                 } else {
                                     $r[$key] = "false";
                                 }

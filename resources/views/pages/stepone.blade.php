@@ -22,6 +22,7 @@
 			        @include('partials.stepone.safety-constraints')
 			    </div>
 			    @include('partials.stepone.add-uca', ['controller' => $controller, 'controlaction' => $ca])
+			    @include('partials.stepone.suggested-uca', ['controller' => $controller, 'controlaction' => $ca])
 			</div>
 		@endforeach
     @endforeach

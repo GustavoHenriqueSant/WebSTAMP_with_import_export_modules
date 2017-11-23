@@ -156,7 +156,8 @@ html, body {
   float: left; }
 
 .center {
-  text-align: center; }
+  text-align: center;
+  vertical-align: middle; }
 
 #control-actions-select {
   -webkit-appearance: none;

@@ -16611,6 +16611,56 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     });
   });
 
+  $('body').on('click', '.suggested-uca', function (event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var controlaction_id = form.attr("id").split("-")[2];
+    var total_rows = $('#total_rows').val() - 1;
+    var possible_uca = [];
+    while (total_rows >= 0) {
+      var states = $("#all_states_" + total_rows).val();
+      var provided = $("#provided-ca-" + controlaction_id + "-row-" + total_rows).val();
+      var not_provided = $("#notprovided-ca-" + controlaction_id + "-row-" + total_rows).val();
+      var wrong_time = $("#wrongtime-ca-" + controlaction_id + "-row-" + total_rows).val();
+      var early = $("#early-ca-" + controlaction_id + "-row-" + total_rows).val();
+      var late = $("#late-ca-" + controlaction_id + "-row-" + total_rows).val();
+      var soon = $("#soon-ca-" + controlaction_id + "-row-" + total_rows).val();
+      var long = $("#long-ca-" + controlaction_id + "-row-" + total_rows).val();
+
+      if (provided == "true") {
+        possible_uca.push([controlaction_id, states, "provided"]);
+      }
+      if (not_provided == "true") {
+        possible_uca.push([controlaction_id, states, "not_provided"]);
+      }
+      if (wrong_time == "true") {
+        possible_uca.push([controlaction_id, states, "wrong_time"]);
+      }
+      if (early == "true") {
+        possible_uca.push([controlaction_id, states, "early"]);
+      }
+      if (late == "true") {
+        possible_uca.push([controlaction_id, states, "late"]);
+      }
+      if (soon == "true") {
+        possible_uca.push([controlaction_id, states, "soon"]);
+      }
+      if (long == "true") {
+        possible_uca.push([controlaction_id, states, "long"]);
+      }
+      //console.log(provided + " " + not_provided + " " + wrong_time + " " + early + " " + late + " " + soon + " " + long);
+      total_rows--;
+    }
+    console.log(possible_uca);
+    vex.closeAll();
+    vex.open({
+      unsafeContent: $("#add-suggested-uca-" + controlaction_id).html(),
+      buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
+      showCloseButton: true,
+      className: "vex-theme-default"
+    });
+  });
+
   $('body').on('click', '.legend-button', function (event) {
     event.preventDefault();
     vex.closeAll();
@@ -16853,7 +16903,11 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
           var controlaction_id = form.find("#controlaction_id").val();
           var $newRule = $('#rule-control-action-' + controlaction_id).find(".container-fluid");
           var rule_index = $('#rule-control-action-' + controlaction_id).find(".rules-table").length + 1;
-          var column = form.find("#rule_column").val();
+          var column = "";
+          var columns = form.find("#rule_column").val();
+          columns.forEach(function (column_name, index) {
+            if (index > 0) column += ";" + column_name;else column += column_name;
+          });
           console.log("Coluna: " + column);
           var append = '<div class="table-row rules-table rules-ca-' + controlaction_id + '-rule-' + rule_index + '"><div class="text">R' + rule_index + '</div>';
           var variables_array = [];

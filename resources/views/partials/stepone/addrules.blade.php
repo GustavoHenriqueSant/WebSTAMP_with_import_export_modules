@@ -20,8 +20,8 @@
             <input type="hidden" name="_token" value="{{csrf_token()}}">
             <input type="hidden" id="controlaction_id" name="controlaction_id" value="{{$ca->id}}">
             <div class="table-row">
-                <select id="rule_column" name="rule_column" class="text">
-                    <option value="Provided">Provided</option>
+                <select id="rule_column" name="rule_column" class="text" multiple>
+                    <option value="Provided" selected="true">Provided</option>
                     <option value="Not Provided">Not Provided</option>
                     <option value="Provided too early">Provided too early</option>
                     <option value="Provided too late">Provided too late</option>

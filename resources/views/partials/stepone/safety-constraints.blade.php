@@ -2,8 +2,12 @@
     Unsafe Control Actions and Associated Safety Constraints - {{$ca->name}}
 </div>
 
+<div class="substep__add suggested-uca" id="suggested-ca-{{$ca->id}}">
+    + Suggested Unsafe Control Actions
+</div>
+
 <div class="substep__add add-new-uca" id="ca-{{$ca->id}}">
-    +
+    + New Unsafe Control Action
 </div>
 
 <div class="substep__content add-uca" id="uca-{{$ca->id}}">

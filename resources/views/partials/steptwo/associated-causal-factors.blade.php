@@ -43,57 +43,58 @@
 ?>
 
 <div id="approach-{{$uca_id}}" style="display: none;">
+
+	<input type="hidden" name="_token" value="{{csrf_token()}}">
+	<input type="hidden" name="uca" id="uca" value="0">
+
+	<div class="center">
+		<select id="show-guidewords-{{$uca_id}}" class="choose-guideword">
+			<option value="left">Left side: Safe control action provided but not followed or executed</option>
+			<option value="right">Right side: Unsafe control action provided or safe control action required but not provided</option>
+		</select>
+	</div>
+
+	<br/>
+	
+	<div class="center">
+		@foreach(App\SafetyConstraints::where('id', $uca->id)->get() as $sc)
+			<b>Unsafe Control Action</b>: {{$sc->unsafe_control_action}}
+		@endforeach 
+	</div>
+	<div class="center">
+		<?php
+		 	$operator = strtolower($ca->controller->name);
+
+            $type = strtolower($sc->type);
+
+            $ca->name = strtolower($ca->name);
+
+            $context = array_pad(explode("when ", $sc->unsafe_control_action, 2), 2, null)[1];
+            // Removes the "." in the end of the context
+            $context = str_replace(".", "", $context);
+
+            $guidequestion = "What are the causal factors that make the $ca->name to be $type by the $operator when $context?";
+		?>
+		<b>Guide Question</b>: What are the causal factors that make the <b>{{$ca->name}}</b> to be <b>{{$type}}</b> by the <b>{{$operator}}</b> when <b>{{$context}}</b>?
+	</div>
+
+	<br/>
+
+	<div class="center">
+		<button class="gcl2" name="gcl2">Show Generic Control Loop</button>
+	</div>
+
+	<br/>
+	
+	<div class="gcl center" name="gcl" style="display: none;">
+		<img src="{{ asset('images/GCL.png') }}" alt="Generic Control Loop" class="image" syle="visible: false;">
+	</div>
+	
+
+	<br/>
+	
 		<div class="vex-dialog-form">
 			<form action="/addcausal" class="add-causal" method="POST">
-				<input type="hidden" name="_token" value="{{csrf_token()}}">
-				<input type="hidden" name="uca" id="uca" value="0">
-
-				<div class="center">
-					<select id="show-guidewords-{{$uca_id}}" class="choose-guideword">
-						<option value="left">Left side: Safe control action provided but not followed or executed</option>
-						<option value="right">Right side: Unsafe control action provided or safe control action required but not provided</option>
-					</select>
-				</div>
-
-				<br/>
-				
-				<div class="center">
-					@foreach(App\SafetyConstraints::where('id', $uca->id)->get() as $sc)
-						<b>Unsafe Control Action</b>: {{$sc->unsafe_control_action}}
-					@endforeach 
-				</div>
-				<div class="center">
-					<?php
-					 	$operator = strtolower($ca->controller->name);
-
-		                $type = strtolower($sc->type);
-
-		                $ca->name = strtolower($ca->name);
-
-		                $context = array_pad(explode("when ", $sc->unsafe_control_action, 2), 2, null)[1];
-		                // Removes the "." in the end of the context
-		                $context = str_replace(".", "", $context);
-
-		                $guidequestion = "What are the causal factors that make the $ca->name to be $type by the $operator when $context?";
-					?>
-					<b>Guide Question</b>: What are the causal factors that make the <b>{{$ca->name}}</b> to be <b>{{$type}}</b> by the <b>{{$operator}}</b> when <b>{{$context}}</b>?
-				</div>
-
-				<br/>
-
-				<div class="center">
-					<button class="gcl2" name="gcl2">Show Generic Control Loop</button>
-				</div>
-
-				<br/>
-				
-				<div class="gcl center" name="gcl" style="display: none;">
-					<img src="{{ asset('images/GCL.png') }}" alt="Generic Control Loop" class="image" syle="visible: false;">
-				</div>
-				
-
-				<br/>
-
 				<div class="container">
 		    		<div class="container-fluid" style="margin-top: 10px">
 		    			<div class="table-row header">
