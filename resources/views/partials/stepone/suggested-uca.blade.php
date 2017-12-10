@@ -11,12 +11,10 @@
             <div class="container">
                 <div class="container-fluid">
                     <div class="table-row header">
-                        <div class="text">Control Actions</div>
-                        <div class="text">Associated Safety Constraints</div>
+                        <div class="text">Suggested Unsafe Control Actions</div>
+                        <div class="text">Suggested Associated Safety Constraints</div>
                     </div>
-                    <div class="table-row center">
-                        <div class="text">Control Actions</div>
-                        <div class="text">Associated Safety Constraints</div>
+                    <div id="suggested-content-{{$ca->id}}">
                     </div>
                 </div>
             </div>

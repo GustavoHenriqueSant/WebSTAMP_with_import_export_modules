@@ -27,22 +27,27 @@
      *  Create a new array ($allStates) containing all states of all variables
      *  Ex: Variable 1 (State 1, State 2) and Variable 2 (State 3 and State 4)
      *  Resulting array: array([0] => array(State 1, State 2), [1] => array(State 3, State 4))
+     *  Array ($allStatesId) follows the same rule, but I saved the ID and not the name
+     *  Array ($allVariablesId) stores the variable_id of each state_id
      */
 
     for($i = 0; $i < count($variables); $i++) {
         $allStates[$variable_index] = [];
         $allStatesId[$variable_index] = [];
+        $allVariablesId[$variable_index] = [];
         for ($j = 0; $j < count($states); $j++) {
             if ($variables[$i]->id == $states[$j]->variable_id){    
                 array_push($allStates[$variable_index], $states[$j]->name);
                 array_push($allStatesId[$variable_index], $states[$j]->id);
+                array_push($allVariablesId[$variable_index], $states[$j]->variable_id);
             }
         }
         $variable_index++;
     }
 
-    // The number of all loops (The total number of the context table rows)
     $total_loop = 1;
+
+    // The number of all loops (The total number of the context table rows)
     /*
      * Ex: Variable 1 (State 1, State 2) and Variable 2 (State 3 and State 4)
      * Number of total loops: (2 states of Variable 1 x 2 states of variable 2 = 4 rows)
@@ -146,6 +151,7 @@
 
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" id="controlaction_id" name="controlaction_id" value="{{$ca->id}}">
+                <input type="hidden" id="controlaction_name" name="controlaction_name" value="{{$ca->name}}">
                 <input type="hidden" id="total_rows" name="total_rows" value="{{$total_loop}}">
 
                 <div class="table-row header">
@@ -153,6 +159,7 @@
                 <div class="number-contexttable">#</div>
                 @foreach ($variables as $variable)
                     <div class="text">{{$variable->name}}</div>
+                    <input type="hidden" id="varible-name-id-{{$variable->id}}" name="varible-name-id-{{$variable->id}}" value="{{$variable->name}}">
                 @endforeach
                 <div class="text">Index Rule</div>
                 <div class="text">Control Action provided</div>
@@ -184,7 +191,9 @@
                         @for($i = 0; $i < count($allStates); $i++)
                             
                             <div class="text">
-                                {{$allStates[$i][$combination_array[$i]]}} <br/>
+                                {{$allStates[$i][$combination_array[$i]]}}<br/>
+                                <input type="hidden" id="name-state-id-{{$allStatesId[$i][$combination_array[$i]]}}" name="name-state-id-{{$allStatesId[$i][$combination_array[$i]]}}" value="{{$allStates[$i][$combination_array[$i]]}}">
+                                <input type="hidden" id="associated-variable-id-{{$allStatesId[$i][$combination_array[$i]]}}" name="associated-variable-id-{{$allStatesId[$i][$combination_array[$i]]}}" value="{{$allVariablesId[$i][$combination_array[$i]]}}">
                             </div>
                             <?php
                                 array_push($arr, $allStatesId[$i][$combination_array[$i]]);

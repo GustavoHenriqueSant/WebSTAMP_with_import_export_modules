@@ -16465,6 +16465,15 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     if (type == "provided") return "Provided";else if (type == "not provided") return "Not provided";else if (type == "wrong time") return "Provided in wrong time";else if (type == "wrong order") return "Provided in wrong order";else if (type == "too early") return "Provided too early";else if (type == "too late") return "Provided too late";else if (type == "too soon") return "Stopped too soon";else if (type == "too long") return "Applied too long";
   };
 
+  var getVariableName = function getVariableName(id) {
+    var new_id = $("#associated-variable-id-" + id).val();
+    return $("#varible-name-id-" + new_id).val();
+  };
+
+  var getStateName = function getStateName(id) {
+    return $("#name-state-id-" + id).val();
+  };
+
   var generateUCAText = function generateUCAText(controlaction_id, controller_name, controlaction_name, type, states_name) {
     var unsafe_control_action = "";
     var safety_constraint = "";
@@ -16491,7 +16500,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         safety_constraint += ", " + f.toLowerCase();
       } else {
         unsafe_control_action += " and " + f.toLowerCase();
-        safety_constraint += ", " + f.toLowerCase();
+        safety_constraint += " and " + f.toLowerCase();
       }
     });
     unsafe_control_action = unsafe_control_action.replace("when and", "when");
@@ -16615,43 +16624,55 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var controlaction_id = form.attr("id").split("-")[2];
+    var controller_name = form.find("controller_name").val();
+    console.log(controller_name);
     var total_rows = $('#total_rows').val() - 1;
     var possible_uca = [];
     while (total_rows >= 0) {
       var states = $("#all_states_" + total_rows).val();
-      var provided = $("#provided-ca-" + controlaction_id + "-row-" + total_rows).val();
-      var not_provided = $("#notprovided-ca-" + controlaction_id + "-row-" + total_rows).val();
-      var wrong_time = $("#wrongtime-ca-" + controlaction_id + "-row-" + total_rows).val();
-      var early = $("#early-ca-" + controlaction_id + "-row-" + total_rows).val();
-      var late = $("#late-ca-" + controlaction_id + "-row-" + total_rows).val();
-      var soon = $("#soon-ca-" + controlaction_id + "-row-" + total_rows).val();
-      var long = $("#long-ca-" + controlaction_id + "-row-" + total_rows).val();
+      var provided = $("#provided-ca-" + controlaction_id + "-row-" + total_rows + ":enabled").val();
+      var not_provided = $("#notprovided-ca-" + controlaction_id + "-row-" + total_rows + ":enabled").val();
+      var wrong_time = $("#wrongtime-ca-" + controlaction_id + "-row-" + total_rows + ":enabled").val();
+      var early = $("#early-ca-" + controlaction_id + "-row-" + total_rows + ":enabled").val();
+      var late = $("#late-ca-" + controlaction_id + "-row-" + total_rows + ":enabled").val();
+      var soon = $("#soon-ca-" + controlaction_id + "-row-" + total_rows + ":enabled").val();
+      var long = $("#long-ca-" + controlaction_id + "-row-" + total_rows + ":enabled").val();
 
       if (provided == "true") {
         possible_uca.push([controlaction_id, states, "provided"]);
       }
       if (not_provided == "true") {
-        possible_uca.push([controlaction_id, states, "not_provided"]);
+        possible_uca.push([controlaction_id, states, "not provided"]);
       }
       if (wrong_time == "true") {
-        possible_uca.push([controlaction_id, states, "wrong_time"]);
+        possible_uca.push([controlaction_id, states, "wrong time"]);
       }
       if (early == "true") {
-        possible_uca.push([controlaction_id, states, "early"]);
+        possible_uca.push([controlaction_id, states, "too early"]);
       }
       if (late == "true") {
-        possible_uca.push([controlaction_id, states, "late"]);
+        possible_uca.push([controlaction_id, states, "too late"]);
       }
       if (soon == "true") {
-        possible_uca.push([controlaction_id, states, "soon"]);
+        possible_uca.push([controlaction_id, states, "too soon"]);
       }
       if (long == "true") {
-        possible_uca.push([controlaction_id, states, "long"]);
+        possible_uca.push([controlaction_id, states, "too long"]);
       }
-      //console.log(provided + " " + not_provided + " " + wrong_time + " " + early + " " + late + " " + soon + " " + long);
       total_rows--;
     }
-    console.log(possible_uca);
+    var formulario = $("#add-suggested-uca-" + controlaction_id);
+    formulario.find("#suggested-content-" + controlaction_id).html("");
+    var states = [];
+    possible_uca.forEach(function f(index) {
+      states = index[1].split(",");
+      states.forEach(function f(state_id, index) {
+        states[index] = getVariableName(state_id) + " is " + getStateName(state_id);
+      });
+      var UCA_Text = generateUCAText(controlaction_id, "Train Door Controller", "Open Door command", index[2], states);
+      states = [];
+      formulario.find("#suggested-content-" + controlaction_id).append('<div class="table-row"><div class="text">' + UCA_Text.unsafe_control_action + '.</div><div class="text">' + UCA_Text.safety_constraint + '.</div></div>');
+    });
     vex.closeAll();
     vex.open({
       unsafeContent: $("#add-suggested-uca-" + controlaction_id).html(),
@@ -16699,7 +16720,6 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
           return self.indexOf(elem) == pos;
         });
       });
-      console.log("BUP!");
       $("#warning-message-ca-" + ca_id).html("Warning: An error occured on saving the data. Please, revise the following row(s): [" + lines_without_repetition + "]").show();
     });
     //$("#warning-message-ca-" + ca_id).html("Warning: An error occured on saving the data. Please, revise the following row(s): [" + uniqueArray + "]").show();
@@ -16715,7 +16735,6 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   $('body').on('submit', '.adding-uca', function (event) {
     event.preventDefault();
     vex.closeAll();
-    console.log("Adicionou!");
     var form = $(event.currentTarget);
     var controlaction_id = form.find("#controlaction_id").val();
     var controller_name = form.find("#controller_name").val();
