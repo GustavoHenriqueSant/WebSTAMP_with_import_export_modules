@@ -151,7 +151,8 @@
 
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" id="controlaction_id" name="controlaction_id" value="{{$ca->id}}">
-                <input type="hidden" id="controlaction_name" name="controlaction_name" value="{{$ca->name}}">
+                <input type="hidden" id="controlaction_name_{{$ca->id}}" name="controlaction_name_{{$ca->id}}" value="{{$ca->name}}">
+                <input type="hidden" id="controller_name_{{$ca->id}}" name="controller_name_{{$ca->id}}" value="{{$ca->controller->name}}">
                 <input type="hidden" id="total_rows" name="total_rows" value="{{$total_loop}}">
 
                 <div class="table-row header">

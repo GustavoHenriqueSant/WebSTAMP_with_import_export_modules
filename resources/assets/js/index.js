@@ -932,8 +932,9 @@ for (i = 0; i < acc.length; i++) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var controlaction_id = form.attr("id").split("-")[2];
-    var controller_name = form.find("controller_name").val();
-    console.log(controller_name);
+    var controlaction_name = $("#controlaction_name_"+controlaction_id).val();
+    var controller_name = $("#controller_name_"+controlaction_id).val();
+    console.log(controlaction_name);
     var total_rows = $('#total_rows').val() - 1;
     var possible_uca = [];
     while (total_rows >= 0) {
@@ -977,7 +978,7 @@ for (i = 0; i < acc.length; i++) {
       states.forEach(function f(state_id, index) {
         states[index] = getVariableName(state_id) + " is " + getStateName(state_id);
       }); 
-      var UCA_Text = generateUCAText(controlaction_id, "Train Door Controller", "Open Door command", index[2], states);
+      var UCA_Text = generateUCAText(controlaction_id, controller_name, controlaction_name, index[2], states);
       states = [];
       formulario.find("#suggested-content-"+controlaction_id).append('<div class="table-row"><div class="text">'+ UCA_Text.unsafe_control_action +'.</div><div class="text">'+ UCA_Text.safety_constraint +'.</div></div>');
     });
@@ -1296,21 +1297,18 @@ for (i = 0; i < acc.length; i++) {
         if (value) {
           var form = $(event.currentTarget);
           var controlaction_id = form.find("#controlaction_id").val();
+          var controlaction_name = $("#controlaction_name_"+controlaction_id).val();
+          var controller_name = $("#controller_name_"+controlaction_id).val();
           var $newRule = $('#rule-control-action-'+controlaction_id).find(".container-fluid");
           var rule_index = $('#rule-control-action-'+controlaction_id).find(".rules-table").length+1;
           var column = "";
           var columns = form.find("#rule_column").val();
-          columns.forEach(function(column_name, index) {
-            if (index > 0)
-              column += ";" + column_name;
-            else
-              column += column_name;
-          })
           console.log("Coluna: " + column);
           var append = '<div class="table-row rules-table rules-ca-'+controlaction_id+'-rule-'+rule_index+'"><div class="text">R'+rule_index+'</div>';
           var variables_array = [];
           var states_name = [];
           var id = 0;
+          var states_final = []
           // Save each variable of the rule
           var variables = form.find('[id^="variable_id_"]').each(function() {
             var ids = form.find(this).val().split("-");
@@ -1319,9 +1317,13 @@ for (i = 0; i < acc.length; i++) {
             if (state_id > 0)
               variables_array.push(state_id);
             var name = $(this).find('option:selected').attr('name');
+            //variables_array.forEach(function f(state_id, index){
+              //states_final.push(getVariableName(state_id) + " is " + getStateName(state_id));
+            //});
             console.log(name);
             if (name !== "ANY")
-              states_name.push(name);
+              states_final.push(getVariableName(state_id) + " is " + getStateName(state_id));
+              //states_name.push(name);
             append += '<div class="text">'+name+'</div>';
             if (rule_index > 0)
             axios.post('/addrule', {
@@ -1336,28 +1338,29 @@ for (i = 0; i < acc.length; i++) {
                 console.log(error);
             });
           });
-          var sc = generateUCAText(controlaction_id, "Train Door Controller", "Open door command", column.toLowerCase(), states_name);
-          var context = "";
-          variables_array.forEach(function(f, index) {
-            console.log(f);
-            if (index == 0)
-              context += f;
-            else if (index < variables_array.length)
-              context += "," + f;
-          })
-          axios.post('/adduca', {
-            id : id,
-            unsafe_control_action : sc.unsafe_control_action,
-            safety_constraint : sc.safety_constraint,
-            type : column,
-            controlaction_id : controlaction_id,
-            rule_id : id,
-            context : context
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-          console.log(sc.unsafe_control_action);
+          columns.forEach(function(column_name) {
+            var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
+            var context = "";
+            variables_array.forEach(function(f, index) {
+              console.log(f);
+              if (index == 0)
+                context += f;
+              else if (index < variables_array.length)
+                context += "," + f;
+            })
+            axios.post('/adduca', {
+              id : id,
+              unsafe_control_action : sc.unsafe_control_action,
+              safety_constraint : sc.safety_constraint,
+              type : column,
+              controlaction_id : controlaction_id,
+              rule_id : id,
+              context : context
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+          });
           setTimeout(function(){
             var ca = window.location.search.substr(1).split("=");
             console.log(ca);
