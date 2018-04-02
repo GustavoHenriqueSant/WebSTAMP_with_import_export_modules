@@ -165,7 +165,7 @@
                 <div class="text">Index Rule</div>
                 <div class="text">Control Action provided</div>
                 <div class="text">Control Action not provided</div>
-                <div class="text">Wrong time/order of Control Action</div>
+                <div class="text">Wrong order of Control Action</div>
                 <div class="text">Control Action provided too early</div>
                 <div class="text">Control Action provided too late</div>
                 <div class="text">Control Action stopped too soon</div>

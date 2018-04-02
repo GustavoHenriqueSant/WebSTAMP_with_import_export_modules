@@ -12488,7 +12488,7 @@ return Drop;
 }));
 
 },{"tether":30}],30:[function(require,module,exports){
-/*! tether 1.4.0 */
+/*! tether 1.4.3 */
 
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -12567,7 +12567,7 @@ function getScrollParents(el) {
     var overflowX = _style.overflowX;
     var overflowY = _style.overflowY;
 
-    if (/(auto|scroll)/.test(overflow + overflowY + overflowX)) {
+    if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
       if (position !== 'absolute' || ['relative', 'absolute', 'fixed'].indexOf(style.position) >= 0) {
         parents.push(parent);
       }
@@ -12966,7 +12966,7 @@ var position = function position() {
 };
 
 function now() {
-  if (typeof performance !== 'undefined' && typeof performance.now !== 'undefined') {
+  if (typeof performance === 'object' && typeof performance.now === 'function') {
     return performance.now();
   }
   return +new Date();
@@ -13738,7 +13738,9 @@ var TetherClass = (function (_Evented) {
 
       if (!moved) {
         if (this.options.bodyElement) {
-          this.options.bodyElement.appendChild(this.element);
+          if (this.element.parentNode !== this.options.bodyElement) {
+            this.options.bodyElement.appendChild(this.element);
+          }
         } else {
           var offsetParentIsBody = true;
           var currentNode = this.element.parentNode;
@@ -16629,6 +16631,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     console.log(controlaction_name);
     var total_rows = $('#total_rows').val() - 1;
     var possible_uca = [];
+    var my_id = -1;
     while (total_rows >= 0) {
       var states = $("#all_states_" + total_rows).val();
       var provided = $("#provided-ca-" + controlaction_id + "-row-" + total_rows + ":enabled").val();
@@ -16672,10 +16675,12 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       });
       var UCA_Text = generateUCAText(controlaction_id, controller_name, controlaction_name, index[2], states);
       states = [];
-      formulario.find("#suggested-content-" + controlaction_id).append('<div class="table-row"><div class="text">' + UCA_Text.unsafe_control_action + '.</div><div class="text">' + UCA_Text.safety_constraint + '.</div></div>');
+      my_id++;
+      formulario.find("#suggested-content-" + controlaction_id).append('<div class="table-row"><div class="text" id="suggested-uca-' + my_id + '">' + UCA_Text.unsafe_control_action + '.</div><div class="text" id="suggested-sc-' + my_id + '">' + UCA_Text.safety_constraint + '.</div><div class="text center"><input type="checkbox" style="display: inline-block; height: 100%; vertical-align: middle;" class="associated-checkbox" id="checkbox-' + my_id + '"></div><input type="hidden" id="context-' + my_id + ' value="' + index + '"/></div>');
     });
     vex.closeAll();
     vex.open({
+      // overlayClosesOnClick: false,
       unsafeContent: $("#add-suggested-uca-" + controlaction_id).html(),
       buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
       showCloseButton: true,
@@ -16927,7 +16932,9 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
           var rule_index = $('#rule-control-action-' + controlaction_id).find(".rules-table").length + 1;
           var column = "";
           var columns = form.find("#rule_column").val();
-          console.log("Coluna: " + column);
+          for (var i = 0; i < columns.length; i++) {
+            column += i < columns.length - 1 ? columns[i] + ";" : columns[i];
+          }
           var append = '<div class="table-row rules-table rules-ca-' + controlaction_id + '-rule-' + rule_index + '"><div class="text">R' + rule_index + '</div>';
           var variables_array = [];
           var states_name = [];
