@@ -73,9 +73,18 @@
             // Removes the "." in the end of the context
             $context = str_replace(".", "", $context);
 
+
+            $array_types = explode(";", $type);
+
+            foreach ($array_types as $myType) {
+            	if (strpos($sc->unsafe_control_action, $myType) !== false)
+            		$type = $myType;
+            }
+
             $guidequestion = "What are the causal factors that make the $ca->name to be $type by the $operator when $context?";
 		?>
 		<b>Guide Question</b>: What are the causal factors that make the <b>{{$ca->name}}</b> to be <b>{{$type}}</b> by the <b>{{$operator}}</b> when <b>{{$context}}</b>?
+
 	</div>
 
 	<br/>

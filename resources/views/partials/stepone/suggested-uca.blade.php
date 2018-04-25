@@ -18,16 +18,16 @@
                     <div id="suggested-content-{{$ca->id}}">
                     </div>
                 </div>
-            </div>
-            
-            
-            <div class="vex-dialog-input"></div>
-            <div class="vex-dialog-buttons">
-                <div style="display: table; margin: 0 auto;">
-                    <button class="vex-dialog-button-primary vex-dialog-button vex-first">Add</button>
-                    <!--<button class="vex-dialog-button-secondary vex-dialog-button vex-last">Cancel</button>-->
+                
+                
+                <div class="vex-dialog-input"></div>
+                <div class="vex-dialog-buttons">
+                    <div style="display: table; margin: 0 auto;">
+                        <button class="vex-dialog-button-primary vex-dialog-button vex-first">Add</button>
+                        <!--<button class="vex-dialog-button-secondary vex-dialog-button vex-last">Cancel</button>-->
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </form>
 </div>

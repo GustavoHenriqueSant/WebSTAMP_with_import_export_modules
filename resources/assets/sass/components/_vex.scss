@@ -151,6 +151,9 @@
   overflow: scroll; }
 
 .vex-overlay {
+  pointer-events: none;
+  /*display: none;*/
+  right: 16px;
   background: #000;
   filter: alpha(opacity=40);
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)"; }

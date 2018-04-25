@@ -17,6 +17,13 @@
                 $context = str_replace(".", "", $context);
                 //$context = $context[1];
 
+                $array_types = explode(";", $type);
+
+                foreach ($array_types as $myType) {
+                    if (strpos($safety_constraint->unsafe_control_action, $myType) !== false)
+                        $type = $myType;
+                }
+
                 $guidequestion = "What are the causal factors that make the $ca->name to be $type by the $operator when $context?";
     ?>
     <button class="accordion" id="causal_analysis-{{$ca->id}}"><b>[UCA - {{$safety_constraint->id}}]</b> {{$safety_constraint->unsafe_control_action}} <br/> <b>[Guide Question]</b> {{$guidequestion}}</button>

@@ -990,6 +990,7 @@ for (i = 0; i < acc.length; i++) {
   });
     vex.closeAll();
     vex.open({
+      // overlayClosesOnClick: false,
       unsafeContent: $("#add-suggested-uca-" + controlaction_id).html(),
       buttons: [
         $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
@@ -1288,7 +1289,9 @@ for (i = 0; i < acc.length; i++) {
           var rule_index = $('#rule-control-action-'+controlaction_id).find(".rules-table").length+1;
           var column = "";
           var columns = form.find("#rule_column").val();
-          console.log("Coluna: " + column);
+          for (var i=0; i < columns.length; i++) {
+            column += (i < columns.length-1) ? columns[i] + ";" : columns[i];
+          }
           var append = '<div class="table-row rules-table rules-ca-'+controlaction_id+'-rule-'+rule_index+'"><div class="text">R'+rule_index+'</div>';
           var variables_array = [];
           var states_name = [];
