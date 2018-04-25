@@ -13,6 +13,7 @@
                     <div class="table-row header">
                         <div class="text">Suggested Unsafe Control Actions</div>
                         <div class="text">Suggested Associated Safety Constraints</div>
+                        <div class="content-uca">Include?</div>
                     </div>
                     <div id="suggested-content-{{$ca->id}}">
                     </div>

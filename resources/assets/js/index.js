@@ -937,6 +937,7 @@ for (i = 0; i < acc.length; i++) {
     console.log(controlaction_name);
     var total_rows = $('#total_rows').val() - 1;
     var possible_uca = [];
+    var causal_id = 0;
     while (total_rows >= 0) {
       var states = $("#all_states_" + total_rows).val();
       var provided = $("#provided-ca-" + controlaction_id + "-row-" + total_rows + ":enabled").val();
@@ -974,14 +975,19 @@ for (i = 0; i < acc.length; i++) {
     formulario.find("#suggested-content-"+controlaction_id).html("");
     var states = [];
     possible_uca.forEach(function f(index){
+      var type = index[2];
       states = index[1].split(",");
+      var context = states;
+      var estados = [];
       states.forEach(function f(state_id, index) {
-        states[index] = getVariableName(state_id) + " is " + getStateName(state_id);
+        estados[index] = getVariableName(state_id) + " is " + getStateName(state_id);
       }); 
-      var UCA_Text = generateUCAText(controlaction_id, controller_name, controlaction_name, index[2], states);
+      var UCA_Text = generateUCAText(controlaction_id, controller_name, controlaction_name, index[2], estados);
       states = [];
-      formulario.find("#suggested-content-"+controlaction_id).append('<div class="table-row"><div class="text">'+ UCA_Text.unsafe_control_action +'.</div><div class="text">'+ UCA_Text.safety_constraint +'.</div></div>');
-    });
+      estados = [];
+      formulario.find("#suggested-content-"+controlaction_id).append('<div class="table-row"><div class="text" id="uca-'+causal_id+'">'+ UCA_Text.unsafe_control_action +'.</div><div class="text" id="sc-'+causal_id+'">'+ UCA_Text.safety_constraint +'.</div><div class="content-uca center"><input type="checkbox" style="display: inline-block; height: 100%; vertical-align: middle;" class="associated-checkbox" id="checkbox-'+causal_id+'"><input type="hidden" id="context-'+causal_id+'" value="'+context+'"/><input type="hidden" id="type-'+causal_id+'" value="'+type+'"/></div></div>');
+      causal_id++;
+  });
     vex.closeAll();
     vex.open({
       unsafeContent: $("#add-suggested-uca-" + controlaction_id).html(),
@@ -1066,52 +1072,31 @@ for (i = 0; i < acc.length; i++) {
     var controller_name = form.find("#controller_name").val();
     var controlaction_name = form.find("#controlaction_name").val();
     var type = "";
-    $(".type-uca").each(function(index, f){
-      if (index > 0 && f.id.split("-")[2] == controlaction_id){
-        type = $(f).find("option:selected").val();         
-      }
+    form.find(".associated-checkbox:checked").each(function(index, f){
+      var id = 0;
+      var checkbox_id = f.id.split("-")[1];
+      var unsafe_control_action = form.find("#uca-"+checkbox_id).text();
+      var safety_constraint = form.find("#sc-"+checkbox_id).text();
+      var context = form.find("#context-"+checkbox_id).val();
+      var type = form.find("#type-"+checkbox_id).val();
+      type = convertType(type);
+      var rule_id = 0;
+      axios.post('/adduca', {
+        id : id,
+        unsafe_control_action : unsafe_control_action,
+        safety_constraint : safety_constraint,
+        type : type,
+        controlaction_id : controlaction_id,
+        rule_id : rule_id,
+        context : context
+      })
+      .then(function (response) {
+        $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
     });
-    var states = [];
-    var states_name = [];
-    form.find(".uca-row-" + controlaction_id + " option:selected").each(function(index, f){
-      if (f.value.split("-")[0] > 0){
-        states.push(f.value.split("-")[0]);
-        states_name.push(f.value.split("-")[1] + " is " + f.text);
-      }
-    })
-    var uca_sc = generateUCAText(controlaction_id, controller_name, controlaction_name, type, states_name);
-    var unsafe_control_action = uca_sc.unsafe_control_action;
-    var safety_constraint = uca_sc.safety_constraint;
-    if(states_name.length > 0){
-      $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/> " + unsafe_control_action + ".");
-      $(".safety-control").html("<br/><center><b>Associated safety constraint:</b></center><br/> " + safety_constraint + ".");
-    }
-    var id = 0;
-    var rule_id = 0;
-    type = convertType(type);
-    var context = "";
-    states.forEach(function(f, index) {
-      console.log(f);
-      if (index == 0)
-        context += f;
-      else if (index < states.length)
-        context += "," + f;
-    })
-    axios.post('/adduca', {
-      id : id,
-      unsafe_control_action : unsafe_control_action,
-      safety_constraint : safety_constraint,
-      type : type,
-      controlaction_id : controlaction_id,
-      rule_id : rule_id,
-      context : context
-    })
-    .then(function (response) {
-      $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
   });
 
   function generateUCAText(controlaction_id, controller_name, controlaction_name, type, states_name) {
