@@ -81,8 +81,25 @@
     <div class="navbar__item navbar__item--right">
       <div class="navbar__item__content">
         <a href="/" class="navbar__item__link">
-          User info
+          {{Auth::user()->name}}
         </a>
+      </div>
+      <div class="navbar__item__substeps">
+        <div class="navbar__item__substep">
+          <a href="/#systemgoals" class="navbar__item__link">
+            My Info
+          </a>
+        </div>
+        <div class="navbar__item__substep">
+          <a href="/#accidents" class="navbar__item__link">
+            My Projects
+          </a>
+        </div>
+        <div class="navbar__item__substep">
+          <a href="/#hazards" class="navbar__item__link">
+            Logout
+          </a>
+        </div>
       </div>
     </div>
   </nav>

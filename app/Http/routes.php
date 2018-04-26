@@ -11,10 +11,14 @@
 |
 */
 
-Route::get('/', ['as' => 'fundamentals', function () {
+Route::get('/fundamentals', ['as' => 'fundamentals', function () {
 	$project_id = 1;
     $accidents = App\Accidents::where('project_id', $project_id)->get();
-    return view('pages.index', compact("accidents", "project_id"));
+    return view('pages.home', compact("accidents", "project_id"));
+}]);
+
+Route::get('/', ['as' => 'login', function () {
+    return view('auth.login');
 }]);
 
 Route::post('/addsystemgoal', 'SystemGoalController@add');
