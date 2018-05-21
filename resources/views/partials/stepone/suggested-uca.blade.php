@@ -27,7 +27,7 @@
                         <!--<button class="vex-dialog-button-secondary vex-dialog-button vex-last">Cancel</button>-->
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </form>
 </div>
