@@ -17,7 +17,7 @@ class SystemSafetyConstraintController extends Controller
 		$sys_safety_contraint = new SystemSafetyConstraints();
 		$sys_safety_contraint->name = $request->input('name');
 		$sys_safety_contraint->description = "Teste";
-		$sys_safety_contraint->project_id = 1;
+		$sys_safety_contraint->project_id = 2;
 
 		$sys_safety_contraint->save();
 

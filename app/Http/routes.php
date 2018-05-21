@@ -19,7 +19,10 @@
 
 Route::get('/', ['as' => 'home', function () {
 	if (Auth::check()) {
-		$project_id = 1;
+        if (Auth::user()->name == "Celso Hirata")
+		    $project_id = 2;
+        else
+            $project_id = 1;
     	$accidents = App\Accidents::where('project_id', $project_id)->get();
     	return view('pages.home', compact("accidents", "project_id"));
 	}
@@ -29,7 +32,10 @@ Route::get('/', ['as' => 'home', function () {
 
 Route::get('/stepone', ['as' => 'stepone', function () {
 	if (Auth::check()) {
-		$project_id = 1;
+		if (Auth::user()->name == "Celso Hirata")
+            $project_id = 2;
+        else
+            $project_id = 1;
     	$accidents = App\Accidents::where('project_id', $project_id)->get();
     	return view('pages.stepone', compact("accidents", "project_id"));
 	}
@@ -38,7 +44,10 @@ Route::get('/stepone', ['as' => 'stepone', function () {
 }]);
 
 Route::get('/steptwo', ['as' => 'steptwo', function () {
-	$project_id = 1;
+	if (Auth::user()->name == "Celso Hirata")
+            $project_id = 2;
+        else
+            $project_id = 1;
     return view('pages.steptwo', compact("project_id"));
 }]);
 

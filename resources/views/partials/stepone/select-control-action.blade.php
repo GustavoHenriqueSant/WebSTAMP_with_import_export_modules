@@ -7,8 +7,8 @@
     <div class="container">
 
         <select id="control-actions-select" name="control-actions-select">
-        	@foreach(App\Components::where("project_id", $project_id)->get() as $controller)
-	            @foreach(App\ControlAction::where("controller_id", $controller->id)->get() as $ca)
+        	@foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
+                @foreach(App\ControlAction::where('controller_id', $controller->id)->get() as $ca)
 	                <option value="{{$ca->id}}">{{$ca->name}} ({{$ca->controller->name}})</option>
 	            @endforeach
             @endforeach

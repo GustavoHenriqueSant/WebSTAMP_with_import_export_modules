@@ -132,7 +132,7 @@
                 </div>
                 
                 <div class="substep substep--variables-associated" id="variables-0">
-                    @include('partials.fundamentals.variables')
+                    <!-- @include('partials.fundamentals.variables') -->
                 </div>
             </div>
         @endforeach

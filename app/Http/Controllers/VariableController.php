@@ -27,7 +27,7 @@ class VariableController extends Controller
 		$variable = new Variable();
 		$variable->controller_id = $request->input('controller_id');
 		$variable->name = $request->input('name');
-		$variable->project_id = 1;
+		$variable->project_id = 2;
 
 		$variable->save();
 

@@ -15,33 +15,33 @@
     @if (Auth::check())
       <div class="navbar__item">
         <div class="navbar__item__content">
-          <a href="/fundamentals" class="navbar__item__link">
+          <a href="/" class="navbar__item__link">
             Fundamentals
           </a>
         </div>
         <div class="navbar__item__substeps">
           <div class="navbar__item__substep">
-            <a href="/fundamentals#systemgoals" class="navbar__item__link">
+            <a href="/#systemgoals" class="navbar__item__link">
               System Goals
             </a>
           </div>
           <div class="navbar__item__substep">
-            <a href="/fundamentals#accidents" class="navbar__item__link">
+            <a href="/#accidents" class="navbar__item__link">
               Accidents
             </a>
           </div>
           <div class="navbar__item__substep">
-            <a href="/fundamentals#hazards" class="navbar__item__link">
+            <a href="/#hazards" class="navbar__item__link">
               Hazards
             </a>
           </div>
           <div class="navbar__item__substep">
-            <a href="/fundamentals#systemsafetyconstraint" class="navbar__item__link">
+            <a href="/#systemsafetyconstraint" class="navbar__item__link">
               System Safety Constraints
             </a>
           </div>
           <div class="navbar__item__substep">
-            <a href="/fundamentals#components" class="navbar__item__link">
+            <a href="/#components" class="navbar__item__link">
               Components
             </a>
           </div>

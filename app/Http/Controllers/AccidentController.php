@@ -17,7 +17,7 @@ class AccidentController extends Controller
 		$accident = new Accidents();
 		$accident->name = $request->input('name');
 		$accident->description = "Teste";
-		$accident->project_id = 1;
+		$accident->project_id = 2;
 
 		$accident->save();
 
