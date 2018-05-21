@@ -8,7 +8,7 @@
 
 <div class="substep__content">
     <ul class="substep__list">
-        @foreach (App\SystemSafetyConstraints::all() as $systemSafetyConstraint)
+        @foreach (App\SystemSafetyConstraints::where('project_id', $project_id)->get() as $systemSafetyConstraint)
             <li class="item" id="systemsafetyconstraint-{{$systemSafetyConstraint->id}}">
                 <div class="item__title">
                     SSC-{{$systemSafetyConstraint->id}}: <input type="text" class="item__input" id="systemsafetyconstraint-description-{{$systemSafetyConstraint->id}}" value="{{$systemSafetyConstraint->name}}" disabled>

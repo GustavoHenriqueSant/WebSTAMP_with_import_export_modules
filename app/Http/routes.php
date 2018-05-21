@@ -11,13 +11,39 @@
 |
 */
 
-Route::get('/fundamentals', ['as' => 'fundamentals', function () {
-	$project_id = 1;
-    $accidents = App\Accidents::where('project_id', $project_id)->get();
-    return view('pages.home', compact("accidents", "project_id"));
+// Route::get('/fundamentals', ['as' => 'fundamentals', function () {
+// 	$project_id = 1;
+//     $accidents = App\Accidents::where('project_id', $project_id)->get();
+//     return view('pages.home', compact("accidents", "project_id"));
+// }]);
+
+Route::get('/', ['as' => 'home', function () {
+	if (Auth::check()) {
+		$project_id = 1;
+    	$accidents = App\Accidents::where('project_id', $project_id)->get();
+    	return view('pages.home', compact("accidents", "project_id"));
+	}
+    else
+    	return view('home');
 }]);
 
-Route::get('/', ['as' => 'login', function () {
+Route::get('/stepone', ['as' => 'stepone', function () {
+	if (Auth::check()) {
+		$project_id = 1;
+    	$accidents = App\Accidents::where('project_id', $project_id)->get();
+    	return view('pages.stepone', compact("accidents", "project_id"));
+	}
+    else
+    	return view('home');
+}]);
+
+Route::get('/steptwo', ['as' => 'steptwo', function () {
+	$project_id = 1;
+    return view('pages.steptwo', compact("project_id"));
+}]);
+
+
+Route::get('/login', ['as' => 'login', function () {
     return view('auth.login');
 }]);
 
@@ -82,14 +108,6 @@ Route::post('/deleteaccidentassociated', 'AccidentHazardController@delete');
 Route::post('/addrule', 'RuleController@add');
 Route::post('/refreshPage', 'RuleController@refreshPage');
 Route::post('/deleterule', 'RuleController@delete');
-
-Route::get('/stepone', ['as' => 'stepone', function () {
-    return view('pages.stepone');
-}]);
-
-Route::get('/steptwo', ['as' => 'steptwo', function () {
-    return view('pages.steptwo');
-}]);
 
 Route::post('/savecontexttable', 'ContextTableController@save');
 Route::post('/deletecontexttable', 'ContextTableController@delete');

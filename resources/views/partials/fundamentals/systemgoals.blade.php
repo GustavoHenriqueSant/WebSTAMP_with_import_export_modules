@@ -8,7 +8,7 @@
 
 <div class="substep__content">
     <ul class="substep__list">
-        @foreach (App\SystemGoals::all() as $systemGoal)
+        @foreach (App\SystemGoals::where('project_id', $project_id)->get() as $systemGoal)
             <li class="item" id="systemgoal-{{$systemGoal->id}}">
                 <div class="item__title">
                     G-{{$systemGoal->id}}: <input type="text" class="item__input" id="systemgoal-description-{{$systemGoal->id}}" value="{{$systemGoal->name}}" disabled>

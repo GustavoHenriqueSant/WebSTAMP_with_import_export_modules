@@ -8,7 +8,7 @@
 
 <div class="substep__content" id="hazards_content" data-accidents="{{$accidents}}">
     <ul class="substep__list">
-        @foreach (App\Hazards::all() as $hazard)
+        @foreach (App\Hazards::where('project_id', $project_id)->get() as $hazard)
             <li class="item" id="hazard-{{$hazard->id}}">
                 <div class="item__title">
                     H-{{$hazard->id}}: <input type="text" class="item__input" id="hazard-description-{{$hazard->id}}" value="{{ $hazard->name }}" disabled>

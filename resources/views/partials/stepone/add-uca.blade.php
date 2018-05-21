@@ -1,5 +1,5 @@
 <?php
-    $variables = App\Variable::where('project_id', 1)->where('controller_id', 0)->orWhere('controller_id', $controller->id)->get();
+    $variables = App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $controller->id])->get();
 ?>
 <div id="add-new-uca-{{$ca->id}}" style="display: none;">
     <form action="/addnewuca" class="adding-uca" method="POST">

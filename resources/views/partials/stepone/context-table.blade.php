@@ -1,6 +1,7 @@
 <?php
     // Getting all variables
-    $variables = App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->orderBy('id')->get();
+    // $variables = App\Variable::where('project_id', $project_id)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->orderBy('id')->get();
+    $variables = App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $ca->controller->id])->orderBy('id')->get();
     // Getting all States
     $states = [];
     //Selecting the divisor
@@ -22,6 +23,8 @@
     $loop = 0;
     $arr = array();
     $pos = 0;
+    $allStates = [];
+
 
     /*  
      *  Create a new array ($allStates) containing all states of all variables
@@ -30,7 +33,6 @@
      *  Array ($allStatesId) follows the same rule, but I saved the ID and not the name
      *  Array ($allVariablesId) stores the variable_id of each state_id
      */
-
     for($i = 0; $i < count($variables); $i++) {
         $allStates[$variable_index] = [];
         $allStatesId[$variable_index] = [];
@@ -94,12 +96,13 @@
     
 
 ?>
+
 <div class="substep__title">
     Context Table - {{$ca->name}}
 </div>
 
 <div class="substep__content">
-
+@if (count($variables) > 0)
     <div class="legend-contexttable">
         <div class="container">
             <div class="container-fluid" style="margin-top: 10px">
@@ -643,4 +646,5 @@
             </form>
         </div>
     </div>
+@endif
 </div>

@@ -6,7 +6,7 @@
         @include('partials.stepone.select-control-action')
 	</div>
 	    
-    @foreach(App\Controllers::where('project_id', 1)->get() as $controller)
+    @foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
     	@foreach(App\ControlAction::where('controller_id', $controller->id)->get() as $ca)
 		    <div id="control-action-{{$ca->id}}" class="hide-control-actions" name="control-action-{{$ca->id}}" style="display:none;">
 			    <div class="substep substep--addrule" id="addrule">

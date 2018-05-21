@@ -4,6 +4,7 @@
 
 <div class="substep__content">
 
+    @if (App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $controller->id])->count())
     <div class="container">
 
         <div class="container-fluid control-action-{{$ca->id}}" style="margin-top: 10px">
@@ -11,7 +12,7 @@
             <div class="table-row header">
                 <div class="text">Rule Index</div>
                 <div class="text">Column(s)</div>
-                @foreach (App\Variable::where('project_id', 1)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->get() as $variable)
+                @foreach (App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $controller->id])->get() as $variable)
                     <div class="text">{{$variable->name}}</div>
                 @endforeach
                 <div class="content-uca">
@@ -60,4 +61,5 @@
 
     </div>
 
+    @endif
 </div>

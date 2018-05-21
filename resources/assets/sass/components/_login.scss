@@ -1,0 +1,50 @@
+.login {
+	font-family: "Lato";
+	border: 3px solid #2c3e50;
+	border-radius: 15px;
+	padding: 20px;
+	width: 20%;
+	margin: auto;
+	/*text-align: center;*/
+}
+
+	.login h2, .login h3 {
+		text-align: center;
+		font-weight: bolder; 
+	}
+
+	.login hr {
+		margin-bottom: 20px;
+	}
+
+	.login label[for=name], .login label[for=email], .login label[for=password], .login label[for=password-confirm] {
+		font-weight: bold;
+	}
+
+	.login button[type=submit] {
+		background-color: #2c3e50;
+		color: white; 
+		border: 3px solid #2c3e50;
+		padding: 5px;
+		width: 30%;
+		margin: auto;
+	}
+
+	.login .field {
+		padding: 5px;
+	}
+
+	.login .verify-credentials {
+		text-align: center;
+		font-family: serif;
+	}
+
+.login-input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
