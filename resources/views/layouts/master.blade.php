@@ -93,7 +93,7 @@
 
       <div class="navbar__item">
         <div class="navbar__item__content">
-          <a href="/" class="navbar__item__link">
+          <a href="/#tool" class="navbar__item__link">
             STPA Tool
           </a>
         </div>
@@ -101,7 +101,7 @@
 
       <div class="navbar__item">
         <div class="navbar__item__content">
-          <a href="/stepone" class="navbar__item__link">
+          <a href="/#about" class="navbar__item__link">
             About
           </a>
         </div>
@@ -109,7 +109,7 @@
 
       <div class="navbar__item">
         <div class="navbar__item__content">
-          <a href="/steptwo" class="navbar__item__link">
+          <a href="/#authors" class="navbar__item__link">
             Authors
           </a>
         </div>

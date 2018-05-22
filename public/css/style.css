@@ -367,6 +367,18 @@ html, body {
   text-align: center;
   font-weight: bolder; }
 
+.login p {
+  font-size: 18px;
+  font-family: "Lato";
+  text-align: justify;
+  padding: 0 15px 0 15px; }
+
+.author-name {
+  font-size: 22px;
+  font-weight: bold;
+  font-family: "Lato";
+  margin-top: 10px; }
+
 .login hr {
   margin-bottom: 20px; }
 
