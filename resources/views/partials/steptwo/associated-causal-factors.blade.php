@@ -110,6 +110,7 @@
 		    				<div class="text">Scenario</div>
 		    				<div class="text">Associated Causal Factors</div>
 		    				<div class="text">Recommendations</div>
+		    				<input type="hidden" id="uca" name="uca" value="{{$uca->id}}"/>
 		    				<!-- <div class="text">Role</div> -->
 		    				<div class="text">Rationale</div>
 		    				<div class="text">Include?</div>

@@ -12,6 +12,9 @@
             <li class="item" id="systemsafetyconstraint-{{$systemSafetyConstraint->id}}">
                 <div class="item__title">
                     SSC-{{$systemSafetyConstraint->id}}: <input type="text" class="item__input" id="systemsafetyconstraint-description-{{$systemSafetyConstraint->id}}" value="{{$systemSafetyConstraint->name}}" disabled>
+                    <div class="item__actions__action" id="accident-associated-1">
+                        <a href="javascript:;" class="item__delete__box">×</a> [A-1]
+                    </div>
                 </div>
                 <div class="item__actions">
                     <form action ="/editsystemsafetyconstraint" method="POST" class="edit-form ajaxform" data-edit="systemsafetyconstraint">

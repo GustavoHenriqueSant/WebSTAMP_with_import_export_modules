@@ -16293,6 +16293,17 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         }
       }
     });
+  });
+
+  // Mission Assurance
+  $('body').on('click', '.add-mission-assurance', function (event) {
+    event.preventDefault();
+    vex.open({
+      unsafeContent: $("#add-a-new-mission-assurance").html(),
+      buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
+      showCloseButton: true,
+      className: "vex-theme-default"
+    });
   });$("body").on('blur', '.item__input__active', function (event) {
     event.preventDefault();
     var split = event.currentTarget.id.split("-");
@@ -17259,7 +17270,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var _axios$post2;
 
       var causal_id = f.id.split("-")[1];
-      console.log(causal_id);
+      // console.log(causal_id);
       form.find("#guideword-scenario-" + causal_id).remove(".listing-guidewords");
       var scenario = form.find("#getting-scenario-" + causal_id).text();
       var associated = form.find("#guideword-associated-" + causal_id).text();
@@ -17268,7 +17279,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var rationale = form.find("#guideword-rationale-" + causal_id).text();
       var guideword = form.find("#guideword-" + causal_id).val();
       var safety = form.find("#uca").val();
-      console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
+      // console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
+      console.log("UCA: " + safety);
       var id = 0;
       axios.post('/addtuple', (_axios$post2 = {
         id: id }, _defineProperty(_axios$post2, 'id', id), _defineProperty(_axios$post2, 'scenario', scenario), _defineProperty(_axios$post2, 'associated', associated), _defineProperty(_axios$post2, 'requirement', requirement), _defineProperty(_axios$post2, 'role', role), _defineProperty(_axios$post2, 'rationale', rationale), _defineProperty(_axios$post2, 'guideword', guideword), _defineProperty(_axios$post2, 'safety', safety), _axios$post2)).then(function (response) {

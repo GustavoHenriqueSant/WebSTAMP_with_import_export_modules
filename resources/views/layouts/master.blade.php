@@ -13,56 +13,58 @@
     </div>
 
     @if (Auth::check())
-      <div class="navbar__item">
-        <div class="navbar__item__content">
-          <a href="/" class="navbar__item__link">
-            Fundamentals
-          </a>
+      @if(isset($slug))
+        <div class="navbar__item">
+          <div class="navbar__item__content">
+            <a href="/{{$slug}}/fundamentals" class="navbar__item__link">
+              Fundamentals
+            </a>
+          </div>
+          <div class="navbar__item__substeps">
+            <div class="navbar__item__substep">
+              <a href="/{{$slug}}/fundamentals#systemgoals" class="navbar__item__link">
+                System Goals
+              </a>
+            </div>
+            <div class="navbar__item__substep">
+              <a href="/{{$slug}}/fundamentals#accidents" class="navbar__item__link">
+                Accidents
+              </a>
+            </div>
+            <div class="navbar__item__substep">
+              <a href="/{{$slug}}/fundamentals#hazards" class="navbar__item__link">
+                Hazards
+              </a>
+            </div>
+            <div class="navbar__item__substep">
+              <a href="/{{$slug}}/fundamentals#systemsafetyconstraint" class="navbar__item__link">
+                System Safety Constraints
+              </a>
+            </div>
+            <div class="navbar__item__substep">
+              <a href="/{{$slug}}/fundamentals#components" class="navbar__item__link">
+                Components
+              </a>
+            </div>
+          </div>
         </div>
-        <div class="navbar__item__substeps">
-          <div class="navbar__item__substep">
-            <a href="/#systemgoals" class="navbar__item__link">
-              System Goals
-            </a>
-          </div>
-          <div class="navbar__item__substep">
-            <a href="/#accidents" class="navbar__item__link">
-              Accidents
-            </a>
-          </div>
-          <div class="navbar__item__substep">
-            <a href="/#hazards" class="navbar__item__link">
-              Hazards
-            </a>
-          </div>
-          <div class="navbar__item__substep">
-            <a href="/#systemsafetyconstraint" class="navbar__item__link">
-              System Safety Constraints
-            </a>
-          </div>
-          <div class="navbar__item__substep">
-            <a href="/#components" class="navbar__item__link">
-              Components
-            </a>
-          </div>
-        </div>
-      </div>
 
-      <div class="navbar__item">
-        <div class="navbar__item__content">
-          <a href="/stepone" class="navbar__item__link">
-            STPA Step 1
-          </a>
+        <div class="navbar__item">
+          <div class="navbar__item__content">
+            <a href="/{{$slug}}/stepone" class="navbar__item__link">
+              STPA Step 1
+            </a>
+          </div>
         </div>
-      </div>
 
-      <div class="navbar__item">
-        <div class="navbar__item__content">
-          <a href="/steptwo" class="navbar__item__link">
-            STPA Step 2
-          </a>
+        <div class="navbar__item">
+          <div class="navbar__item__content">
+            <a href="/{{$slug}}/steptwo" class="navbar__item__link">
+              STPA Step 2
+            </a>
+          </div>
         </div>
-      </div>
+      @endif
 
       <div class="navbar__item navbar__item--right">
         <div class="navbar__item__content">
@@ -77,7 +79,7 @@
             </a>
           </div>
           <div class="navbar__item__substep">
-            <a href="/#accidents" class="navbar__item__link">
+            <a href="/projects" class="navbar__item__link">
               My Projects
             </a>
           </div>

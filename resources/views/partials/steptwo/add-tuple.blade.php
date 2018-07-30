@@ -1,10 +1,10 @@
 <div id="add-tuple" style="display: none;">
-        <div class="center">
+        <!-- <div class="center">
                 <b>Unsafe Control Action</b>: <span name="4tupleUCA" id="4tupleUCA"></span>
         </div>
         <div class="center">
                 <b>Guide Question</b>: <span name="4tupleGQ" id="4tupleGQ"></span>
-        </div>
+        </div> -->
         <!-- @begin Showing the Generic Control Loop -->
         <div class="center">
                 <button class="gcl2" name="gcl2">Show Generic Control Loop</button>
@@ -21,6 +21,42 @@
 		<div class="vex-dialog-form">
 			<div class="container">
         		<div class="container-fluid">
+                                <!-- Begin: Delete after STPA-Sec paper -->
+                                <div style="width: 100%;">
+                                        <div style="width: 15%; float: left; font-weight: bold; white-space: nowrap;">
+                                                Process Model Variables
+                                        </div>
+                                        <div style="width: 85%; float: right; font-weight: bold; white-space: nowrap;text-align: center;">
+                                                Information Lifecycle Analysis
+                                        </div>
+                                </div>
+                                <div class="table-row">
+                                        <div class="text"><b>Authenticated: </b></div>
+                                        <div class="text"><input type="checkbox"> Inf. Generation</div>
+                                        <div class="text"><input type="checkbox"> Inf. Processing</div>
+                                        <div class="text"><input type="checkbox"> Inf. Storage</div>
+                                        <div class="text"><input type="checkbox"> Inf. Communication</div>
+                                        <div class="text"><input type="checkbox"> Inf. Consumption</div>
+                                        <div class="text"><input type="checkbox"> Inf. Destruction</div>
+                                </div>
+                                <div class="table-row">
+                                        <div class="text"><b>User's account number: </b></div>
+                                        <div class="text"><input type="checkbox"> Inf. Generation</div>
+                                        <div class="text"><input type="checkbox"> Inf. Processing</div>
+                                        <div class="text"><input type="checkbox"> Inf. Storage</div>
+                                        <div class="text"><input type="checkbox"> Inf. Communication</div>
+                                        <div class="text"><input type="checkbox"> Inf. Consumption</div>
+                                        <div class="text"><input type="checkbox"> Inf. Destruction</div>
+                                </div>
+                                <div class="table-row">
+                                        <div class="text"><b>User's identification: </b></div>
+                                        <div class="text"><input type="checkbox"> Inf. Generation</div>
+                                        <div class="text"><input type="checkbox"> Inf. Processing</div>
+                                        <div class="text"><input type="checkbox"> Inf. Storage</div>
+                                        <div class="text"><input type="checkbox"> Inf. Communication</div>
+                                        <div class="text"><input type="checkbox"> Inf. Consumption</div>
+                                        <div class="text"><input type="checkbox"> Inf. Destruction</div>
+                                </div>
         			<div class="table-row header">
         				<div class="text">Scenario</div>
         				<div class="text">Associated Causal Factors</div>
@@ -28,7 +64,7 @@
         				<!-- <div class="text">Role</div> -->
         				<div class="text">Rationale</div>
         			</div>
-
+                                <!-- End: Delete after STPA-Sec paper -->
         			<div class="table-row" id="guidewords">
 	        			<div class="text center">
 	        				<select id="guideword" class="guideword-combo-tuple" style="background-color: #f0f0f0;">

@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
-<?php $fundamentals = ['systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components']; ?>
+<?php $fundamentals = ['mission-assurance', 'accidents', 'hazards', 'systemsafetyconstraint', 'components']; ?>
+<?php //$fundamentals = ['systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components']; ?>
 
 @section('content')
     @foreach ($fundamentals as $f)
@@ -9,6 +10,8 @@
         </div>
     @endforeach
 @endsection
+
+@include('partials.fundamentals.add-mission-assurance')
 
 <?php $addItens = ['systemgoals', 'accident', 'hazard', 'component', 'systemsafetyconstraint', 'variable']; ?>
 

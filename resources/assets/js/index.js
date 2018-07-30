@@ -490,6 +490,19 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     });
 
 
+// Mission Assurance
+$('body').on('click', '.add-mission-assurance', function(event){
+    event.preventDefault();
+    vex.open({
+      unsafeContent: $("#add-a-new-mission-assurance").html(),
+      buttons: [
+        $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+      ],
+      showCloseButton: true,
+      className: "vex-theme-default"
+    });
+    });
 
 // FUNCTION TO EDIT FUNDAMENTALS
 
@@ -1675,7 +1688,7 @@ for (i = 0; i < acc.length; i++) {
     var checked = [];
     form.find(".associated-checkbox:checked").each(function(index, f){
       var causal_id = f.id.split("-")[1];
-      console.log(causal_id);
+      // console.log(causal_id);
       form.find("#guideword-scenario-" + causal_id).remove(".listing-guidewords");
       var scenario = form.find("#getting-scenario-" + causal_id).text();
       var associated = form.find("#guideword-associated-" + causal_id).text();
@@ -1684,7 +1697,8 @@ for (i = 0; i < acc.length; i++) {
       var rationale = form.find("#guideword-rationale-" + causal_id).text();
       var guideword = form.find("#guideword-" + causal_id).val();
       var safety = form.find("#uca").val();
-      console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
+      // console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
+      console.log("UCA: " + safety);
       var id = 0;
       axios.post('/addtuple', {
         id, id,

@@ -18,42 +18,42 @@
 // }]);
 
 Route::get('/', ['as' => 'home', function () {
+	return view('home');
+}]);
+
+Route::get('{slug}/fundamentals', ['as' => 'fundamentals', function ($slug) {
+    if (Auth::check()) {
+        $project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
+        $accidents = App\Accidents::where('project_id', $project_id)->get();
+        return view('pages.home', compact("accidents", "project_id", "slug"));
+    }
+}]);
+
+Route::get('{slug}/stepone', ['as' => 'stepone', function ($slug) {
 	if (Auth::check()) {
-        if (Auth::user()->name == "Celso Hirata")
-		    $project_id = 2;
-        else
-            $project_id = 1;
-    	$accidents = App\Accidents::where('project_id', $project_id)->get();
-    	return view('pages.home', compact("accidents", "project_id"));
+		$project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
+    	return view('pages.stepone', compact("project_id", "slug"));
 	}
     else
     	return view('home');
 }]);
 
-Route::get('/stepone', ['as' => 'stepone', function () {
+Route::get('{slug}/steptwo', ['as' => 'steptwo', function ($slug) {
 	if (Auth::check()) {
-		if (Auth::user()->name == "Celso Hirata")
-            $project_id = 2;
-        else
-            $project_id = 1;
-    	$accidents = App\Accidents::where('project_id', $project_id)->get();
-    	return view('pages.stepone', compact("accidents", "project_id"));
-	}
+        $project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
+        return view('pages.steptwo', compact("project_id", "slug"));
+    }
     else
-    	return view('home');
-}]);
-
-Route::get('/steptwo', ['as' => 'steptwo', function () {
-	if (Auth::user()->name == "Celso Hirata")
-            $project_id = 2;
-        else
-            $project_id = 1;
-    return view('pages.steptwo', compact("project_id"));
+        return view('home');
 }]);
 
 
 Route::get('/login', ['as' => 'login', function () {
     return view('auth.login');
+}]);
+
+Route::get('/projects', ['as' => 'projects', function () {
+    return view('pages.project');
 }]);
 
 Route::post('/addsystemgoal', 'SystemGoalController@add');
