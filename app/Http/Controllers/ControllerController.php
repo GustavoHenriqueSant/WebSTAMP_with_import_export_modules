@@ -13,7 +13,7 @@ class ControllerController extends Controller
     public function add(Request $request){
     	$controller = new Controllers();
     	$controller->name = $request->input('name');
-    	$controller->project_id = 2;
+    	$controller->project_id = $request->input('project_id');
     	$controller->save();
 
     	return response()->json([

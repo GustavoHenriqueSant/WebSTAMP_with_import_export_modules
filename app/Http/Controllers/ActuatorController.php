@@ -14,7 +14,7 @@ class ActuatorController extends Controller
 	public function add(Request $request){
     	$actuator = new Actuators();
     	$actuator->name = $request->input('name');
-    	$actuator->project_id = 2;
+    	$actuator->project_id = $request->input('project_id');
     	$actuator->save();
 
     	return response()->json([

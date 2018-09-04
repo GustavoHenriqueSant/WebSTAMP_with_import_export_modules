@@ -12,6 +12,136 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   vex.registerPlugin(require('vex-dialog'));
   vex.defaultOptions.className = 'vex-theme-os';
 
+  var axios = require('./axios');
+
+  $('body').on('click', '#add-new-project', function(event){
+    event.preventDefault();
+    vex.closeAll();
+    vex.open({
+      // overlayClosesOnClick: false,
+      unsafeContent: $("#add-project").html(),
+      buttons: [
+        $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+      ],
+      showCloseButton: true,
+      className: "vex-theme-default"
+    });
+  });
+
+  $('body').on('submit', '.adding-project', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var name = form.find("#name").val();
+    var description = form.find("#description").val();
+    var type = form.find("#type").val();
+    var shared = form.find("#user-email").val() + ";" + form.find("#shared").val();
+    axios.post('/addproject', {
+      name : name,
+      description : description,
+      type : type,
+      shared : shared
+    }).then(function (response) { 
+        console.log(response);
+        location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });
+
+  $('body').on('submit', '.editing-form', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var id = form.find("#project_id").val();
+    var name = form.find("#project_name").val();
+    var description = form.find("#project_description").val();
+    var shared = form.find("#user-email").val() + ";" + form.find("#shared").val();
+    $('#edit-id').attr("value", id);
+    $('#edit-name').attr("value", name);
+    $("#edit-description").html(description);
+    axios.post('/getteam', {
+      id : id
+    }).then(function(response) {
+      var emails = ""; //response.data.team[0];
+      for (var i = 1; i < response.data.team.length; i++) {
+        emails += (i > 1) ? ";" + response.data.team[i] : response.data.team[i];
+      }
+      $('#edit-shared').attr("value", emails);
+      setTimeout(function(){
+        vex.closeAll();
+        vex.open({
+          // overlayClosesOnClick: false,
+          unsafeContent: $("#edit-project").html(),
+          buttons: [
+            $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+          ],
+          showCloseButton: true,
+          className: "vex-theme-default"
+        });
+      }, 100);
+        
+    }).catch(function(error) {
+      console.log(error);
+    });
+  });
+
+  $('body').on('submit', '.editing-project', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var id = form.find("#edit-id").val();
+    var name = form.find("#edit-name").val();
+    var description = form.find("#edit-description").val();
+    console.log("Id: " + id);
+    console.log("Name: " + name);
+    console.log("Description: " + description);
+    axios.post('/editproject', {
+      id : id,
+      name : name,
+      description : description
+    }).then(function (response) { 
+        console.log(response);
+        location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });
+
+  $('body').on('change', '#mission-purpose', function (event) {
+    event.preventDefault();
+    var purpose = $(event.currentTarget).val();
+    $(".label-mission-purpose").empty();
+    $(".label-mission-purpose").append(purpose);
+  });
+
+  $('body').on('change', '#mission-method', function (event) {
+    event.preventDefault();
+    var methods = $(event.currentTarget).val();
+    methods = methods.split(";");
+    $(".label-mission-method").empty();
+    var method = "";
+    methods.forEach(function(f) {
+      method += " [" + f + "]";
+    });
+    method = method.split("[ ").join("[");
+    $(".label-mission-method").append(method);
+  });
+
+  $('body').on('change', '#mission-goal', function (event) {
+    event.preventDefault();
+    var goals = $(event.currentTarget).val();
+    goals = goals.split(";");
+    $(".label-mission-goal").empty();
+    var goal = "";
+    goals.forEach(function(f) {
+      goal += " [" + f + "]";
+    });
+    goal = goal.split("[ ").join("[");
+    $(".label-mission-goal").append(goal);
+  });
+
   Hazard.init();
   //State.init();
   ControlActions.init();
@@ -52,7 +182,6 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     })
   });
 
-  var axios = require('./axios');
   var functions = require('./ajax_functions');
 
   var systemgoal = require('./templates/systemgoal_template');
@@ -70,6 +199,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   var addstate = require('./templates/add-state_template');
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
 
+  
+
 
   // ADD
 
@@ -79,16 +210,19 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     var activity = form.data("add");
     var activity_name = activity + '-name';
     var name = form.find("#" + activity_name).val();
+    var project_id = $('#project_id').val();
     var id = 0;
     // Verifies if activity is system goal
     if (activity === 'systemgoal') {
       var $newSystemGoal = $('#systemgoals').find(".substep__list");
       axios.post('/addsystemgoal', {
         name: name,
-        id : id
+        id : id,
+        project_id : project_id
       })
-      .then(function (response) { 
-        $newSystemGoal.append(systemgoal(response.data));
+      .then(function (response) {
+        var exihibition_id = $('#systemgoals').find(".substep__list").children().length + 1; 
+        $newSystemGoal.append(systemgoal(response.data, exihibition_id));
       })
       .catch(function (error) {
         console.log(error);
@@ -99,12 +233,13 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var $newAccident = $('#accidents').find(".substep__list");
       axios.post('/addaccident', {
         name: name,
-        id : id
+        id : id,
+        project_id : project_id
       })
       .then(function (response) { 
-        console.log("Entrou!");
         Hazard.addAccident(response.data);
-        $newAccident.append(accident(response.data));
+        var exihibition_id = $('#accidents').find(".substep__list").children().length + 1;
+        $newAccident.append(accident(response.data, exihibition_id));
       })
       .catch(function (error) {
         console.log(error);
@@ -114,14 +249,18 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var accidents_associated = form.find("#hazard-accident-association").val();
       var $newHazard = $('#hazards').find(".substep__list");
       var accidents_associated_id;
+      var project_type = $('#project_type').val();
       axios.post('/addhazard', {
         name : name,
         id : id,
         accidents_associated : accidents_associated,
-        accidents_associated_id : accidents_associated_id
+        accidents_associated_id : accidents_associated_id,
+        project_id : project_id,
+        project_type : project_type
       })
       .then(function(response) {
-        $newHazard.append(hazard(response.data));
+        var exihibition_id = $("#hazards_content").children().children().length + 1;
+        $newHazard.append(hazard(response.data, exihibition_idx1));
       })
       .catch(function(error) {
         console.log(error);
@@ -135,7 +274,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         axios.post('/addactuator', {
           name : name,
           type : type,
-          id : id
+          id : id,
+          project_id : project_id
         })
         .then(function(response) {
           location.reload();
@@ -147,7 +287,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         var $newComponent = $('#controlledprocess');
         axios.post('/addcontrolledprocess', {
           name : name,
-          id : id
+          id : id,
+          project_id : project_id
         })
         .then(function(response) {
           location.reload();
@@ -159,7 +300,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         var $newComponent = $('#controllers');
         axios.post('/addcontroller', {
           name : name,
-          id : id
+          id : id,
+          project_id : project_id
         })
         .then(function(response) {
           location.reload();
@@ -171,7 +313,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         var $newComponent = $('#sensors');
         axios.post('/addsensor', {
           name : name,
-          id : id
+          id : id,
+          project_id : project_id
         })
         .then(function(response) {
           location.reload();
@@ -190,7 +333,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       axios.post('/addcontrolaction', {
         name : name,
         controller_id : controller_id,
-        id : id
+        id : id,
+        project_id : project_id
       })
       .then(function(response) {
         $newControlAction.append(controlaction(response.data));
@@ -207,7 +351,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       axios.post('/addstate', {
         name : name,
         variable_id : variable_id,
-        id : id
+        id : id,
+        project_id : project_id
       })
       .then(function(response) {
         var $newState = $('#variable-' + response.data.variable_id).find(".states-associated");
@@ -225,10 +370,12 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
       axios.post('/addsystemsafetyconstraint', {
         name : name,
-        id : id
+        id : id,
+        project_id : project_id
       })
       .then(function(response) {
-        $newSSC.append(systemsafetyconstraint(response.data));
+        var exihibition_id = $('#systemsafetyconstraint').find(".substep__list").children().length + 1;  
+        $newSSC.append(systemsafetyconstraint(response.data, exihibition_id));
       })
       .catch(function(error) {
         console.log(error);
@@ -252,7 +399,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         output_component_id : output_component_id,
         type_output : type_output,
         output_name : output_name,
-        id : id
+        id : id,
+        project_id : project_id
       })
       .then(function(response) {
         $newConnection.append(connection(response.data));
@@ -281,7 +429,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         name : name,
         id : id,
         controller_id : controller_id,
-        states : states
+        states : states,
+        project_id : project_id
       })
       .then(function(response) {
         if (response.data.controller_id > 0){

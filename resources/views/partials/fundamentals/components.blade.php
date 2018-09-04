@@ -101,7 +101,7 @@
             <div class="panel" id="panel-controlledprocess-{{$component->id}}">
                 <ul class="substep__list" id="add-controlledprocess">
                     @foreach (App\ControlledProcess::where('project_id', $project_id)->where('id', $component->id)->get() as $component)
-                        <li class="item" id="actuator-{{$component->id}}">
+                        <li class="item" id="controlledprocess-{{$component->id}}">
                             <div class="item__title">
                                 <input type="text" class="item__input" id="controlledprocess-description-{{ $component->id }}" value="{{ $component->name }}" disabled>
                             </div>
@@ -132,7 +132,7 @@
                 </div>
                 
                 <div class="substep substep--variables-associated" id="variables-0">
-                    <!-- @include('partials.fundamentals.variables') -->
+                    @include('partials.fundamentals.variables')
                 </div>
             </div>
         @endforeach

@@ -14,7 +14,7 @@ class SensorController extends Controller
     public function add(Request $request){
     	$sensor = new Sensors();
     	$sensor->name = $request->input('name');
-    	$sensor->project_id = 2;
+    	$sensor->project_id = $request->input('project_id');
     	$sensor->save();
 
     	return response()->json([

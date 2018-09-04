@@ -11,7 +11,7 @@
         @foreach (App\SystemGoals::where('project_id', $project_id)->get() as $systemGoal)
             <li class="item" id="systemgoal-{{$systemGoal->id}}">
                 <div class="item__title">
-                    G-{{$systemGoal->id}}: <input type="text" class="item__input" id="systemgoal-description-{{$systemGoal->id}}" value="{{$systemGoal->name}}" disabled>
+                    G-{{$goals_map[$systemGoal->id]}}: <input type="text" class="item__input" id="systemgoal-description-{{$systemGoal->id}}" value="{{$systemGoal->name}}" disabled>
                 </div>
                 <div class="item__actions">
                     <form action ="/editsystemgoal" method="POST" class="edit-form ajaxform" data-edit="systemgoal">

@@ -1,17 +1,25 @@
 <div class="substep__title">
-    Accidents
+    @if($project_type == "Safety")
+        Accidents
+    @else
+        Losses
+    @endif
 </div>
 
 <div class="substep__add" data-component="add-button" data-add="accident">
     +
 </div>
-
+<input type="hidden" id="project_type" value="{{$project_type}}"/>
 <div class="substep__content">
     <ul class="substep__list">
         @foreach ($accidents as $accident)
             <li class="item" id="accident-{{$accident->id}}">
                 <div class="item__title">
-                    A-{{$accident->id}}: <input type="text" class="item__input" id="accident-description-{{$accident->id}}" value="{{ $accident->name }}" disabled>
+                    @if($project_type == "Safety")
+                        A-{{$accident_map[$accident->id]}}: <input type="text" class="item__input" id="accident-description-{{$accident->id}}" value="{{ $accident->name }}" disabled>
+                    @else
+                        L-{{$accident_map[$accident->id]}}: <input type="text" class="item__input" id="accident-description-{{$accident->id}}" value="{{ $accident->name }}" disabled>
+                    @endif
                 </div>
                 <div class="item__actions">
                     <form action ="/editaccident" method="POST" class="edit-form ajaxform" data-edit="accident">

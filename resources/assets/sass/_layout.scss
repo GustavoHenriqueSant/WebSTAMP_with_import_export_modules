@@ -231,3 +231,77 @@
   margin: 10px;
   background: #fef65b;
 }
+
+input.information-input {
+  border: none;
+  border-radius: 5px;
+  border: solid 1px;
+  width: 100%;
+  height: 25px;
+  padding-left: 10px;
+  font-size: 16px;
+  margin: 1% 0 2% 0;
+}
+
+textarea.information-input {
+  border: none;
+  border-radius: 5px;
+  border: solid 1px;
+  width: 100%;
+  height: 80px;
+  padding-left: 10px;
+  font-size: 16px;
+  margin: 1% 0 2% 0;
+  max-width: 100%;
+  resize: vertical;
+}
+
+select.information-input {
+  border: none;
+  border-radius: 5px;
+  border: solid 1px;
+  width: 100%;
+  height: 25px;
+  padding-left: 10px;
+  font-size: 16px;
+  margin: 1% 0 2% 0;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.center-button {
+  display: table;
+  margin: 0 auto;
+}
+
+input.edit-button{
+    background: buttonface url('../images/edit.ico') no-repeat top left;
+    background-size: 20px 20px;
+    padding-left: 22px;
+    height: 25px;
+    border-radius: 5px;
+}
+
+input.delete-button{
+    background: buttonface url('../images/trash.png') no-repeat top left;
+    background-size: 20px 20px;
+    padding-left: 22px;
+    height: 25px;
+    border-radius: 5px;
+    padding-right: 5px;
+}
+
+input.add-button{
+    background: buttonface url('../images/plus.png') no-repeat top left;
+    background-size: 20px 20px;
+    padding-left: 22px;
+    height: 25px;
+    border-radius: 5px;
+}
+
+textarea.mission-assurance {
+  width: 100%;
+  height: 100px;
+}

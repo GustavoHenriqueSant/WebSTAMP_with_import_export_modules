@@ -17,9 +17,11 @@ class AccidentController extends Controller
 		$accident = new Accidents();
 		$accident->name = $request->input('name');
 		$accident->description = "Teste";
-		$accident->project_id = 2;
+		$accident->project_id = $request->input('project_id');
 
 		$accident->save();
+
+		// $accident_map[$accident->id] = count($accident_map) + 1;
 
 		return response()->json([
         	'name' => $accident->name,

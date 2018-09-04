@@ -1,10 +1,10 @@
-module.exports = function(context) {
+module.exports = function(context, exihibition_id) {
     console.log(context);
     var size = context.name.length;
     return `
         <li class="item" id="accident-${context.id}">
             <div class="item__title">
-                A-${context.id}: <input type="text" class="item__input" id="accident-description-${context.id}" value="${context.name}" size="${size}" onkeypress="this.size=this.value.length" disabled>
+                A-${exihibition_id}: <input type="text" class="item__input" id="accident-description-${context.id}" value="${context.name}" size="${size}" onkeypress="this.size=this.value.length" disabled>
             </div>
             <div class="item__actions">
                 <form action ="/editaccident" method="POST" class="edit-form ajaxform" data-edit="accident">

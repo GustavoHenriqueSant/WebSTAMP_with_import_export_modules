@@ -26,7 +26,7 @@
 
     <ul class="substep__list">
         <span class="controller_variable">
-            @foreach (App\Variable::where('controller_id', $component_id)->get() as $variable)
+            @foreach (App\Variable::where('controller_id', $component_id)->where('project_id', $project_id)->get() as $variable)
                 <li class="item"  id="variable-{{$variable->id}}">
                     <div class="item__title">
                         <input type="text" class="item__input" id="variable-description-{{ $variable->id }}" value="{{ $variable->name }}" disabled>

@@ -11,11 +11,15 @@
         @foreach (App\Hazards::where('project_id', $project_id)->get() as $hazard)
             <li class="item" id="hazard-{{$hazard->id}}">
                 <div class="item__title">
-                    H-{{$hazard->id}}: <input type="text" class="item__input" id="hazard-description-{{$hazard->id}}" value="{{ $hazard->name }}" disabled>
+                    H-{{$hazard_map[$hazard->id]}}: <input type="text" class="item__input" id="hazard-description-{{$hazard->id}}" value="{{ $hazard->name }}" disabled>
                 </div>
                 @foreach($hazard->accidentshazards as $accidentshazards)
                     <div class="item__actions__action" id="accident-associated-{{$accidentshazards->id}}">
-                        <a href="javascript:;" class="item__delete__box" data-type="hazard" data-index="{{$accidentshazards->id}}">×</a> [A-{{$accidentshazards->accidents_id}}]
+                        @if($project_type == "Safety")
+                        <a href="javascript:;" class="item__delete__box" data-type="hazard" data-index="{{$accidentshazards->id}}">×</a> [A-{{$accident_map[$accidentshazards->accidents_id]}}]
+                    @else
+                       <a href="javascript:;" class="item__delete__box" data-type="hazard" data-index="{{$accidentshazards->id}}">×</a> [L-{{$accident_map[$accidentshazards->accidents_id]}}]
+                    @endif
                     </div>
                 @endforeach
                 <div class="item__actions">

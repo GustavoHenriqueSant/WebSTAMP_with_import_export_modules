@@ -1,9 +1,9 @@
-module.exports = function(context) {
+module.exports = function(context, exihibition_id) {
     var size = context.name.length;
     return `
         <li class="item" id="systemsafetyconstraint-${context.id}">
                 <div class="item__title">
-                    SSC-${context.id}: <input type="text" class="item__input" id="systemsafetyconstraint-description-${context.id}" value="${context.name}" size="${size}" onkeypress="this.size=this.value.length" disabled>
+                    SSC-${exihibition_id}: <input type="text" class="item__input" id="systemsafetyconstraint-description-${context.id}" value="${context.name}" size="${size}" onkeypress="this.size=this.value.length" disabled>
                 </div>
                 <div class="item__actions">
 	                <form action="editsystemsafetyconstraint" method="POST"  class="edit-form ajaxform" data-edit="systemsafetyconstraint">

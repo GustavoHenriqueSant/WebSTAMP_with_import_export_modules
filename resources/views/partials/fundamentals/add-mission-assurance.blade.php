@@ -13,20 +13,26 @@
                         <div class="text">Why (Goals)</div>
                     </div>
                     <div class="table-row center">
-                        <div class="text"><textarea style="width: 100%; height: 100px;"></textarea></div>
-                        <div class="text"><textarea style="width: 100%; height: 100px;"></textarea></div>
-                        <div class="text"><textarea style="width: 100%; height: 100px;"></textarea></div>
+                        <div class="text">
+                            <textarea class="mission-assurance garamond" id="mission-purpose" placeholder="Insert here the purpose"></textarea>
+                        </div>
+                        <div class="text">
+                            <textarea class="mission-assurance garamond" id="mission-method" placeholder="Insert here the methods (separated by semicolon)"></textarea>
+                        </div>
+                        <div class="text">
+                            <textarea class="mission-assurance garamond" id="mission-goal" placeholder="Insert here the goals (separated by semicolon)"></textarea>
+                        </div>
                     </div>
                     <div class="table-row">
                         <div class="text center">
-                            <b>An [online bank system] to </b>
-                                allow a user accesses his account info through any device 
+                            <b>A [{{$project_name}}] to </b>
+                                <label class="label-mission-purpose"></label> 
                             <br/> 
                             <b>by means of </b>
-                                [registering with the institution] and [performing financial transactions],
+                                <label class="label-mission-method"></label>
                             <br/> 
                             <b>in order to contribute to </b>
-                                secure customer operations.
+                                <label class="label-mission-goal"></label>
                         </div>
                     </div>
                 </div>

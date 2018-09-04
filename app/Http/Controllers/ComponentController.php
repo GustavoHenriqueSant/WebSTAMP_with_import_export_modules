@@ -17,7 +17,7 @@ class ComponentController extends Controller
 		$component = new Components();
 		$component->name = $request->input('name');
 		$component->type = $request->input('type');
-		$component->project_id = 2;
+		$component->project_id = $request->input('project_id');
 
 		$component->save();
 

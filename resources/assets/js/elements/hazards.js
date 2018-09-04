@@ -18,8 +18,12 @@ function init(){
 
 function showAccidents(){
 	var listAccidents = $("#hazard-accident-association");
+	var project_type = $("#project_type").val();
 	var retorno = accidents.map(function(accident) {
-		return `<option value="${accident.id}">[A-${accident.id}] ${accident.name}</option>`;
+		if (project_type == "Safety")
+			return `<option value="${accident.id}">[A-${accident.id}] ${accident.name}</option>`;
+		else
+			return `<option value="${accident.id}">[L-${accident.id}] ${accident.name}</option>`;
 	});
 	listAccidents.html(retorno);
 }

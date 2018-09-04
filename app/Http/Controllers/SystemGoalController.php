@@ -17,7 +17,7 @@ class SystemGoalController extends Controller
 		$systemGoals = new SystemGoals();
 		$systemGoals->name = $request->input('name');
 		$systemGoals->description = "Teste";
-		$systemGoals->project_id = 2;
+		$systemGoals->project_id = $request->input('project_id');
 
 		$systemGoals->save();
 

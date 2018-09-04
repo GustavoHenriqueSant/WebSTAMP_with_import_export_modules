@@ -4,7 +4,11 @@
 
 @section('content-add')
     <label for="accident-name" class="add-drop__label">
-        Accident name
+        @if($project_type == "Safety")
+            Accidents
+        @else
+            Losses
+        @endif
     </label>
     <input id="accident-name" name="accident-name" type="text" class="add-drop__input" required>
 @overwrite

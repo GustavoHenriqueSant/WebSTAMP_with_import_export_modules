@@ -1,10 +1,11 @@
 @extends('layouts.master')
 
-<?php $fundamentals = ['mission-assurance', 'accidents', 'hazards', 'systemsafetyconstraint', 'components']; ?>
-<?php //$fundamentals = ['systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components']; ?>
+<?php $fundamentals = ($project_type == "Security" ) ? ['mission-assurance', 'accidents', 'hazards', 'systemsafetyconstraint', 'components'] : ['systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components'];
+?>
 
 @section('content')
     @foreach ($fundamentals as $f)
+        <input type="hidden" id="project_id" value="{{$project_id}}">
         <div class="substep substep--{{ $f }}" id="{{ $f }}">
           @include('partials.fundamentals.' . $f)
         </div>

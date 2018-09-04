@@ -20,7 +20,7 @@ class HazardController extends Controller
 		$hazard = new Hazards();
 		$hazard->name = $request->input('name');
 		$hazard->description = "Teste";
-		$hazard->project_id = 2;
+		$hazard->project_id = $request->input('project_id');
 
 		$hazard->save();
 
@@ -39,7 +39,8 @@ class HazardController extends Controller
         	'name' => $hazard->name,
         	'id' => $hazard->id,
         	'accidents_associated' => $accidents,
-        	'accidents_associated_id' => $accidents_associated_id
+        	'accidents_associated_id' => $accidents_associated_id,
+        	'project_type' => $request->input('project_type')
     	]);
 	}
 
