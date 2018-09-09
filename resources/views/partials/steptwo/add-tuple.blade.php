@@ -22,7 +22,7 @@
 			<div class="container">
         		<div class="container-fluid">
                                 <!-- Begin: Delete after STPA-Sec paper -->
-                                <div style="width: 100%;">
+                                <!-- <div style="width: 100%;">
                                         <div style="width: 15%; float: left; font-weight: bold; white-space: nowrap;">
                                                 Process Model Variables
                                         </div>
@@ -61,9 +61,8 @@
         				<div class="text">Scenario</div>
         				<div class="text">Associated Causal Factors</div>
         				<div class="text">Recommendations</div>
-        				<!-- <div class="text">Role</div> -->
         				<div class="text">Rationale</div>
-        			</div>
+        			</div> -->
                                 <!-- End: Delete after STPA-Sec paper -->
         			<div class="table-row" id="guidewords">
 	        			<div class="text center">

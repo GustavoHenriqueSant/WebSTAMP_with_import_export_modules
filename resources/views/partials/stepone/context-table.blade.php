@@ -212,8 +212,10 @@
                                                 }
                                             } else if ( ($allStates[$i][$combination_array[$i]] == App\State::find($r[$i]->state_id)->name) && ($rules[$key] == "true") ){
                                                 $rules[$key] = "true";
+                                                $columns[$key] = $r[$i]->column;
                                             } else {
                                                 $rules[$key] = "false";
+                                                $columns[$key] = $r[$i]->column;
                                             }                                            
                                         }
                                     }
@@ -261,7 +263,7 @@
                                 if ($r == "true" && count($r) > 0) {
                                     echo "R".($key+1)." ";
                                     $thereAreRule = "true";
-                                    $columns_that_rule_can_be_applied = explode(";", $columns[$key]);
+                                    $columns_that_rule_can_be_applied = explode(";", $columns[0]);
                                     //print_r($columns_that_rule_can_be_applied);
                                     foreach($columns_that_rule_can_be_applied as $column_rule)
                                         $column_name[$column_rule] = true;                                    
@@ -288,7 +290,7 @@
                                     <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                                 @endif
                                         @if($context_table->ca_provided == "true")
-                                            <option value="null">-</option>
+                                            <option value="null">?</option>
                                             <option value="false"> </option>
                                             <option value="true" selected>Unsafe</option>
                                         @elseif($context_table->ca_provided == "null")
@@ -296,7 +298,7 @@
                                             <option value="false"> </option>
                                             <option value="true">Unsafe</option>
                                         @else
-                                            <option value="null">-</option>
+                                            <option value="null">?</option>
                                             <option value="false" selected> </option>
                                             <option value="true">Unsafe</option>
                                         @endif
@@ -313,11 +315,11 @@
                                         <option value="false"> </option>
                                         <option value="true">Unsafe</option>
                                     @elseif($context_table->ca_not_provided == "true")
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false"> </option>
                                         <option value="true" selected>Unsafe</option>
                                     @else
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false" selected> </option>
                                         <option value="true">Unsafe</option>
                                     @endif
@@ -334,11 +336,11 @@
                                         <option value="false"> </option>
                                         <option value="true">Unsafe</option>
                                     @elseif($context_table->wrong_time_order == "true")
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false"> </option>
                                         <option value="true" selected>Unsafe</option>
                                     @else
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false" selected> </option>
                                         <option value="true">Unsafe</option>
                                     @endif
@@ -355,11 +357,11 @@
                                         <option value="false"> </option>
                                         <option value="true">Unsafe</option>
                                     @elseif($context_table->ca_too_early == "true")
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false"> </option>
                                         <option value="true" selected>Unsafe</option>
                                     @else
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false" selected> </option>
                                         <option value="true">Unsafe</option>
                                     @endif
@@ -376,11 +378,11 @@
                                         <option value="false"> </option>
                                         <option value="true">Unsafe</option>
                                     @elseif($context_table->ca_too_late == "true")
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false"> </option>
                                         <option value="true" selected>Unsafe</option>
                                     @else
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false" selected> </option>
                                         <option value="true">Unsafe</option>
                                     @endif
@@ -396,11 +398,11 @@
                                         <option value="false"> </option>
                                         <option value="true">Unsafe</option>
                                     @elseif($context_table->ca_too_soon == "true")
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false"> </option>
                                         <option value="true" selected>Unsafe</option>
                                     @else
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false" selected> </option>
                                         <option value="true">Unsafe</option>
                                     @endif
@@ -416,11 +418,11 @@
                                         <option value="false"> </option>
                                         <option value="true">Unsafe</option>
                                     @elseif($context_table->ca_too_long == "true")
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false"> </option>
                                         <option value="true" selected>Unsafe</option>
                                     @else
-                                        <option value="null">-</option>
+                                        <option value="null">?</option>
                                         <option value="false" selected> </option>
                                         <option value="true">Unsafe</option>
                                     @endif
@@ -432,7 +434,7 @@
                             @else
                                 <select class="text_error" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                    <option value="null">-</option>
+                                    <option value="null">?</option>
                                     <option value="false"> </option>
                                     @if ($thereAreRule == "true" && $column_name["Provided"] == true)
                                         <option value="true" selected>Unsafe</option>
@@ -448,7 +450,7 @@
                                 <select class="text_error" id="notprovided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-not-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
                                 <option value="false"> </option>
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 @if ($thereAreRule == "true" && $column_name["Not Provided"] == true)
                                     <option value="true" selected>Unsafe</option>
                                 @else
@@ -462,7 +464,7 @@
                             @else
                                 <select class="text_error" id="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" name="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Wrong order"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -477,7 +479,7 @@
                             @else
                                 <select class="text_error" id="early-ca-{{$ca->id}}-row-{{$total_loop}}" name="early-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Provided too early"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -492,7 +494,7 @@
                             @else
                                 <select class="text_error" id="late-ca-{{$ca->id}}-row-{{$total_loop}}" name="late-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Provided too late"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -507,7 +509,7 @@
                             @else
                                 <select class="text_error" id="soon-ca-{{$ca->id}}-row-{{$total_loop}}" name="soon-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Stopped too soon"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -522,7 +524,7 @@
                             @else
                                 <select class="text_error" id="long-ca-{{$ca->id}}-row-{{$total_loop}}" name="long-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Applied too long"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -540,7 +542,7 @@
                             @else
                                 <select class="text" id="provided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                    <option value="null">-</option>
+                                    <option value="null">?</option>
                                     <option value="false"> </option>
                                     @if ($thereAreRule == "true" && $column_name["Provided"] == true)
                                         <option value="true" selected>Unsafe</option>
@@ -555,7 +557,7 @@
                             @else
                                 <select class="text" id="notprovided-ca-{{$ca->id}}-row-{{$total_loop}}" name="ca-not-provided-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Not Provided"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -570,7 +572,7 @@
                             @else
                                 <select class="text" id="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}" name="wrongtime-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Wrong order"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -585,7 +587,7 @@
                             @else
                                 <select class="text" id="early-ca-{{$ca->id}}-row-{{$total_loop}}" name="early-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Provided too early"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -600,7 +602,7 @@
                             @else
                                 <select class="text" id="late-ca-{{$ca->id}}-row-{{$total_loop}}" name="late-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Provided too late"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -615,7 +617,7 @@
                             @else
                                 <select class="text" id="soon-ca-{{$ca->id}}-row-{{$total_loop}}" name="soon-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Stopped too soon"] == true)
                                     <option value="true" selected>Unsafe</option>
@@ -630,7 +632,7 @@
                             @else
                                 <select class="text" id="long-ca-{{$ca->id}}-row-{{$total_loop}}" name="long-ca-{{$ca->id}}-row-{{$total_loop}}">
                             @endif
-                                <option value="null">-</option>
+                                <option value="null">?</option>
                                 <option value="false"> </option>
                                 @if ($thereAreRule == "true" && $column_name["Applied too long"] == true)
                                     <option value="true" selected>Unsafe</option>

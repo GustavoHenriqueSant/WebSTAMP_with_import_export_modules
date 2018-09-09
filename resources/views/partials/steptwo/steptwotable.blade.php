@@ -66,24 +66,22 @@
                                         <option value="{{$guideword->id}}" title="{{$guideword->guideword}}" {{$selected}}>[{{$guideword->guideword}}]</option>
                                     @endforeach
                                 </select><br/>
+
+                                <?php
+                                    $causal->scenario = preg_replace('/\s+/', ' ',$causal->scenario);
+                                    $causal->associated_causal_factor = preg_replace('/\s+/', ' ',$causal->associated_causal_factor);
+                                    $causal->requirement = preg_replace('/\s+/', ' ',$causal->requirement);
+                                    $causal->rationale = preg_replace('/\s+/', ' ',$causal->rationale);
+                                ?>
                                 
-                                <textarea class="step2_textarea" name="scenario-{{$causal->id}}" id="scenario-{{$causal->id}}" placeholder="Scenario" disabled>
-                                    <?php $causal->scenario = preg_replace('/\s+/', ' ',$causal->scenario); ?>
-                                    {{$causal->scenario}}
-                                </textarea>
+                                <textarea class="step2_textarea" name="scenario-{{$causal->id}}" id="scenario-{{$causal->id}}" placeholder="Scenario" disabled>{{$causal->scenario}}</textarea>
                             </div>
 
-                            <div class="text center"><br/><textarea class="step2_textarea" id="associated-{{$causal->id}}" placeholder="Associated Causal Factors" disabled>
-                                <?php $causal->associated_causal_factor = preg_replace('/\s+/', ' ',$causal->associated_causal_factor); ?>
-                                {{$causal->associated_causal_factor}}
-                            </textarea></div>
-                            <div class="text center"><br/><textarea class="step2_textarea" id="requirement-{{$causal->id}}" placeholder="Requirements" disabled>
-                                <?php $causal->requirement = preg_replace('/\s+/', ' ',$causal->requirement); ?>
-                                {{$causal->requirement}}</textarea></div>
+                            <div class="text center"><br/><textarea class="step2_textarea" id="associated-{{$causal->id}}" placeholder="Associated Causal Factors" disabled>{{$causal->associated_causal_factor}}</textarea></div>
+                            <div class="text center"><br/><textarea class="step2_textarea" id="requirement-{{$causal->id}}" placeholder="Requirements" disabled>{{$causal->requirement}}</textarea></div>
                             <!-- <div class="text center"><br/><textarea class="step2_textarea" id="role-{{$causal->id}}" placeholder="Role" disabled>{{$causal->role}}</textarea></div> -->
-                            <div class="text center"><br/><textarea class="step2_textarea" id="rationale-{{$causal->id}}" placeholder="Rationales" disabled>
-                                <?php $causal->rationale = preg_replace('/\s+/', ' ',$causal->rationale); ?>
-                                {{$causal->rationale}}</textarea></div>
+                            <div class="text center"><br/><textarea class="step2_textarea" id="rationale-{{$causal->id}}" placeholder="Rationales" disabled>{{$causal->rationale}}</textarea></div>
+                            
                             <div class="content-uca">
                                 <form action="/edittuple" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">
                                     <input type="hidden" name="_token" value="{{csrf_token()}}">

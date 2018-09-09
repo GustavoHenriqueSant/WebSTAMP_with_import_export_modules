@@ -22,14 +22,14 @@
                     <div class="table-row center">
                         <select id="type-uca-{{$ca->id}}" class="text type-uca mudanca">
                                 <option></option>
-                                <option value="provided">Provided</option>
-                                <option value="not provided">Not Provided</option>
-                                <option value="wrong time">Provided in wrong time</option>
-                                <option value="wrong order">Provided in wrong order</option>
-                                <option value="too early">Provided too early</option>
-                                <option value="too late">Provided too late</option>
-                                <option value="too soon">Stopped too soon</option>
-                                <option value="too long">Applied too long</option>
+                                <option value="Provided">Provided</option>
+                                <option value="Not Provided">Not Provided</option>
+                                <option value="Wrong Time">Provided in wrong time</option>
+                                <option value="Wrong Order">Provided in wrong order</option>
+                                <option value="Provided too early">Provided too early</option>
+                                <option value="Provided too late">Provided too late</option>
+                                <option value="Stopped too soon">Stopped too soon</option>
+                                <option value="Applied too long">Applied too long</option>
                         </select>
                         @foreach($variables as $variable)
                             <select class="text uca-row-{{$ca->id}} mudanca">
@@ -49,7 +49,7 @@
                             <input type="hidden" name="_token" value="{{csrf_token()}}">
                             <input type="image" src="{{ asset('images/edit.ico') }}" alt="Delete" width="20" class="navbar__logo">
                         </form>
-                    </div>
+                    </div> 
                     <div>
                         <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST">
                             <input type="hidden" name="_token" value="{{csrf_token()}}">

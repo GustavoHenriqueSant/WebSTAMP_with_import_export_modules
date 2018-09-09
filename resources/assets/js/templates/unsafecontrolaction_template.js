@@ -10,17 +10,17 @@ module.exports = function(context) {
     else
         type += `<option value="Provided">[Provided]</option>`;
 
-    if (context.type === 'not provided' || context.type === 'Not provided')
+    if (context.type === 'not provided' || context.type === 'Not provided' || context.type === 'Not Provided')
         type += `<option value="Not Provided" selected>[Not Provided]</option>`;
     else
         type += `<option value="Not Provided">[Not Provided]</option>`;
 
-    if (context.type === 'wrong time' || context.type === 'Provided in wrong time')
+    if (context.type === 'wrong time' || context.type === 'Provided in wrong time' || context.type === 'Wrong Time')
         type += `<option value="Wrong Time" selected>[Wrong Time]</option>`;
     else
         type += `<option value="Wrong Time">[Wrong Time]</option>`;
 
-    if (context.type === 'wrong order' || context.type === 'Provided in wrong order')
+    if (context.type === 'wrong order' || context.type === 'Provided in wrong order' || context.type === 'Wrong Order')
         type += `<option value="Wrong Order" selected>[Wrong Order]</option>`;
     else
         type += `<option value="Wrong Order">[Wrong Order]</option>`;

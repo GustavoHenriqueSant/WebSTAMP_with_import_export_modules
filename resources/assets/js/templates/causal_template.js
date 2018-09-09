@@ -102,8 +102,7 @@ return `<div class="table-row" id="causal-row-${context.id}"">
     <div class="text center"><br/><textarea class="step2_textarea" id="associated-${context.id}" placeholder="Associated Causal Factors" disabled>${context.associated}</textarea></div>
     <div class="text center"><br/><textarea class="step2_textarea" id="requirement-${context.id}" placeholder="Requirements" disabled>${context.requirement}</textarea></div>
     <div class="text center"><br/><textarea class="step2_textarea" id="rationale-${context.id}" placeholder="Rationales" disabled>${context.rationale}</textarea></div>
-    <div class="text center">
-        <div style="display: inline-block;">
+    <div class="content-uca">
             <br/>
             <form action="/edittuple" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -115,7 +114,6 @@ return `<div class="table-row" id="causal-row-${context.id}"">
                 <input type="hidden" name="causal_id" id="causal_id" value="${context.id}">
                 <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">
             </form>
-        </div>
     </div>
 </div>`;
 }

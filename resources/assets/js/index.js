@@ -1234,32 +1234,37 @@ for (i = 0; i < acc.length; i++) {
     var controlaction_id = form.find("#controlaction_id").val();
     var controller_name = form.find("#controller_name").val();
     var controlaction_name = form.find("#controlaction_name").val();
-    var type = "";
-    form.find(".associated-checkbox:checked").each(function(index, f){
-      var id = 0;
-      var checkbox_id = f.id.split("-")[1];
-      var unsafe_control_action = form.find("#uca-"+checkbox_id).text();
-      var safety_constraint = form.find("#sc-"+checkbox_id).text();
-      var context = form.find("#context-"+checkbox_id).val();
-      var type = form.find("#type-"+checkbox_id).val();
-      type = convertType(type);
-      var rule_id = 0;
-      axios.post('/adduca', {
-        id : id,
-        unsafe_control_action : unsafe_control_action,
-        safety_constraint : safety_constraint,
-        type : type,
-        controlaction_id : controlaction_id,
-        rule_id : rule_id,
-        context : context
-      })
-      .then(function (response) {
-        $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
+    var type = form.find("#type-uca-" + controlaction_id).val();;
+    var uca_name = form.find(".unsafe-control-name").text();
+    var sc_name = form.find(".safety-control-name").text();
+    var states = [];
+    var id = 0;
+    var rule_id = 0;
+    $(".uca-row-" + controlaction_id + " option:selected").each(function(index, f){
+      if (f.value.split("-")[0] > 0){
+        states.push(f.value.split("-")[0]);
+      }
     });
+    var context = states[0];
+    states.forEach(function(f, index) {
+    if (index > 0)
+      context += "," + f;
+    });
+    axios.post('/adduca', {
+      id : id,
+      unsafe_control_action : uca_name,
+      safety_constraint : sc_name,
+      type : type,
+      controlaction_id : controlaction_id,
+      rule_id : rule_id,
+      context : context
+    })
+    .then(function (response) {
+      $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
   });
 
   function generateUCAText(controlaction_id, controller_name, controlaction_name, type, states_name) {
@@ -1298,10 +1303,6 @@ for (i = 0; i < acc.length; i++) {
     safety_constraint = safety_constraint.replace("when,", "when");
     return {unsafe_control_action: unsafe_control_action, safety_constraint: safety_constraint};
   }
-
-
-
-
 
   $('body').on('change', '.mudanca', function(event) {
     var form = $(event.currentTarget).closest(".adding-uca");
@@ -1348,7 +1349,7 @@ for (i = 0; i < acc.length; i++) {
       }
       else{
         unsafe_control_action += " and " + f.toLowerCase();
-        safety_constraint += ", " + f.toLowerCase();
+        safety_constraint += " and " + f.toLowerCase();
       }
     })
     unsafe_control_action = unsafe_control_action.replace("when and", "when");
@@ -1356,14 +1357,15 @@ for (i = 0; i < acc.length; i++) {
     safety_constraint = safety_constraint.replace("when and", "when");
     safety_constraint = safety_constraint.replace("when,", "when");
     if(states_name.length > 0){
-      $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/> " + unsafe_control_action + ".");
-      $(".safety-control").html("<br/><center><b>Associated safety constraint:</b></center><br/> " + safety_constraint + ".");
+      $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/><span class='unsafe-control-name'>" + unsafe_control_action + "</span>.");
+      $(".safety-control").html("<br/><center><b>Associated safety constraint:</b></center><br/><span class='safety-control-name'>" + safety_constraint + "</span>.");
     }
   });
 
   // Add UCA and Safety Constraint Associated
   $('body').on('submit', '.add-form', function(event) {
     event.preventDefault();
+    alert("Entrou!");
     var form = $(event.currentTarget);
     var controlaction_id = form.data("add").split("-")[1];
     var unsafe_control_action = form.find("#uca-name-" + controlaction_id).val();
@@ -1675,6 +1677,9 @@ for (i = 0; i < acc.length; i++) {
     .then(function(response){
       console.log($("#safety-"+safety).find(".container-fluid"));
       $("#safety-"+safety).find(".table-content").append(newCausal(response.data));
+      setTimeout(function(){
+        vex.closeAll();
+      }, 2000);
     })
     .catch(function (error) {
       console.log(error);
@@ -1689,7 +1694,7 @@ for (i = 0; i < acc.length; i++) {
       message: 'Are you sure you want to delete this item?',
       callback: function (value) {
         if (value && id > 0) {
-          axios.post('deletetuple', {
+          axios.post('/deletetuple', {
             id : id
           })
           .then(function(response) {
@@ -1839,13 +1844,13 @@ for (i = 0; i < acc.length; i++) {
       var causal_id = f.id.split("-")[1];
       // console.log(causal_id);
       form.find("#guideword-scenario-" + causal_id).remove(".listing-guidewords");
-      var scenario = form.find("#getting-scenario-" + causal_id).text();
-      var associated = form.find("#guideword-associated-" + causal_id).text();
-      var requirement = form.find("#guideword-requirement-" + causal_id).text();
-      var role = form.find("#guideword-role-" + causal_id).text();
-      var rationale = form.find("#guideword-rationale-" + causal_id).text();
-      var guideword = form.find("#guideword-" + causal_id).val();
-      var safety = form.find("#uca").val();
+      var scenario = form.find("#getting-scenario-" + causal_id).text().trim();
+      var associated = form.find("#guideword-associated-" + causal_id).text().trim();
+      var requirement = form.find("#guideword-requirement-" + causal_id).text().trim();
+      var role = form.find("#guideword-role-" + causal_id).text().trim();
+      var rationale = form.find("#guideword-rationale-" + causal_id).text().trim();
+      var guideword = form.find("#guideword-" + causal_id).val().trim();
+      var safety = form.find("#uca").val().trim();
       // console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
       console.log("UCA: " + safety);
       var id = 0;
@@ -1862,6 +1867,9 @@ for (i = 0; i < acc.length; i++) {
       .then(function(response){
         console.log($("#safety-"+safety).find(".container-fluid"));
         $("#safety-"+safety).find(".table-content").append(newCausal(response.data));
+        setTimeout(function(){
+          vex.closeAll();
+        }, 2000);
       })
       .catch(function (error) {
         console.log(error);
