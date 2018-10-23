@@ -278,7 +278,26 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
 
   
-
+  function getLossesId(myString) {
+    var myRegexp = /\[L\-\d+\]/g;
+    var match = myRegexp.exec(myString);
+    var str_return = "";
+    var matches = [];
+    while (match != null) {
+      str_return += match[0];
+      match = myRegexp.exec(myString);
+      str_return += (match != null) ? "," : "";
+    }
+    myRegexp = /\d+/g;
+    match = myRegexp.exec(str_return);
+    str_return = "";
+    while (match != null) {
+      str_return += match[0];
+      match = myRegexp.exec(myString);
+      str_return += (match != null) ? "," : "";
+    }
+    return str_return;
+  }
 
   // ADD
 
@@ -325,6 +344,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     // Verify if activity is hazard
     } else if (activity === 'hazard') { 
       var accidents_associated = form.find("#hazard-accident-association").val();
+      var losses_id = getLossesId(form.find("#hazard-accident-association :selected").text()).split(",");
       var $newHazard = $('#hazards').find(".substep__list");
       var accidents_associated_id;
       var project_type = $('#project_type').val();
@@ -338,7 +358,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       })
       .then(function(response) {
         var exihibition_id = $("#hazards_content").children().children().length + 1;
-        $newHazard.append(hazard(response.data, exihibition_id));
+        $newHazard.append(hazard(response.data, exihibition_id, losses_id));
       })
       .catch(function(error) {
         console.log(error);
@@ -1083,6 +1103,16 @@ for (i = 0; i < acc.length; i++) {
     var split = event.currentTarget.id.split("-");
     var id = split[1];
     var activity = split[0];
+    $("#type-"+id).attr('class', 'type-combo');
+    edit_uca_sc(id);
+  });
+
+  $("body").on('change', '.item__input__active', function(event) {
+    event.preventDefault();
+    var split = event.currentTarget.id.split("-");
+    var id = split[1];
+    var activity = split[0];
+    $("#type-"+id).attr('class', 'type-combo');
     edit_uca_sc(id);
   });
 
@@ -1155,7 +1185,7 @@ for (i = 0; i < acc.length; i++) {
     else if (type == "not provided")
       return "Not provided";
     else if (type == "wrong time")
-      return "Provided in wrong time";
+      return "Provided in wrong order";
     else if (type == "wrong order")
       return "Provided in wrong order";
     else if (type == "too early")
@@ -1401,7 +1431,7 @@ for (i = 0; i < acc.length; i++) {
   }
 
   $('body').on('change', '.mudanca', function(event) {
-    var form = $(event.currentTarget).closest(".adding-uca");
+    var form = $(event.currentTarget).closest(".adding-manual-uca");
     var controlaction_id = form.find("#controlaction_id").val();
     var controller_name = form.find("#controller_name").val();
     var controlaction_name = form.find("#controlaction_name").val();
@@ -1456,30 +1486,36 @@ for (i = 0; i < acc.length; i++) {
       $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/><span class='unsafe-control-name'>" + unsafe_control_action + "</span>.");
       $(".safety-control").html("<br/><center><b>Associated safety constraint:</b></center><br/><span class='safety-control-name'>" + safety_constraint + "</span>.");
     }
+    console.log(controlaction_id);
+    $(".adding-manual-uca").find("#context").val(states.join(",")); //.val();
   });
 
   // Add UCA and Safety Constraint Associated
-  $('body').on('submit', '.add-form', function(event) {
+  $('body').on('submit', '.adding-manual-uca', function(event) {
     event.preventDefault();
-    alert("Entrou!");
     var form = $(event.currentTarget);
-    var controlaction_id = form.data("add").split("-")[1];
-    var unsafe_control_action = form.find("#uca-name-" + controlaction_id).val();
-    var safety_constraint = form.find("#sc-name-" + controlaction_id).val();
+    console.log(form);
+    var controlaction_id = form.find("#controlaction_id").val();
+    var unsafe_control_action = form.find(".unsafe-control-name").html();
+    var safety_constraint = form.find(".safety-control-name").html();
     var type = form.find("#type-uca-" + controlaction_id + " option:selected").val();
+    var context = form.find("#context").val();
     // Rule_is is always zero when the analyst add it.
     var rule_id = 0;
     var id = 0;
+    console.log("CA: " + controlaction_id + " UCA: " + unsafe_control_action + " SC: " + safety_constraint + " Type: " + type + " Context: " + context);
     axios.post('/adduca', {
       id : id,
       unsafe_control_action : unsafe_control_action,
       safety_constraint : safety_constraint,
       type : type,
       controlaction_id : controlaction_id,
+      context : context,
       rule_id : rule_id
     })
     .then(function (response) {
       $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
+      vex.closeAll();
     })
     .catch(function (error) {
       console.log(error);
@@ -1852,6 +1888,7 @@ for (i = 0; i < acc.length; i++) {
             uca_id : uca_id
           })
           .then(function(response){
+            console.log(uca_id);
             $("#content-safety-"+uca_id).empty();
           })
           .catch(function (error) {
@@ -1884,7 +1921,8 @@ for (i = 0; i < acc.length; i++) {
       safety : safety
     })
     .then(function(response){
-      console.log($("#safety-"+safety).find(".container-fluid"));
+      $("#safety-"+safety).find(".information-lifecycle").show();
+      $("#safety-"+safety).find(".information-lifecycle").css('display', 'inline-block');
       $("#safety-"+safety).find(".table-content").append(newCausal(response.data));
       setTimeout(function(){
         vex.closeAll();
@@ -2008,6 +2046,23 @@ for (i = 0; i < acc.length; i++) {
     });
   });
 
+  $('body').on('click', '.information-lifecycle', function(event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    // Gets the id of the UCA
+    var value = form.data("id");
+    $("#information-"+value).find("#uca").val(value);
+    vex.open({
+      unsafeContent: $("#information-"+value).html(),
+      buttons: [
+        $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+        $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+      ],
+      showCloseButton: true,
+      contentClassName: 'teste1'
+    });
+  });
+
   $('body').on('click', '.test-vex', function(event) {
     event.preventDefault();
     var form = $(event.currentTarget);
@@ -2074,8 +2129,13 @@ for (i = 0; i < acc.length; i++) {
         safety : safety
       })
       .then(function(response){
-        console.log($("#safety-"+safety).find(".container-fluid"));
-        $("#safety-"+safety).find(".table-content").append(newCausal(response.data));
+        $("#safety-"+safety).find(".information-lifecycle").show();
+        $("#safety-"+safety).find(".information-lifecycle").css('display', 'inline-block');
+        $("#safety-"+safety).find(".information-lifecycle").show();
+        var guideword_id_information = (guideword == 13 || guideword == 14) ? 15 : guideword;
+        guideword_id_information = (guideword == 18) ? 17 : guideword; 
+        $("#information-"+safety).find(".guideword-"+guideword).show();
+        $("#safety-"+safety).find("#content-safety-"+safety).append(newCausal(response.data));
         setTimeout(function(){
           vex.closeAll();
         }, 2000);

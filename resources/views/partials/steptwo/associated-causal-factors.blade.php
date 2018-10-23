@@ -125,8 +125,8 @@
 		    				<div class="text">Include?</div>
 		    			</div>
 
-		    			<div id="table-right-{{$uca_id}}" class="hidding-guidewords showtable-right" style="display: none;">
-		        			@foreach(App\CausalAnalysis::where('safety_constraint_id', 0)->whereNotBetween('guideword_id', [4,12])->get() as $causal)
+		    			<div id="table-right-{{$uca_id}}" class="hidding-guidewords showtable-right">
+		        			@foreach(App\CausalAnalysis::where('safety_constraint_id', 0)->whereNotBetween('guideword_id', [4,12])->where('role', '!=', 'N/A')->get() as $causal)
 			        			@if($controller_2 != false || $causal->guideword_id != 7)
 			        			<div class="table-row" id="guidewords-{{$causal->id}}">
 			        				<div class="text" id="guideword-scenario-{{$causal->id}}">
@@ -207,7 +207,7 @@
 		        		</div>
 
 		        		<div id="table-left-{{$uca_id}}" class="hidding-guidewords showtable-left" style="display: none;">
-		        			@foreach(App\CausalAnalysis::where('safety_constraint_id', 0)->where('guideword_id', '>', 3)->where('guideword_id', '<', 13)->get() as $causal)
+		        			@foreach(App\CausalAnalysis::where('safety_constraint_id', 0)->where('guideword_id', '>', 3)->where('guideword_id', '<', 13)->where('role', '!=', 'N/A')->get() as $causal)
 			        			@if($controller_2 != false || $causal->guideword_id != 7)
 			        			<div class="table-row" id="guidewords-{{$causal->id}}">
 			        				<div class="text" id="guideword-scenario-{{$causal->id}}">

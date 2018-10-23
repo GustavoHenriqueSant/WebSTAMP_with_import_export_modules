@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-<?php $fundamentals = ($project_type == "Security" ) ? ['mission-assurance', 'systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components'] : ['systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components'];
+<?php $fundamentals = ($project_type == "Security" ) ? ['mission-assurance', 'accidents', 'hazards', 'systemsafetyconstraint', 'components'] : ['systemgoals', 'accidents', 'hazards', 'systemsafetyconstraint', 'components'];
 ?>
 
 @section('content')

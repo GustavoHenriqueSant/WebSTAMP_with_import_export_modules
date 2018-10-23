@@ -13,6 +13,7 @@
 		    </div>
 		    @foreach(App\SafetyConstraints::where('controlaction_id', $ca->id)->get() as $uca)
 		    	@include('partials.steptwo.associated-causal-factors', ['uca_id' => $uca->id, 'uca_context' => $uca->context])
+		    	@include('partials.steptwo.information-lifecycle', ['uca_id' => $uca->id, 'uca_context' => $uca->context])
 		    @endforeach
 	    @endforeach
     @endforeach

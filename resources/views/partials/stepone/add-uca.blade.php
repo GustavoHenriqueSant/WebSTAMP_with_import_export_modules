@@ -2,16 +2,17 @@
     $variables = App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $controller->id])->get();
 ?>
 <div id="add-new-uca-{{$ca->id}}" style="display: none;">
-    <form action="/addnewuca" class="adding-uca" method="POST">
+    <form action="/addnewuca" class="adding-manual-uca" method="POST">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="hidden" name="controlaction_id" id="controlaction_id" value="{{$ca->id}}">
         <input type="hidden" name="controller_name" id="controller_name" value="{{$controller->name}}">
         <input type="hidden" name="controlaction_name" id="controlaction_name" value="{{$ca->name}}">
+        <input type="hidden" name="context" id="context" value="0">
         <div class="vex-dialog-form">
             <div class="container">
                 <div class="container-fluid">
                     <div class="table-row header">
-                        <div class="text">Defining the context of potentially unsafe control action</div>
+                        <div class="text">Defining the context of potentially hazardous control action</div>
                     </div>
                     <div class="table-row header">
                         <div class="text">Type</div>

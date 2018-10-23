@@ -47,6 +47,6 @@ class SafetyConstraintsController extends Controller
 	}
 
 	public function deleteAll(Request $request){
-		SafetyConstraints::where('controlaction_id', $request->input('controlaction_id'))->delete();
+		SafetyConstraints::where('controlaction_id', $request->input('controlaction_id'))->where('rule_id', 0)->delete();
 	}
 }

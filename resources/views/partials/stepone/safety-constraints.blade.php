@@ -1,13 +1,13 @@
 <div class="substep__title">
-    Unsafe Control Actions and Associated Safety Constraints - {{$ca->name}}
+    Hazardous Control Actions and Associated Safety & Security Constraints - {{$ca->name}}
 </div>
 
 <div class="substep__add suggested-uca" id="suggested-ca-{{$ca->id}}">
-    + Suggested Unsafe Control Actions
+    + Suggested Hazardous Control Actions
 </div>
 
 <div class="substep__add add-new-uca" id="ca-{{$ca->id}}">
-    + New Unsafe Control Action
+    + New Hazardous Control Action
 </div>
 
 <div class="substep__content add-uca" id="uca-{{$ca->id}}">
@@ -29,8 +29,8 @@
             </form>
             -->
             <div class="table-row header">
-                <div class="text">Unsafe Control Actions</div>
-                <div class="text">Associated Safety Constraint</div>
+                <div class="text">Hazardous Control Actions</div>
+                <div class="text">Associated Safety & Security Constraint</div>
                 <div class="number-contexttable"><!-- Edit/Delete icons --></div>
             </div>
 
@@ -61,7 +61,7 @@
             @endforeach 
             -->
 
-            @foreach(App\SafetyConstraints::where('controlaction_id', $ca->id)->get() as $sc)
+            @foreach(App\SafetyConstraints::where('controlaction_id', $ca->id)->orderby('id')->get() as $sc)
                 <div class="table-row" id="uca-row-{{$sc->id}}">
                     
                     <div class="text">

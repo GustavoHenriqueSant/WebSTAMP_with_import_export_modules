@@ -4,7 +4,7 @@
 
 @section('content-add')
     <label for="uca-name" class="add-drop__label">
-        Unsafe Control Action
+        Hazardous Control Action
     </label>
     <input id="uca-name-{{$controlaction_id}}" name="uca-name-{{$controlaction_id}}" type="text" class="add-drop__input" required>
 
@@ -23,7 +23,7 @@
     </select>
 
     <label for="sc-name-{{$controlaction_id}}" class="add-drop__label">
-        Safety Constraint Associated 
+        Safety & Security Constraint Associated 
     </label>
     <input id="sc-name-{{$controlaction_id}}" name="uca-name-{{$controlaction_id}}" type="text" class="add-drop__input" required>
 @overwrite

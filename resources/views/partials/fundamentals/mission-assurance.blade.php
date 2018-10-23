@@ -1,5 +1,5 @@
 <div class="substep__title">
-    Mission
+    System Purpose and Goals
 </div>
 
 <div class="substep__add add-mission-assurance" id="mission-assurance">

@@ -6,7 +6,7 @@
             <div class="container">
                 <div class="container-fluid">
                     <div class="table-row header">
-                        <div class="text">Defining the Mission</div>
+                        <div class="text">Defining the System Purpose and Goals</div>
                     </div>
                     <div class="table-row header">
                         <div class="text">What (Purpose)</div>
@@ -43,7 +43,7 @@
             <div class="vex-dialog-input"></div>
             <div class="vex-dialog-buttons">
                 <div style="display: table; margin: 0 auto;">
-                    <button class="vex-dialog-button-primary vex-dialog-button vex-first">Set the Mission</button>
+                    <button class="vex-dialog-button-primary vex-dialog-button vex-first">Set the System Purpose and Goals</button>
                     <!--<button class="vex-dialog-button-secondary vex-dialog-button vex-last">Cancel</button>-->
                 </div>
             </div>
@@ -60,7 +60,7 @@
             <div class="container">
                 <div class="container-fluid">
                     <div class="table-row header">
-                        <div class="text">Defining the Mission</div>
+                        <div class="text">Editing the System Purpose and Goals</div>
                     </div>
                     <div class="table-row header">
                         <div class="text">What (Purpose)</div>
@@ -97,7 +97,7 @@
             <div class="vex-dialog-input"></div>
             <div class="vex-dialog-buttons">
                 <div style="display: table; margin: 0 auto;">
-                    <button class="vex-dialog-button-primary vex-dialog-button vex-first">Edit the Mission</button>
+                    <button class="vex-dialog-button-primary vex-dialog-button vex-first">Edit the System Purpose and Goals</button>
                     <!--<button class="vex-dialog-button-secondary vex-dialog-button vex-last">Cancel</button>-->
                 </div>
             </div>

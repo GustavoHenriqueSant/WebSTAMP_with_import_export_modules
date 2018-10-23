@@ -53,7 +53,7 @@
                     </div>
 
                         <div id="content-safety-{{$safety_constraint->id}}">
-                            @foreach(App\CausalAnalysis::where('safety_constraint_id', $safety_constraint->id)->get() as $causal)
+                            @foreach(App\CausalAnalysis::where('safety_constraint_id', $safety_constraint->id)->orderby('id')->get() as $causal)
                             <div class="table-row" id="causal-row-{{$causal->id}}">
                                 <div class="text">
                                     <select id="guideword-{{$causal->id}}" class="guideword-combo" disabled>
@@ -102,18 +102,25 @@
                         </div>
 
                         <div class="table-row">
-                            <div class="text center"></div>
                             <div class="text center">
                                 <form action="/" class="teste-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
                                     <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Template Instantiation</button>
                                 </form>
                                 <form action="/testeUCA" class="test-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
-                                    <button class="font-button"><img src="/images/plus.png" class="steptwo-button" width="15"/> Add New 4-tuple</button></div>
+                                    <button class="font-button"><img src="/images/plus.png" class="steptwo-button" width="15"/> Add New 4-tuple</button>
                                     <input type="hidden" id="uca_name_{{$safety_constraint->id}}" name="uca_name_{{$safety_constraint->id}}" value="{{$safety_constraint->unsafe_control_action}}">
                                     <input type="hidden" id="GQ_{{$safety_constraint->id}}" name="GQ_{{$safety_constraint->id}}" value="{{$guidequestion}}">
                                     <input type="hidden" id="tst" name="tst" value="{{$safety_constraint->id}}">
                                 </form>
-                            <div class="text center"></div>
+                                @if (App\CausalAnalysis::where('safety_constraint_id', $safety_constraint->id)->count() > 0)
+                                    <form action="/" class="information-lifecycle" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
+                                @else
+                                    <form action="/" class="information-lifecycle" method="POST" data-id="{{$safety_constraint->id}}" style="display: none;" >
+                                @endif
+                                    <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Information Lifecycle</button>
+                                </form>
+                            </div>
+
                         </div>
                         <br/>
                         <center>
