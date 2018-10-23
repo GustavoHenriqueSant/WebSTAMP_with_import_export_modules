@@ -60,6 +60,14 @@
         </div>     
 
     </div>
-
+    </br>
+    <center>
+        <form action="/deleteallrules" method="POST" class="delete-all-rules">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <input type="hidden" id="controlaction_id" name="controlaction_id" value="{{$ca->id}}">
+                <button class="font-button" id="delete"><img src="/images/trash.png" class="steptwo-button" width="15"/> Delete all Rules
+        </button>
+        </form>
+    </center>
     @endif
 </div>

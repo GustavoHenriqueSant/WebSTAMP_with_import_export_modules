@@ -8,6 +8,8 @@ use App\Http\Requests;
 
 use App\Rules;
 
+use App\SafetyConstraints;
+
 use Illuminate\Routing\Redirector;
 
 use Illuminate\Http\RedirectResponse;
@@ -26,19 +28,24 @@ class RuleController extends Controller
 
 		//return redirect()->route('stepone', ['controlaction_id', $rule->controlaction_id]);
 
-		return redirect(route('stepone'));
+		// return redirect(route('stepone'));
 
-		/*return response()->json([
+		return response()->json([
          	'id' => $rule->id,
          	'rule_index' => $rule->index,
          	'state_id' => $rule->state_id,
          	'controlaction_id' => $rule->controlaction_id,
          	'variable_id' => $rule->variable_id
-     	]);*/
+     	]);
 	}
 
 	public function delete(Request $request){
 		Rules::where('index', $request->input('rule_index'))->where('controlaction_id', $request->input('controlaction_id'))->delete();
+	}
+
+	public function deleteAll(Request $request){
+		SafetyConstraints::where('controlaction_id', $request->input('controlaction_id'))->where('rule_id', 1)->delete();
+		Rules::where('controlaction_id', $request->input('controlaction_id'))->delete();
 	}
 
 }

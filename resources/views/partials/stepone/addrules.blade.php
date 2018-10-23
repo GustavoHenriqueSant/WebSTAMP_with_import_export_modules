@@ -1,5 +1,5 @@
 <div class="substep__title">
-    Add new Rule - {{$ca->name}}
+    Add new rule to hazardous control action - {{$ca->name}}
 </div>
 
 <div class="substep__content">

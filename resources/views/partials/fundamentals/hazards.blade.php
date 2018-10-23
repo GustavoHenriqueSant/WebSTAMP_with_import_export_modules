@@ -8,12 +8,14 @@
 
 <div class="substep__content" id="hazards_content" data-accidents="{{$accidents}}">
     <ul class="substep__list">
-        @foreach (App\Hazards::where('project_id', $project_id)->get() as $hazard)
+        @foreach (App\Hazards::where('project_id', $project_id)->orderBy('id')->get() as $hazard)
             <li class="item" id="hazard-{{$hazard->id}}">
                 <div class="item__title">
                     H-{{$hazard_map[$hazard->id]}}: <input type="text" class="item__input" id="hazard-description-{{$hazard->id}}" value="{{ $hazard->name }}" disabled>
                 </div>
+                <?php $loss_index = 0; ?>
                 @foreach($hazard->accidentshazards as $accidentshazards)
+                    <?php $loss_index++; ?>
                     <div class="item__actions__action" id="accident-associated-{{$accidentshazards->id}}">
                         @if($project_type == "Safety")
                         <a href="javascript:;" class="item__delete__box" data-type="hazard" data-index="{{$accidentshazards->id}}">×</a> [A-{{$accident_map[$accidentshazards->accidents_id]}}]

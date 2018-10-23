@@ -31,7 +31,7 @@ function mapAccident($accidents){
 }
 
 function mapHazard($project_id){
-    $hazards = App\Hazards::where('project_id', $project_id)->get();
+    $hazards = App\Hazards::where('project_id', $project_id)->orderBy('id')->get();
     $index = 0;
 
     $hazard_map = null;
@@ -43,7 +43,7 @@ function mapHazard($project_id){
 }
 
 function mapGoals($project_id){
-    $sysgoals = App\SystemGoals::where('project_id', $project_id)->get();
+    $sysgoals = App\SystemGoals::where('project_id', $project_id)->orderBy('id')->get();
     $index = 0;
 
     $sysgoal_map = null;
@@ -75,17 +75,13 @@ Route::match(array('GET', 'POST'), '{slug}/fundamentals', ['as' => 'fundamentals
         $project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
         $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
         $project_name = App\Project::select("name")->where('URL', $slug)->first()->name;
-        $accidents = App\Accidents::where('project_id', $project_id)->get();
+        $accidents = App\Accidents::where('project_id', $project_id)->orderBy('id')->get();
         $belongsToProject = Team::where('project_id', $project_id)->where('user_id', Auth::user()->id)->first() != null;
         $accident_map = mapAccident($accidents);
         $hazard_map = mapHazard($project_id);
         $sysconstraints_map = mapConstraints($project_id);
-        if ($belongsToProject && $project_type == "Safety") {
-            $goals_map = mapGoals($project_id);
-            return view('pages.home', compact("accidents", "project_id", "project_name", "project_type", "slug", "accident_map", "hazard_map", "goals_map", "sysconstraints_map"));
-        }
-        else if ($belongsToProject && $project_type == "Security")
-            return view('pages.home', compact("accidents", "project_id", "project_name", "project_type", "slug", "accident_map", "hazard_map", "sysconstraints_map"));
+        $goals_map = mapGoals($project_id);
+        return view('pages.home', compact("accidents", "project_id", "project_name", "project_type", "slug", "accident_map", "hazard_map", "goals_map", "sysconstraints_map"));
     }
 }]);
 
@@ -152,6 +148,10 @@ Route::post('/addsensor', 'SensorController@add');
 Route::post('/editsensor', 'SensorController@edit');
 Route::post('/deletesensor', 'SensorController@delete');
 
+Route::post('/addmission', 'MissionController@add');
+Route::post('/editmission', 'MissionController@edit');
+Route::post('/deletemission', 'MissionController@delete');
+
 Route::post('/addcontrolaction', 'ControlActionController@add');
 Route::post('/editcontrolaction', 'ControlActionController@edit');
 Route::post('/deletecontrolaction', 'ControlActionController@delete');
@@ -177,11 +177,13 @@ Route::post('/deletestate', 'StateController@delete');
 Route::post('/adduca', 'SafetyConstraintsController@add');
 Route::post('/edituca', 'SafetyConstraintsController@edit');
 Route::post('/deleteuca', 'SafetyConstraintsController@delete');
+Route::post('/deletealluca', 'SafetyConstraintsController@deleteAll');
 // Route::post('/addsuggesteduca', 'SystemSafetyConstraintController@save');
 
 Route::post('/addtuple', 'CausalAnalysisController@add');
 Route::post('/edittuple', 'CausalAnalysisController@edit');
 Route::post('/deletetuple', 'CausalAnalysisController@delete');
+Route::post('/deletealltuple', 'CausalAnalysisController@deleteAll');
 
 
 Route::post('/deleteaccidentassociated', 'AccidentHazardController@delete');
@@ -189,6 +191,7 @@ Route::post('/deleteaccidentassociated', 'AccidentHazardController@delete');
 Route::post('/addrule', 'RuleController@add');
 Route::post('/refreshPage', 'RuleController@refreshPage');
 Route::post('/deleterule', 'RuleController@delete');
+Route::post('/deleteallrules', 'RuleController@deleteAll');
 
 Route::post('/savecontexttable', 'ContextTableController@save');
 Route::post('/deletecontexttable', 'ContextTableController@delete');

@@ -15744,8 +15744,10 @@ function init() {
 function showAccidents() {
 	var listAccidents = $("#hazard-accident-association");
 	var project_type = $("#project_type").val();
+	var index = 0;
 	var retorno = accidents.map(function (accident) {
-		if (project_type == "Safety") return "<option value=\"" + accident.id + "\">[A-" + accident.id + "] " + accident.name + "</option>";else return "<option value=\"" + accident.id + "\">[L-" + accident.id + "] " + accident.name + "</option>";
+		index++;
+		if (project_type == "Safety") return "<option value=\"" + accident.id + "\">[A-" + index + "] " + accident.name + "</option>";else return "<option value=\"" + accident.id + "\">[L-" + index + "] " + accident.name + "</option>";
 	});
 	listAccidents.html(retorno);
 }
@@ -15758,6 +15760,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
 
 if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
+  var removeSemicolon = function removeSemicolon(parameter) {
+    parameter = parameter.split(";");
+    var result = "";
+    var parameter_length = parameter.length;
+    parameter.forEach(function (f, index) {
+      if (index < parameter_length - 2) result += " [" + f + "],";else if (index == parameter_length - 2) result += " [" + f + "] and ";else result += " [" + f + "]";
+    });
+    result = result.split("[ ").join("[");
+    return result;
+  };
 
   // FUNCTION TO EDIT FUNDAMENTALS
 
@@ -15953,9 +15965,6 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     var id = form.find("#edit-id").val();
     var name = form.find("#edit-name").val();
     var description = form.find("#edit-description").val();
-    console.log("Id: " + id);
-    console.log("Name: " + name);
-    console.log("Description: " + description);
     axios.post('/editproject', {
       id: id,
       name: name,
@@ -15968,37 +15977,98 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     });
   });
 
-  $('body').on('change', '#mission-purpose', function (event) {
+  $('body').on('focusout', '#mission_purpose, #mission_purpose_edit', function (event) {
     event.preventDefault();
-    var purpose = $(event.currentTarget).val();
-    $(".label-mission-purpose").empty();
-    $(".label-mission-purpose").append(purpose);
+    var target = event.target.id;
+    if (target == "mission_purpose") {
+      var purpose = $(event.currentTarget).val();
+      $(".label-mission-purpose").empty();
+      $(".label-mission-purpose").append(purpose);
+    } else {
+      var purpose = $(event.currentTarget).text();
+      $(".label-mission-purpose-edit").empty();
+      $(".label-mission-purpose-edit").append(purpose);
+    }
   });
 
-  $('body').on('change', '#mission-method', function (event) {
+  $('body').on('focusout', '#mission_method, #mission_method_edit', function (event) {
     event.preventDefault();
-    var methods = $(event.currentTarget).val();
-    methods = methods.split(";");
-    $(".label-mission-method").empty();
-    var method = "";
-    methods.forEach(function (f) {
-      method += " [" + f + "]";
-    });
-    method = method.split("[ ").join("[");
-    $(".label-mission-method").append(method);
+    var target = event.target.id;
+    if (target == "mission_method") {
+      var methods = $(event.currentTarget).val();
+      var method = removeSemicolon(methods);
+      $(".label-mission-method").empty();
+      $(".label-mission-method").append(method);
+    } else {
+      var methods = $(event.currentTarget).text();
+      var method = removeSemicolon(methods);
+      $(".label-mission-method-edit").empty();
+      $(".label-mission-method-edit").append(method);
+    }
   });
 
-  $('body').on('change', '#mission-goal', function (event) {
+  $('body').on('focusout', '#mission_goal, #mission_goal_edit', function (event) {
     event.preventDefault();
-    var goals = $(event.currentTarget).val();
-    goals = goals.split(";");
-    $(".label-mission-goal").empty();
-    var goal = "";
-    goals.forEach(function (f) {
-      goal += " [" + f + "]";
+    var target = event.target.id;
+    if (target == "mission_goal") {
+      var goals = $(event.currentTarget).val();
+      var goal = removeSemicolon(goals);
+      $(".label-mission-goal").empty();
+      $(".label-mission-goal").append(goal);
+    } else {
+      var goals = $(event.currentTarget).text();
+      var goal = removeSemicolon(goals);
+      $(".label-mission-goal-edit").empty();
+      $(".label-mission-goal-edit").append(goal);
+    }
+  });
+
+  $('body').on('submit', '.adding-mission-assurance', function (event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var mission_purpose = form.find("#mission_purpose").val();
+    var mission_method = form.find('#mission_method').val();
+    var mission_goal = form.find('#mission_goal').val();
+    var project_id = form.find('#project_id').val();
+    var id = 0;
+    axios.post('/addmission', {
+      id: id,
+      purpose: mission_purpose,
+      method: mission_method,
+      goals: mission_goal,
+      project_id: project_id
+    }).catch(function (error) {
+      console.log(error);
     });
-    goal = goal.split("[ ").join("[");
-    $(".label-mission-goal").append(goal);
+    location.reload();
+  });
+
+  $('body').on('submit', '.editing-mission-assurance', function (event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var id = form.find("#mission_id").val();
+    var purpose = form.find("#mission_purpose_edit").html();
+    $("#mission-purpose").val(purpose);
+    var method = form.find("#mission_method_edit").html();
+    $("#mission-method").val(method);
+    var goal = form.find("#mission_goal_edit").html();
+    $("#mission-goal").val(goal);
+    axios.post('/editmission', {
+      id: id,
+      purpose: purpose,
+      method: method,
+      goals: goal
+    }).then(function (response) {
+      $(".label-for-mission-purpose").empty();
+      $(".label-for-mission-purpose").html(purpose);
+      $(".label-for-mission-method").empty();
+      $(".label-for-mission-method").html(removeSemicolon(method));
+      $(".label-for-mission-goal").empty();
+      $(".label-for-mission-goal").html(removeSemicolon(goal));
+      vex.closeAll();
+    }).catch(function (error) {
+      console.log(error);
+    });
   });
 
   Hazard.init();
@@ -16109,7 +16179,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
           project_type: project_type
         }).then(function (response) {
           var exihibition_id = $("#hazards_content").children().children().length + 1;
-          $newHazard.append(hazard(response.data, exihibition_idx1));
+          $newHazard.append(hazard(response.data, exihibition_id));
         }).catch(function (error) {
           console.log(error);
         });
@@ -16435,6 +16505,24 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   });
 
   // Mission Assurance
+  $('body').on('click', '#editing-mission', function (event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    $("#mission_purpose_edit").html($("#mission-purpose").val());
+    $("#mission_method_edit").html($("#mission-method").val());
+    $("#mission_goal_edit").html($("#mission-goal").val());
+    $("#mission_id").val(form.find("#mission_id").val());
+    $(".label-mission-purpose-edit").html($(".label-for-mission-purpose").html());
+    $(".label-mission-method-edit").html($(".label-for-mission-method").html());
+    $(".label-mission-goal-edit").html($(".label-for-mission-goal").html());
+    vex.open({
+      unsafeContent: $("#edit-mission-assurance").html(),
+      buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
+      showCloseButton: true,
+      className: "vex-theme-default"
+    });
+  });
+
   $('body').on('click', '.add-mission-assurance', function (event) {
     event.preventDefault();
     vex.open({
@@ -16899,33 +16987,29 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     var controlaction_id = form.find("#controlaction_id").val();
     var controller_name = form.find("#controller_name").val();
     var controlaction_name = form.find("#controlaction_name").val();
-    var type = form.find("#type-uca-" + controlaction_id).val();;
-    var uca_name = form.find(".unsafe-control-name").text();
-    var sc_name = form.find(".safety-control-name").text();
-    var states = [];
-    var id = 0;
-    var rule_id = 0;
-    $(".uca-row-" + controlaction_id + " option:selected").each(function (index, f) {
-      if (f.value.split("-")[0] > 0) {
-        states.push(f.value.split("-")[0]);
-      }
-    });
-    var context = states[0];
-    states.forEach(function (f, index) {
-      if (index > 0) context += "," + f;
-    });
-    axios.post('/adduca', {
-      id: id,
-      unsafe_control_action: uca_name,
-      safety_constraint: sc_name,
-      type: type,
-      controlaction_id: controlaction_id,
-      rule_id: rule_id,
-      context: context
-    }).then(function (response) {
-      $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
-    }).catch(function (error) {
-      console.log(error);
+    var type = "";
+    form.find(".associated-checkbox:checked").each(function (index, f) {
+      var id = 0;
+      var checkbox_id = f.id.split("-")[1];
+      var unsafe_control_action = form.find("#uca-" + checkbox_id).text();
+      var safety_constraint = form.find("#sc-" + checkbox_id).text();
+      var context = form.find("#context-" + checkbox_id).val();
+      var type = form.find("#type-" + checkbox_id).val();
+      type = convertType(type);
+      var rule_id = 0;
+      axios.post('/adduca', {
+        id: id,
+        unsafe_control_action: unsafe_control_action,
+        safety_constraint: safety_constraint,
+        type: type,
+        controlaction_id: controlaction_id,
+        rule_id: rule_id,
+        context: context
+      }).then(function (response) {
+        $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
+      }).catch(function (error) {
+        console.log(error);
+      });
     });
   });
 
@@ -17057,6 +17141,61 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       var ca_id = window.location.search.substr(1).split("=");
     });
   });
+  $('body').on('submit', '.delete-all-uca', function (event) {
+    event.preventDefault();
+    vex.dialog.confirm({
+      message: 'All Hazardous Control Actions and Constraints will be deleted. All unsaved data will be lost. Are you sure?',
+      callback: function callback(value) {
+        if (value) {
+          var form = $(event.currentTarget);
+          var controlaction_id = form.find("#controlaction_id").val();
+          axios.post('/deletealluca', {
+            controlaction_id: controlaction_id
+          }).catch(function (error) {
+            console.log(error);
+          });
+          setTimeout(function () {
+            var ca = window.location.search.substr(1).split("=");
+            console.log(ca);
+            if (ca.length > 1) {
+              var currentURL = window.location.href.split("?");
+              window.location.href = currentURL[0] + '?ca=' + controlaction_id;
+            } else {
+              window.location.href += '?ca=' + controlaction_id;
+            }
+          }, 2000);
+        }
+      }
+    });
+  });
+
+  $('body').on('submit', '.delete-all-rules', function (event) {
+    event.preventDefault();
+    vex.dialog.confirm({
+      message: 'All rules will be deleted. All unsaved data will be lost. Are you sure?',
+      callback: function callback(value) {
+        if (value) {
+          var form = $(event.currentTarget);
+          var controlaction_id = form.find("#controlaction_id").val();
+          axios.post('/deleteallrules', {
+            controlaction_id: controlaction_id
+          }).catch(function (error) {
+            console.log(error);
+          });
+          setTimeout(function () {
+            var ca = window.location.search.substr(1).split("=");
+            console.log(ca);
+            if (ca.length > 1) {
+              var currentURL = window.location.href.split("?");
+              window.location.href = currentURL[0] + '?ca=' + controlaction_id;
+            } else {
+              window.location.href += '?ca=' + controlaction_id;
+            }
+          }, 2000);
+        }
+      }
+    });
+  });
 
   // Add rules
   $('body').on('submit', '.add-new-rule', function (event) {
@@ -17081,6 +17220,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
           var states_name = [];
           var id = 0;
           var states_final = [];
+          var rule_id = 1;
           // Save each variable of the rule
           var variables = form.find('[id^="variable_id_"]').each(function () {
             var ids = form.find(this).val().split("-");
@@ -17106,6 +17246,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
               console.log(error);
             });
           });
+          var column_index = -1;
           columns.forEach(function (column_name) {
             var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
             var context = "";
@@ -17113,13 +17254,14 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
               console.log(f);
               if (index == 0) context += f;else if (index < variables_array.length) context += "," + f;
             });
+            column_index++;
             axios.post('/adduca', {
               id: id,
               unsafe_control_action: sc.unsafe_control_action,
               safety_constraint: sc.safety_constraint,
-              type: column,
+              type: columns[column_index],
               controlaction_id: controlaction_id,
-              rule_id: id,
+              rule_id: rule_id,
               context: context
             }).catch(function (error) {
               console.log(error);
@@ -17175,6 +17317,32 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
               console.log(error);
             });
             return false;
+          }
+        }
+      }
+    });
+  });
+
+  $('body').on('submit', '.clear-context-table', function (event) {
+    event.preventDefault();
+    vex.dialog.confirm({
+      message: 'Attention: The Context Table is going to be cleaned (Not saved). If you want to save the cleaned Context table, use the "Save Context Table" Button. Are you sure you want to clean?.',
+      callback: function callback(value) {
+        if (value) {
+          var form = $(event.currentTarget);
+          var total_rows = form.find("#total_rows").val() - 1;
+          var row = 0;
+          var controlaction_id = form.find("#controlaction_id").val();
+          while (total_rows >= 0) {
+            //.is(':disabled')
+            if (!$("#provided-ca-" + controlaction_id + "-row-" + total_rows).is(':disabled')) $("#provided-ca-" + controlaction_id + "-row-" + total_rows).val("null");
+            if (!$("#notprovided-ca-" + controlaction_id + "-row-" + total_rows).is(':disabled')) $("#notprovided-ca-" + controlaction_id + "-row-" + total_rows).val("null");
+            $("#wrongtime-ca-" + controlaction_id + "-row-" + total_rows).val("null");
+            if (!$("#early-ca-" + controlaction_id + "-row-" + total_rows).is(':disabled')) $("#early-ca-" + controlaction_id + "-row-" + total_rows).val("null");
+            if (!$("#late-ca-" + controlaction_id + "-row-" + total_rows).is(':disabled')) $("#late-ca-" + controlaction_id + "-row-" + total_rows).val("null");
+            if (!$("#soon-ca-" + controlaction_id + "-row-" + total_rows).is(':disabled')) $("#soon-ca-" + controlaction_id + "-row-" + total_rows).val("null");
+            if (!$("#long-ca-" + controlaction_id + "-row-" + total_rows).is(':disabled')) $("#long-ca-" + controlaction_id + "-row-" + total_rows).val("null");
+            total_rows--;
           }
         }
       }
@@ -17270,6 +17438,27 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   vex.registerPlugin(require('vex-dialog'));
   vex.defaultOptions.className = 'vex-theme-default';
 
+  $('body').on('submit', '.delete-all-tuple', function (event) {
+    event.preventDefault();
+    vex.dialog.confirm({
+      message: 'All tuples created (through "Template Instantiation" and "Add new 4-tuple") for that HCA will be deleted. Are you sure?',
+      callback: function callback(value) {
+        if (value) {
+          var form = $(event.currentTarget);
+          var uca_id = form.find("#uca_id").val();
+          var content = form.find(".table-content");
+          axios.post('/deletealltuple', {
+            uca_id: uca_id
+          }).then(function (response) {
+            $("#content-safety-" + uca_id).empty();
+          }).catch(function (error) {
+            console.log(error);
+          });
+        }
+      }
+    });
+  });
+
   $('body').on('submit', '.adding-tuple', function (event) {
     var _axios$post;
 
@@ -17361,8 +17550,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     // Gets the id of the UCA
     var value = form.data("id");
     console.log($("#table-left-" + value));
-    $("#table-left-" + value).show();
-    $("#table-right" + value).hide();
+    $("#table-right" + value).show();
+    $("#table-left-" + value).hide();
     // Change de hidden value to the actual UCA id
     $("#approach-" + value).find("#uca").val(value);
     vex.open({

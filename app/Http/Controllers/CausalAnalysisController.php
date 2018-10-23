@@ -39,6 +39,10 @@ class CausalAnalysisController extends Controller
     	CausalAnalysis::destroy($request->input('id'));
     }
 
+    public function deleteAll(Request $request) {
+        CausalAnalysis::where("safety_constraint_id", $request->input('uca_id'))->delete();
+    }
+
     public function edit(Request $request){
     	$causal = CausalAnalysis::find($request->input('id'));
     	$causal->scenario = $request->input('scenario');

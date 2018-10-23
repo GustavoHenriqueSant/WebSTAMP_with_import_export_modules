@@ -25,7 +25,7 @@
                     <form action ="/editaccident" method="POST" class="edit-form ajaxform" data-edit="accident">
                         <div class="item__title">
                             <input type="hidden" name="_token" value="{{csrf_token()}}">
-                            <input id="project_id" name="project_id" type="hidden" value="1">
+                            <input id="project_id" name="project_id" type="hidden" value="{{$project_id}}">
                             <input id="accident_id" name="accident_id" type="hidden" value="{{$accident->id}}">
                             <input type="image" src="{{ asset('images/edit.ico') }}" alt="Edit" width="20" class="navbar__logo">
                         </div>
@@ -33,7 +33,7 @@
                     <form action ="/deleteaccident" method="POST" class="delete-form ajaxform" data-delete="accident">
                         <div class="item__title">
                             <input type="hidden" name="_token" value="{{csrf_token()}}">
-                            <input id="project_id" name="project_id" type="hidden" value="1">
+                            <input id="project_id" name="project_id" type="hidden" value="{{$project_id}}">
                             <input id="accident_id" name="accident_id" type="hidden" value="{{$accident->id}}">
                             <input type="image" src="{{ asset('images/trash.png') }}" alt="Delete" width="20" class="navbar__logo">
                         </div>

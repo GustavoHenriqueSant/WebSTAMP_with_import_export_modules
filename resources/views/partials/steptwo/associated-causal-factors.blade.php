@@ -9,17 +9,29 @@
 	else
 		$controller_2 = App\Controllers::find($controller_2);
 
-	$actuator = App\Connections::where('output_component_id', $unsafe->controlaction->controller->id)->where('type_input', 'actuator')->get();
-	$actuator = $actuator[0]->input_component_id;
-	$actuator = App\Actuators::find($actuator);
-
-	$controlled_process = App\Connections::where('output_component_id', $actuator->id)->where('type_input', 'controlled_process')->get();
+	$isActuator = App\Connections::where('output_component_id', $unsafe->controlaction->controller->id)->where('type_input', 'actuator')->count();
+	if ($isActuator > 0) {
+		$actuator = App\Connections::where('output_component_id', $unsafe->controlaction->controller->id)->where('type_input', 'actuator')->get();
+		$actuator = $actuator[0]->input_component_id;
+		$actuator = App\Actuators::find($actuator);
+	}
+		
+	if ($isActuator > 0) {
+		$controlled_process = App\Connections::where('output_component_id', $actuator->id)->where('type_input', 'controlled_process')->get();
+	} else {
+		$controlled_process = App\Connections::where('output_component_id', $unsafe->controlaction->controller->id)->where('type_input', 'controlled_process')->get();
+	}
 	$controlled_process = $controlled_process[0]->input_component_id;
 	$controlled_process = App\ControlledProcess::find($controlled_process);
 
-	$sensor = App\Connections::where('output_component_id', $controlled_process->id)->where('type_input', 'sensor')->get();
-	$sensor = $sensor[0]->input_component_id;
+	$isSensor = App\Connections::where('output_component_id', $controlled_process->id)->where('type_input', 'sensor')->count();
+	if($isSensor){
+		$sensor = App\Connections::where('output_component_id', $controlled_process->id)->where('type_input', 'sensor')->get();
+		$sensor = $sensor[0]->input_component_id;
 	$sensor = App\Sensors::find($sensor);
+	} else {
+		$sensor = App\Connections::where('output_component_id', $controlled_process->id)->where('type_input', 'controller')->get();
+	}
 
 	$variable = "";
 	$context = [];
@@ -48,14 +60,15 @@
 	<input type="hidden" name="uca" id="uca" value="0">
 
 	<div class="center">
-		<select id="show-guidewords-{{$uca_id}}" class="choose-guideword">
-			<option value="left">Left side: Safe control action provided but not followed or executed</option>
-			<option value="right" selected="true">Right side: Unsafe control action provided or safe control action required but not provided</option>
-		</select>
+		<button class="gcl2" name="gcl2">Show Generic Control Loop</button>
+	</div>
+	
+	<div class="gcl center" name="gcl" style="display: none;">
+		<img src="{{ asset('images/GCL.png') }}" alt="Generic Control Loop" class="image" syle="visible: false;">
 	</div>
 
 	<br/>
-	
+
 	<div class="center">
 		@foreach(App\SafetyConstraints::where('id', $uca->id)->get() as $sc)
 			<b>Unsafe Control Action</b>: {{$sc->unsafe_control_action}}
@@ -85,20 +98,16 @@
 		?>
 		<b>Guide Question</b>: What are the causal factors that make the <b>{{$ca->name}}</b> to be <b>{{$type}}</b> by the <b>{{$operator}}</b> when <b>{{$context}}</b>?
 
-	</div>
+	</div>	
 
 	<br/>
 
 	<div class="center">
-		<button class="gcl2" name="gcl2">Show Generic Control Loop</button>
+		<select id="show-guidewords-{{$uca_id}}" class="choose-guideword">
+			<option value="right" selected="true">Right side: Unsafe control action provided or safe control action required but not provided</option>
+			<option value="left">Left side: Safe control action provided but not followed or executed</option>
+		</select>
 	</div>
-
-	<br/>
-	
-	<div class="gcl center" name="gcl" style="display: none;">
-		<img src="{{ asset('images/GCL.png') }}" alt="Generic Control Loop" class="image" syle="visible: false;">
-	</div>
-	
 
 	<br/>
 	
@@ -116,75 +125,7 @@
 		    				<div class="text">Include?</div>
 		    			</div>
 
-		    			<div id="table-left-{{$uca_id}}" class="hidding-guidewords showtable-left" style="display: none;">
-		        			@foreach(App\CausalAnalysis::where('safety_constraint_id', 0)->where('guideword_id', '>', 3)->where('guideword_id', '<', 13)->get() as $causal)
-			        			@if($controller_2 != false || $causal->guideword_id != 7)
-			        			<div class="table-row" id="guidewords-{{$causal->id}}">
-			        				<div class="text" id="guideword-scenario-{{$causal->id}}">
-			        					<?php
-			        						$causal->scenario = str_replace("[CONTROLLER]", $controller, $causal->scenario);
-			        						$causal->scenario = str_replace("[CONTROLLER2]", $controller_2, $causal->scenario);
-			        						$causal->scenario = str_replace("[ACTUATOR]", $actuator->name, $causal->scenario);
-			        						$causal->scenario = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->scenario);
-			        						$causal->scenario = str_replace("[SENSOR]", $sensor->name, $causal->scenario);
-			        						$causal->scenario = str_replace("[VARIABLE]", $variable, $causal->scenario);
-			        					?>
-			        					<span class="listing-guideword">
-		        							[<b style="font-size: 16px; text-align: center;">{{$causal->guideword->guideword}}</b>] <br/>
-			        					</span>
-			        					<span id="getting-scenario-{{$causal->id}}">
-			        						{{$causal->scenario}}
-			        					</span>
-			        				</div>
-			        				<div class="text" id="guideword-associated-{{$causal->id}}">
-			        					<?php
-			        						$causal->associated_causal_factor = str_replace("[CONTROLLER]", $controller, $causal->associated_causal_factor);
-			        						$causal->associated_causal_factor = str_replace("[ACTUATOR]", $actuator->name, $causal->associated_causal_factor);
-			        						$causal->associated_causal_factor = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->associated_causal_factor);
-			        						$causal->associated_causal_factor = str_replace("[SENSOR]", $sensor->name, $causal->associated_causal_factor);
-			        						$causal->associated_causal_factor = str_replace("[VARIABLE]", $variable, $causal->associated_causal_factor);
-			        					?>
-			        					{{$causal->associated_causal_factor}}
-			        				</div>
-			        				<div class="text" id="guideword-requirement-{{$causal->id}}">
-			        					<?php
-			        						$causal->requirement = str_replace("[CONTROLLER]", $controller, $causal->requirement);
-			        						$causal->requirement = str_replace("[ACTUATOR]", $actuator->name, $causal->requirement);
-			        						$causal->requirement = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->requirement);
-			        						$causal->requirement = str_replace("[SENSOR]", $sensor->name, $causal->requirement);
-			        						$causal->requirement = str_replace("[VARIABLE]", $variable, $causal->requirement);
-			        					?>
-			        					{{$causal->requirement}}
-			        				</div>
-<!-- 			        				<div class="text" id="guideword-role-{{$causal->id}}">
-			        					<?php
-			        						$causal->role = str_replace("[CONTROLLER]", $controller, $causal->role);
-			        						$causal->role = str_replace("[ACTUATOR]", $actuator->name, $causal->role);
-			        						$causal->role = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->role);
-			        						$causal->role = str_replace("[SENSOR]", $sensor->name, $causal->role);
-			        						$causal->role = str_replace("[VARIABLE]", $variable, $causal->role);
-			        					?>
-			        					{{$causal->role}}
-			        				</div> -->
-			        				<div class="text" id="guideword-rationale-{{$causal->id}}">
-			        					<?php
-			        						$causal->rationale = str_replace("[CONTROLLER]", $controller, $causal->rationale);
-			        						$causal->rationale = str_replace("[ACTUATOR]", $actuator->name, $causal->rationale);
-			        						$causal->rationale = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->rationale);
-			        						$causal->rationale = str_replace("[SENSOR]", $sensor->name, $causal->rationale);
-			        						$causal->rationale = str_replace("[VARIABLE]", $variable, $causal->rationale);
-			        					?>
-			        					{{$causal->rationale}}
-			        				</div>
-			        				<div class="text center"><input type="checkbox" style="display: inline-block; height: 100%; vertical-align: middle;" class="associated-checkbox" id="checkbox-{{$causal->id}}"></div>
-			        				<input type="hidden" name="guideword-{{$causal->id}}" id="guideword-{{$causal->id}}" value="{{$causal->guideword_id}}">
-			        			</div>
-			        			@endif
-		        			@endforeach
-		        		</div>
-
-
-		        		<div id="table-right-{{$uca_id}}" class="hidding-guidewords showtable-right" style="display: none;">
+		    			<div id="table-right-{{$uca_id}}" class="hidding-guidewords showtable-right" style="display: none;">
 		        			@foreach(App\CausalAnalysis::where('safety_constraint_id', 0)->whereNotBetween('guideword_id', [4,12])->get() as $causal)
 			        			@if($controller_2 != false || $causal->guideword_id != 7)
 			        			<div class="table-row" id="guidewords-{{$causal->id}}">
@@ -192,9 +133,15 @@
 			        					<?php
 			        						$causal->scenario = str_replace("[CONTROLLER]", $controller, $causal->scenario);
 			        						$causal->scenario = str_replace("[CONTROLLER2]", $controller_2, $causal->scenario);
-			        						$causal->scenario = str_replace("[ACTUATOR]", $actuator->name, $causal->scenario);
+			        						if ($isActuator > 0)
+			        							$causal->scenario = str_replace("[ACTUATOR]", $actuator->name, $causal->scenario);
+			        						else
+			        							$causal->scenario = str_replace("[ACTUATOR]", $controller, $causal->scenario);
 			        						$causal->scenario = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->scenario);
-			        						$causal->scenario = str_replace("[SENSOR]", $sensor->name, $causal->scenario);
+			        						if ($isSensor > 0)
+			        							$causal->scenario = str_replace("[SENSOR]", $sensor->name, $causal->scenario);
+			        						else
+			        							$causal->scenario = str_replace("[SENSOR]", $controller, $causal->scenario);
 			        						$causal->scenario = str_replace("[VARIABLE]", $variable, $causal->scenario);
 			        					?>
 			        					<span class="listing-guideword">
@@ -207,9 +154,15 @@
 			        				<div class="text" id="guideword-associated-{{$causal->id}}">
 			        					<?php
 			        						$causal->associated_causal_factor = str_replace("[CONTROLLER]", $controller, $causal->associated_causal_factor);
+			        						if ($isActuator > 0)
 			        						$causal->associated_causal_factor = str_replace("[ACTUATOR]", $actuator->name, $causal->associated_causal_factor);
+			        						else
+			        						$causal->associated_causal_factor = str_replace("[ACTUATOR]", $controller, $causal->associated_causal_factor);
 			        						$causal->associated_causal_factor = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->associated_causal_factor);
-			        						$causal->associated_causal_factor = str_replace("[SENSOR]", $sensor->name, $causal->associated_causal_factor);
+			        						if ($isSensor > 0)
+			        							$causal->associated_causal_factor = str_replace("[SENSOR]", $sensor->name, $causal->associated_causal_factor);
+			        						else
+			        							$causal->associated_causal_factor = str_replace("[SENSOR]", $controller, $causal->associated_causal_factor);
 			        						$causal->associated_causal_factor = str_replace("[VARIABLE]", $variable, $causal->associated_causal_factor);
 			        					?>
 			        					{{$causal->associated_causal_factor}}
@@ -217,29 +170,112 @@
 			        				<div class="text" id="guideword-requirement-{{$causal->id}}">
 			        					<?php
 			        						$causal->requirement = str_replace("[CONTROLLER]", $controller, $causal->requirement);
+			        						if ($isActuator > 0)
 			        						$causal->requirement = str_replace("[ACTUATOR]", $actuator->name, $causal->requirement);
+			        						else
+			        						$causal->requirement = str_replace("[ACTUATOR]", $controller, $causal->requirement);
 			        						$causal->requirement = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->requirement);
-			        						$causal->requirement = str_replace("[SENSOR]", $sensor->name, $causal->requirement);
+			        						if ($isSensor > 0)
+			        							$causal->requirement = str_replace("[SENSOR]", $sensor->name, $causal->requirement);
+			        						else
+			        							$causal->requirement = str_replace("[SENSOR]", $controller, $causal->requirement);
 			        						$causal->requirement = str_replace("[VARIABLE]", $variable, $causal->requirement);
 			        					?>
 			        					{{$causal->requirement}}
 			        				</div>
-<!-- 			        				<div class="text" id="guideword-role-{{$causal->id}}">
-			        					<?php
-			        						$causal->role = str_replace("[CONTROLLER]", $controller, $causal->role);
-			        						$causal->role = str_replace("[ACTUATOR]", $actuator->name, $causal->role);
-			        						$causal->role = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->role);
-			        						$causal->role = str_replace("[SENSOR]", $sensor->name, $causal->role);
-			        						$causal->role = str_replace("[VARIABLE]", $variable, $causal->role);
-			        					?>
-			        					{{$causal->role}}
-			        				</div> -->
 			        				<div class="text" id="guideword-rationale-{{$causal->id}}">
 			        					<?php
 			        						$causal->rationale = str_replace("[CONTROLLER]", $controller, $causal->rationale);
+			        						if ($isActuator > 0)
 			        						$causal->rationale = str_replace("[ACTUATOR]", $actuator->name, $causal->rationale);
+			        						else
+			        						$causal->rationale = str_replace("[ACTUATOR]", $controller, $causal->rationale);
 			        						$causal->rationale = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->rationale);
-			        						$causal->rationale = str_replace("[SENSOR]", $sensor->name, $causal->rationale);
+			        						if ($isSensor > 0)
+			        							$causal->rationale = str_replace("[SENSOR]", $sensor->name, $causal->rationale);
+			        						else
+			        							$causal->rationale = str_replace("[SENSOR]", $controller, $causal->rationale);
+			        						$causal->rationale = str_replace("[VARIABLE]", $variable, $causal->rationale);
+			        					?>
+			        					{{$causal->rationale}}
+			        				</div>
+			        				<div class="text center"><input type="checkbox" style="display: inline-block; height: 100%; vertical-align: middle;" class="associated-checkbox" id="checkbox-{{$causal->id}}"></div>
+			        				<input type="hidden" name="guideword-{{$causal->id}}" id="guideword-{{$causal->id}}" value="{{$causal->guideword_id}}">
+			        			</div>
+			        			@endif
+		        			@endforeach
+		        		</div>
+
+		        		<div id="table-left-{{$uca_id}}" class="hidding-guidewords showtable-left" style="display: none;">
+		        			@foreach(App\CausalAnalysis::where('safety_constraint_id', 0)->where('guideword_id', '>', 3)->where('guideword_id', '<', 13)->get() as $causal)
+			        			@if($controller_2 != false || $causal->guideword_id != 7)
+			        			<div class="table-row" id="guidewords-{{$causal->id}}">
+			        				<div class="text" id="guideword-scenario-{{$causal->id}}">
+			        					<?php
+			        						$causal->scenario = str_replace("[CONTROLLER]", $controller, $causal->scenario);
+			        						$causal->scenario = str_replace("[CONTROLLER2]", $controller_2, $causal->scenario);
+			        						if ($isActuator > 0)
+			        						$causal->scenario = str_replace("[ACTUATOR]", $actuator->name, $causal->scenario);
+			        						else
+			        						$causal->scenario = str_replace("[ACTUATOR]", $controller, $causal->scenario);
+			        						$causal->scenario = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->scenario);
+			        						if ($isSensor > 0)
+			        							$causal->scenario = str_replace("[SENSOR]", $sensor->name, $causal->scenario);
+			        						else
+			        							$causal->scenario = str_replace("[SENSOR]", $controller, $causal->scenario);
+			        						$causal->scenario = str_replace("[VARIABLE]", $variable, $causal->scenario);
+			        					?>
+			        					<span class="listing-guideword">
+		        							[<b style="font-size: 16px; text-align: center;">{{$causal->guideword->guideword}}</b>] <br/>
+			        					</span>
+			        					<span id="getting-scenario-{{$causal->id}}">
+			        						{{$causal->scenario}}
+			        					</span>
+			        				</div>
+			        				<div class="text" id="guideword-associated-{{$causal->id}}">
+			        					<?php
+			        						$causal->associated_causal_factor = str_replace("[CONTROLLER]", $controller, $causal->associated_causal_factor);
+			        						if ($isActuator > 0)
+			        						$causal->associated_causal_factor = str_replace("[ACTUATOR]", $actuator->name, $causal->associated_causal_factor);
+			        						else
+			        						$causal->associated_causal_factor = str_replace("[ACTUATOR]", $controller, $causal->associated_causal_factor);
+			        						$causal->associated_causal_factor = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->associated_causal_factor);
+			        						if ($isSensor > 0)
+			        							$causal->associated_causal_factor = str_replace("[SENSOR]", $sensor->name, $causal->associated_causal_factor);
+			        						else
+			        							$causal->associated_causal_factor = str_replace("[SENSOR]", $controller, $causal->associated_causal_factor);
+			        						$causal->associated_causal_factor = str_replace("[VARIABLE]", $variable, $causal->associated_causal_factor);
+			        					?>
+			        					{{$causal->associated_causal_factor}}
+			        				</div>
+			        				<div class="text" id="guideword-requirement-{{$causal->id}}">
+			        					<?php
+			        						$causal->requirement = str_replace("[CONTROLLER]", $controller, $causal->requirement);
+			        						if ($isActuator > 0)
+			        						$causal->requirement = str_replace("[ACTUATOR]", $actuator->name, $causal->requirement);
+			        						else
+			        						$causal->requirement = str_replace("[ACTUATOR]", $controller, $causal->requirement);
+			        						$causal->requirement = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->requirement);
+			        						if ($isSensor > 0)
+			        							$causal->requirement = str_replace("[SENSOR]", $sensor->name, $causal->requirement);
+			        						else
+			        							$causal->requirement = str_replace("[SENSOR]", $controller, $causal->requirement);
+			        						$causal->requirement = str_replace("[VARIABLE]", $variable, $causal->requirement);
+			        					?>
+			        					{{$causal->requirement}}
+			        				</div>
+			        				<div class="text" id="guideword-rationale-{{$causal->id}}">
+			        					<?php
+			        						$causal->rationale = str_replace("[CONTROLLER]", $controller, $causal->rationale);
+			        						if ($isActuator > 0)
+			        						$causal->rationale = str_replace("[ACTUATOR]", $actuator->name, $causal->rationale);
+			        						else
+			        						$causal->rationale = str_replace("[ACTUATOR]", $controller, $causal->rationale);
+			        						$causal->rationale = str_replace("[CONTROLLED PROCESS]", $controlled_process->name, $causal->rationale);
+			        						if ($isSensor > 0)
+			        							$causal->rationale = str_replace("[SENSOR]", $sensor->name, $causal->rationale);
+			        						else
+			        							$causal->rationale = str_replace("[SENSOR]", $controller, $causal->rationale);
 			        						$causal->rationale = str_replace("[VARIABLE]", $variable, $causal->rationale);
 			        					?>
 			        					{{$causal->rationale}}

@@ -73,11 +73,11 @@
           </a>
         </div>
         <div class="navbar__item__substeps">
-          <div class="navbar__item__substep">
+          <!-- <div class="navbar__item__substep">
             <a href="/#systemgoals" class="navbar__item__link">
               My Info
             </a>
-          </div>
+          </div> -->
           <div class="navbar__item__substep">
             <a href="/projects" class="navbar__item__link">
               My Projects

@@ -45,4 +45,8 @@ class SafetyConstraintsController extends Controller
 	public function delete(Request $request){
 		SafetyConstraints::destroy($request->input('id'));
 	}
+
+	public function deleteAll(Request $request){
+		SafetyConstraints::where('controlaction_id', $request->input('controlaction_id'))->delete();
+	}
 }
