@@ -4,7 +4,7 @@ module.exports = function(context, exihibition_id) {
     return `
         <li class="item" id="accident-${context.id}">
             <div class="item__title">
-                A-${exihibition_id}: <input type="text" class="item__input" id="accident-description-${context.id}" value="${context.name}" size="${size}" onkeypress="this.size=this.value.length" disabled>
+                L-${exihibition_id}: <input type="text" class="item__input" id="accident-description-${context.id}" value="${context.name}" size="${size}" onkeypress="this.size=this.value.length" disabled>
             </div>
             <div class="item__actions">
                 <form action ="/editaccident" method="POST" class="edit-form ajaxform" data-edit="accident">
