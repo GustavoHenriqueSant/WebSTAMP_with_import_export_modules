@@ -260,16 +260,19 @@
                             );
 
                             foreach ($rules as $key => $r) {
-                                if ($r == "true" && count($r) > 0) {
-                                    echo "R".($key+1)." ";
-                                    $thereAreRule = "true";
-                                    $columns_that_rule_can_be_applied = explode(";", $columns[0]);
-                                    //print_r($columns_that_rule_can_be_applied);
-                                    foreach($columns_that_rule_can_be_applied as $column_rule)
-                                        $column_name[$column_rule] = true;                                    
-                                } else {
-                                    $r[$key] = "false";
+                                if (isset($r)){
+                                    if ($r == "true" && count($r) > 0) {
+                                        echo "R".($key+1)." ";
+                                        $thereAreRule = "true";
+                                        $columns_that_rule_can_be_applied = explode(";", $columns[0]);
+                                        //print_r($columns_that_rule_can_be_applied);
+                                        foreach($columns_that_rule_can_be_applied as $column_rule)
+                                            $column_name[$column_rule] = true;                                    
+                                    } else {
+                                        $r[$key] = "false";
+                                    }
                                 }
+                                
                             }                            
                             $context_table = DB::select('SELECT * FROM context_tables WHERE controlaction_id = ? and ? like concat("%",context,"%") ORDER BY context', [$ca->id, $array_for_compare]);
                             $context_table = (count($context_table) > 0) ? $context_table[0] : "";
