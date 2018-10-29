@@ -78,7 +78,7 @@
                 <label class="bold">Type </label>
                 <select class="information-input garamond" id="type">
                     <option value="Safety">Safety</option>
-                    <option value="Security">Security</option>
+                    <option value="Security">Safety and Security</option>
                 </select>
             </div>
 

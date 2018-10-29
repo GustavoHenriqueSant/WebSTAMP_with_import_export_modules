@@ -114,6 +114,10 @@ Route::get('/login', ['as' => 'login', function () {
     return view('auth.login');
 }]);
 
+Route::get('/register', ['as' => 'login', function () {
+    return view('auth.register');
+}]);
+
 Route::get('/projects', ['as' => 'projects', function () {
     return view('pages.project');
 }]);

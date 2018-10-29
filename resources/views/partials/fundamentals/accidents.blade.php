@@ -2,7 +2,7 @@
     @if($project_type == "Safety")
         Accidents
     @else
-        Losses
+        Unacceptable Losses
     @endif
 </div>
 
