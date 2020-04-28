@@ -49,7 +49,7 @@
     </p>
     <p class="author-name">Fellipe Guilherme Rey de Souza</p>
     <p>
-        PhD student, Instituto Tecnológico de Aeronáutica – ITA, and Teaching Assistant, Federal University of Alfenas, UNIFAL.
+        PhD student, Instituto Tecnológico de Aeronáutica – ITA.
     </p>
     <p class="author-name">Celso Massaki Hirata</p>
     <p>
@@ -58,7 +58,7 @@
     <p class="author-name">Rodrigo Martins Pagliares
     </p>
     <p>
-        Assistant Professor, Computer Science Department, Federal University of Alfenas, UNIFAL.
+        Professor, Computer Science Department, Federal University of Alfenas, UNIFAL.
     </p>
 
 
