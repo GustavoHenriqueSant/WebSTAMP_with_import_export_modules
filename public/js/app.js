@@ -12488,17 +12488,17 @@ return Drop;
 }));
 
 },{"tether":30}],30:[function(require,module,exports){
-/*! tether 1.4.3 */
+/*! tether 1.4.7 */
 
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(factory);
+    define([], factory);
   } else if (typeof exports === 'object') {
-    module.exports = factory(require, exports, module);
+    module.exports = factory();
   } else {
     root.Tether = factory();
   }
-}(this, function(require, exports, module) {
+}(this, function() {
 
 'use strict';
 
@@ -12525,15 +12525,19 @@ function getActualBoundingClientRect(node) {
     rect[k] = boundingRect[k];
   }
 
-  if (node.ownerDocument !== document) {
-    var _frameElement = node.ownerDocument.defaultView.frameElement;
-    if (_frameElement) {
-      var frameRect = getActualBoundingClientRect(_frameElement);
-      rect.top += frameRect.top;
-      rect.bottom += frameRect.top;
-      rect.left += frameRect.left;
-      rect.right += frameRect.left;
+  try {
+    if (node.ownerDocument !== document) {
+      var _frameElement = node.ownerDocument.defaultView.frameElement;
+      if (_frameElement) {
+        var frameRect = getActualBoundingClientRect(_frameElement);
+        rect.top += frameRect.top;
+        rect.bottom += frameRect.top;
+        rect.left += frameRect.left;
+        rect.right += frameRect.left;
+      }
     }
+  } catch (err) {
+    // Ignore "Access is denied" in IE11/Edge
   }
 
   return rect;
@@ -13676,13 +13680,9 @@ var TetherClass = (function (_Evented) {
             xPos = -_pos.right;
           }
 
-          if (window.matchMedia) {
-            // HubSpot/tether#207
-            var retina = window.matchMedia('only screen and (min-resolution: 1.3dppx)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3)').matches;
-            if (!retina) {
-              xPos = Math.round(xPos);
-              yPos = Math.round(yPos);
-            }
+          if (typeof window.devicePixelRatio === 'number' && devicePixelRatio % 1 === 0) {
+            xPos = Math.round(xPos * devicePixelRatio) / devicePixelRatio;
+            yPos = Math.round(yPos * devicePixelRatio) / devicePixelRatio;
           }
 
           css[transformKey] = 'translateX(' + xPos + 'px) translateY(' + yPos + 'px)';
@@ -13742,9 +13742,16 @@ var TetherClass = (function (_Evented) {
             this.options.bodyElement.appendChild(this.element);
           }
         } else {
+          var isFullscreenElement = function isFullscreenElement(e) {
+            var d = e.ownerDocument;
+            var fe = d.fullscreenElement || d.webkitFullscreenElement || d.mozFullScreenElement || d.msFullscreenElement;
+            return fe === e;
+          };
+
           var offsetParentIsBody = true;
+
           var currentNode = this.element.parentNode;
-          while (currentNode && currentNode.nodeType === 1 && currentNode.tagName !== 'BODY') {
+          while (currentNode && currentNode.nodeType === 1 && currentNode.tagName !== 'BODY' && !isFullscreenElement(currentNode)) {
             if (getComputedStyle(currentNode).position !== 'static') {
               offsetParentIsBody = false;
               break;
@@ -15667,15 +15674,15 @@ Hazard.init();
 
 var axios = require('./axios');
 var $ = require('jquery');
-var accident = require('./templates/accident_template');
+var loss = require('./templates/loss_template');
 
-function addAccident() {}
+function addLoss() {}
 
 module.exports = {
-	addAccident: addAccident
+	addLoss: addLoss
 };
 
-},{"./axios":34,"./elements/hazards":36,"./templates/accident_template":38,"jquery":27}],34:[function(require,module,exports){
+},{"./axios":34,"./elements/hazards":36,"./templates/loss_template":47,"jquery":27}],34:[function(require,module,exports){
 'use strict';
 
 var axios = require('axios');
@@ -15725,31 +15732,31 @@ function showControllers() {
 
 var $ = require('jquery');
 
-var accidents = [];
+var losses = [];
 
-function addAccident(ac) {
-	accidents.push(ac);
+function addLoss(ac) {
+	losses.push(ac);
 }
 
 module.exports = {
-	addAccident: addAccident,
+	addLoss: addLoss,
 	init: init,
-	showAccidents: showAccidents
+	showLosses: showLosses
 };
 
 function init() {
-	accidents = $("#hazards_content").data("accidents");
+	losses = $("#hazards_content").data("losses");
 }
 
-function showAccidents() {
-	var listAccidents = $("#hazard-accident-association");
+function showLosses() {
+	var listLosses = $("#hazard-loss-association");
 	var project_type = $("#project_type").val();
 	var index = 0;
-	var retorno = accidents.map(function (accident) {
+	var retorno = losses.map(function (loss) {
 		index++;
-		if (project_type == "Safety") return "<option value=\"" + accident.id + "\">[A-" + index + "] " + accident.name + "</option>";else return "<option value=\"" + accident.id + "\">[L-" + index + "] " + accident.name + "</option>";
+		return "<option value=\"" + loss.id + "\">[L-" + index + "] " + loss.name + "</option>";
 	});
-	listAccidents.html(retorno);
+	listLosses.html(retorno);
 }
 
 },{"jquery":27}],37:[function(require,module,exports){
@@ -15759,7 +15766,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
 
-if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
+if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
   var removeSemicolon = function removeSemicolon(parameter) {
     parameter = parameter.split(";");
     var result = "";
@@ -15796,14 +15803,14 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
 
   // FUNCTION TO EDIT FUNDAMENTALS
 
-  var edit_fundamentals = function edit_fundamentals(id, activity) {
-    if (activity == "accident") {
-      var name = $("#accident-description-" + id).val();
-      axios.post('/editaccident', {
+  var edit_stepone = function edit_stepone(id, activity) {
+    if (activity == "loss") {
+      var name = $("#loss-description-" + id).val();
+      axios.post('/editloss', {
         id: id,
         name: name
       }).then(function (response) {
-        $("#accident-description-" + id).replaceWith('<input type="text" class="item__input" id="accident-description-' + id + '" value="' + name + '" size="' + name.length + '" disabled>');
+        $("#loss-description-" + id).replaceWith('<input type="text" class="item__input" id="loss-description-' + id + '" value="' + name + '" size="' + name.length + '" disabled>');
       }).catch(function (error) {
         console.log(error);
       });
@@ -15828,6 +15835,19 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       }).then(function (response) {
         $("#systemgoal-description-" + id).replaceWith('<input type="text" class="item__input" id="systemgoal-description-' + id + '" value="' + name + '" size="100">');
         document.getElementById("systemgoal-description-" + id).disabled = true;
+      }).catch(function (error) {
+        console.log(error);
+      });
+      return false;
+    } else if (activity == "assumption") {
+      //aquiii
+      var name = $("#assumption-description-" + id).val();
+      axios.post('/editassumption', {
+        id: id,
+        name: name
+      }).then(function (response) {
+        $("#assumption-description-" + id).replaceWith('<textarea class="item__textarea" id="assumption-description-' + id + '" rows="5" cols = "100" style="resize: none; height: auto;" disabled>' + name + '</textarea>');
+        document.getElementById("assumption-description-" + id).disabled = true;
       }).catch(function (error) {
         console.log(error);
       });
@@ -16097,20 +16117,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   Hazard.init();
   //State.init();
   ControlActions.init();
-  var fundamentals = ['hazard', 'component', 'systemgoal', 'accident', 'systemsafetyconstraint', 'variable-0'];
-  $('.variables-content').each(function (index, f) {
-    fundamentals.push(f.id);
-  });
-  $('.controlactions-content').each(function (index, f) {
-    fundamentals.push(f.id);
-  });
-  $('.connections-content').each(function (index, f) {
-    fundamentals.push(f.id);
-  });
-  $('.item__actions__add').each(function (index, f) {
-    fundamentals.push(f.id);
-  });
-  fundamentals.forEach(function (f) {
+  var stepone = ['hazard', 'systemgoal', 'assumption', 'loss', 'systemsafetyconstraint'];
+  stepone.forEach(function (f) {
     var drop = new Drop({
       target: document.querySelector('[data-add="' + f + '"]'),
       content: document.querySelector('[data-drop="' + f + '"]'),
@@ -16127,15 +16135,53 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     });
     drop.on("open", function () {
       if (f === "hazard") {
-        Hazard.showAccidents();
+        Hazard.showLosses();
       }
     });
   });
-
+  /*
+    var steptwo = ['component', 'variable-0'];
+    $('.variables-content').each(function(index, f){
+      steptwo.push(f.id);
+    })
+    $('.controlactions-content').each(function(index, f){
+      steptwo.push(f.id);
+    })
+    $('.connections-content').each(function(index, f){
+      steptwo.push(f.id);
+    })
+    $('.item__actions__add').each(function(index, f){
+      steptwo.push(f.id);
+    })
+    steptwo.forEach(function(f) {
+      var drop = new Drop({
+        target: document.querySelector('[data-add="' + f + '"]'),
+        content: document.querySelector('[data-drop="' + f + '"]'),
+        openOn: 'click',
+        remove: true,
+        tetherOptions: {
+          attachment: 'top left',
+          targetAttachment: 'middle right',
+          constraints: [
+            {
+              to: 'scrollParent',
+              attachment: 'together'
+            }
+          ]
+        }
+      });
+      drop.on("open", function() {
+        if (f === "hazard"){
+          Hazard.showLosses();
+        }
+      })
+    });
+  */
   var functions = require('./ajax_functions');
 
   var systemgoal = require('./templates/systemgoal_template');
-  var accident = require('./templates/accident_template');
+  var assumption = require('./templates/assumption_template');
+  var loss = require('./templates/loss_template');
   var hazard = require('./templates/hazard_template');
   var actuator = require('./templates/actuator_template');
   var controlledprocess = require('./templates/controlledprocess_template');
@@ -16171,230 +16217,246 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         console.log(error);
       });
     }
-    // Verifies if activity is accident
-    else if (activity === 'accident') {
-        var $newAccident = $('#accidents').find(".substep__list");
-        axios.post('/addaccident', {
+    // Verifies if activity is assumption
+    else if (activity == 'assumption') {
+        var $newAssumption = $('#assumptions').find(".substep__list");
+        axios.post('/addassumption', {
           name: name,
           id: id,
           project_id: project_id
         }).then(function (response) {
-          Hazard.addAccident(response.data);
-          var exihibition_id = $('#accidents').find(".substep__list").children().length + 1;
-          $newAccident.append(accident(response.data, exihibition_id));
-        }).catch(function (error) {
-          console.log(error);
-        });
-        // Verify if activity is hazard
-      } else if (activity === 'hazard') {
-        var accidents_associated = form.find("#hazard-accident-association").val();
-        var losses_id = getLossesId(form.find("#hazard-accident-association :selected").text()).split(",");
-        var $newHazard = $('#hazards').find(".substep__list");
-        var accidents_associated_id;
-        var project_type = $('#project_type').val();
-        axios.post('/addhazard', {
-          name: name,
-          id: id,
-          accidents_associated: accidents_associated,
-          accidents_associated_id: accidents_associated_id,
-          project_id: project_id,
-          project_type: project_type
-        }).then(function (response) {
-          var exihibition_id = $("#hazards_content").children().children().length + 1;
-          $newHazard.append(hazard(response.data, exihibition_id, losses_id));
+          var exihibition_id = $newAssumption.children().length + 1;
+          alert(exihibition_id);
+          console.log($('#assumptions').find("substep__list").children());
+          $newAssumption.append(assumption(response.data, exihibition_id));
         }).catch(function (error) {
           console.log(error);
         });
       }
-      // Verify if activity is component
-      else if (activity === 'component') {
-          var type = form.find("#component-type").val();
-          if (type === 'Actuator') {
-            var $newComponent = $('#actuators');
-            axios.post('/addactuator', {
-              name: name,
-              type: type,
-              id: id,
-              project_id: project_id
-            }).then(function (response) {
-              location.reload();
-            }).catch(function (error) {
-              console.log(error);
-            });
-          } else if (type === 'ControlledProcess') {
-            var $newComponent = $('#controlledprocess');
-            axios.post('/addcontrolledprocess', {
-              name: name,
-              id: id,
-              project_id: project_id
-            }).then(function (response) {
-              location.reload();
-            }).catch(function (error) {
-              console.log(error);
-            });
-          } else if (type === "Controller") {
-            var $newComponent = $('#controllers');
-            axios.post('/addcontroller', {
-              name: name,
-              id: id,
-              project_id: project_id
-            }).then(function (response) {
-              location.reload();
-            }).catch(function (error) {
-              console.log(error);
-            });
-          } else if (type === "Sensor") {
-            var $newComponent = $('#sensors');
-            axios.post('/addsensor', {
-              name: name,
-              id: id,
-              project_id: project_id
-            }).then(function (response) {
-              location.reload();
-            }).catch(function (error) {
-              console.log(error);
-            });
-          }
+      // Verifies if activity is loss
+      else if (activity === 'loss') {
+          var $newLoss = $('#losses').find(".substep__list");
+          axios.post('/addloss', {
+            name: name,
+            id: id,
+            project_id: project_id
+          }).then(function (response) {
+            Hazard.addLoss(response.data);
+            var exihibition_id = $('#losses').find(".substep__list").children().length + 1;
+            $newLoss.append(loss(response.data, exihibition_id));
+          }).catch(function (error) {
+            console.log(error);
+          });
+          // Verify if activity is hazard
+        } else if (activity === 'hazard') {
+          var losses_associated = form.find("#hazard-loss-association").val();
+          var losses_id = getLossesId(form.find("#hazard-loss-association :selected").text()).split(",");
+          var $newHazard = $('#hazards').find(".substep__list");
+          var losses_associated_id;
+          var project_type = $('#project_type').val();
+          axios.post('/addhazard', {
+            name: name,
+            id: id,
+            losses_associated: losses_associated,
+            losses_associated_id: losses_associated_id,
+            project_id: project_id,
+            project_type: project_type
+          }).then(function (response) {
+            var exihibition_id = $("#hazards_content").children().children().length + 1;
+            $newHazard.append(hazard(response.data, exihibition_id, losses_id));
+          }).catch(function (error) {
+            console.log(error);
+          });
         }
-        // Verify if activity is control control action
-        else if (activity.indexOf("controlaction") != -1) {
-            var controller_id = activity.split("-")[1];
-            var $newControlAction = $('#controlactions_content-' + controller_id).find(".substep__list");
-            var id = 0;
-            var name = form.find("#controlaction-" + controller_id + "-name").val();
-            axios.post('/addcontrolaction', {
-              name: name,
-              controller_id: controller_id,
-              id: id,
-              project_id: project_id
-            }).then(function (response) {
-              $newControlAction.append(controlaction(response.data));
-            }).catch(function (error) {
-              console.log(error);
-            });
-          }
-          // Verify if activity is state
-          else if (activity.indexOf("state") != -1) {
-              var variable_id = form.find("#variable_id").val();
-              var name = form.find("#state-name-" + variable_id).val();
-              var id = 0;
-              axios.post('/addstate', {
+        // Verify if activity is component
+        else if (activity === 'component') {
+            var type = form.find("#component-type").val();
+            if (type === 'Actuator') {
+              var $newComponent = $('#actuators');
+              axios.post('/addactuator', {
                 name: name,
-                variable_id: variable_id,
+                type: type,
                 id: id,
                 project_id: project_id
               }).then(function (response) {
-                var $newState = $('#variable-' + response.data.variable_id).find(".states-associated");
-                console.log($newState);
-                $newState.append(state(response.data, true));
-                $newState = $('.variable-' + response.data.variable_id).find(".states-associated");
-                $newState.append(state(response.data, false));
+                location.reload();
+              }).catch(function (error) {
+                console.log(error);
+              });
+            } else if (type === 'ControlledProcess') {
+              var $newComponent = $('#controlledprocess');
+              axios.post('/addcontrolledprocess', {
+                name: name,
+                id: id,
+                project_id: project_id
+              }).then(function (response) {
+                location.reload();
+              }).catch(function (error) {
+                console.log(error);
+              });
+            } else if (type === "Controller") {
+              var $newComponent = $('#controllers');
+              axios.post('/addcontroller', {
+                name: name,
+                id: id,
+                project_id: project_id
+              }).then(function (response) {
+                location.reload();
+              }).catch(function (error) {
+                console.log(error);
+              });
+            } else if (type === "Sensor") {
+              var $newComponent = $('#sensors');
+              axios.post('/addsensor', {
+                name: name,
+                id: id,
+                project_id: project_id
+              }).then(function (response) {
+                location.reload();
               }).catch(function (error) {
                 console.log(error);
               });
             }
-            // Verify if activity is System Safety Constraint
-            else if (activity === 'systemsafetyconstraint') {
-                var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
-                axios.post('/addsystemsafetyconstraint', {
+          }
+          // Verify if activity is control control action
+          else if (activity.indexOf("controlaction") != -1) {
+              var controller_id = activity.split("-")[1];
+              var $newControlAction = $('#controlactions_content-' + controller_id).find(".substep__list");
+              var id = 0;
+              var name = form.find("#controlaction-" + controller_id + "-name").val();
+              axios.post('/addcontrolaction', {
+                name: name,
+                controller_id: controller_id,
+                id: id,
+                project_id: project_id
+              }).then(function (response) {
+                $newControlAction.append(controlaction(response.data));
+              }).catch(function (error) {
+                console.log(error);
+              });
+            }
+            // Verify if activity is state
+            else if (activity.indexOf("state") != -1) {
+                var variable_id = form.find("#variable_id").val();
+                var name = form.find("#state-name-" + variable_id).val();
+                var id = 0;
+                axios.post('/addstate', {
                   name: name,
+                  variable_id: variable_id,
                   id: id,
                   project_id: project_id
                 }).then(function (response) {
-                  var exihibition_id = $('#systemsafetyconstraint').find(".substep__list").children().length + 1;
-                  $newSSC.append(systemsafetyconstraint(response.data, exihibition_id));
+                  var $newState = $('#variable-' + response.data.variable_id).find(".states-associated");
+                  console.log($newState);
+                  $newState.append(state(response.data, true));
+                  $newState = $('.variable-' + response.data.variable_id).find(".states-associated");
+                  $newState.append(state(response.data, false));
                 }).catch(function (error) {
                   console.log(error);
                 });
               }
-              // Verify if activity is variable
-              else if (activity.indexOf("connections") != -1) {
-                  var type_output = activity.split("-")[1];
-                  var output_component_id = activity.split("-")[2];
-                  var output_name = form.find("#" + activity + " option:selected").text();
-                  var input_name = form.find('#component_name').val();
-                  var input = form.find("#" + activity + " option:selected").val();
-                  var type_input = input.split("-")[0];
-                  var input_component_id = input.split("-")[1];
-                  var id = 0;
-                  var $newConnection = $('#connection-' + type_output + '-' + output_component_id).find(".substep__list");
-                  axios.post('/addconnections', {
-                    input_component_id: input_component_id,
-                    type_input: type_input,
-                    input_name: input_name,
-                    output_component_id: output_component_id,
-                    type_output: type_output,
-                    output_name: output_name,
-                    id: id,
-                    project_id: project_id
-                  }).then(function (response) {
-                    $newConnection.append(connection(response.data));
-                  }).catch(function (error) {
-                    console.log(error);
-                  });
-                } else {
-                  var variable_split = activity.split('-');
-                  var controller_id = 0;
-                  var $newVariable = "";
-                  var id = 0;
-                  if (variable_split.length > 2) {
-                    controller_id = variable_split[2];
-                    $newVariable = $('#variables-' + controller_id).find(".controller_variable");
-                  } else $newVariable = $('#variables-0').find(".controller_variable");
-                  var name = form.find("#variable-" + controller_id + "-name").val();
-                  var states = [];
-                  form.find(".states-associated").each(function (index) {
-                    states.push($(this).val());
-                  });
-                  axios.post('/addvariable', {
+              // Verify if activity is System Safety Constraint
+              else if (activity === 'systemsafetyconstraint') {
+                  var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
+                  axios.post('/addsystemsafetyconstraint', {
                     name: name,
                     id: id,
-                    controller_id: controller_id,
-                    states: states,
                     project_id: project_id
                   }).then(function (response) {
-                    if (response.data.controller_id > 0) {
-                      $newVariable.append(variable(response.data, true));
-                      $('body').append(addstate(response.data));
-                      var state_variable = 'state-variable-' + response.data.id;
-                      var drop = new Drop({
-                        target: document.querySelector('[data-add="' + state_variable + '"]'),
-                        content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
-                        openOn: 'click',
-                        remove: true,
-                        tetherOptions: {
-                          attachment: 'top left',
-                          targetAttachment: 'middle right',
-                          constraints: [{
-                            to: 'scrollParent',
-                            attachment: 'together'
-                          }]
-                        }
-                      });
-                    } else {
-                      $newVariable.append(variable(response.data, true));
-                      $('.variables-content').find(".substep__list").append(variable(response.data, false));
-                      $('body').append(addstate(response.data));
-                      var state_variable = 'state-variable-' + response.data.id;
-                      var drop = new Drop({
-                        target: document.querySelector('[data-add="' + state_variable + '"]'),
-                        content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
-                        openOn: 'click',
-                        remove: true,
-                        tetherOptions: {
-                          attachment: 'top left',
-                          targetAttachment: 'middle right',
-                          constraints: [{
-                            to: 'scrollParent',
-                            attachment: 'together'
-                          }]
-                        }
-                      });
-                    }
+                    var exihibition_id = $('#systemsafetyconstraint').find(".substep__list").children().length + 1;
+                    $newSSC.append(systemsafetyconstraint(response.data, exihibition_id));
                   }).catch(function (error) {
                     console.log(error);
                   });
                 }
+                // Verify if activity is variable
+                else if (activity.indexOf("connections") != -1) {
+                    var type_output = activity.split("-")[1];
+                    var output_component_id = activity.split("-")[2];
+                    var output_name = form.find("#" + activity + " option:selected").text();
+                    var input_name = form.find('#component_name').val();
+                    var input = form.find("#" + activity + " option:selected").val();
+                    var type_input = input.split("-")[0];
+                    var input_component_id = input.split("-")[1];
+                    var id = 0;
+                    var $newConnection = $('#connection-' + type_output + '-' + output_component_id).find(".substep__list");
+                    axios.post('/addconnections', {
+                      input_component_id: input_component_id,
+                      type_input: type_input,
+                      input_name: input_name,
+                      output_component_id: output_component_id,
+                      type_output: type_output,
+                      output_name: output_name,
+                      id: id,
+                      project_id: project_id
+                    }).then(function (response) {
+                      $newConnection.append(connection(response.data));
+                    }).catch(function (error) {
+                      console.log(error);
+                    });
+                  } else {
+                    var variable_split = activity.split('-');
+                    var controller_id = 0;
+                    var $newVariable = "";
+                    var id = 0;
+                    if (variable_split.length > 2) {
+                      controller_id = variable_split[2];
+                      $newVariable = $('#variables-' + controller_id).find(".controller_variable");
+                    } else $newVariable = $('#variables-0').find(".controller_variable");
+                    var name = form.find("#variable-" + controller_id + "-name").val();
+                    var states = [];
+                    form.find(".states-associated").each(function (index) {
+                      states.push($(this).val());
+                    });
+                    axios.post('/addvariable', {
+                      name: name,
+                      id: id,
+                      controller_id: controller_id,
+                      states: states,
+                      project_id: project_id
+                    }).then(function (response) {
+                      if (response.data.controller_id > 0) {
+                        $newVariable.append(variable(response.data, true));
+                        $('body').append(addstate(response.data));
+                        var state_variable = 'state-variable-' + response.data.id;
+                        var drop = new Drop({
+                          target: document.querySelector('[data-add="' + state_variable + '"]'),
+                          content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
+                          openOn: 'click',
+                          remove: true,
+                          tetherOptions: {
+                            attachment: 'top left',
+                            targetAttachment: 'middle right',
+                            constraints: [{
+                              to: 'scrollParent',
+                              attachment: 'together'
+                            }]
+                          }
+                        });
+                      } else {
+                        $newVariable.append(variable(response.data, true));
+                        $('.variables-content').find(".substep__list").append(variable(response.data, false));
+                        $('body').append(addstate(response.data));
+                        var state_variable = 'state-variable-' + response.data.id;
+                        var drop = new Drop({
+                          target: document.querySelector('[data-add="' + state_variable + '"]'),
+                          content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
+                          openOn: 'click',
+                          remove: true,
+                          tetherOptions: {
+                            attachment: 'top left',
+                            targetAttachment: 'middle right',
+                            constraints: [{
+                              to: 'scrollParent',
+                              attachment: 'together'
+                            }]
+                          }
+                        });
+                      }
+                    }).catch(function (error) {
+                      console.log(error);
+                    });
+                  }
     return false;
   });
 
@@ -16408,12 +16470,12 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       message: 'Are you sure you want to delete this item?',
       callback: function callback(value) {
         if (value) {
-          if (activity === 'accident') {
-            var id = form.find("#accident_id").val();
-            axios.post('/deleteaccident', {
+          if (activity === 'loss') {
+            var id = form.find("#loss_id").val();
+            axios.post('/deleteloss', {
               id: id
             }).then(function (response) {
-              $("#accident-" + id).remove();
+              $("#loss-" + id).remove();
             }).catch(function (error) {
               console.log(error);
             });
@@ -16424,6 +16486,16 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
               id: id
             }).then(function (response) {
               $("#systemgoal-" + id).remove();
+            }).catch(function (error) {
+              console.log(error);
+            });
+            return false;
+          } else if (activity === 'assumption') {
+            var id = form.find("#assumption_id").val();
+            axios.post('/deleteassumption', {
+              id: id
+            }).then(function (response) {
+              $("#assumption-" + id).remove();
             }).catch(function (error) {
               console.log(error);
             });
@@ -16558,17 +16630,17 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     var split = event.currentTarget.id.split("-");
     var id = split[2];
     var activity = split[0];
-    edit_fundamentals(id, activity);
+    edit_stepone(id, activity);
   });
 
   // EDIT WHEN KEY "ENTER" WAS PRESSED
   $("body").on('keypress', '.item__input__active', function (event) {
-    if (event.which == 13) {
+    if (event.which == 13 && !event.shiftKey) {
       event.preventDefault();
       var split = event.currentTarget.id.split("-");
       var id = split[2];
       var activity = split[0];
-      edit_fundamentals(id, activity);
+      edit_stepone(id, activity);
     }
   });
 
@@ -16576,9 +16648,9 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var activity = form.data("edit");
-    if (activity == "accident") {
-      var id = form.find("#accident_id").val();
-      $('#accident-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
+    if (activity == "loss") {
+      var id = form.find("#loss_id").val();
+      $('#loss-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
       return false;
     } else if (activity == "hazard") {
       var id = form.find("#hazard_id").val();
@@ -16587,6 +16659,10 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     } else if (activity == "systemgoal") {
       var id = form.find("#systemgoal_id").val();
       $('#systemgoal-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;
+    } else if (activity == "assumption") {
+      var id = form.find("#assumption_id").val();
+      $('#assumption-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
       return false;
     } else if (activity == "systemsafetyconstraint") {
       var id = form.find("#systemsafetyconstraint_id").val();
@@ -16643,7 +16719,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     });
   });
 
-  // DELETE BLUE ITEM -> ACCIDENT(HAZARD) AND VARIABLE(STATE))
+  // DELETE BLUE ITEM -> LOSS(HAZARD) AND VARIABLE(STATE))
 
   $('body').on('click', '.item__delete__box', function (event) {
     var id = $(event.currentTarget).data('index');
@@ -16653,10 +16729,10 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       callback: function callback(value) {
         if (value) {
           if (type === 'hazard') {
-            axios.post('/deleteaccidentassociated', {
+            axios.post('/deletelossassociated', {
               id: id
             }).then(function (response) {
-              $("#accident-associated-" + id).remove();
+              $("#loss-associated-" + id).remove();
             }).catch(function (error) {
               console.log(error);
             });
@@ -16704,7 +16780,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   }
   */
   // STEP 1
-} else if (!actualPage.includes('steptwo')) {
+} else if (!actualPage.includes('stepfour')) {
   var edit_uca_sc = function edit_uca_sc(id) {
     var unsafe_control_action = $("#unsafe_control_action-" + id).val();
     var type = $("#type-" + id + " option:selected").val();
@@ -17748,16 +17824,7 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   });
 }
 
-},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./elements/hazards":36,"./templates/accident_template":38,"./templates/actuator_template":39,"./templates/add-state_template":40,"./templates/causal_template":41,"./templates/component_template":42,"./templates/connection_template":43,"./templates/controlaction_template":44,"./templates/controlledprocess_template":45,"./templates/hazard_template":46,"./templates/sensor_template":47,"./templates/state_template":48,"./templates/systemgoal_template":49,"./templates/systemsafetyconstraint_template":50,"./templates/unsafecontrolaction_template":51,"./templates/variable_template":52,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],38:[function(require,module,exports){
-"use strict";
-
-module.exports = function (context, exihibition_id) {
-    console.log(context);
-    var size = context.name.length;
-    return "\n        <li class=\"item\" id=\"accident-" + context.id + "\">\n            <div class=\"item__title\">\n                A-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"accident-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n            </div>\n            <div class=\"item__actions\">\n                <form action =\"/editaccident\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"accident\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"accident_id\" name=\"accident_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deleteaccident\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"accident\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"accident_id\" name=\"accident_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
-};
-
-},{}],39:[function(require,module,exports){
+},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./elements/hazards":36,"./templates/actuator_template":38,"./templates/add-state_template":39,"./templates/assumption_template":40,"./templates/causal_template":41,"./templates/component_template":42,"./templates/connection_template":43,"./templates/controlaction_template":44,"./templates/controlledprocess_template":45,"./templates/hazard_template":46,"./templates/loss_template":47,"./templates/sensor_template":48,"./templates/state_template":49,"./templates/systemgoal_template":50,"./templates/systemsafetyconstraint_template":51,"./templates/unsafecontrolaction_template":52,"./templates/variable_template":53,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],38:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17765,12 +17832,20 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Actuator]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-actuator\">\n                <li class=\"item\" id=\"actuator-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editactuator\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"actuator\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deleteactuator\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"actuator\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n        </div>";
 };
 
-},{}],40:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
 
     return "<div data-component=\"drop\" data-drop=\"form-state-variable-" + context.id + "\" class=\"add-drop\">\n        <form action =\"/addstate-variable-" + context.id + "\" method=\"POST\" class=\"add-form\" data-add=\"state-variable-" + context.id + "\">\n            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n            <div class=\"add-drop__content\">\n                <label for=\"state-name-" + context.id + "\" class=\"add-drop__label\">\n                    State name\n                </label>\n                <input id=\"state-name-" + context.id + "\" name=\"state-name-" + context.id + "\" type=\"text\" class=\"add-drop__input\">\n                <input type=\"hidden\" name=\"variable_id\" id=\"variable_id\" value=\"" + context.id + "\">\n            </div>\n            <div class=\"add-drop__buttons\">\n                    <button class=\"add-drop__action\">\n                      Cancel\n                    </button>\n                    <button type=\"submit\" class=\"add-drop__action\">\n                      Add\n                    </button>\n            </div>\n        </form>\n    </div>";
+};
+
+},{}],40:[function(require,module,exports){
+"use strict";
+
+module.exports = function (context, exihibition_id) {
+    var size = context.name.length;
+    return "\n        <li class=\"item\" id=\"assumption-" + context.id + "\">\n                <div class=\"item__title\">\n                    A-" + exihibition_id + ": <br/> <textarea class=\"item__textarea\" id=\"assumption-description-" + context.id + "\"  rows=\"5\" cols = \"100\" style=\"resize: none;\n    height: auto;\" disabled>" + context.name + "</textarea>\n                </div>\n                <div class=\"item__actions\">\n                    <form action =\"/editassumption\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"assumption\">\n                        <div class=\"item__title\">\n                           <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                       </div>\n                    </form>\n                    <form action=\"deleteassumption\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"assumption\">\n                       <div class=\"item__title\">\n                           <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                       </div>\n                    </form>\n                </div>\n        </li>";
 };
 
 },{}],41:[function(require,module,exports){
@@ -17866,15 +17941,24 @@ module.exports = function (context) {
 
 module.exports = function (context, exihibition_id, losses) {
     var size = context.name.length;
-    var accidents_associated = "";
+    var losses_associated = "";
 
-    context.accidents_associated.forEach(function (value, index) {
-        accidents_associated += "<div class=\"item__actions__action\" id=\"accident-associated-" + context.accidents_associated_id[index] + "\">\n                <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"hazard\" data-index=\"" + context.accidents_associated_id[index] + "\">\xD7</a> [L-" + losses[index] + "]\n            </div>";
+    context.losses_associated.forEach(function (value, index) {
+        losses_associated += "<div class=\"item__actions__action\" id=\"loss-associated-" + context.losses_associated_id[index] + "\">\n                <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"hazard\" data-index=\"" + context.losses_associated_id[index] + "\">\xD7</a> [L-" + losses[index] + "]\n            </div>";
     });
-    return "\n        <li class=\"item\" id=\"hazard-" + context.id + "\">\n            <div class=\"item__title\">\n                H-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"hazard-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeyup=\"this.size=this.value.length\" disabled>\n            </div>\n            " + accidents_associated + "\n            <div class=\"item__actions\">\n                <form action =\"/edit-formhazard\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deletehazard\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
+    return "\n        <li class=\"item\" id=\"hazard-" + context.id + "\">\n            <div class=\"item__title\">\n                H-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"hazard-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeyup=\"this.size=this.value.length\" disabled>\n            </div>\n            " + losses_associated + "\n            <div class=\"item__actions\">\n                <form action =\"/edit-formhazard\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deletehazard\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
 };
 
 },{}],47:[function(require,module,exports){
+"use strict";
+
+module.exports = function (context, exihibition_id) {
+    console.log(context);
+    var size = context.name.length;
+    return "\n        <li class=\"item\" id=\"loss-" + context.id + "\">\n            <div class=\"item__title\">\n                L-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"loss-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n            </div>\n            <div class=\"item__actions\">\n                <form action =\"/editloss\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"loss\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deleteloss\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"loss\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
+};
+
+},{}],48:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17882,14 +17966,14 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Sensor]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-sensor\">\n                <li class=\"item\" id=\"sensor-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editsensor\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"sensor\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deletesensor\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"sensor\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n        </div>";
 };
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, id_or_class) {
     if (id_or_class) return "\n            <div class=\"item__actions__action\" id=\"state-associated-" + context.id + "\">\n                <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"variable\" data-index=\"" + context.id + "\">\xD7</a> " + context.name + "\n            </div>";else return "\n            <div class=\"item__actions__action state-associated-" + context.id + "\">\n                " + context.name + "\n            </div>";
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -17897,7 +17981,7 @@ module.exports = function (context, exihibition_id) {
                            return "\n        <li class=\"item\" id=\"systemgoal-" + context.id + "\">\n                <div class=\"item__title\">\n                    G-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"systemgoal-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n                </div>\n                <div class=\"item__actions\">\n\t                <form action =\"/editsystemgoal\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"systemgoal\">\n                        <div class=\"item__title\">\n\t                       <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n                    <form action=\"deletesystemgoal\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"systemgoal\">\n\t                   <div class=\"item__title\">\n\t                       <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n             \t</div>\n        </li>";
 };
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -17905,7 +17989,7 @@ module.exports = function (context, exihibition_id) {
     return "\n        <li class=\"item\" id=\"systemsafetyconstraint-" + context.id + "\">\n                <div class=\"item__title\">\n                    SSC-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"systemsafetyconstraint-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n                </div>\n                <div class=\"item__actions\">\n\t                <form action=\"editsystemsafetyconstraint\" method=\"POST\"  class=\"edit-form ajaxform\" data-edit=\"systemsafetyconstraint\">\n                       <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n                    <form action=\"deletesystemsafetyconstraint\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"systemsafetyconstraint\">\n\t                   <div class=\"item__title\">\n\t                       <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n             \t</div>\n        </li>";
 };
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 module.exports = function (context) {
@@ -17936,7 +18020,7 @@ module.exports = function (context) {
     return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="unsafe_control_action-' + context.id + '" disabled>' + context.unsafe_control_action + '</textarea>\n                    </div>\n                    \n                    <div class="text">\n                        ' + type + '\n                        <textarea class="uca_list_textarea" id="safety_constraint-' + context.id + '" disabled>' + context.safety_constraint + '</textarea>\n                    </div>\n                    \n                    <div class="content-uca">\n                        <form action="/edituca" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n        </div>';
 };
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, firstAppend) {

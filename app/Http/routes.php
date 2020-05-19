@@ -15,19 +15,31 @@ use App\Team;
 
 // Route::get('/fundamentals', ['as' => 'fundamentals', function () {
 // 	$project_id = 1;
-//     $accidents = App\Accidents::where('project_id', $project_id)->get();
-//     return view('pages.home', compact("accidents", "project_id"));
+//     $losses = App\Losses::where('project_id', $project_id)->get();
+//     return view('pages.home', compact("losses", "project_id"));
 // }]);
 
-function mapAccident($accidents){
+function mapAssumptions($project_id){
+    $assumptions = App\Assumptions::where('project_id', $project_id)->orderBy('id')->get();
     $index = 0;
 
-    $accident_map = null;
+    $assumptions_map = null;
 
-    foreach($accidents as $accident) {
-        $accident_map[$accident->id] = ++$index;
+    foreach($assumptions as $assumption) {
+        $assumptions_map[$assumption->id] = ++$index;
     }
-    return $accident_map;
+    return $assumptions_map;
+}
+
+function mapLoss($losses){
+    $index = 0;
+
+    $loss_map = null;
+
+    foreach($losses as $loss) {
+        $loss_map[$loss->id] = ++$index;
+    }
+    return $loss_map;
 }
 
 function mapHazard($project_id){
@@ -70,21 +82,22 @@ Route::get('/', ['as' => 'home', function () {
 	return view('home');
 }]);
 
-Route::match(array('GET', 'POST'), '{slug}/fundamentals', ['as' => 'fundamentals', function ($slug) {
+Route::match(array('GET', 'POST'), '{slug}/stepone', ['as' => 'stepone', function ($slug) {
     if (Auth::check()) {
         $project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
         $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
         $project_name = App\Project::select("name")->where('URL', $slug)->first()->name;
-        $accidents = App\Accidents::where('project_id', $project_id)->orderBy('id')->get();
+        $losses = App\Losses::where('project_id', $project_id)->orderBy('id')->get();
         $belongsToProject = Team::where('project_id', $project_id)->where('user_id', Auth::user()->id)->first() != null;
-        $accident_map = mapAccident($accidents);
+        $loss_map = mapLoss($losses);
         $hazard_map = mapHazard($project_id);
         $sysconstraints_map = mapConstraints($project_id);
         $goals_map = mapGoals($project_id);
-        return view('pages.home', compact("accidents", "project_id", "project_name", "project_type", "slug", "accident_map", "hazard_map", "goals_map", "sysconstraints_map"));
+        $assumptions_map = mapAssumptions($project_id);
+        return view('pages.stepone', compact("losses", "project_id", "project_name", "project_type", "slug", "loss_map", "hazard_map", "goals_map", "assumptions_map", "sysconstraints_map"));
     }
 }]);
-
+/*
 Route::match(array('GET', 'POST'), '{slug}/stepone', ['as' => 'stepone', function ($slug) {
 	if (Auth::check()) {
 		$project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
@@ -108,7 +121,7 @@ Route::match(array('GET', 'POST'), '{slug}/steptwo', ['as' => 'steptwo', functio
     else
         return view('home');
 }]);
-
+*/
 
 Route::get('/login', ['as' => 'login', function () {
     return view('auth.login');
@@ -128,9 +141,13 @@ Route::post('/addsystemgoal', 'SystemGoalController@add');
 Route::post('/editsystemgoal', 'SystemGoalController@edit');
 Route::post('/deletesystemgoal', 'SystemGoalController@delete');
 
-Route::post('/addaccident', 'AccidentController@add');
-Route::post('/editaccident', 'AccidentController@edit');
-Route::post('/deleteaccident', 'AccidentController@delete');
+Route::post('/addassumption','AssumptionsController@add');
+Route::post('/editassumption','AssumptionsController@edit');
+Route::post('/deleteassumption','AssumptionsController@delete');
+
+Route::post('/addloss', 'LossController@add');
+Route::post('/editloss', 'LossController@edit');
+Route::post('/deleteloss', 'LossController@delete');
 
 Route::post('/addactuator', 'ActuatorController@add');
 Route::post('/editactuator', 'ActuatorController@edit');
@@ -186,7 +203,7 @@ Route::post('/deletetuple', 'CausalAnalysisController@delete');
 Route::post('/deletealltuple', 'CausalAnalysisController@deleteAll');
 
 
-Route::post('/deleteaccidentassociated', 'AccidentHazardController@delete');
+Route::post('/deletelossassociated', 'LossHazardController@delete');
 
 Route::post('/addrule', 'RuleController@add');
 Route::post('/refreshPage', 'RuleController@refreshPage');

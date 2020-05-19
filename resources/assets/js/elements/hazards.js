@@ -1,31 +1,28 @@
 var $ = require('jquery');
 
-var accidents = [];
+var losses = [];
 
-function addAccident(ac) {
-	accidents.push(ac);
+function addLoss(ac) {
+	losses.push(ac);
 }
 
 module.exports = {
-	addAccident : addAccident,
+	addLoss : addLoss,
 	init : init,
-	showAccidents : showAccidents
+	showLosses : showLosses
 }
 
 function init(){
-	accidents = $("#hazards_content").data("accidents");
+	losses = $("#hazards_content").data("losses");
 }
 
-function showAccidents(){
-	var listAccidents = $("#hazard-accident-association");
+function showLosses(){
+	var listLosses = $("#hazard-loss-association");
 	var project_type = $("#project_type").val();
 	var index = 0;
-	var retorno = accidents.map(function(accident) {
+	var retorno = losses.map(function(loss) {
 		index++;
-		if (project_type == "Safety")
-			return `<option value="${accident.id}">[A-${index}] ${accident.name}</option>`;
-		else
-			return `<option value="${accident.id}">[L-${index}] ${accident.name}</option>`;
+		return `<option value="${loss.id}">[L-${index}] ${loss.name}</option>`;
 	});
-	listAccidents.html(retorno);
+	listLosses.html(retorno);
 }

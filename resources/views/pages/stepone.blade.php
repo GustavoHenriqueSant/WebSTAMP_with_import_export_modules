@@ -1,38 +1,25 @@
 @extends('layouts.master')
 
+<?php $stepone= ($project_type == "Security" ) ? ['mission-assurance', 'assumptions','losses', 'hazards', 'systemsafetyconstraint'] : ['systemgoals', 'assumptions','losses', 'hazards', 'systemsafetyconstraint'];
+?>
+
 @section('content')
-	
-	<div class="substep substep--select-control-action" id="addrule">
-        @include('partials.stepone.select-control-action')
-	</div>
-	    
-    @foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
-    	@foreach(App\ControlAction::where('controller_id', $controller->id)->get() as $ca)
-		    <div id="control-action-{{$ca->id}}" class="hide-control-actions" name="control-action-{{$ca->id}}" style="display:none;">
-			    <div class="substep substep--addrule" id="addrule">
-			        @include('partials.stepone.addrules')
-			    </div>
-			    <div class="substep substep--rule" id="rule-control-action-{{$ca->id}}">
-			        @include('partials.stepone.rules')
-			    </div>
-			    <div class="substep substep--context-table" id="context-table">
-			        @include('partials.stepone.context-table')
-			    </div>
-			    <div class="substep substep--safety-constraints" id="safety-constraints">
-			        @include('partials.stepone.safety-constraints')
-			    </div>
-			    @include('partials.stepone.add-uca', ['controller' => $controller, 'controlaction' => $ca])
-			    @include('partials.stepone.suggested-uca', ['controller' => $controller, 'controlaction' => $ca])
-			</div>
-		@endforeach
+    @foreach ($stepone as $s)
+        <input type="hidden" id="project_id" value="{{$project_id}}">
+        <div class="substep substep--{{ $s }}" id="{{ $s }}">
+          @include('partials.stepone.' . $s)
+        </div>
     @endforeach
-
 @endsection
 
-<!--
+@include('partials.stepone.add-mission-assurance')
+
+<?php $addItens = ['systemgoals', 'assumption','loss', 'hazard', 'systemsafetyconstraint']; ?>
+
 @section('dialogs')
-	@foreach(App\ControlAction::all() as $ca)
-		 @include('partials.stepone.add-unsafecontrolaction', ['controlaction_id' => $ca->id])
-	@endforeach
+       <!-- Including all basic stepone-->
+    @foreach ($addItens as $addItem)
+        @include('partials.stepone.add-' . $addItem)
+    @endforeach
 @endsection
--->
+
