@@ -17,7 +17,7 @@
         <div class="navbar__item">
           <div class="navbar__item__content">
             <a href="/{{$slug}}/stepone" class="navbar__item__link">
-              Define Purpose of the Analysis
+              Purpose of the Analysis
             </a>
           </div>
           <div class="navbar__item__substeps">
@@ -48,7 +48,7 @@
         <div class="navbar__item">
           <div class="navbar__item__content">
             <a href="/{{$slug}}/steptwo" class="navbar__item__link"> <!-- TROCAR PELA NOVA ROTA PARA PAGINA STEP TWO -->
-              Model the Control Structure
+              Control Structure
             </a>
           </div>
         </div>
@@ -56,7 +56,7 @@
         <div class="navbar__item">
           <div class="navbar__item__content">
             <a href="/{{$slug}}/stepthree" class="navbar__item__link"> <!-- TROCAR PELA NOVA ROTA PARA PAGINA STEP THREE-->
-              Identify Unsafe Control Actions
+              Unsafe Control Actions
             </a>
           </div>
         </div>
@@ -64,7 +64,7 @@
         <div class="navbar__item">
           <div class="navbar__item__content">
             <a href="/{{$slug}}/stepfour" class="navbar__item__link"> <!-- TROCAR PELA NOVA ROTA PARA PAGINA STEP FOUR -->
-              Identify Loss Scenarios
+              Loss Scenarios
             </a>
           </div>
         </div>
