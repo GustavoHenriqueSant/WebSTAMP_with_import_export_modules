@@ -2,7 +2,7 @@ var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/
 
 require('./steptwo');
 
-if (actualPage.includes('stepone')) {
+if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   var $ = require('jquery');
 
   var Hazard = require('./elements/hazards');
