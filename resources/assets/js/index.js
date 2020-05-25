@@ -1178,39 +1178,31 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 
-  $(function() {
-    // Get all elements with class step_one
-    var $op1 = $('.hide-control-actions');
+  //select controller event on step 3
+  $("#controller-select").change(function(e){
+    var controllerSelected_id = $(this).children("option:selected").val();
 
-    // Verifies if there is Control Actions stored
-    if ($op1 != null) {
-      //
-      var ca_id = window.location.search.substr(1).split("=");
-      if (ca_id[1] > 0) {
-        // Show the selected rule
-        $('#control-action-'+ca_id[1]).show();
-        // Show the selected control action
-        $('#control-actions-select').val(ca_id[1]);
-      } else {
-        // Show the first control action (with lower id)
-        $($op1[0]).show();
-      }
-    }
-  // function to hide all elements with class step_one
-  var hideAll = function() {
-    $op1.hide();
-  };
+    $(".hide-control-actions-options").hide();
 
-  // Function to alter the visibility of the control action under analysis
-  $('#control-actions-select').change(function(e) {
-      // Hide all elements of all control actions
-      hideAll();
-      // Shows the content of selected control action
-      $('#control-action-'+e.target.value).show();
-      var ca_id = window.location.search.substr(1).split("=");
+    $('select[name=control-actions-of-controller-' + controllerSelected_id+']').val(0);
+
+    $('select[name=control-actions-of-controller-' + controllerSelected_id+']').show();
+
+    $('select[name=control-actions-of-controller-' + controllerSelected_id+']').change(function(e) {
+        // Hide all elements of all control actions
+        $('.hide-control-actions').hide();
+        // Shows the content of selected control action
+        $('#control-action-'+e.target.value).show();
+        var ca_id = window.location.search.substr(1).split("=");
+        //alert(e.target.value);
+      });
+
+    $("#div_select_control_action").show();
+
+    $('.hide-control-actions').hide();
+
   });
 
-});
   $('body').on('submit', '.delete-all-uca', function(event) {
     event.preventDefault();
     vex.dialog.confirm({
@@ -1795,17 +1787,34 @@ else if(actualPage.includes('stepfour')) {
         $(".showtable-right").show();
       }
   });
+//select controller event on step 3
+  $("#controller-select").change(function(e){
+    var controllerSelected_id = $(this).children("option:selected").val();
 
+    $(".hide-control-actions-options").hide();
+
+    $('select[name=control-actions-of-controller-' + controllerSelected_id+']').val(0);
+
+    $('select[name=control-actions-of-controller-' + controllerSelected_id+']').show();
+
+    $('select[name=control-actions-of-controller-' + controllerSelected_id+']').change(function(e) {
+        // Hide all elements of all control actions
+        $('.hide-control-actions').hide();
+
+        // Shows the content of selected control action
+        $('#showtable-'+e.target.value).show();
+        //alert(e.target.value);
+      });
+
+    $("#div_select_control_action").show();
+
+    $('.hide-control-actions').hide();
+
+  });
+  
   $(function() {
     // Get all elements with class step_one
-    var $op1 = $('.hide-control-actions');
     var $op2 = $('.hidding-guidewords');
-
-    // Verifies if there is Control Actions stored
-    if ($op1 != null) {
-        // Show the first control action (with lower id)
-        $($op1[0]).show();
-    }
 
     if ($op2 != null) {
         // Show the first control action (with lower id)
@@ -1813,18 +1822,7 @@ else if(actualPage.includes('stepfour')) {
     }
 
   // function to hide all elements with class step_one
-  var hideAll = function() {
-    $op1.hide();
-
-  };
-
   // Function to alter the visibility of the control action under analysis
-  $('#control-actions-select').change(function(e) {
-      // Hide all elements of all control actions
-      hideAll();
-      // Shows the content of selected control action
-      $('#showtable-'+e.target.value).show();
-  });
 
   $('body').on('click', ".gcl2", function(e) {
     var img = $('.gcl');
