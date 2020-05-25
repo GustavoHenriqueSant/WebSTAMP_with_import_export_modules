@@ -27,6 +27,7 @@ if(actualPage.includes('steptwo')){
 		steptwo.push(f.id);
 	})
 	
+	ControlActions.init();
 	steptwo.forEach(function(f) {
 		var drop = new Drop({
 			target: document.querySelector('[data-add="' + f + '"]'),

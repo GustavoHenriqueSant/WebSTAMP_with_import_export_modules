@@ -16127,7 +16127,6 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
           project_id: project_id
         }).then(function (response) {
           var exihibition_id = $newAssumption.children().length + 1;
-          alert(exihibition_id);
           console.log($('#assumptions').find("substep__list").children());
           $newAssumption.append(assumption(response.data, exihibition_id));
         }).catch(function (error) {
@@ -17532,6 +17531,7 @@ if (actualPage.includes('steptwo')) {
 		steptwo.push(f.id);
 	});
 
+	ControlActions.init();
 	steptwo.forEach(function (f) {
 		var drop = new Drop({
 			target: document.querySelector('[data-add="' + f + '"]'),
