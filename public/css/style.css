@@ -175,6 +175,22 @@ html, body {
   border: 1px solid #ddd;
   width: 100%; }
 
+#controller-select {
+  -webkit-appearance: none;
+  /* Remove estilo padrão do Chrome */
+  -moz-appearance: none;
+  /* Remove estilo padrão do FireFox */
+  appearance: none;
+  /* Remove estilo padrão do FireFox*/
+  background: url("../images/select-arrow.gif") no-repeat;
+  /* Imagem de fundo (Seta) */
+  background-position: 100% center;
+  /*Posição da imagem do background*/
+  height: 30px;
+  /* Altura do select, importante para que tenha a mesma altura em todo os navegadores */
+  border: 1px solid #ddd;
+  width: 100%; }
+
 .garamond {
   font-family: Garamond,Baskerville,Baskerville Old Face,Hoefler Text,Times New Roman,serif; }
 

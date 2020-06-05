@@ -5,15 +5,25 @@
 <div class="substep__content" aligned="center">
 
     <div class="container">
-
-        <select id="control-actions-select" name="control-actions-select">
+        Select controller:
+        <select id="controller-select" name="controller-select">
+            <option disabled selected value> -- Select controller --</option>
         	@foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
-                @foreach(App\ControlAction::where('controller_id', $controller->id)->get() as $ca)
-	                <option value="{{$ca->id}}">{{$ca->name}} ({{$ca->controller->name}})</option>
-	            @endforeach
+	           <option value="{{$controller->id}}">{{$controller->name}}</option>
             @endforeach
-        </select>     
-
+        </select>
+        <div id="div_select_control_action" hidden="true">
+            <br/><br/>
+            Select control action:
+            @foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
+            <select id="control-actions-select" class="hide-control-actions-options" name="control-actions-of-controller-{{$controller->id}}">
+                <option value = "0" disabled selected value> -- Select control action -- </option>
+                @foreach(App\ControlAction::where('controller_id', $controller->id)->get() as $ca)
+                    <option value="{{$ca->id}}">{{$ca->name}}</option>
+                @endforeach
+            </select>     
+            @endforeach
+        </div>
     </div>
 
 </div>
