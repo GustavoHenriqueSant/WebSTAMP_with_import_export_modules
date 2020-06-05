@@ -89,6 +89,12 @@
     font-size: 1rem;
     color: black;
   }
+  &__textarea {
+    background: white;
+    border: 0;
+    font-size: 1rem;
+    color: black;   
+  }
 
   &__input__uca {
     background-color: #f0f0f0;
@@ -103,6 +109,11 @@
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 1rem;
+  }
+  &__textarea__active {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;  
   }
 
   &__delete__box {

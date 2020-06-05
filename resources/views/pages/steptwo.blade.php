@@ -1,25 +1,47 @@
 @extends('layouts.master')
 
-@section('content')
-	
-	<div class="substep substep--select-control-action-two" id="sca">
-        @include('partials.stepone.select-control-action')
-	</div>
-	
-	@foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
-    	@foreach(App\ControlAction::where('controller_id', $controller->id)->get() as $ca)
-		    <div class="substep substep--showtable-{{$ca->id}} hide-control-actions" id="showtable-{{$ca->id}}" style="display: none;">
-		    	@include('partials.steptwo.steptwotable')
-		    </div>
-		    @foreach(App\SafetyConstraints::where('controlaction_id', $ca->id)->get() as $uca)
-		    	@include('partials.steptwo.associated-causal-factors', ['uca_id' => $uca->id, 'uca_context' => $uca->context])
-		    	@include('partials.steptwo.information-lifecycle', ['uca_id' => $uca->id, 'uca_context' => $uca->context])
-		    @endforeach
-	    @endforeach
-    @endforeach
+<?php $steptwo= ($project_type == "Security" ) ? ['component'] : ['component'];
+?>
 
+@section('content')
+    @foreach ($steptwo as $s)
+        <input type="hidden" id="project_id" value="{{$project_id}}">
+        <div class="substep substep--{{ $s }}" id="{{ $s }}">
+          @include('partials.steptwo.' . $s)
+        </div>
+    @endforeach
 @endsection
 
 @section('dialogs')
-	@include('partials.steptwo.add-tuple')
+
+    @include('partials.stepone.add-component')
+ 
+    <!-- Including variables for each Controllers and for the Controlled Process -->
+    @foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
+    	@include('partials.steptwo.add-variable', ['component_id' => $controller->id])
+    @endforeach
+
+    <!-- Including states for each Variables -->
+    @foreach(App\Variable::where('project_id', $project_id)->get() as $variable)
+        @include('partials.steptwo.add-state', ['variable_id' => $variable->id])
+    @endforeach
+
+    <!-- Including Control Actions for each Controller -->
+    @foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
+        @include('partials.steptwo.add-controlactions', ['controller_id' => $controller->id])
+    @endforeach
+
+    <!-- Including Connection for each Component -->
+    @foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)
+        @include('partials.steptwo.add-connection', ['type' => 'controller', 'id' => $controller->id, 'name' => $controller->name])
+    @endforeach
+    @foreach(App\Actuators::where('project_id', $project_id)->get() as $actuator)
+        @include('partials.steptwo.add-connection', ['type' => 'actuator', 'id' => $actuator->id, 'name' => $actuator->name])
+    @endforeach
+    @foreach(App\ControlledProcess::where('project_id', $project_id)->get() as $controlledprocess)
+        @include('partials.steptwo.add-connection', ['type' => 'controlled_process', 'id' => $controlledprocess->id, 'name' => $controlledprocess->name])
+    @endforeach
+    @foreach(App\Sensors::where('project_id', $project_id)->get() as $sensor)
+        @include('partials.steptwo.add-connection', ['type' => 'sensor', 'id' => $sensor->id, 'name' => $sensor->name])
+    @endforeach
 @endsection

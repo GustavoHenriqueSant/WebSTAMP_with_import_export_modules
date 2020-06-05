@@ -21,7 +21,7 @@
 
                         </div>
                         <div class="item__actions">
-                            <form action ="{{$project->URL}}/fundamentals" method="POST" class="edit-form ajaxform">
+                            <form action ="{{$project->URL}}/stepone" method="POST" class="edit-form ajaxform">
                                 <div class="item__title">
                                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                                     <input id="project_id" name="project_id" type="hidden" value="{{$project->id}}">

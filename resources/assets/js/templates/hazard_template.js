@@ -1,10 +1,10 @@
 module.exports = function(context, exihibition_id, losses) {
     var size = context.name.length;
-    var accidents_associated = "";
+    var losses_associated = "";
 
-    context.accidents_associated.forEach(function(value, index){
-        accidents_associated += `<div class="item__actions__action" id="accident-associated-`+context.accidents_associated_id[index]+`">
-                <a href="javascript:;" class="item__delete__box" data-type="hazard" data-index="`+context.accidents_associated_id[index]+`">×</a> [L-`+losses[index]+`]
+    context.losses_associated.forEach(function(value, index){
+        losses_associated += `<div class="item__actions__action" id="loss-associated-`+context.losses_associated_id[index]+`">
+                <a href="javascript:;" class="item__delete__box" data-type="hazard" data-index="`+context.losses_associated_id[index]+`">×</a> [L-`+losses[index]+`]
             </div>`;
     });
     return `
@@ -12,7 +12,7 @@ module.exports = function(context, exihibition_id, losses) {
             <div class="item__title">
                 H-${exihibition_id}: <input type="text" class="item__input" id="hazard-description-${context.id}" value="${context.name}" size="${size}" onkeyup="this.size=this.value.length" disabled>
             </div>
-            ${accidents_associated}
+            ${losses_associated}
             <div class="item__actions">
                 <form action ="/edit-formhazard" method="POST" class="edit-form ajaxform" data-edit="hazard">
                     <div class="item__title">

@@ -3,12 +3,12 @@ Hazard.init();
 
 var axios = require('./axios');
 var $ = require('jquery');
-var accident = require('./templates/accident_template');
+var loss = require('./templates/loss_template');
 
-function addAccident() {
+function addLoss() {
 	
 }
 
 module.exports = {
-	addAccident : addAccident
+	addLoss: addLoss
 }

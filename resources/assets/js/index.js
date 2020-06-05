@@ -1,6 +1,6 @@
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
 
-if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
+if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
   var $ = require('jquery');
 
   var Hazard = require('./elements/hazards');
@@ -223,20 +223,8 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
   Hazard.init();
   //State.init();
   ControlActions.init();
-  var fundamentals = ['hazard', 'component', 'systemgoal', 'accident', 'systemsafetyconstraint', 'variable-0'];
-  $('.variables-content').each(function(index, f){
-    fundamentals.push(f.id);
-  })
-  $('.controlactions-content').each(function(index, f){
-    fundamentals.push(f.id);
-  })
-  $('.connections-content').each(function(index, f){
-    fundamentals.push(f.id);
-  })
-  $('.item__actions__add').each(function(index, f){
-    fundamentals.push(f.id);
-  })
-  fundamentals.forEach(function(f) {
+  var stepone = ['hazard', 'systemgoal', 'assumption', 'loss', 'systemsafetyconstraint'];
+  stepone.forEach(function(f) {
     var drop = new Drop({
       target: document.querySelector('[data-add="' + f + '"]'),
       content: document.querySelector('[data-drop="' + f + '"]'),
@@ -255,15 +243,53 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
     });
     drop.on("open", function() {
       if (f === "hazard"){
-        Hazard.showAccidents();
+        Hazard.showLosses();
       }
     })
   });
-
+/*
+  var steptwo = ['component', 'variable-0'];
+  $('.variables-content').each(function(index, f){
+    steptwo.push(f.id);
+  })
+  $('.controlactions-content').each(function(index, f){
+    steptwo.push(f.id);
+  })
+  $('.connections-content').each(function(index, f){
+    steptwo.push(f.id);
+  })
+  $('.item__actions__add').each(function(index, f){
+    steptwo.push(f.id);
+  })
+  steptwo.forEach(function(f) {
+    var drop = new Drop({
+      target: document.querySelector('[data-add="' + f + '"]'),
+      content: document.querySelector('[data-drop="' + f + '"]'),
+      openOn: 'click',
+      remove: true,
+      tetherOptions: {
+        attachment: 'top left',
+        targetAttachment: 'middle right',
+        constraints: [
+          {
+            to: 'scrollParent',
+            attachment: 'together'
+          }
+        ]
+      }
+    });
+    drop.on("open", function() {
+      if (f === "hazard"){
+        Hazard.showLosses();
+      }
+    })
+  });
+*/
   var functions = require('./ajax_functions');
 
   var systemgoal = require('./templates/systemgoal_template');
-  var accident = require('./templates/accident_template');
+  var assumption = require('./templates/assumption_template');
+  var loss = require('./templates/loss_template');
   var hazard = require('./templates/hazard_template');
   var actuator = require('./templates/actuator_template');
   var controlledprocess = require('./templates/controlledprocess_template');
@@ -325,34 +351,51 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
         console.log(error);
       });
     }
-    // Verifies if activity is accident
-    else if (activity === 'accident') {
-      var $newAccident = $('#accidents').find(".substep__list");
-      axios.post('/addaccident', {
+    // Verifies if activity is assumption
+    else if(activity == 'assumption'){
+      var $newAssumption = $('#assumptions').find(".substep__list");
+      axios.post('/addassumption', {
+        name: name,
+        id : id,
+        project_id : project_id
+      })
+      .then(function(response){
+        var exihibition_id = $newAssumption.children().length + 1;
+        console.log($('#assumptions').find("substep__list").children());
+        $newAssumption.append(assumption(response.data, exihibition_id));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    // Verifies if activity is loss
+    else if (activity === 'loss') {
+      var $newLoss = $('#losses').find(".substep__list");
+      axios.post('/addloss', {
         name: name,
         id : id,
         project_id : project_id
       })
       .then(function (response) { 
-        Hazard.addAccident(response.data);
-        var exihibition_id = $('#accidents').find(".substep__list").children().length + 1;
-        $newAccident.append(accident(response.data, exihibition_id));
+        Hazard.addLoss(response.data);
+        var exihibition_id = $('#losses').find(".substep__list").children().length + 1;
+        $newLoss.append(loss(response.data, exihibition_id));
       })
       .catch(function (error) {
         console.log(error);
       });
     // Verify if activity is hazard
     } else if (activity === 'hazard') { 
-      var accidents_associated = form.find("#hazard-accident-association").val();
-      var losses_id = getLossesId(form.find("#hazard-accident-association :selected").text()).split(",");
+      var losses_associated = form.find("#hazard-loss-association").val();
+      var losses_id = getLossesId(form.find("#hazard-loss-association :selected").text()).split(",");
       var $newHazard = $('#hazards').find(".substep__list");
-      var accidents_associated_id;
+      var losses_associated_id;
       var project_type = $('#project_type').val();
       axios.post('/addhazard', {
         name : name,
         id : id,
-        accidents_associated : accidents_associated,
-        accidents_associated_id : accidents_associated_id,
+        losses_associated : losses_associated,
+        losses_associated_id : losses_associated_id,
         project_id : project_id,
         project_type : project_type
       })
@@ -594,13 +637,13 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
       message: 'Are you sure you want to delete this item?',
       callback: function (value) {
         if (value) {
-          if (activity === 'accident'){
-            var id = form.find("#accident_id").val();
-            axios.post('/deleteaccident', {
+          if (activity === 'loss'){
+            var id = form.find("#loss_id").val();
+            axios.post('/deleteloss', {
                 id : id,
               })
               .then(function (response) {
-                $("#accident-" + id).remove();
+                $("#loss-" + id).remove();
               })
               .catch(function (error) {
                 console.log(error);
@@ -613,6 +656,18 @@ if (!actualPage.includes('stepone') && !actualPage.includes('steptwo')) {
               })
               .then(function (response) {
                 $("#systemgoal-" + id).remove();
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+              return false;
+          } else if (activity === 'assumption'){
+            var id = form.find("#assumption_id").val();
+            axios.post('/deleteassumption', {
+                id : id,
+              })
+              .then(function (response) {
+                $("#assumption-" + id).remove();
               })
               .catch(function (error) {
                 console.log(error);
@@ -776,15 +831,15 @@ $('body').on('click', '.add-mission-assurance', function(event){
 
 // FUNCTION TO EDIT FUNDAMENTALS
 
-function edit_fundamentals(id, activity) {
-  if (activity == "accident") {
-    var name = $("#accident-description-"+id).val();
-    axios.post('/editaccident', {
+function edit_stepone(id, activity) {
+  if (activity == "loss") {
+    var name = $("#loss-description-"+id).val();
+    axios.post('/editloss', {
         id : id,
         name : name
       })
       .then(function (response) {
-        $("#accident-description-" + id).replaceWith('<input type="text" class="item__input" id="accident-description-'+id+'" value="'+name+'" size="'+name.length+'" disabled>');
+        $("#loss-description-" + id).replaceWith('<input type="text" class="item__input" id="loss-description-'+id+'" value="'+name+'" size="'+name.length+'" disabled>');
       })
       .catch(function (error) {
         console.log(error);
@@ -818,6 +873,20 @@ function edit_fundamentals(id, activity) {
         console.log(error);
       })
       return false;
+  } else if (activity == "assumption") { //aquiii
+    var name = $("#assumption-description-"+id).val();
+    axios.post('/editassumption', {
+        id : id,
+        name : name
+      })
+      .then(function (response) {
+        $("#assumption-description-" + id).replaceWith('<textarea class="item__textarea" id="assumption-description-' +id+ '" rows="5" cols = "100" style="resize: none; height: auto;" disabled>'+name+'</textarea>');
+        document.getElementById("assumption-description-" + id).disabled = true;
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      return false;    
   } else if (activity == "systemsafetyconstraint") {
     var name = $("#systemsafetyconstraint-description-"+id).val();
     axios.post('/editsystemsafetyconstraint', {
@@ -901,17 +970,17 @@ $("body").on('blur', '.item__input__active', function(event) {
   var split = event.currentTarget.id.split("-");
   var id = split[2];
   var activity = split[0];
-  edit_fundamentals(id, activity);
+  edit_stepone(id, activity);
 });
 
 // EDIT WHEN KEY "ENTER" WAS PRESSED
 $("body").on('keypress', '.item__input__active', function(event) {
-  if (event.which == 13) {
+  if (event.which == 13 && !event.shiftKey ) {
     event.preventDefault();
     var split = event.currentTarget.id.split("-");
     var id = split[2];
     var activity = split[0];
-    edit_fundamentals(id, activity);
+    edit_stepone(id, activity);
   }
 });
 
@@ -920,9 +989,9 @@ $("body").on('keypress', '.item__input__active', function(event) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var activity = form.data("edit");
-    if (activity == "accident") {
-      var id = form.find("#accident_id").val();
-      $('#accident-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+    if (activity == "loss") {
+      var id = form.find("#loss_id").val();
+      $('#loss-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
       return false;
     } else if (activity == "hazard") {
       var id = form.find("#hazard_id").val();
@@ -932,6 +1001,10 @@ $("body").on('keypress', '.item__input__active', function(event) {
       var id = form.find("#systemgoal_id").val();
       $('#systemgoal-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
       return false;
+    } else if (activity == "assumption") {
+      var id = form.find("#assumption_id").val();
+      $('#assumption-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
+      return false;  
     } else if (activity == "systemsafetyconstraint") {
       var id = form.find("#systemsafetyconstraint_id").val();
       $('#systemsafetyconstraint-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
@@ -988,7 +1061,7 @@ $("body").on('keypress', '.item__input__active', function(event) {
     });
   });
 
-  // DELETE BLUE ITEM -> ACCIDENT(HAZARD) AND VARIABLE(STATE))
+  // DELETE BLUE ITEM -> LOSS(HAZARD) AND VARIABLE(STATE))
 
   $('body').on('click', '.item__delete__box', function(event) {
     var id = $(event.currentTarget).data('index');
@@ -998,11 +1071,11 @@ $("body").on('keypress', '.item__input__active', function(event) {
       callback: function (value) {
         if (value) {
           if (type === 'hazard'){
-            axios.post('/deleteaccidentassociated', {
+            axios.post('/deletelossassociated', {
                 id : id,
               })
               .then(function (response) {
-                $("#accident-associated-" + id).remove();
+                $("#loss-associated-" + id).remove();
               })
               .catch(function (error) {
                 console.log(error);
@@ -1053,7 +1126,7 @@ for (i = 0; i < acc.length; i++) {
 }
 */
   // STEP 1
-} else if(!actualPage.includes('steptwo')) {
+} else if(!actualPage.includes('stepfour')) {
   // Require JQuery
   var $ = require('jquery');
 

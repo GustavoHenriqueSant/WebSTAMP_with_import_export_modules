@@ -8,7 +8,7 @@ use App\Http\Requests;
 
 use App\Hazards;
 
-use App\AccidentsHazards;
+use App\LossesHazards;
 
 use Illuminate\Routing\Redirector;
 
@@ -23,23 +23,23 @@ class HazardController extends Controller
 		$hazard->project_id = $request->input('project_id');
 
 		$hazard->save();
+		
+		$losses = $request->input('losses_associated');
+		$losses_associated_id = array();
 
-		$accidents = $request->input('accidents_associated');
-		$accidents_associated_id = array();
-
-		foreach($accidents as $accident_id){
-			$accident_associated = new AccidentsHazards();
-			$accident_associated->accidents_id = $accident_id;
-			$accident_associated->hazards_id = $hazard->id;
-			$accident_associated->save();
-			array_push($accidents_associated_id, $accident_associated->id);
+		foreach($losses as $loss_id){
+			$loss_associated = new LossesHazards();
+			$loss_associated->losses_id = $loss_id;
+			$loss_associated->hazards_id = $hazard->id;
+			$loss_associated->save();
+			array_push($losses_associated_id, $loss_associated->id);
 		}
-
+		
 		return response()->json([
         	'name' => $hazard->name,
         	'id' => $hazard->id,
-        	'accidents_associated' => $accidents,
-        	'accidents_associated_id' => $accidents_associated_id,
+        	'losses_associated' => $losses,
+        	'losses_associated_id' => $losses_associated_id,
         	'project_type' => $request->input('project_type')
     	]);
 	}

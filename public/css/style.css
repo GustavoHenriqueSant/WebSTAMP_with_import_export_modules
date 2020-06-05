@@ -497,7 +497,6 @@ textarea.mission-assurance {
     padding: 5px 10px;
     position: relative;
     -webkit-user-select: none;
-    -moz-user-select: none;
     -ms-user-select: none;
     user-select: none; }
   .substep__title {
@@ -545,6 +544,11 @@ textarea.mission-assurance {
     border: 0;
     font-size: 1rem;
     color: black; }
+  .item__textarea {
+    background: white;
+    border: 0;
+    font-size: 1rem;
+    color: black; }
   .item__input__uca {
     background-color: #f0f0f0;
     width: 100%;
@@ -556,6 +560,10 @@ textarea.mission-assurance {
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 1rem; }
+  .item__textarea__active {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; }
   .item__delete__box {
     color: white;
     text-decoration: none; }
@@ -653,6 +661,12 @@ textarea.mission-assurance {
     margin-top: 0; }
 
 .add-drop__input {
+  width: 100%;
+  font-size: 1.1rem;
+  border: 1px solid #ecf0f1;
+  margin: 3px 3px 0 0; }
+
+.add-drop__textarea {
   width: 100%;
   font-size: 1.1rem;
   border: 1px solid #ecf0f1;

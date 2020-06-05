@@ -16,54 +16,59 @@
       @if(isset($slug))
         <div class="navbar__item">
           <div class="navbar__item__content">
-            <a href="/{{$slug}}/fundamentals" class="navbar__item__link">
-              Fundamentals
+            <a href="/{{$slug}}/stepone" class="navbar__item__link">
+              Purpose of the Analysis
             </a>
           </div>
           <div class="navbar__item__substeps">
             <div class="navbar__item__substep">
-              <a href="/{{$slug}}/fundamentals#systemgoals" class="navbar__item__link">
+              <a href="/{{$slug}}/stepone#systemgoals" class="navbar__item__link">
                 System Goals
               </a>
             </div>
             <div class="navbar__item__substep">
-              <a href="/{{$slug}}/fundamentals#accidents" class="navbar__item__link">
-                Accidents
+              <a href="/{{$slug}}/stepone#accidents" class="navbar__item__link"> <!-- TROCAR POR LOSSES -->
+                Losses
               </a>
             </div>
             <div class="navbar__item__substep">
-              <a href="/{{$slug}}/fundamentals#hazards" class="navbar__item__link">
-                Hazards
+              <a href="/{{$slug}}/stepone#hazards" class="navbar__item__link">
+                System-level Hazards
               </a>
             </div>
             <div class="navbar__item__substep">
-              <a href="/{{$slug}}/fundamentals#systemsafetyconstraint" class="navbar__item__link">
-                System Safety Constraints
+              <a href="/{{$slug}}/stepone#systemsafetyconstraint" class="navbar__item__link">
+                System-level Safety Constraints
               </a>
             </div>
-            <div class="navbar__item__substep">
-              <a href="/{{$slug}}/fundamentals#components" class="navbar__item__link">
-                Components
-              </a>
-            </div>
+            
           </div>
         </div>
 
         <div class="navbar__item">
           <div class="navbar__item__content">
-            <a href="/{{$slug}}/stepone" class="navbar__item__link">
-              STPA Step 1
+            <a href="/{{$slug}}/steptwo" class="navbar__item__link"> <!-- TROCAR PELA NOVA ROTA PARA PAGINA STEP TWO -->
+              Control Structure
             </a>
           </div>
         </div>
 
         <div class="navbar__item">
           <div class="navbar__item__content">
-            <a href="/{{$slug}}/steptwo" class="navbar__item__link">
-              STPA Step 2
+            <a href="/{{$slug}}/stepthree" class="navbar__item__link"> <!-- TROCAR PELA NOVA ROTA PARA PAGINA STEP THREE-->
+              Unsafe Control Actions
             </a>
           </div>
         </div>
+
+        <div class="navbar__item">
+          <div class="navbar__item__content">
+            <a href="/{{$slug}}/stepfour" class="navbar__item__link"> <!-- TROCAR PELA NOVA ROTA PARA PAGINA STEP FOUR -->
+              Loss Scenarios
+            </a>
+          </div>
+        </div>
+
       @endif
 
       <div class="navbar__item navbar__item--right">
