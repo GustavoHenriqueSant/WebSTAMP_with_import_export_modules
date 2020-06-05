@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-<?php $steptwo= ($project_type == "Security" ) ? ['component'] : ['component'];
+<?php $steptwo= ($project_type == "Security" ) ? ['components'] : ['components'];
 ?>
 
 @section('content')
@@ -14,7 +14,8 @@
 
 @section('dialogs')
 
-    @include('partials.stepone.add-component')
+    @include('partials.steptwo.add-component')
+    @include('partials.steptwo.add-variable')
  
     <!-- Including variables for each Controllers and for the Controlled Process -->
     @foreach(App\Controllers::where('project_id', $project_id)->get() as $controller)

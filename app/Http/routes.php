@@ -97,31 +97,40 @@ Route::match(array('GET', 'POST'), '{slug}/stepone', ['as' => 'stepone', functio
         return view('pages.stepone', compact("losses", "project_id", "project_name", "project_type", "slug", "loss_map", "hazard_map", "goals_map", "assumptions_map", "sysconstraints_map"));
     }
 }]);
-/*
-Route::match(array('GET', 'POST'), '{slug}/stepone', ['as' => 'stepone', function ($slug) {
+
+Route::match(array('GET', 'POST'), '{slug}/steptwo', ['as' => 'steptwo', function($slug){
+    if(Auth::check()){
+        $project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
+        $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
+        $project_name = App\Project::select("name")->where('URL', $slug)->first()->name;
+        return view('pages.steptwo', compact("project_id", "project_name", "project_type", "slug"));
+    }
+}]);
+
+Route::match(array('GET', 'POST'), '{slug}/stepthree', ['as' => 'stepthree', function ($slug) {
 	if (Auth::check()) {
 		$project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
         $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
         $belongsToProject = Team::where('project_id', $project_id)->where('user_id', Auth::user()->id)->first() != null;
         if ($belongsToProject)
-    	   return view('pages.stepone', compact("project_id", "project_type", "slug"));
+    	   return view('pages.stepthree', compact("project_id", "project_type", "slug"));
 	}
     else
     	return view('home');
 }]);
 
-Route::match(array('GET', 'POST'), '{slug}/steptwo', ['as' => 'steptwo', function ($slug) {
+Route::match(array('GET', 'POST'), '{slug}/stepfour', ['as' => 'stepfour', function ($slug) {
 	if (Auth::check()) {
         $project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
         $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
         $belongsToProject = Team::where('project_id', $project_id)->where('user_id', Auth::user()->id)->first() != null;
         if ($belongsToProject)
-            return view('pages.steptwo', compact("project_id", "project_type", "slug"));
+            return view('pages.stepfour', compact("project_id", "project_type", "slug"));
     }
     else
         return view('home');
 }]);
-*/
+
 
 Route::get('/login', ['as' => 'login', function () {
     return view('auth.login');

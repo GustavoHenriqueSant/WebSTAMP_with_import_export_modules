@@ -15682,7 +15682,7 @@ module.exports = {
 	addLoss: addLoss
 };
 
-},{"./axios":34,"./elements/hazards":36,"./templates/loss_template":47,"jquery":27}],34:[function(require,module,exports){
+},{"./axios":34,"./elements/hazards":36,"./templates/loss_template":48,"jquery":27}],34:[function(require,module,exports){
 'use strict';
 
 var axios = require('axios');
@@ -15766,7 +15766,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
 
-if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
+require('./steptwo');
+
+if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   var removeSemicolon = function removeSemicolon(parameter) {
     parameter = parameter.split(";");
     var result = "";
@@ -15864,60 +15866,6 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
         console.log(error);
       });
       return false;
-    } else if (activity == "variable") {
-      var name = $("#variable-description-" + id).val();
-      axios.post('/editvariable', {
-        id: id,
-        name: name
-      }).then(function (response) {
-        $('#state-variable-' + id).hide();
-        $("#variable-description-" + id).replaceWith('<input type="text" class="item__input" id="variable-description-' + id + '" value="' + name + '" size="' + name.length + '">');
-        document.getElementById("variable-description-" + id).className = "item__input";
-        document.getElementById("variable-description-" + id).disabled = true;
-      }).catch(function (error) {
-        console.log(error);
-      });
-      return false;
-    } else if (activity == "actuator") {
-      var name = $("#actuator-description-" + id).val();
-      axios.post('/editactuator', {
-        id: id,
-        name: name
-      }).then(function (response) {
-        $("#actuator-description-" + id).replaceWith('<input type="text" class="item__input" id="actuator-description-' + id + '" value="' + name + '" size="100">');
-        $("#actuator-" + id).replaceWith('<button class="accordion" id="actuator-' + id + '"><b>[Actuator]</b> ' + name + '</button>');
-        document.getElementById("actuator-description-" + id).disabled = true;
-      });
-    } else if (activity == "controlledprocess") {
-      var name = $("#controlledprocess-description-" + id).val();
-      axios.post('/editcontrolledprocess', {
-        id: id,
-        name: name
-      }).then(function (response) {
-        $("#controlledprocess-description-" + id).replaceWith('<input type="text" class="item__input" id="controlledprocess-description-' + id + '" value="' + name + '" size="100">');
-        $("#controlledprocess-" + id).replaceWith('<button class="accordion" id="controlledprocess-' + id + '"><b>[Controlled Process]</b> ' + name + '</button>');
-        document.getElementById("controlledprocess-description-" + id).disabled = true;
-      });
-    } else if (activity == "controller") {
-      var name = $("#controller-description-" + id).val();
-      axios.post('/editcontroller', {
-        id: id,
-        name: name
-      }).then(function (response) {
-        $("#controller-description-" + id).replaceWith('<input type="text" class="item__input" id="controller-description-' + id + '" value="' + name + '" size="100">');
-        $("#controller-" + id).replaceWith('<button class="accordion" id="controller-' + id + '"><b>[Controller]</b> ' + name + '</button>');
-        document.getElementById("controller-description-" + id).disabled = true;
-      });
-    } else if (activity == "sensor") {
-      var name = $("#sensor-description-" + id).val();
-      axios.post('/editsensor', {
-        id: id,
-        name: name
-      }).then(function (response) {
-        $("#sensor-description-" + id).replaceWith('<input type="text" class="item__input" id="sensor-description-' + id + '" value="' + name + '" size="100">');
-        $("#sensor-" + id).replaceWith('<button class="accordion" id="sensor-' + id + '"><b>[Sensor]</b> ' + name + '</button>');
-        document.getElementById("sensor-description-" + id).disabled = true;
-      });
     }
   };
 
@@ -16139,60 +16087,13 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
       }
     });
   });
-  /*
-    var steptwo = ['component', 'variable-0'];
-    $('.variables-content').each(function(index, f){
-      steptwo.push(f.id);
-    })
-    $('.controlactions-content').each(function(index, f){
-      steptwo.push(f.id);
-    })
-    $('.connections-content').each(function(index, f){
-      steptwo.push(f.id);
-    })
-    $('.item__actions__add').each(function(index, f){
-      steptwo.push(f.id);
-    })
-    steptwo.forEach(function(f) {
-      var drop = new Drop({
-        target: document.querySelector('[data-add="' + f + '"]'),
-        content: document.querySelector('[data-drop="' + f + '"]'),
-        openOn: 'click',
-        remove: true,
-        tetherOptions: {
-          attachment: 'top left',
-          targetAttachment: 'middle right',
-          constraints: [
-            {
-              to: 'scrollParent',
-              attachment: 'together'
-            }
-          ]
-        }
-      });
-      drop.on("open", function() {
-        if (f === "hazard"){
-          Hazard.showLosses();
-        }
-      })
-    });
-  */
+
   var functions = require('./ajax_functions');
 
   var systemgoal = require('./templates/systemgoal_template');
   var assumption = require('./templates/assumption_template');
   var loss = require('./templates/loss_template');
   var hazard = require('./templates/hazard_template');
-  var actuator = require('./templates/actuator_template');
-  var controlledprocess = require('./templates/controlledprocess_template');
-  var sensor = require('./templates/sensor_template');
-  var component = require('./templates/component_template');
-  var connection = require('./templates/connection_template');
-  var controlaction = require('./templates/controlaction_template');
-  var variable = require('./templates/variable_template');
-  var connection = require('./templates/connection_template');
-  var state = require('./templates/state_template');
-  var addstate = require('./templates/add-state_template');
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
 
   $('body').on('submit', '.add-form', function (event) {
@@ -16267,195 +16168,21 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
             console.log(error);
           });
         }
-        // Verify if activity is component
-        else if (activity === 'component') {
-            var type = form.find("#component-type").val();
-            if (type === 'Actuator') {
-              var $newComponent = $('#actuators');
-              axios.post('/addactuator', {
-                name: name,
-                type: type,
-                id: id,
-                project_id: project_id
-              }).then(function (response) {
-                location.reload();
-              }).catch(function (error) {
-                console.log(error);
-              });
-            } else if (type === 'ControlledProcess') {
-              var $newComponent = $('#controlledprocess');
-              axios.post('/addcontrolledprocess', {
-                name: name,
-                id: id,
-                project_id: project_id
-              }).then(function (response) {
-                location.reload();
-              }).catch(function (error) {
-                console.log(error);
-              });
-            } else if (type === "Controller") {
-              var $newComponent = $('#controllers');
-              axios.post('/addcontroller', {
-                name: name,
-                id: id,
-                project_id: project_id
-              }).then(function (response) {
-                location.reload();
-              }).catch(function (error) {
-                console.log(error);
-              });
-            } else if (type === "Sensor") {
-              var $newComponent = $('#sensors');
-              axios.post('/addsensor', {
-                name: name,
-                id: id,
-                project_id: project_id
-              }).then(function (response) {
-                location.reload();
-              }).catch(function (error) {
-                console.log(error);
-              });
-            }
+        // Verify if activity is System Safety Constraint
+        else if (activity === 'systemsafetyconstraint') {
+            var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
+            axios.post('/addsystemsafetyconstraint', {
+              name: name,
+              id: id,
+              project_id: project_id
+            }).then(function (response) {
+              var exihibition_id = $('#systemsafetyconstraint').find(".substep__list").children().length + 1;
+              $newSSC.append(systemsafetyconstraint(response.data, exihibition_id));
+            }).catch(function (error) {
+              console.log(error);
+            });
           }
-          // Verify if activity is control control action
-          else if (activity.indexOf("controlaction") != -1) {
-              var controller_id = activity.split("-")[1];
-              var $newControlAction = $('#controlactions_content-' + controller_id).find(".substep__list");
-              var id = 0;
-              var name = form.find("#controlaction-" + controller_id + "-name").val();
-              axios.post('/addcontrolaction', {
-                name: name,
-                controller_id: controller_id,
-                id: id,
-                project_id: project_id
-              }).then(function (response) {
-                $newControlAction.append(controlaction(response.data));
-              }).catch(function (error) {
-                console.log(error);
-              });
-            }
-            // Verify if activity is state
-            else if (activity.indexOf("state") != -1) {
-                var variable_id = form.find("#variable_id").val();
-                var name = form.find("#state-name-" + variable_id).val();
-                var id = 0;
-                axios.post('/addstate', {
-                  name: name,
-                  variable_id: variable_id,
-                  id: id,
-                  project_id: project_id
-                }).then(function (response) {
-                  var $newState = $('#variable-' + response.data.variable_id).find(".states-associated");
-                  console.log($newState);
-                  $newState.append(state(response.data, true));
-                  $newState = $('.variable-' + response.data.variable_id).find(".states-associated");
-                  $newState.append(state(response.data, false));
-                }).catch(function (error) {
-                  console.log(error);
-                });
-              }
-              // Verify if activity is System Safety Constraint
-              else if (activity === 'systemsafetyconstraint') {
-                  var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
-                  axios.post('/addsystemsafetyconstraint', {
-                    name: name,
-                    id: id,
-                    project_id: project_id
-                  }).then(function (response) {
-                    var exihibition_id = $('#systemsafetyconstraint').find(".substep__list").children().length + 1;
-                    $newSSC.append(systemsafetyconstraint(response.data, exihibition_id));
-                  }).catch(function (error) {
-                    console.log(error);
-                  });
-                }
-                // Verify if activity is variable
-                else if (activity.indexOf("connections") != -1) {
-                    var type_output = activity.split("-")[1];
-                    var output_component_id = activity.split("-")[2];
-                    var output_name = form.find("#" + activity + " option:selected").text();
-                    var input_name = form.find('#component_name').val();
-                    var input = form.find("#" + activity + " option:selected").val();
-                    var type_input = input.split("-")[0];
-                    var input_component_id = input.split("-")[1];
-                    var id = 0;
-                    var $newConnection = $('#connection-' + type_output + '-' + output_component_id).find(".substep__list");
-                    axios.post('/addconnections', {
-                      input_component_id: input_component_id,
-                      type_input: type_input,
-                      input_name: input_name,
-                      output_component_id: output_component_id,
-                      type_output: type_output,
-                      output_name: output_name,
-                      id: id,
-                      project_id: project_id
-                    }).then(function (response) {
-                      $newConnection.append(connection(response.data));
-                    }).catch(function (error) {
-                      console.log(error);
-                    });
-                  } else {
-                    var variable_split = activity.split('-');
-                    var controller_id = 0;
-                    var $newVariable = "";
-                    var id = 0;
-                    if (variable_split.length > 2) {
-                      controller_id = variable_split[2];
-                      $newVariable = $('#variables-' + controller_id).find(".controller_variable");
-                    } else $newVariable = $('#variables-0').find(".controller_variable");
-                    var name = form.find("#variable-" + controller_id + "-name").val();
-                    var states = [];
-                    form.find(".states-associated").each(function (index) {
-                      states.push($(this).val());
-                    });
-                    axios.post('/addvariable', {
-                      name: name,
-                      id: id,
-                      controller_id: controller_id,
-                      states: states,
-                      project_id: project_id
-                    }).then(function (response) {
-                      if (response.data.controller_id > 0) {
-                        $newVariable.append(variable(response.data, true));
-                        $('body').append(addstate(response.data));
-                        var state_variable = 'state-variable-' + response.data.id;
-                        var drop = new Drop({
-                          target: document.querySelector('[data-add="' + state_variable + '"]'),
-                          content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
-                          openOn: 'click',
-                          remove: true,
-                          tetherOptions: {
-                            attachment: 'top left',
-                            targetAttachment: 'middle right',
-                            constraints: [{
-                              to: 'scrollParent',
-                              attachment: 'together'
-                            }]
-                          }
-                        });
-                      } else {
-                        $newVariable.append(variable(response.data, true));
-                        $('.variables-content').find(".substep__list").append(variable(response.data, false));
-                        $('body').append(addstate(response.data));
-                        var state_variable = 'state-variable-' + response.data.id;
-                        var drop = new Drop({
-                          target: document.querySelector('[data-add="' + state_variable + '"]'),
-                          content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
-                          openOn: 'click',
-                          remove: true,
-                          tetherOptions: {
-                            attachment: 'top left',
-                            targetAttachment: 'middle right',
-                            constraints: [{
-                              to: 'scrollParent',
-                              attachment: 'together'
-                            }]
-                          }
-                        });
-                      }
-                    }).catch(function (error) {
-                      console.log(error);
-                    });
-                  }
+
     return false;
   });
 
@@ -16509,84 +16236,12 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
               console.log(error);
             });
             return false;
-          } else if (activity === 'component') {
-            var id = form.find("#component_id").val();
-            var type = form.find("#component_type").val();
-            if (type === 'actuator') {
-              axios.post('/deleteactuator', {
-                id: id
-              }).then(function (response) {
-                $("#" + type + "-" + id).remove();
-                $("#panel-" + type + "-" + id).remove();
-              }).catch(function (error) {
-                console.log(error);
-              });
-            } else if (type === 'controlledprocess') {
-              axios.post('/deletecontrolledprocess', {
-                id: id
-              }).then(function (response) {
-                $("#" + type + "-" + id).remove();
-                $("#panel-" + type + "-" + id).remove();
-              }).catch(function (error) {
-                console.log(error);
-              });
-            } else if (type === 'controller') {
-              axios.post('/deletecontroller', {
-                id: id
-              }).then(function (response) {
-                $("#" + type + "-" + id).remove();
-                $("#panel-" + type + "-" + id).remove();
-              }).catch(function (error) {
-                console.log(error);
-              });
-            } else if (type === 'sensor') {
-              axios.post('/deletesensor', {
-                id: id
-              }).then(function (response) {
-                $("#" + type + "-" + id).remove();
-                $("#panel-" + type + "-" + id).remove();
-              }).catch(function (error) {
-                console.log(error);
-              });
-            }
-            return false;
-          } else if (activity === 'controlaction') {
-            var id = form.find("#controlaction_id").val();
-            axios.post('/deletecontrolaction', {
-              id: id
-            }).then(function (response) {
-              $("#controlaction-" + id).remove();
-            }).catch(function (error) {
-              console.log(error);
-            });
-            return false;
           } else if (activity === 'systemsafetyconstraint') {
             var id = form.find("#systemsafetyconstraint_id").val();
             axios.post('/deletesystemsafetyconstraint', {
               id: id
             }).then(function (response) {
               $("#systemsafetyconstraint-" + id).remove();
-            }).catch(function (error) {
-              console.log(error);
-            });
-            return false;
-          } else if (activity === 'variable') {
-            var id = form.find("#variable_id").val();
-            axios.post('/deletevariable', {
-              id: id
-            }).then(function (response) {
-              $(".variable-" + id).remove();
-              $("#variable-" + id).remove();
-            }).catch(function (error) {
-              console.log(error);
-            });
-            return false;
-          } else if (activity === 'connection') {
-            var id = form.find("#connection_id").val();
-            axios.post('/deleteconnections', {
-              id: id
-            }).then(function (response) {
-              $("#connection-" + id).remove();
             }).catch(function (error) {
               console.log(error);
             });
@@ -16634,12 +16289,16 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
 
   // EDIT WHEN KEY "ENTER" WAS PRESSED
   $("body").on('keypress', '.item__input__active', function (event) {
-    if (event.which == 13 && !event.shiftKey) {
-      event.preventDefault();
-      var split = event.currentTarget.id.split("-");
-      var id = split[2];
-      var activity = split[0];
-      edit_stepone(id, activity);
+    if (event.which == 13) {
+      if (event.shifKey && activity == "assumptions") {
+        //do nothing
+      } else {
+        event.preventDefault();
+        var split = event.currentTarget.id.split("-");
+        var id = split[2];
+        var activity = split[0];
+        edit_stepone(id, activity);
+      }
     }
   });
 
@@ -16667,41 +16326,7 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
       var id = form.find("#systemsafetyconstraint_id").val();
       $('#systemsafetyconstraint-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
       return false;
-    } else if (activity == "variable") {
-      var id = form.find("#variable_id").val();
-      $('#state-variable-' + id).show();
-      $('#variable-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "actuator") {
-      var id = form.find("#actuator_id").val();
-      $('#actuator-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "controlledprocess") {
-      console.log("alo");
-      var id = form.find("#controlledprocess_id").val();
-      $('#controlledprocess-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "controller") {
-      var id = form.find("#controller_id").val();
-      $('#controller-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "actuator") {
-      var id = form.find("#actuator_id").val();
-      $('#actuator-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "controlledprocess") {
-      var id = form.find("#controlledprocess_id").val();
-      $('#controlledprocess-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "controller") {
-      var id = form.find("#controller_id").val();
-      $('#controller-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "sensor") {
-      var id = form.find("#sensor_id").val();
-      $('#sensor-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else {}
+    }
   });
 
   $('.item__input').on('keyup', function (event) {
@@ -16732,16 +16357,6 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
               id: id
             }).then(function (response) {
               $("#loss-associated-" + id).remove();
-            }).catch(function (error) {
-              console.log(error);
-            });
-            return false;
-          } else if (type === 'variable') {
-            axios.post('/deletestate', {
-              id: id
-            }).then(function (response) {
-              $(".state-associated-" + id).remove();
-              $("#state-associated-" + id).remove();
             }).catch(function (error) {
               console.log(error);
             });
@@ -16778,8 +16393,8 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
       }
   }
   */
-  // STEP 1
-} else if (!actualPage.includes('stepfour')) {
+  // STEP 3
+} else if (actualPage.includes('stepthree')) {
   var edit_uca_sc = function edit_uca_sc(id) {
     var unsafe_control_action = $("#unsafe_control_action-" + id).val();
     var type = $("#type-" + id + " option:selected").val();
@@ -17511,251 +17126,88 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
     // Paint in white the yellow selectors
     form.find(".text_error").removeClass("text_error").addClass("text");
   });
-} else {
-  var _edit_causal_analysis = function _edit_causal_analysis(id) {
-    var guideword = $("#guideword-" + id + " option:selected").val();
-    var scenario = $("#scenario-" + id).val();
-    var associated = $("#associated-" + id).val();
-    var requirement = $("#requirement-" + id).val();
-    var role = $("#role-" + id).val();
-    var rationale = $("#rationale-" + id).val();
-    axios.post('/edittuple', {
-      id: id,
-      guideword: guideword,
-      scenario: scenario,
-      associated: associated,
-      requirement: requirement,
-      role: role,
-      rationale: rationale
-    }).then(function (response) {
-      $("#guideword-" + id).prop('disabled', true);
-      $("#scenario-" + id).prop('disabled', true);
-      $("#associated-" + id).prop('disabled', true);
-      $("#requirement-" + id).prop('disabled', true);
-      $("#role-" + id).prop('disabled', true);
-      $("#rationale-" + id).prop('disabled', true);
-    }).catch(function (error) {
-      console.log(error);
-    });
-  };
+}
+//STEP 4
+else if (actualPage.includes('stepfour')) {
+    var _edit_causal_analysis = function _edit_causal_analysis(id) {
+      var guideword = $("#guideword-" + id + " option:selected").val();
+      var scenario = $("#scenario-" + id).val();
+      var associated = $("#associated-" + id).val();
+      var requirement = $("#requirement-" + id).val();
+      var role = $("#role-" + id).val();
+      var rationale = $("#rationale-" + id).val();
+      axios.post('/edittuple', {
+        id: id,
+        guideword: guideword,
+        scenario: scenario,
+        associated: associated,
+        requirement: requirement,
+        role: role,
+        rationale: rationale
+      }).then(function (response) {
+        $("#guideword-" + id).prop('disabled', true);
+        $("#scenario-" + id).prop('disabled', true);
+        $("#associated-" + id).prop('disabled', true);
+        $("#requirement-" + id).prop('disabled', true);
+        $("#role-" + id).prop('disabled', true);
+        $("#rationale-" + id).prop('disabled', true);
+      }).catch(function (error) {
+        console.log(error);
+      });
+    };
 
-  // Require JQuery
-  var $ = require('jquery');
+    // Require JQuery
+    var $ = require('jquery');
 
-  // Require axios
-  var axios = require('./axios');
+    // Require axios
+    var axios = require('./axios');
 
-  var newCausal = require('./templates/causal_template');
+    var newCausal = require('./templates/causal_template');
 
-  var vex = require('vex-js');
-  vex.registerPlugin(require('vex-dialog'));
-  vex.defaultOptions.className = 'vex-theme-default';
+    var vex = require('vex-js');
+    vex.registerPlugin(require('vex-dialog'));
+    vex.defaultOptions.className = 'vex-theme-default';
 
-  $('body').on('submit', '.delete-all-tuple', function (event) {
-    event.preventDefault();
-    vex.dialog.confirm({
-      message: 'All tuples created (through "Template Instantiation" and "Add new 4-tuple") for that HCA will be deleted. Are you sure?',
-      callback: function callback(value) {
-        if (value) {
-          var form = $(event.currentTarget);
-          var uca_id = form.find("#uca_id").val();
-          var content = form.find(".table-content");
-          axios.post('/deletealltuple', {
-            uca_id: uca_id
-          }).then(function (response) {
-            console.log(uca_id);
-            $("#content-safety-" + uca_id).empty();
-          }).catch(function (error) {
-            console.log(error);
-          });
-        }
-      }
-    });
-  });
-
-  $('body').on('submit', '.adding-tuple', function (event) {
-    var _axios$post;
-
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    var scenario = form.find("#scenario").val();
-    var associated = form.find("#associated").val();
-    var requirement = form.find("#requirement").val();
-    var role = form.find("#role").val();
-    var rationale = form.find("#rationale").val();
-    var guideword = form.find("#guideword option:selected").val();
-    var safety = form.find("#uca").val();
-    var id = 0;
-    axios.post('/addtuple', (_axios$post = {
-      id: id }, _defineProperty(_axios$post, 'id', id), _defineProperty(_axios$post, 'scenario', scenario), _defineProperty(_axios$post, 'associated', associated), _defineProperty(_axios$post, 'requirement', requirement), _defineProperty(_axios$post, 'role', role), _defineProperty(_axios$post, 'rationale', rationale), _defineProperty(_axios$post, 'guideword', guideword), _defineProperty(_axios$post, 'safety', safety), _axios$post)).then(function (response) {
-      $("#safety-" + safety).find(".information-lifecycle").show();
-      $("#safety-" + safety).find(".information-lifecycle").css('display', 'inline-block');
-      $("#safety-" + safety).find(".table-content").append(newCausal(response.data));
-      setTimeout(function () {
-        vex.closeAll();
-      }, 2000);
-    }).catch(function (error) {
-      console.log(error);
-    });
-  });
-
-  $('body').on('submit', '.delete-form', function (event) {
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    var id = form.find("#causal_id").val();
-    vex.dialog.confirm({
-      message: 'Are you sure you want to delete this item?',
-      callback: function callback(value) {
-        if (value && id > 0) {
-          axios.post('/deletetuple', {
-            id: id
-          }).then(function (response) {
-            $("#causal-row-" + id).remove();
-          }).catch(function (error) {
-            console.log(error);
-          });
-        }
-      }
-    });
-  });
-
-  $('body').on('submit', '.edit-form', function (event) {
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    var id = form.find("#causal_id").val();
-    // Disabling the textarea
-    $("#guideword-" + id).prop('disabled', false);
-    $("#scenario-" + id).prop('disabled', false);
-    $("#associated-" + id).prop('disabled', false);
-    $("#requirement-" + id).prop('disabled', false);
-    $("#role-" + id).prop('disabled', false);
-    $("#rationale-" + id).prop('disabled', false);
-  });
-
-  $("body").on('blur', '.step2_textarea', function (event) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[1];
-    var activity = split[0];
-    _edit_causal_analysis(id);
-  });
-
-  $("body").on('change', '.guideword-combo', function (event) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[1];
-    var activity = split[0];
-    _edit_causal_analysis(id);
-  });
-
-  // EDIT WHEN KEY "ENTER" WAS PRESSED
-  $("body").on('keypress', '.step2_textarea', function (event) {
-    if (event.which == 13) {
+    $('body').on('submit', '.delete-all-tuple', function (event) {
       event.preventDefault();
-      var split = event.currentTarget.id.split("-");
-      var id = split[1];
-      var activity = split[0];
-      _edit_causal_analysis(id);
-    }
-  });
-
-  $('body').on('click', '.teste-vex', function (event) {
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    // Gets the id of the UCA
-    var value = form.data("id");
-    console.log($("#table-left-" + value));
-    $("#table-right" + value).show();
-    $("#table-left-" + value).hide();
-    // Change de hidden value to the actual UCA id
-    $("#approach-" + value).find("#uca").val(value);
-    vex.open({
-      unsafeContent: $("#approach-" + value).html(),
-      buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
-      showCloseButton: true,
-      contentClassName: 'teste1'
+      vex.dialog.confirm({
+        message: 'All tuples created (through "Template Instantiation" and "Add new 4-tuple") for that HCA will be deleted. Are you sure?',
+        callback: function callback(value) {
+          if (value) {
+            var form = $(event.currentTarget);
+            var uca_id = form.find("#uca_id").val();
+            var content = form.find(".table-content");
+            axios.post('/deletealltuple', {
+              uca_id: uca_id
+            }).then(function (response) {
+              console.log(uca_id);
+              $("#content-safety-" + uca_id).empty();
+            }).catch(function (error) {
+              console.log(error);
+            });
+          }
+        }
+      });
     });
-  });
 
-  $('body').on('click', '.information-lifecycle', function (event) {
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    // Gets the id of the UCA
-    var value = form.data("id");
-    $("#information-" + value).find("#uca").val(value);
-    vex.open({
-      unsafeContent: $("#information-" + value).html(),
-      buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
-      showCloseButton: true,
-      contentClassName: 'teste1'
-    });
-  });
+    $('body').on('submit', '.adding-tuple', function (event) {
+      var _axios$post;
 
-  $('body').on('click', '.test-vex', function (event) {
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    // Gets the id of the UCA
-    var value = form.data("id");
-    // Gets the UCA
-    var UCA = $("#uca_name_" + value).val();
-    // Gets the Guide Question
-    var GQ = $("#GQ_" + value).val();
-    // Change de hidden value to the actual UCA id
-    $("#add-tuple").find("#uca").val(value);
-    // Put the UCA text on the <span>
-    $('#4tupleUCA').html(UCA);
-    // Put the UCA text on the <span>
-    $('#4tupleGQ').html(GQ);
-    //Opens the modal
-    vex.open({
-      unsafeContent: $("#add-tuple").html()
-    });
-  });
-
-  $('textarea').on('keyup change onpaste', function () {
-    var alturaScroll = this.scrollHeight;
-    var alturaCaixa = $(this).height();
-
-    if (alturaScroll > alturaCaixa + 10) {
-      if (alturaScroll > 500) return;
-      $(this).css('height', alturaScroll);
-    }
-
-    if ($(this).val() == '') {
-      // retonando ao height padrão de 40px
-      $(this).css('height', '40px');
-    }
-  });
-
-  $('body').on('submit', ".add-causal", function (event) {
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    var checked = [];
-    form.find(".associated-checkbox:checked").each(function (index, f) {
-      var _axios$post2;
-
-      var causal_id = f.id.split("-")[1];
-      // console.log(causal_id);
-      form.find("#guideword-scenario-" + causal_id).remove(".listing-guidewords");
-      var scenario = form.find("#getting-scenario-" + causal_id).text().trim();
-      var associated = form.find("#guideword-associated-" + causal_id).text().trim();
-      var requirement = form.find("#guideword-requirement-" + causal_id).text().trim();
-      var role = form.find("#guideword-role-" + causal_id).text().trim();
-      var rationale = form.find("#guideword-rationale-" + causal_id).text().trim();
-      var guideword = form.find("#guideword-" + causal_id).val().trim();
-      var safety = form.find("#uca").val().trim();
-      // console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
-      console.log("UCA: " + safety);
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      var scenario = form.find("#scenario").val();
+      var associated = form.find("#associated").val();
+      var requirement = form.find("#requirement").val();
+      var role = form.find("#role").val();
+      var rationale = form.find("#rationale").val();
+      var guideword = form.find("#guideword option:selected").val();
+      var safety = form.find("#uca").val();
       var id = 0;
-      axios.post('/addtuple', (_axios$post2 = {
-        id: id }, _defineProperty(_axios$post2, 'id', id), _defineProperty(_axios$post2, 'scenario', scenario), _defineProperty(_axios$post2, 'associated', associated), _defineProperty(_axios$post2, 'requirement', requirement), _defineProperty(_axios$post2, 'role', role), _defineProperty(_axios$post2, 'rationale', rationale), _defineProperty(_axios$post2, 'guideword', guideword), _defineProperty(_axios$post2, 'safety', safety), _axios$post2)).then(function (response) {
+      axios.post('/addtuple', (_axios$post = {
+        id: id }, _defineProperty(_axios$post, 'id', id), _defineProperty(_axios$post, 'scenario', scenario), _defineProperty(_axios$post, 'associated', associated), _defineProperty(_axios$post, 'requirement', requirement), _defineProperty(_axios$post, 'role', role), _defineProperty(_axios$post, 'rationale', rationale), _defineProperty(_axios$post, 'guideword', guideword), _defineProperty(_axios$post, 'safety', safety), _axios$post)).then(function (response) {
         $("#safety-" + safety).find(".information-lifecycle").show();
         $("#safety-" + safety).find(".information-lifecycle").css('display', 'inline-block');
-        $("#safety-" + safety).find(".information-lifecycle").show();
-        var guideword_id_information = guideword == 13 || guideword == 14 ? 15 : guideword;
-        guideword_id_information = guideword == 18 ? 17 : guideword;
-        $("#information-" + safety).find(".guideword-" + guideword).show();
-        $("#safety-" + safety).find("#content-safety-" + safety).append(newCausal(response.data));
+        $("#safety-" + safety).find(".table-content").append(newCausal(response.data));
         setTimeout(function () {
           vex.closeAll();
         }, 2000);
@@ -17763,67 +17215,724 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
         console.log(error);
       });
     });
-  });
 
-  $('body').on('change', ".choose-guideword", function (e) {
-    if (e.target.value === 'left') {
-      $(".showtable-left").show();
-      $(".showtable-right").hide();
-    } else {
-      $(".showtable-left").hide();
-      $(".showtable-right").show();
-    }
-  });
-
-  $(function () {
-    // Get all elements with class step_one
-    var $op1 = $('.hide-control-actions');
-    var $op2 = $('.hidding-guidewords');
-
-    // Verifies if there is Control Actions stored
-    if ($op1 != null) {
-      // Show the first control action (with lower id)
-      $($op1[0]).show();
-    }
-
-    if ($op2 != null) {
-      // Show the first control action (with lower id)
-      $($op2[0]).show();
-    }
-
-    // function to hide all elements with class step_one
-    var hideAll = function hideAll() {
-      $op1.hide();
-    };
-
-    // Function to alter the visibility of the control action under analysis
-    $('#control-actions-select').change(function (e) {
-      // Hide all elements of all control actions
-      hideAll();
-      // Shows the content of selected control action
-      $('#showtable-' + e.target.value).show();
+    $('body').on('submit', '.delete-form', function (event) {
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      var id = form.find("#causal_id").val();
+      vex.dialog.confirm({
+        message: 'Are you sure you want to delete this item?',
+        callback: function callback(value) {
+          if (value && id > 0) {
+            axios.post('/deletetuple', {
+              id: id
+            }).then(function (response) {
+              $("#causal-row-" + id).remove();
+            }).catch(function (error) {
+              console.log(error);
+            });
+          }
+        }
+      });
     });
 
-    $('body').on('click', ".gcl2", function (e) {
-      var img = $('.gcl');
-      if (!img.is(":visible")) {
-        $(img).show();
-        $(".gcl2").html('Hide Generic Control Loop');
-      } else {
-        $(img).hide();
-        $(".gcl2").html('Show Generic Control Loop');
+    $('body').on('submit', '.edit-form', function (event) {
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      var id = form.find("#causal_id").val();
+      // Disabling the textarea
+      $("#guideword-" + id).prop('disabled', false);
+      $("#scenario-" + id).prop('disabled', false);
+      $("#associated-" + id).prop('disabled', false);
+      $("#requirement-" + id).prop('disabled', false);
+      $("#role-" + id).prop('disabled', false);
+      $("#rationale-" + id).prop('disabled', false);
+    });
+
+    $("body").on('blur', '.step2_textarea', function (event) {
+      event.preventDefault();
+      var split = event.currentTarget.id.split("-");
+      var id = split[1];
+      var activity = split[0];
+      _edit_causal_analysis(id);
+    });
+
+    $("body").on('change', '.guideword-combo', function (event) {
+      event.preventDefault();
+      var split = event.currentTarget.id.split("-");
+      var id = split[1];
+      var activity = split[0];
+      _edit_causal_analysis(id);
+    });
+
+    // EDIT WHEN KEY "ENTER" WAS PRESSED
+    $("body").on('keypress', '.step2_textarea', function (event) {
+      if (event.which == 13) {
+        event.preventDefault();
+        var split = event.currentTarget.id.split("-");
+        var id = split[1];
+        var activity = split[0];
+        _edit_causal_analysis(id);
       }
     });
 
-    $('body').on('click', '.accordion', function (event) {
-      var accordion = $(event.currentTarget);
-      accordion.toggleClass('active');
-      accordion.next().toggleClass('show');
+    $('body').on('click', '.teste-vex', function (event) {
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      // Gets the id of the UCA
+      var value = form.data("id");
+      console.log($("#table-left-" + value));
+      $("#table-right" + value).show();
+      $("#table-left-" + value).hide();
+      // Change de hidden value to the actual UCA id
+      $("#approach-" + value).find("#uca").val(value);
+      vex.open({
+        unsafeContent: $("#approach-" + value).html(),
+        buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
+        showCloseButton: true,
+        contentClassName: 'teste1'
+      });
     });
-  });
+
+    $('body').on('click', '.information-lifecycle', function (event) {
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      // Gets the id of the UCA
+      var value = form.data("id");
+      $("#information-" + value).find("#uca").val(value);
+      vex.open({
+        unsafeContent: $("#information-" + value).html(),
+        buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
+        showCloseButton: true,
+        contentClassName: 'teste1'
+      });
+    });
+
+    $('body').on('click', '.test-vex', function (event) {
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      // Gets the id of the UCA
+      var value = form.data("id");
+      // Gets the UCA
+      var UCA = $("#uca_name_" + value).val();
+      // Gets the Guide Question
+      var GQ = $("#GQ_" + value).val();
+      // Change de hidden value to the actual UCA id
+      $("#add-tuple").find("#uca").val(value);
+      // Put the UCA text on the <span>
+      $('#4tupleUCA').html(UCA);
+      // Put the UCA text on the <span>
+      $('#4tupleGQ').html(GQ);
+      //Opens the modal
+      vex.open({
+        unsafeContent: $("#add-tuple").html()
+      });
+    });
+
+    $('textarea').on('keyup change onpaste', function () {
+      var alturaScroll = this.scrollHeight;
+      var alturaCaixa = $(this).height();
+
+      if (alturaScroll > alturaCaixa + 10) {
+        if (alturaScroll > 500) return;
+        $(this).css('height', alturaScroll);
+      }
+
+      if ($(this).val() == '') {
+        // retonando ao height padrão de 40px
+        $(this).css('height', '40px');
+      }
+    });
+
+    $('body').on('submit', ".add-causal", function (event) {
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      var checked = [];
+      form.find(".associated-checkbox:checked").each(function (index, f) {
+        var _axios$post2;
+
+        var causal_id = f.id.split("-")[1];
+        // console.log(causal_id);
+        form.find("#guideword-scenario-" + causal_id).remove(".listing-guidewords");
+        var scenario = form.find("#getting-scenario-" + causal_id).text().trim();
+        var associated = form.find("#guideword-associated-" + causal_id).text().trim();
+        var requirement = form.find("#guideword-requirement-" + causal_id).text().trim();
+        var role = form.find("#guideword-role-" + causal_id).text().trim();
+        var rationale = form.find("#guideword-rationale-" + causal_id).text().trim();
+        var guideword = form.find("#guideword-" + causal_id).val().trim();
+        var safety = form.find("#uca").val().trim();
+        // console.log(scenario + "/" + associated + "/" + requirement + "/" + role + "/" + rationale + "/" + guideword + "/" + safety);
+        console.log("UCA: " + safety);
+        var id = 0;
+        axios.post('/addtuple', (_axios$post2 = {
+          id: id }, _defineProperty(_axios$post2, 'id', id), _defineProperty(_axios$post2, 'scenario', scenario), _defineProperty(_axios$post2, 'associated', associated), _defineProperty(_axios$post2, 'requirement', requirement), _defineProperty(_axios$post2, 'role', role), _defineProperty(_axios$post2, 'rationale', rationale), _defineProperty(_axios$post2, 'guideword', guideword), _defineProperty(_axios$post2, 'safety', safety), _axios$post2)).then(function (response) {
+          $("#safety-" + safety).find(".information-lifecycle").show();
+          $("#safety-" + safety).find(".information-lifecycle").css('display', 'inline-block');
+          $("#safety-" + safety).find(".information-lifecycle").show();
+          var guideword_id_information = guideword == 13 || guideword == 14 ? 15 : guideword;
+          guideword_id_information = guideword == 18 ? 17 : guideword;
+          $("#information-" + safety).find(".guideword-" + guideword).show();
+          $("#safety-" + safety).find("#content-safety-" + safety).append(newCausal(response.data));
+          setTimeout(function () {
+            vex.closeAll();
+          }, 2000);
+        }).catch(function (error) {
+          console.log(error);
+        });
+      });
+    });
+
+    $('body').on('change', ".choose-guideword", function (e) {
+      if (e.target.value === 'left') {
+        $(".showtable-left").show();
+        $(".showtable-right").hide();
+      } else {
+        $(".showtable-left").hide();
+        $(".showtable-right").show();
+      }
+    });
+
+    $(function () {
+      // Get all elements with class step_one
+      var $op1 = $('.hide-control-actions');
+      var $op2 = $('.hidding-guidewords');
+
+      // Verifies if there is Control Actions stored
+      if ($op1 != null) {
+        // Show the first control action (with lower id)
+        $($op1[0]).show();
+      }
+
+      if ($op2 != null) {
+        // Show the first control action (with lower id)
+        $($op2[0]).show();
+      }
+
+      // function to hide all elements with class step_one
+      var hideAll = function hideAll() {
+        $op1.hide();
+      };
+
+      // Function to alter the visibility of the control action under analysis
+      $('#control-actions-select').change(function (e) {
+        // Hide all elements of all control actions
+        hideAll();
+        // Shows the content of selected control action
+        $('#showtable-' + e.target.value).show();
+      });
+
+      $('body').on('click', ".gcl2", function (e) {
+        var img = $('.gcl');
+        if (!img.is(":visible")) {
+          $(img).show();
+          $(".gcl2").html('Hide Generic Control Loop');
+        } else {
+          $(img).hide();
+          $(".gcl2").html('Show Generic Control Loop');
+        }
+      });
+
+      $('body').on('click', '.accordion', function (event) {
+        var accordion = $(event.currentTarget);
+        accordion.toggleClass('active');
+        accordion.next().toggleClass('show');
+      });
+    });
+  }
+
+},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./elements/hazards":36,"./steptwo":38,"./templates/assumption_template":41,"./templates/causal_template":42,"./templates/hazard_template":47,"./templates/loss_template":48,"./templates/systemgoal_template":51,"./templates/systemsafetyconstraint_template":52,"./templates/unsafecontrolaction_template":53,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],38:[function(require,module,exports){
+'use strict';
+
+var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
+
+if (actualPage.includes('steptwo')) {
+	var edit_steptwo = function edit_steptwo(id, activity) {
+		if (activity == "variable") {
+			var name = $("#variable-description-" + id).val();
+			axios.post('/editvariable', {
+				id: id,
+				name: name
+			}).then(function (response) {
+				$('#state-variable-' + id).hide();
+				$("#variable-description-" + id).replaceWith('<input type="text" class="item__input" id="variable-description-' + id + '" value="' + name + '" size="' + name.length + '">');
+				document.getElementById("variable-description-" + id).className = "item__input";
+				document.getElementById("variable-description-" + id).disabled = true;
+			}).catch(function (error) {
+				console.log(error);
+			});
+			return false;
+		} else if (activity == "actuator") {
+			var name = $("#actuator-description-" + id).val();
+			axios.post('/editactuator', {
+				id: id,
+				name: name
+			}).then(function (response) {
+				$("#actuator-description-" + id).replaceWith('<input type="text" class="item__input" id="actuator-description-' + id + '" value="' + name + '" size="100">');
+				$("#actuator-" + id).replaceWith('<button class="accordion" id="actuator-' + id + '"><b>[Actuator]</b> ' + name + '</button>');
+				document.getElementById("actuator-description-" + id).disabled = true;
+			});
+		} else if (activity == "controlledprocess") {
+			var name = $("#controlledprocess-description-" + id).val();
+			axios.post('/editcontrolledprocess', {
+				id: id,
+				name: name
+			}).then(function (response) {
+				$("#controlledprocess-description-" + id).replaceWith('<input type="text" class="item__input" id="controlledprocess-description-' + id + '" value="' + name + '" size="100">');
+				$("#controlledprocess-" + id).replaceWith('<button class="accordion" id="controlledprocess-' + id + '"><b>[Controlled Process]</b> ' + name + '</button>');
+				document.getElementById("controlledprocess-description-" + id).disabled = true;
+			});
+		} else if (activity == "controller") {
+			var name = $("#controller-description-" + id).val();
+			axios.post('/editcontroller', {
+				id: id,
+				name: name
+			}).then(function (response) {
+				$("#controller-description-" + id).replaceWith('<input type="text" class="item__input" id="controller-description-' + id + '" value="' + name + '" size="100">');
+				$("#controller-" + id).replaceWith('<button class="accordion" id="controller-' + id + '"><b>[Controller]</b> ' + name + '</button>');
+				document.getElementById("controller-description-" + id).disabled = true;
+			});
+		} else if (activity == "sensor") {
+			var name = $("#sensor-description-" + id).val();
+			axios.post('/editsensor', {
+				id: id,
+				name: name
+			}).then(function (response) {
+				$("#sensor-description-" + id).replaceWith('<input type="text" class="item__input" id="sensor-description-' + id + '" value="' + name + '" size="100">');
+				$("#sensor-" + id).replaceWith('<button class="accordion" id="sensor-' + id + '"><b>[Sensor]</b> ' + name + '</button>');
+				document.getElementById("sensor-description-" + id).disabled = true;
+			});
+		}
+	};
+
+	// EDIT WHEN INPUT LOSES FOCUS
+
+
+	var $ = require('jquery');
+
+	var ControlActions = require('./elements/controlactions');
+	var Drop = require('tether-drop');
+
+	var vex = require('vex-js');
+	vex.registerPlugin(require('vex-dialog'));
+	vex.defaultOptions.className = 'vex-theme-os';
+
+	var axios = require('./axios');
+
+	var steptwo = ['component', 'variable-0'];
+
+	$('.variables-content').each(function (index, f) {
+		steptwo.push(f.id);
+	});
+	$('.controlactions-content').each(function (index, f) {
+		steptwo.push(f.id);
+	});
+	$('.connections-content').each(function (index, f) {
+		steptwo.push(f.id);
+	});
+	$('.item__actions__add').each(function (index, f) {
+		steptwo.push(f.id);
+	});
+
+	steptwo.forEach(function (f) {
+		var drop = new Drop({
+			target: document.querySelector('[data-add="' + f + '"]'),
+			content: document.querySelector('[data-drop="' + f + '"]'),
+			openOn: 'click',
+			remove: true,
+			tetherOptions: {
+				attachment: 'top left',
+				targetAttachment: 'middle right',
+				constraints: [{
+					to: 'scrollParent',
+					attachment: 'together'
+				}]
+			}
+		});
+	});
+
+	var functions = require('./ajax_functions');
+	var actuator = require('./templates/actuator_template');
+	var controlledprocess = require('./templates/controlledprocess_template');
+	var sensor = require('./templates/sensor_template');
+	var component = require('./templates/component_template');
+	var connection = require('./templates/connection_template');
+	var controlaction = require('./templates/controlaction_template');
+	var variable = require('./templates/variable_template');
+	var connection = require('./templates/connection_template');
+	var state = require('./templates/state_template');
+	var addstate = require('./templates/add-state_template');
+
+	//ADD
+	$('body').on('submit', '.add-form', function (event) {
+		event.preventDefault();
+		var form = $(event.currentTarget);
+		var activity = form.data("add");
+		var activity_name = activity + '-name';
+		var name = form.find("#" + activity_name).val();
+		var project_id = $('#project_id').val();
+		var id = 0;
+
+		// Verify if activity is component
+		if (activity === 'component') {
+			var type = form.find("#component-type").val();
+			if (type === 'Actuator') {
+				var $newComponent = $('#actuators');
+				axios.post('/addactuator', {
+					name: name,
+					type: type,
+					id: id,
+					project_id: project_id
+				}).then(function (response) {
+					location.reload();
+				}).catch(function (error) {
+					console.log(error);
+				});
+			} else if (type === 'ControlledProcess') {
+				var $newComponent = $('#controlledprocess');
+				axios.post('/addcontrolledprocess', {
+					name: name,
+					id: id,
+					project_id: project_id
+				}).then(function (response) {
+					location.reload();
+				}).catch(function (error) {
+					console.log(error);
+				});
+			} else if (type === "Controller") {
+				var $newComponent = $('#controllers');
+				axios.post('/addcontroller', {
+					name: name,
+					id: id,
+					project_id: project_id
+				}).then(function (response) {
+					location.reload();
+				}).catch(function (error) {
+					console.log(error);
+				});
+			} else if (type === "Sensor") {
+				var $newComponent = $('#sensors');
+				axios.post('/addsensor', {
+					name: name,
+					id: id,
+					project_id: project_id
+				}).then(function (response) {
+					location.reload();
+				}).catch(function (error) {
+					console.log(error);
+				});
+			}
+		}
+		// Verify if activity is control control action
+		else if (activity.indexOf("controlaction") != -1) {
+				var controller_id = activity.split("-")[1];
+				var $newControlAction = $('#controlactions_content-' + controller_id).find(".substep__list");
+				var id = 0;
+				var name = form.find("#controlaction-" + controller_id + "-name").val();
+				axios.post('/addcontrolaction', {
+					name: name,
+					controller_id: controller_id,
+					id: id,
+					project_id: project_id
+				}).then(function (response) {
+					$newControlAction.append(controlaction(response.data));
+				}).catch(function (error) {
+					console.log(error);
+				});
+			}
+			// Verify if activity is state
+			else if (activity.indexOf("state") != -1) {
+					var variable_id = form.find("#variable_id").val();
+					var name = form.find("#state-name-" + variable_id).val();
+					var id = 0;
+					axios.post('/addstate', {
+						name: name,
+						variable_id: variable_id,
+						id: id,
+						project_id: project_id
+					}).then(function (response) {
+						var $newState = $('#variable-' + response.data.variable_id).find(".states-associated");
+						console.log($newState);
+						$newState.append(state(response.data, true));
+						$newState = $('.variable-' + response.data.variable_id).find(".states-associated");
+						$newState.append(state(response.data, false));
+					}).catch(function (error) {
+						console.log(error);
+					});
+				}
+				// Verify if activity is variable
+				else if (activity.indexOf("connections") != -1) {
+						var type_output = activity.split("-")[1];
+						var output_component_id = activity.split("-")[2];
+						var output_name = form.find("#" + activity + " option:selected").text();
+						var input_name = form.find('#component_name').val();
+						var input = form.find("#" + activity + " option:selected").val();
+						var type_input = input.split("-")[0];
+						var input_component_id = input.split("-")[1];
+						var id = 0;
+						var $newConnection = $('#connection-' + type_output + '-' + output_component_id).find(".substep__list");
+						axios.post('/addconnections', {
+							input_component_id: input_component_id,
+							type_input: type_input,
+							input_name: input_name,
+							output_component_id: output_component_id,
+							type_output: type_output,
+							output_name: output_name,
+							id: id,
+							project_id: project_id
+						}).then(function (response) {
+							$newConnection.append(connection(response.data));
+						}).catch(function (error) {
+							console.log(error);
+						});
+					} else {
+						var variable_split = activity.split('-');
+						var controller_id = 0;
+						var $newVariable = "";
+						var id = 0;
+						if (variable_split.length > 2) {
+							controller_id = variable_split[2];
+							$newVariable = $('#variables-' + controller_id).find(".controller_variable");
+						} else $newVariable = $('#variables-0').find(".controller_variable");
+						var name = form.find("#variable-" + controller_id + "-name").val();
+						var states = [];
+						form.find(".states-associated").each(function (index) {
+							states.push($(this).val());
+						});
+						axios.post('/addvariable', {
+							name: name,
+							id: id,
+							controller_id: controller_id,
+							states: states,
+							project_id: project_id
+						}).then(function (response) {
+							if (response.data.controller_id > 0) {
+								$newVariable.append(variable(response.data, true));
+								$('body').append(addstate(response.data));
+								var state_variable = 'state-variable-' + response.data.id;
+								var drop = new Drop({
+									target: document.querySelector('[data-add="' + state_variable + '"]'),
+									content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
+									openOn: 'click',
+									remove: true,
+									tetherOptions: {
+										attachment: 'top left',
+										targetAttachment: 'middle right',
+										constraints: [{
+											to: 'scrollParent',
+											attachment: 'together'
+										}]
+									}
+								});
+							} else {
+								$newVariable.append(variable(response.data, true));
+								$('.variables-content').find(".substep__list").append(variable(response.data, false));
+								$('body').append(addstate(response.data));
+								var state_variable = 'state-variable-' + response.data.id;
+								var drop = new Drop({
+									target: document.querySelector('[data-add="' + state_variable + '"]'),
+									content: document.querySelector('[data-drop="form-' + state_variable + '"]'),
+									openOn: 'click',
+									remove: true,
+									tetherOptions: {
+										attachment: 'top left',
+										targetAttachment: 'middle right',
+										constraints: [{
+											to: 'scrollParent',
+											attachment: 'together'
+										}]
+									}
+								});
+							}
+						}).catch(function (error) {
+							console.log(error);
+						});
+					}
+		return false;
+	});
+	//DELETE
+	$('body').on('submit', '.delete-form', function (event) {
+		event.preventDefault();
+		var form = $(event.currentTarget);
+		var activity = form.data("delete");
+		vex.dialog.confirm({
+			message: 'Are you sure you want to delete this item?',
+			callback: function callback(value) {
+				if (value) {
+					if (activity === 'component') {
+						var id = form.find("#component_id").val();
+						var type = form.find("#component_type").val();
+						if (type === 'actuator') {
+							axios.post('/deleteactuator', {
+								id: id
+							}).then(function (response) {
+								$("#" + type + "-" + id).remove();
+								$("#panel-" + type + "-" + id).remove();
+							}).catch(function (error) {
+								console.log(error);
+							});
+						} else if (type === 'controlledprocess') {
+							axios.post('/deletecontrolledprocess', {
+								id: id
+							}).then(function (response) {
+								$("#" + type + "-" + id).remove();
+								$("#panel-" + type + "-" + id).remove();
+							}).catch(function (error) {
+								console.log(error);
+							});
+						} else if (type === 'controller') {
+							axios.post('/deletecontroller', {
+								id: id
+							}).then(function (response) {
+								$("#" + type + "-" + id).remove();
+								$("#panel-" + type + "-" + id).remove();
+							}).catch(function (error) {
+								console.log(error);
+							});
+						} else if (type === 'sensor') {
+							axios.post('/deletesensor', {
+								id: id
+							}).then(function (response) {
+								$("#" + type + "-" + id).remove();
+								$("#panel-" + type + "-" + id).remove();
+							}).catch(function (error) {
+								console.log(error);
+							});
+						}
+						return false;
+					} else if (activity === 'controlaction') {
+						var id = form.find("#controlaction_id").val();
+						axios.post('/deletecontrolaction', {
+							id: id
+						}).then(function (response) {
+							$("#controlaction-" + id).remove();
+						}).catch(function (error) {
+							console.log(error);
+						});
+						return false;
+					} else if (activity === 'variable') {
+						var id = form.find("#variable_id").val();
+						axios.post('/deletevariable', {
+							id: id
+						}).then(function (response) {
+							$(".variable-" + id).remove();
+							$("#variable-" + id).remove();
+						}).catch(function (error) {
+							console.log(error);
+						});
+						return false;
+					} else if (activity === 'connection') {
+						var id = form.find("#connection_id").val();
+						axios.post('/deleteconnections', {
+							id: id
+						}).then(function (response) {
+							$("#connection-" + id).remove();
+						}).catch(function (error) {
+							console.log(error);
+						});
+						return false;
+					}
+				}
+			}
+		});
+	});
+
+	$("body").on('blur', '.item__input__active', function (event) {
+		event.preventDefault();
+		var split = event.currentTarget.id.split("-");
+		var id = split[2];
+		var activity = split[0];
+		edit_steptwo(id, activity);
+	});
+
+	// EDIT WHEN KEY "ENTER" WAS PRESSED
+	$("body").on('keypress', '.item__input__active', function (event) {
+		if (event.which == 13) {
+			event.preventDefault();
+			var split = event.currentTarget.id.split("-");
+			var id = split[2];
+			var activity = split[0];
+			edit_stetwo(id, activity);
+		}
+	});
+
+	$('body').on('click', '.edit-form', function (event) {
+		event.preventDefault();
+		var form = $(event.currentTarget);
+		var activity = form.data("edit");
+		if (activity == "variable") {
+			var id = form.find("#variable_id").val();
+			$('#state-variable-' + id).show();
+			$('#variable-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
+			return false;
+		} else if (activity == "actuator") {
+			var id = form.find("#actuator_id").val();
+			$('#actuator-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
+			return false;
+		} else if (activity == "controlledprocess") {
+			var id = form.find("#controlledprocess_id").val();
+			$('#controlledprocess-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
+			return false;
+		} else if (activity == "controller") {
+			var id = form.find("#controller_id").val();
+			$('#controller-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
+			return false;
+		} else if (activity == "sensor") {
+			var id = form.find("#sensor_id").val();
+			$('#sensor-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
+			return false;
+		}
+	});
+
+	$('.item__input').on('keyup', function (event) {
+		event.currentTarget.size = event.currentTarget.value.length;
+	});
+
+	$('.item__input__active').on('keyup', function (event) {
+		event.currentTarget.size = event.currentTarget.value.length;
+	});
+
+	$(window).load(function (event) {
+		$('.item__input').each(function () {
+			this.size = this.value.length;
+		});
+	});
+
+	$('body').on('click', '.item__delete__box', function (event) {
+		var id = $(event.currentTarget).data('index');
+		var type = $(event.currentTarget).data('type');
+		vex.dialog.confirm({
+			message: 'Are you sure you want to delete this item?',
+			callback: function callback(value) {
+				if (value) {
+					if (type === 'variable') {
+						axios.post('/deletestate', {
+							id: id
+						}).then(function (response) {
+							$(".state-associated-" + id).remove();
+							$("#state-associated-" + id).remove();
+						}).catch(function (error) {
+							console.log(error);
+						});
+						return false;
+					}
+				}
+			}
+		});
+	});
+
+	$('body').on('click', '.accordion', function (event) {
+		var accordion = $(event.currentTarget);
+		accordion.toggleClass('active');
+		accordion.next().toggleClass('show');
+	});
+
+	$('body').on('change', '#component-type', function (event) {
+		var component_type = $(event.currentTarget).find(":selected").text();
+		if (component_type !== "Controller") $("#actuator-type").hide();else $("#actuator-type").show();
+	});
 }
 
-},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./elements/hazards":36,"./templates/actuator_template":38,"./templates/add-state_template":39,"./templates/assumption_template":40,"./templates/causal_template":41,"./templates/component_template":42,"./templates/connection_template":43,"./templates/controlaction_template":44,"./templates/controlledprocess_template":45,"./templates/hazard_template":46,"./templates/loss_template":47,"./templates/sensor_template":48,"./templates/state_template":49,"./templates/systemgoal_template":50,"./templates/systemsafetyconstraint_template":51,"./templates/unsafecontrolaction_template":52,"./templates/variable_template":53,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],38:[function(require,module,exports){
+},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./templates/actuator_template":39,"./templates/add-state_template":40,"./templates/component_template":43,"./templates/connection_template":44,"./templates/controlaction_template":45,"./templates/controlledprocess_template":46,"./templates/sensor_template":49,"./templates/state_template":50,"./templates/variable_template":54,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],39:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17831,7 +17940,7 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Actuator]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-actuator\">\n                <li class=\"item\" id=\"actuator-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editactuator\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"actuator\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deleteactuator\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"actuator\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n        </div>";
 };
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17839,7 +17948,7 @@ module.exports = function (context) {
     return "<div data-component=\"drop\" data-drop=\"form-state-variable-" + context.id + "\" class=\"add-drop\">\n        <form action =\"/addstate-variable-" + context.id + "\" method=\"POST\" class=\"add-form\" data-add=\"state-variable-" + context.id + "\">\n            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n            <div class=\"add-drop__content\">\n                <label for=\"state-name-" + context.id + "\" class=\"add-drop__label\">\n                    State name\n                </label>\n                <input id=\"state-name-" + context.id + "\" name=\"state-name-" + context.id + "\" type=\"text\" class=\"add-drop__input\">\n                <input type=\"hidden\" name=\"variable_id\" id=\"variable_id\" value=\"" + context.id + "\">\n            </div>\n            <div class=\"add-drop__buttons\">\n                    <button class=\"add-drop__action\">\n                      Cancel\n                    </button>\n                    <button type=\"submit\" class=\"add-drop__action\">\n                      Add\n                    </button>\n            </div>\n        </form>\n    </div>";
 };
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -17847,7 +17956,7 @@ module.exports = function (context, exihibition_id) {
     return "\n        <li class=\"item\" id=\"assumption-" + context.id + "\">\n                <div class=\"item__title\">\n                    A-" + exihibition_id + ": <br/> <textarea class=\"item__textarea\" id=\"assumption-description-" + context.id + "\"  rows=\"5\" cols = \"100\" style=\"resize: none;\n    height: auto;\" disabled>" + context.name + "</textarea>\n                </div>\n                <div class=\"item__actions\">\n                    <form action =\"/editassumption\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"assumption\">\n                        <div class=\"item__title\">\n                           <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                       </div>\n                    </form>\n                    <form action=\"deleteassumption\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"assumption\">\n                       <div class=\"item__title\">\n                           <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                       </div>\n                    </form>\n                </div>\n        </li>";
 };
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17894,7 +18003,7 @@ module.exports = function (context) {
     return "<div class=\"table-row\" id=\"causal-row-" + context.id + "\"\">\n            <div class=\"text\">\n                " + select + "<br/>\n            <textarea class=\"step2_textarea\" name=\"scenario-" + context.id + "\" id=\"scenario-" + context.id + "\" placeholder=\"Scenario\" disabled>" + context.scenario + "</textarea>\n            </div>\n\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"associated-" + context.id + "\" placeholder=\"Associated Causal Factors\" disabled>" + context.associated + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"requirement-" + context.id + "\" placeholder=\"Requirements\" disabled>" + context.requirement + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"rationale-" + context.id + "\" placeholder=\"Rationales\" disabled>" + context.rationale + "</textarea></div>\n    <div class=\"content-uca\">\n            <br/>\n            <form action=\"/edittuple\" class=\"edit-form\" data-edit=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n            <form action=\"/deletetuple\" class=\"delete-form\" data-delete=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n    </div>\n</div>";
 };
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17902,7 +18011,7 @@ module.exports = function (context) {
     return "\n        <li class=\"item\" id=\"" + type + "-" + context.id + "\">\n            <div class=\"item__title\">\n                " + context.name + "\n            </div>\n            <div class=\"item__actions\">\n                <div class=\"item__title\">\n                    <img src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                </div>\n                <form action =\"/deletecomponent\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"component\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
 };
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17920,14 +18029,14 @@ module.exports = function (context) {
                 </form>
 */
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, controller_name) {
     return "\n        <li class=\"item\" id=\"controlaction-" + context.id + "\">\n                <div class=\"item__title\">\n                    " + context.name + "\n                </div>\n                <div class=\"item__actions\">\n                    <div class=\"item__title\">\n                        <img src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                    <form action=\"/deletecontrolaction\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"controlaction\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"controlaction_id\" name=\"controlaction_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                </div>\n            </li>";
 };
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17935,7 +18044,7 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Controlled Process]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-controlledprocess\">\n                <li class=\"item\" id=\"controlledprocess-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editcontrolledprocess method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"controlledprocess\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deletecontrolledprocess\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"controlledprocess\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n            <div class=\"substep substep--variables-associated\" id=\"variables-0\">\n                <div class=\"substep__title\">\n                    System Variables\n                </div>\n                <div class=\"substep__add\" data-component=\"add-button\" data-add=\"variable-0\">\n                    +\n                </div>\n                <div class=\"substep__content variables-content\" id=variable-0>\n                    <ul class=\"substep__list\">\n                    </ul>\n                </div>\n            </div>\n        </div>";
 };
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id, losses) {
@@ -17948,7 +18057,7 @@ module.exports = function (context, exihibition_id, losses) {
     return "\n        <li class=\"item\" id=\"hazard-" + context.id + "\">\n            <div class=\"item__title\">\n                H-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"hazard-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeyup=\"this.size=this.value.length\" disabled>\n            </div>\n            " + losses_associated + "\n            <div class=\"item__actions\">\n                <form action =\"/edit-formhazard\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deletehazard\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
 };
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -17957,7 +18066,7 @@ module.exports = function (context, exihibition_id) {
     return "\n        <li class=\"item\" id=\"loss-" + context.id + "\">\n            <div class=\"item__title\">\n                L-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"loss-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n            </div>\n            <div class=\"item__actions\">\n                <form action =\"/editloss\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"loss\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deleteloss\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"loss\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
 };
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17965,14 +18074,14 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Sensor]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-sensor\">\n                <li class=\"item\" id=\"sensor-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editsensor\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"sensor\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deletesensor\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"sensor\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n        </div>";
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, id_or_class) {
     if (id_or_class) return "\n            <div class=\"item__actions__action\" id=\"state-associated-" + context.id + "\">\n                <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"variable\" data-index=\"" + context.id + "\">\xD7</a> " + context.name + "\n            </div>";else return "\n            <div class=\"item__actions__action state-associated-" + context.id + "\">\n                " + context.name + "\n            </div>";
 };
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -17980,7 +18089,7 @@ module.exports = function (context, exihibition_id) {
                            return "\n        <li class=\"item\" id=\"systemgoal-" + context.id + "\">\n                <div class=\"item__title\">\n                    G-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"systemgoal-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n                </div>\n                <div class=\"item__actions\">\n\t                <form action =\"/editsystemgoal\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"systemgoal\">\n                        <div class=\"item__title\">\n\t                       <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n                    <form action=\"deletesystemgoal\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"systemgoal\">\n\t                   <div class=\"item__title\">\n\t                       <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n             \t</div>\n        </li>";
 };
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -17988,7 +18097,7 @@ module.exports = function (context, exihibition_id) {
     return "\n        <li class=\"item\" id=\"systemsafetyconstraint-" + context.id + "\">\n                <div class=\"item__title\">\n                    SSC-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"systemsafetyconstraint-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n                </div>\n                <div class=\"item__actions\">\n\t                <form action=\"editsystemsafetyconstraint\" method=\"POST\"  class=\"edit-form ajaxform\" data-edit=\"systemsafetyconstraint\">\n                       <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n                    <form action=\"deletesystemsafetyconstraint\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"systemsafetyconstraint\">\n\t                   <div class=\"item__title\">\n\t                       <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n             \t</div>\n        </li>";
 };
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 module.exports = function (context) {
@@ -18019,7 +18128,7 @@ module.exports = function (context) {
     return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="unsafe_control_action-' + context.id + '" disabled>' + context.unsafe_control_action + '</textarea>\n                    </div>\n                    \n                    <div class="text">\n                        ' + type + '\n                        <textarea class="uca_list_textarea" id="safety_constraint-' + context.id + '" disabled>' + context.safety_constraint + '</textarea>\n                    </div>\n                    \n                    <div class="content-uca">\n                        <form action="/edituca" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n        </div>';
 };
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, firstAppend) {

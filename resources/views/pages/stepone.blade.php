@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-<?php $stepone= ($project_type == "Security" ) ? ['mission-assurance', 'assumptions','losses', 'hazards', 'systemsafetyconstraint'] : ['systemgoals', 'assumptions','losses', 'hazards', 'systemsafetyconstraint'];
+<?php $stepone= ($project_type == "Security" ) ? ['mission-assurance', 'assumptions',' losses', 'hazards', 'systemsafetyconstraint'] : ['systemgoals', 'assumptions','losses', 'hazards', 'systemsafetyconstraint'];
 ?>
 
 @section('content')
