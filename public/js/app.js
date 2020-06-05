@@ -16226,7 +16226,6 @@ if (!actualPage.includes('stepthree') && !actualPage.includes('stepfour')) {
           project_id: project_id
         }).then(function (response) {
           var exihibition_id = $newAssumption.children().length + 1;
-          alert(exihibition_id);
           console.log($('#assumptions').find("substep__list").children());
           $newAssumption.append(assumption(response.data, exihibition_id));
         }).catch(function (error) {
