@@ -960,6 +960,135 @@ for (i = 0; i < acc.length; i++) {
     });
   });
 
+  $('body').on('click', '.context_table_filter-button', function(event){
+    event.preventDefault();
+    vex.closeAll();
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+    var i, checkboxes = document.querySelectorAll('input[value*=-ca-' + selected_controlAction + ']');
+
+    vex.open({
+      unsafeContent: $("#filter-ca-"+selected_controlAction).html(),
+      showCloseButton: true,
+      afterOpen: function(){
+        for (i = 0; i < checkboxes.length; i++) {
+          if(localStorage.getItem(checkboxes[i].value) != null){
+            $('input[value=' + checkboxes[i].value +']').prop('checked', localStorage.getItem(checkboxes[i].value) === 'true' ? true:false);
+          }
+          else{
+            checkboxes[i].checked = true;
+          } 
+        }
+      },
+    });
+    
+
+  });
+  
+  $('body').on('click', 'input[name=check_columnProvided]', function(event){
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnProvided-ca-'+ selected_controlAction + ']').toggle(this.checked);
+    $('#columnProvided-ca-'+ selected_controlAction +'-header').toggle(this.checked);
+  });
+  
+  $('body').on('click', 'input[name=check_columnNotProvided]', function(event){
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnNotProvided-ca-'+ selected_controlAction + ']').toggle(this.checked);
+    $('#columnNotProvided-ca-'+ selected_controlAction +'-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnWrongOrder]', function(event){
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnWrongOrder-ca-'+ selected_controlAction + ']').toggle(this.checked);
+    $('#columnWrongOrder-ca-'+ selected_controlAction +'-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnTooEarly]', function(event){
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnTooEarly-ca-'+ selected_controlAction + ']').toggle(this.checked);
+    $('#columnTooEarly-ca-'+ selected_controlAction +'-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnTooLate]', function(event){
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnTooLate-ca-'+ selected_controlAction + ']').toggle(this.checked);
+    $('#columnTooLate-ca-'+ selected_controlAction +'-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnTooSoon]', function(event){
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnTooSoon-ca-'+ selected_controlAction + ']').toggle(this.checked);
+    $('#columnTooSoon-ca-'+ selected_controlAction +'-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnTooLong]', function(event){
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnTooLong-ca-'+ selected_controlAction + ']').toggle(this.checked);
+    $('#columnTooLong-ca-'+ selected_controlAction +'-header').toggle(this.checked);
+  });
+
+  $(document).ready(function () {
+    require('./jquery.floating.min.js');
+    $(".context_table_style").floatingScroll();
+});
+
+
+  $(window).load(function(event){
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var ca = url.searchParams.get("ca");
+    var controller = url.searchParams.get("controller");
+
+    if(ca != null && controller != null)
+    {
+      $('#controller-select').val("" + controller);
+      
+      $('#controller-select').change();
+
+      $('select[name="control-actions-of-controller-' + controller).val("" + ca);
+
+      // Hide all elements of all control actions
+      $('.hide-control-actions').hide();
+      // Shows the content of ca in params
+      $('#control-action-'+ca).show();
+    }
+
+
+    for (var key in localStorage) {
+      $('td[name='+ key +']').toggle(localStorage.getItem(key) === 'true' ? true:false);
+      $('#' + key + '-header').toggle(localStorage.getItem(key) === 'true' ? true:false);
+    }
+    
+  });
+
   $(window).load(function(event) {
     // Getting the total rows of the Context Table
     var total_rows = $("#total_rows").val();
@@ -1343,10 +1472,10 @@ for (i = 0; i < acc.length; i++) {
             console.log(ca);
             if (ca.length > 1){
               var currentURL = window.location.href.split("?");
-              window.location.href = currentURL[0] + '?ca='+controlaction_id;
+              window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             }
             else{
-              window.location.href += '?ca='+controlaction_id;
+              window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             } 
           }, 2000);
 

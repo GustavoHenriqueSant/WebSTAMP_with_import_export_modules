@@ -2,6 +2,10 @@
 
 @section('content')
 
+<script type="text/javascript">
+    localStorage.clear();
+</script>
+
 <div class="login">
     <!-- <h2>Welcome!</h2> -->
     <h2>Login</h2>

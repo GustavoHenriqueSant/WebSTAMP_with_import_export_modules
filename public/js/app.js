@@ -15682,7 +15682,7 @@ module.exports = {
 	addLoss: addLoss
 };
 
-},{"./axios":34,"./elements/hazards":36,"./templates/loss_template":48,"jquery":27}],34:[function(require,module,exports){
+},{"./axios":34,"./elements/hazards":36,"./templates/loss_template":49,"jquery":27}],34:[function(require,module,exports){
 'use strict';
 
 var axios = require('axios');
@@ -16663,6 +16663,129 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     });
   });
 
+  $('body').on('click', '.context_table_filter-button', function (event) {
+    event.preventDefault();
+    vex.closeAll();
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+    var i,
+        checkboxes = document.querySelectorAll('input[value*=-ca-' + selected_controlAction + ']');
+
+    vex.open({
+      unsafeContent: $("#filter-ca-" + selected_controlAction).html(),
+      showCloseButton: true,
+      afterOpen: function afterOpen() {
+        for (i = 0; i < checkboxes.length; i++) {
+          if (localStorage.getItem(checkboxes[i].value) != null) {
+            $('input[value=' + checkboxes[i].value + ']').prop('checked', localStorage.getItem(checkboxes[i].value) === 'true' ? true : false);
+          } else {
+            checkboxes[i].checked = true;
+          }
+        }
+      }
+    });
+  });
+
+  $('body').on('click', 'input[name=check_columnProvided]', function (event) {
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnProvided-ca-' + selected_controlAction + ']').toggle(this.checked);
+    $('#columnProvided-ca-' + selected_controlAction + '-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnNotProvided]', function (event) {
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnNotProvided-ca-' + selected_controlAction + ']').toggle(this.checked);
+    $('#columnNotProvided-ca-' + selected_controlAction + '-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnWrongOrder]', function (event) {
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnWrongOrder-ca-' + selected_controlAction + ']').toggle(this.checked);
+    $('#columnWrongOrder-ca-' + selected_controlAction + '-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnTooEarly]', function (event) {
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnTooEarly-ca-' + selected_controlAction + ']').toggle(this.checked);
+    $('#columnTooEarly-ca-' + selected_controlAction + '-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnTooLate]', function (event) {
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnTooLate-ca-' + selected_controlAction + ']').toggle(this.checked);
+    $('#columnTooLate-ca-' + selected_controlAction + '-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnTooSoon]', function (event) {
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnTooSoon-ca-' + selected_controlAction + ']').toggle(this.checked);
+    $('#columnTooSoon-ca-' + selected_controlAction + '-header').toggle(this.checked);
+  });
+
+  $('body').on('click', 'input[name=check_columnTooLong]', function (event) {
+    var selected_controller = $('#controller-select').val();
+    var selected_controlAction = $('select[name="control-actions-of-controller-' + selected_controller).val();
+
+    localStorage.setItem(this.value, this.checked);
+
+    $('td[name=columnTooLong-ca-' + selected_controlAction + ']').toggle(this.checked);
+    $('#columnTooLong-ca-' + selected_controlAction + '-header').toggle(this.checked);
+  });
+
+  $(document).ready(function () {
+    require('./jquery.floating.min.js');
+    $(".context_table_style").floatingScroll();
+  });
+
+  $(window).load(function (event) {
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var ca = url.searchParams.get("ca");
+    var controller = url.searchParams.get("controller");
+
+    if (ca != null && controller != null) {
+      $('#controller-select').val("" + controller);
+
+      $('#controller-select').change();
+
+      $('select[name="control-actions-of-controller-' + controller).val("" + ca);
+
+      // Hide all elements of all control actions
+      $('.hide-control-actions').hide();
+      // Shows the content of ca in params
+      $('#control-action-' + ca).show();
+    }
+
+    for (var key in localStorage) {
+      $('td[name=' + key + ']').toggle(localStorage.getItem(key) === 'true' ? true : false);
+      $('#' + key + '-header').toggle(localStorage.getItem(key) === 'true' ? true : false);
+    }
+  });
+
   $(window).load(function (event) {
     // Getting the total rows of the Context Table
     var total_rows = $("#total_rows").val();
@@ -16992,9 +17115,9 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
             console.log(ca);
             if (ca.length > 1) {
               var currentURL = window.location.href.split("?");
-              window.location.href = currentURL[0] + '?ca=' + controlaction_id;
+              window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             } else {
-              window.location.href += '?ca=' + controlaction_id;
+              window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             }
           }, 2000);
 
@@ -17438,7 +17561,106 @@ else if (actualPage.includes('stepfour')) {
     });
   }
 
-},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./elements/hazards":36,"./steptwo":38,"./templates/assumption_template":41,"./templates/causal_template":42,"./templates/hazard_template":47,"./templates/loss_template":48,"./templates/systemgoal_template":51,"./templates/systemsafetyconstraint_template":52,"./templates/unsafecontrolaction_template":53,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],38:[function(require,module,exports){
+},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./elements/hazards":36,"./jquery.floating.min.js":38,"./steptwo":39,"./templates/assumption_template":42,"./templates/causal_template":43,"./templates/hazard_template":48,"./templates/loss_template":49,"./templates/systemgoal_template":52,"./templates/systemsafetyconstraint_template":53,"./templates/unsafecontrolaction_template":54,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],38:[function(require,module,exports){
+"use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*!
+floating-scroll v3.1.0
+https://amphiluke.github.io/floating-scroll/
+(c) 2020 Amphiluke
+*/
+!function (t, i) {
+  "object" == (typeof exports === "undefined" ? "undefined" : _typeof(exports)) && "undefined" != typeof module ? i(require("jquery")) : "function" == typeof define && define.amd ? define(["jquery"], i) : i((t = t || self).jQuery);
+}(undefined, function (t) {
+  "use strict";
+  var i = { init: function init(t, i) {
+      this.orientationProps = function (t) {
+        var i = "horizontal" === t;return { ORIENTATION: t, SIZE: i ? "width" : "height", X_SIZE: i ? "height" : "width", OFFSET_SIZE: i ? "offsetWidth" : "offsetHeight", OFFSET_X_SIZE: i ? "offsetHeight" : "offsetWidth", CLIENT_SIZE: i ? "clientWidth" : "clientHeight", CLIENT_X_SIZE: i ? "clientHeight" : "clientWidth", INNER_X_SIZE: i ? "innerHeight" : "innerWidth", SCROLL_SIZE: i ? "scrollWidth" : "scrollHeight", SCROLL_POS: i ? "scrollLeft" : "scrollTop", START: i ? "left" : "top", X_START: i ? "top" : "left", X_END: i ? "bottom" : "right" };
+      }(i);var n = t.closest(".fl-scrolls-body");n.length && (this.scrollBody = n), this.container = t[0], this.visible = !0, this.initWidget(), this.updateAPI(), this.addEventHandlers(), this.skipSyncContainer = this.skipSyncWidget = !1;
+    }, initWidget: function initWidget() {
+      var i = this.orientationProps,
+          n = i.ORIENTATION,
+          e = i.SIZE,
+          o = i.SCROLL_SIZE,
+          s = this.widget = t('<div class="fl-scrolls" data-orientation="' + n + '"></div>');t("<div></div>").appendTo(s)[e](this.container[o]), s.appendTo(this.container);
+    }, addEventHandlers: function addEventHandlers() {
+      var i = this;(i.eventHandlers = [{ $el: i.scrollBody || t(window), handlers: { scroll: function scroll() {
+            i.updateAPI();
+          }, resize: function resize() {
+            i.updateAPI();
+          } } }, { $el: i.widget, handlers: { scroll: function scroll() {
+            i.visible && !i.skipSyncContainer && i.syncContainer(), i.skipSyncContainer = !1;
+          } } }, { $el: t(i.container), handlers: { scroll: function scroll() {
+            i.skipSyncWidget || i.syncWidget(), i.skipSyncWidget = !1;
+          }, focusin: function focusin() {
+            setTimeout(function () {
+              return i.syncWidget();
+            }, 0);
+          }, "update.fscroll": function updateFscroll(t) {
+            "fscroll" === t.namespace && i.updateAPI();
+          }, "destroy.fscroll": function destroyFscroll(t) {
+            "fscroll" === t.namespace && i.destroyAPI();
+          } } }]).forEach(function (t) {
+        var i = t.$el,
+            n = t.handlers;return i.bind(n);
+      });
+    }, checkVisibility: function checkVisibility() {
+      var t = this.widget,
+          i = this.container,
+          n = this.scrollBody,
+          e = this.orientationProps,
+          o = e.SCROLL_SIZE,
+          s = e.OFFSET_SIZE,
+          r = e.X_START,
+          c = e.X_END,
+          l = e.INNER_X_SIZE,
+          d = e.CLIENT_X_SIZE,
+          a = t[0][o] <= t[0][s];if (!a) {
+        var h = i.getBoundingClientRect(),
+            f = n ? n[0].getBoundingClientRect()[c] : window[l] || document.documentElement[d];a = h[c] <= f || h[r] > f;
+      }this.visible === a && (this.visible = !a, t.toggleClass("fl-scrolls-hidden"));
+    }, syncContainer: function syncContainer() {
+      var t = this.orientationProps.SCROLL_POS,
+          i = this.widget[0][t];this.container[t] !== i && (this.skipSyncWidget = !0, this.container[t] = i);
+    }, syncWidget: function syncWidget() {
+      var t = this.orientationProps.SCROLL_POS,
+          i = this.container[t];this.widget[0][t] !== i && (this.skipSyncContainer = !0, this.widget[0][t] = i);
+    }, updateAPI: function updateAPI() {
+      var i = this.orientationProps,
+          n = i.SIZE,
+          e = i.X_SIZE,
+          o = i.OFFSET_X_SIZE,
+          s = i.CLIENT_SIZE,
+          r = i.CLIENT_X_SIZE,
+          c = i.SCROLL_SIZE,
+          l = i.START,
+          d = this.widget,
+          a = this.container,
+          h = this.scrollBody,
+          f = a[s],
+          u = a[c];d[n](f), h || d.css(l, a.getBoundingClientRect()[l] + "px"), t("div", d)[n](u), u > f && d[e](d[0][o] - d[0][r] + 1), this.syncWidget(), this.checkVisibility();
+    }, destroyAPI: function destroyAPI() {
+      this.eventHandlers.forEach(function (t) {
+        var i = t.$el,
+            n = t.handlers;return i.unbind(n);
+      }), this.widget.remove(), this.eventHandlers = this.widget = this.container = this.scrollBody = null;
+    } };t.fn.floatingScroll = function (n, e) {
+    if (void 0 === n && (n = "init"), void 0 === e && (e = {}), "init" === n) {
+      var o = e.orientation,
+          s = void 0 === o ? "horizontal" : o;if ("horizontal" !== s && "vertical" !== s) throw new Error("Scrollbar orientation should be either “horizontal” or “vertical”");this.each(function (n, e) {
+        return Object.create(i).init(t(e), s);
+      });
+    } else Object.prototype.hasOwnProperty.call(i, n + "API") && this.trigger(n + ".fscroll");return this;
+  }, t(document).ready(function () {
+    t("body [data-fl-scrolls]").each(function (i, n) {
+      var e = t(n);e.floatingScroll("init", e.data("flScrolls") || {});
+    });
+  });
+});
+
+},{"jquery":27}],39:[function(require,module,exports){
 'use strict';
 
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
@@ -17931,7 +18153,7 @@ if (actualPage.includes('steptwo')) {
 	});
 }
 
-},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./templates/actuator_template":39,"./templates/add-state_template":40,"./templates/component_template":43,"./templates/connection_template":44,"./templates/controlaction_template":45,"./templates/controlledprocess_template":46,"./templates/sensor_template":49,"./templates/state_template":50,"./templates/variable_template":54,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],39:[function(require,module,exports){
+},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./templates/actuator_template":40,"./templates/add-state_template":41,"./templates/component_template":44,"./templates/connection_template":45,"./templates/controlaction_template":46,"./templates/controlledprocess_template":47,"./templates/sensor_template":50,"./templates/state_template":51,"./templates/variable_template":55,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],40:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17939,7 +18161,7 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Actuator]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-actuator\">\n                <li class=\"item\" id=\"actuator-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editactuator\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"actuator\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deleteactuator\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"actuator\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n        </div>";
 };
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -17947,7 +18169,7 @@ module.exports = function (context) {
     return "<div data-component=\"drop\" data-drop=\"form-state-variable-" + context.id + "\" class=\"add-drop\">\n        <form action =\"/addstate-variable-" + context.id + "\" method=\"POST\" class=\"add-form\" data-add=\"state-variable-" + context.id + "\">\n            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n            <div class=\"add-drop__content\">\n                <label for=\"state-name-" + context.id + "\" class=\"add-drop__label\">\n                    State name\n                </label>\n                <input id=\"state-name-" + context.id + "\" name=\"state-name-" + context.id + "\" type=\"text\" class=\"add-drop__input\">\n                <input type=\"hidden\" name=\"variable_id\" id=\"variable_id\" value=\"" + context.id + "\">\n            </div>\n            <div class=\"add-drop__buttons\">\n                    <button class=\"add-drop__action\">\n                      Cancel\n                    </button>\n                    <button type=\"submit\" class=\"add-drop__action\">\n                      Add\n                    </button>\n            </div>\n        </form>\n    </div>";
 };
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -17955,7 +18177,7 @@ module.exports = function (context, exihibition_id) {
     return "\n        <li class=\"item\" id=\"assumption-" + context.id + "\">\n                <div class=\"item__title\">\n                    A-" + exihibition_id + ": <br/> <textarea class=\"item__textarea\" id=\"assumption-description-" + context.id + "\"  rows=\"5\" cols = \"100\" style=\"resize: none;\n    height: auto;\" disabled>" + context.name + "</textarea>\n                </div>\n                <div class=\"item__actions\">\n                    <form action =\"/editassumption\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"assumption\">\n                        <div class=\"item__title\">\n                           <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                       </div>\n                    </form>\n                    <form action=\"deleteassumption\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"assumption\">\n                       <div class=\"item__title\">\n                           <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                       </div>\n                    </form>\n                </div>\n        </li>";
 };
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18002,7 +18224,7 @@ module.exports = function (context) {
     return "<div class=\"table-row\" id=\"causal-row-" + context.id + "\"\">\n            <div class=\"text\">\n                " + select + "<br/>\n            <textarea class=\"step2_textarea\" name=\"scenario-" + context.id + "\" id=\"scenario-" + context.id + "\" placeholder=\"Scenario\" disabled>" + context.scenario + "</textarea>\n            </div>\n\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"associated-" + context.id + "\" placeholder=\"Associated Causal Factors\" disabled>" + context.associated + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"requirement-" + context.id + "\" placeholder=\"Requirements\" disabled>" + context.requirement + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"rationale-" + context.id + "\" placeholder=\"Rationales\" disabled>" + context.rationale + "</textarea></div>\n    <div class=\"content-uca\">\n            <br/>\n            <form action=\"/edittuple\" class=\"edit-form\" data-edit=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n            <form action=\"/deletetuple\" class=\"delete-form\" data-delete=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n    </div>\n</div>";
 };
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18010,7 +18232,7 @@ module.exports = function (context) {
     return "\n        <li class=\"item\" id=\"" + type + "-" + context.id + "\">\n            <div class=\"item__title\">\n                " + context.name + "\n            </div>\n            <div class=\"item__actions\">\n                <div class=\"item__title\">\n                    <img src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                </div>\n                <form action =\"/deletecomponent\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"component\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
 };
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18028,14 +18250,14 @@ module.exports = function (context) {
                 </form>
 */
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, controller_name) {
     return "\n        <li class=\"item\" id=\"controlaction-" + context.id + "\">\n                <div class=\"item__title\">\n                    " + context.name + "\n                </div>\n                <div class=\"item__actions\">\n                    <div class=\"item__title\">\n                        <img src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                    <form action=\"/deletecontrolaction\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"controlaction\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"controlaction_id\" name=\"controlaction_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                </div>\n            </li>";
 };
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18043,7 +18265,7 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Controlled Process]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-controlledprocess\">\n                <li class=\"item\" id=\"controlledprocess-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editcontrolledprocess method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"controlledprocess\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deletecontrolledprocess\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"controlledprocess\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n            <div class=\"substep substep--variables-associated\" id=\"variables-0\">\n                <div class=\"substep__title\">\n                    System Variables\n                </div>\n                <div class=\"substep__add\" data-component=\"add-button\" data-add=\"variable-0\">\n                    +\n                </div>\n                <div class=\"substep__content variables-content\" id=variable-0>\n                    <ul class=\"substep__list\">\n                    </ul>\n                </div>\n            </div>\n        </div>";
 };
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id, losses) {
@@ -18056,7 +18278,7 @@ module.exports = function (context, exihibition_id, losses) {
     return "\n        <li class=\"item\" id=\"hazard-" + context.id + "\">\n            <div class=\"item__title\">\n                H-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"hazard-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeyup=\"this.size=this.value.length\" disabled>\n            </div>\n            " + losses_associated + "\n            <div class=\"item__actions\">\n                <form action =\"/edit-formhazard\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deletehazard\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
 };
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -18065,7 +18287,7 @@ module.exports = function (context, exihibition_id) {
     return "\n        <li class=\"item\" id=\"loss-" + context.id + "\">\n            <div class=\"item__title\">\n                L-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"loss-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n            </div>\n            <div class=\"item__actions\">\n                <form action =\"/editloss\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"loss\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deleteloss\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"loss\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18073,14 +18295,14 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Sensor]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-sensor\">\n                <li class=\"item\" id=\"sensor-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editsensor\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"sensor\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deletesensor\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"sensor\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n        </div>";
 };
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, id_or_class) {
     if (id_or_class) return "\n            <div class=\"item__actions__action\" id=\"state-associated-" + context.id + "\">\n                <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"variable\" data-index=\"" + context.id + "\">\xD7</a> " + context.name + "\n            </div>";else return "\n            <div class=\"item__actions__action state-associated-" + context.id + "\">\n                " + context.name + "\n            </div>";
 };
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -18088,7 +18310,7 @@ module.exports = function (context, exihibition_id) {
                            return "\n        <li class=\"item\" id=\"systemgoal-" + context.id + "\">\n                <div class=\"item__title\">\n                    G-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"systemgoal-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n                </div>\n                <div class=\"item__actions\">\n\t                <form action =\"/editsystemgoal\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"systemgoal\">\n                        <div class=\"item__title\">\n\t                       <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n                    <form action=\"deletesystemgoal\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"systemgoal\">\n\t                   <div class=\"item__title\">\n\t                       <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n             \t</div>\n        </li>";
 };
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
@@ -18096,7 +18318,7 @@ module.exports = function (context, exihibition_id) {
     return "\n        <li class=\"item\" id=\"systemsafetyconstraint-" + context.id + "\">\n                <div class=\"item__title\">\n                    SSC-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"systemsafetyconstraint-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n                </div>\n                <div class=\"item__actions\">\n\t                <form action=\"editsystemsafetyconstraint\" method=\"POST\"  class=\"edit-form ajaxform\" data-edit=\"systemsafetyconstraint\">\n                       <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n                    <form action=\"deletesystemsafetyconstraint\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"systemsafetyconstraint\">\n\t                   <div class=\"item__title\">\n\t                       <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n             \t</div>\n        </li>";
 };
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict';
 
 module.exports = function (context) {
@@ -18127,7 +18349,7 @@ module.exports = function (context) {
     return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="unsafe_control_action-' + context.id + '" disabled>' + context.unsafe_control_action + '</textarea>\n                    </div>\n                    \n                    <div class="text">\n                        ' + type + '\n                        <textarea class="uca_list_textarea" id="safety_constraint-' + context.id + '" disabled>' + context.safety_constraint + '</textarea>\n                    </div>\n                    \n                    <div class="content-uca">\n                        <form action="/edituca" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n        </div>';
 };
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, firstAppend) {
