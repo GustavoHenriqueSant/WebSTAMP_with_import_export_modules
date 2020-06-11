@@ -1,3 +1,13 @@
+.context_table_style{
+  display: flex;           display: -webkit-flex;
+  flex-direction: row;     -webkit-flex-direction: row;
+  flex-grow: 0;            -webkit-flex-grow: 0;
+  flex-wrap: nowrap;         -webkit-flex-wrap: nowrap;
+  width: 100%;
+  overflow: auto;
+  overflow-y: hidden;
+}
+
 // Main container: initialize the flex, direction is row
 .table-row {
   display: flex;           display: -webkit-flex;
@@ -5,9 +15,10 @@
   flex-grow: 0;            -webkit-flex-grow: 0;
   flex-wrap: nowrap;         -webkit-flex-wrap: nowrap;
   width: 100%;
-  padding-left: 15px;
-  padding-right: 15px;
-  text-align: justify;
+  text-align: center;
+  border-bottom: 2px solid #e0e0e0;
+  border-collapse: collapse;
+  padding-top: 5px;
 }
 
 // Text based cells: grow, truncate and show ellipsis when there is not enough space
@@ -15,7 +26,14 @@
   flex-grow: 1;            -webkit-flex-grow: 1;
   white-space: wrap;
   text-overflow: ellipsis;
-  padding-right: 20px;
+}
+
+.text {
+  width: 180px;
+}
+
+select.text{
+  width:100%;
 }
 
 .text_error {
@@ -36,8 +54,13 @@
   width: 180px;
 }
 
+
 // Fix the minimum width of the leaf level cells
-.text {
+td{
+  width: 180px;
+}
+
+th{
   width: 180px;
 }
 
@@ -50,12 +73,6 @@
  */
 body {
   font-size: 20px;
-}
-
-.table-row {
-  border-bottom: 2px solid #e0e0e0;
-  border-collapse: collapse;
-  padding-top: 5px;
 }
 
 .table-row-without-border {
@@ -75,6 +92,7 @@ body {
   padding-top: 8px;
   padding-bottom: 8px;
   text-align: center;
+  width: 100%;
 }
 
 .table-row.header-blue {
