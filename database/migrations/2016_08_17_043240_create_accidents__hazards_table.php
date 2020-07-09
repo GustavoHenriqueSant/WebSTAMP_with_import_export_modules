@@ -27,6 +27,6 @@ class CreateAccidentsHazardsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('accidents_hazards');
+        Schema::dropIfExists('accidents_hazards');
     }
 }

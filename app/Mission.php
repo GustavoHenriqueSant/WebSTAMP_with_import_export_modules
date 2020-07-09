@@ -9,7 +9,7 @@ class Mission extends Model
 
 	protected $table = 'mission';
 
-    public function project(){
+    	public function project(){
 		return $this->belongsTo(Projects::class);
 	}
 

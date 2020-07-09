@@ -68,25 +68,24 @@
     $rows_number = $total_loop;
 
     // Select all rules associated with the selected control action
-    $rule = App\Rules::where('controlaction_id', $ca->id)->get();
-    // Get the number of rules
-    $total_index = App\Rules::distinct()->select('index')->where('controlaction_id', $ca->id)->get();
-    // Array to store the rules
-    $rle = [];
-    if (count($total_index) > 0) {
-        foreach($total_index as $index) {
-            array_push($rle, App\Rules::where('controlaction_id', $ca->id)->where('index', $index->index)->orderBy('index')->orderBy('variable_id')->get());
+    $rules = App\Rule::where('controlaction_id', $ca->id)->get();
+
+    // Array to store the rules and the variables states of the rules
+    $rules_variables_states = [];
+    if (count($rules) > 0) {
+        foreach($rules as $rule) {
+            array_push($rules_variables_states, App\RulesVariables::where('rule_id', $rule->id)->orderBy('rule_id')->orderBy('variable_id')->get());
         }
     }
 
     // BubbleSort to order the rules. For some reason, the sql "orderBy" is not working.
-    if (count($rle) > 0){
-        for ($i = 0; $i < count($rle)-1; $i++){
-            for ($j = $i+1; $j < count($rle); $j++){
-                if ($rle[$i][0]["index"] > $rle[$j][0]["index"]){
-                    $aux = $rle[$i];
-                    $rle[$i] = $rle[$j];
-                    $rle[$j] = $aux;
+    if (count($rules_variables_states) > 0){
+        for ($i = 0; $i < count($rules_variables_states)-1; $i++){
+            for ($j = $i+1; $j < count($rules_variables_states); $j++){
+                if ($rules_variables_states[$i][0]["rule_id"] > $rules_variables_states[$j][0]["rule_id"]){
+                    $aux = $rules_variables_states[$i];
+                    $rules_variables_states[$i] = $rules_variables_states[$j];
+                    $rules_variables_states[$j] = $aux;
                 }
             }
         }
@@ -226,9 +225,9 @@
                     @while($total_loop > 0)
                     <?php
                         $columns = [];
-                        $rules = [];
-                        foreach($total_index as $index) {
-                            array_push($rules, "true");
+                        $rule = [];
+                        foreach($rules as $r) {
+                            array_push($rule, "true");
                         }
                     ?>
                         <tr class="table-row">
@@ -249,21 +248,21 @@
                                 <?php
                                     array_push($arr, $allStatesId[$i][$combination_array[$i]]);
                                     // Verifying if the rule fits
-                                    if(count($rle) > 0) {
-                                        foreach($rle as $key => $r) {                                        
+                                    if(count($rules_variables_states) > 0) {
+                                        foreach($rules_variables_states as $key => $r) {                                        
                                             if (count($r) > $i) {      //aqui tinha erro prestar atenção                                   
                                                 if($r[$i]->state_id == 0){                                            
-                                                    if ($rules[$key] == "true"){
-                                                        $rules[$key] = "true";
-                                                        $columns[$key] = $r[$i]->column;
+                                                    if ($rule[$key] == "true"){
+                                                        $rule[$key] = "true";
+                                                        $columns[$key] = App\Rule::find($r[$i]->rule_id)->column;
                                                     }
 
-                                                } else if ( ($allStates[$i][$combination_array[$i]] == App\State::find($r[$i]->state_id)->name) && ($rules[$key] == "true") ){
-                                                    $rules[$key] = "true";
-                                                    $columns[$key] = $r[$i]->column;
+                                                } else if ( ($allStates[$i][$combination_array[$i]] == App\State::find($r[$i]->state_id)->name) && ($rule[$key] == "true") ){
+                                                    $rule[$key] = "true";
+                                                    $columns[$key] = App\Rule::find($r[$i]->rule_id)->column;
                                                 } else {
-                                                    $rules[$key] = "false";
-                                                    $columns[$key] = $r[$i]->column;
+                                                    $rule[$key] = "false";
+                                                    $columns[$key] = App\Rule::find($r[$i]->rule_id)->column;
                                                 }                                            
                                             }
                                         }
@@ -314,7 +313,7 @@
                                     "Stopped too soon" => "",
                                     "Applied too long" =>  ""
                                 );
-                                foreach ($rules as $key => $r) {
+                                foreach ($rule as $key => $r) {
                                     if ($r == "true" && count($r) > 0) {
                                         $thereAreRule = "true";
                                         $columns_that_rule_can_be_applied = explode(";", $columns[$key]);

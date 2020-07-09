@@ -35,29 +35,29 @@
             </div>
 
             <!--
-            @foreach (App\Rules::where('controlaction_id', $ca->id)->select('index')->distinct()->get() as $rule_index)
-            <?php
+            @foreach (App\Rule::where('controlaction_id', $ca->id)->select('id')->distinct()->get() as $rule)
+                <?php
 
-            $iterations = count(App\Rules::where('index', $rule_index->index)->where('controlaction_id', $ca->id)->where('state_id', '>', 0)->get());
-            $actual_index = -1;
+                $iterations = count(App\RulesVariables::where('rule_id', $rule->id)->where('state_id', '>', 0)->get());
+                $actual_index = -1;
 
-            ?>
-            <div class="table-row">
-                <div class="text">
-                    {{$ca->controller->name}}<b> provides</b> {{$ca->name}} <b>when</b>
-                    @foreach (App\Rules::where('index', $rule_index->index)->where('controlaction_id', $ca->id)->where('state_id', '>', 0)->get() as $rule)
-                        @if($iterations == 0)
-                            {{App\State::find($rule->state_id)->name}}
-                        @elseif ($actual_index++ < $iterations-2)
-                            {{App\State::find($rule->state_id)->name}} and
-                        @else
-                            {{App\State::find($rule->state_id)->name}}.
-                        @endif
-                    @endforeach
+                ?>
+                <div class="table-row">
+                    <div class="text">
+                        {{$ca->controller->name}}<b> provides</b> {{$ca->name}} <b>when</b>
+                        @foreach (App\RulesVariables::where('rule_id', $rule->id)->where('state_id', '>', 0)->get() as $r)
+                            @if($iterations == 0)
+                                {{App\State::find($r->state_id)->name}}
+                            @elseif ($actual_index++ < $iterations-2)
+                                {{App\State::find($r->state_id)->name}} and
+                            @else
+                                {{App\State::find($r->state_id)->name}}.
+                            @endif
+                        @endforeach
+                    </div>
+                    <div class="text">
+                    </div>
                 </div>
-                <div class="text">
-                </div>
-            </div>
             @endforeach 
             -->
 

@@ -1375,13 +1375,12 @@ for (i = 0; i < acc.length; i++) {
           });
           setTimeout(function(){
             var ca = window.location.search.substr(1).split("=");
-            console.log(ca);
             if (ca.length > 1){
               var currentURL = window.location.href.split("?");
-              window.location.href = currentURL[0] + '?ca='+controlaction_id;
+              window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             }
             else{
-              window.location.href += '?ca='+controlaction_id;
+              window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             } 
           }, 2000);
         }
@@ -1400,19 +1399,15 @@ for (i = 0; i < acc.length; i++) {
           var controlaction_id = form.find("#controlaction_id").val();
           var controlaction_name = $("#controlaction_name_"+controlaction_id).val();
           var controller_name = $("#controller_name_"+controlaction_id).val();
-          var $newRule = $('#rule-control-action-'+controlaction_id).find(".container-fluid");
-          var rule_index = $('#rule-control-action-'+controlaction_id).find(".rules-table").length+1;
+          
           var column = "";
           var columns = form.find("#rule_column").val();
           for (var i=0; i < columns.length; i++) {
             column += (i < columns.length-1) ? columns[i] + ";" : columns[i];
           }
-          var append = '<div class="table-row rules-table rules-ca-'+controlaction_id+'-rule-'+rule_index+'"><div class="text">R'+rule_index+'</div>';
           var variables_array = [];
-          var states_name = [];
-          var id = 0;
-          var states_final = []
-          var rule_id = 1;
+          var states_final = [];
+          var rules_variables = [];
           // Save each variable of the rule
           var variables = form.find('[id^="variable_id_"]').each(function() {
             var ids = form.find(this).val().split("-");
@@ -1421,27 +1416,26 @@ for (i = 0; i < acc.length; i++) {
             if (state_id > 0)
               variables_array.push(state_id);
             var name = $(this).find('option:selected').attr('name');
-            //variables_array.forEach(function f(state_id, index){
-              //states_final.push(getVariableName(state_id) + " is " + getStateName(state_id));
-            //});
-            console.log(name);
             if (name !== "ANY")
               states_final.push(getVariableName(state_id) + " is " + getStateName(state_id));
-              //states_name.push(name);
-            append += '<div class="text">'+name+'</div>';
-            if (rule_index > 0)
-            axios.post('/addrule', {
-                id : id,
-                rule_index: rule_index,
-                variable_id : variable_id,
-                state_id : state_id,
-                controlaction_id : controlaction_id,
-                column : column
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+            
+            rules_variables.push({variable_id: variable_id, state_id: state_id});
           });
+
+          var rule_id;
+
+          axios.post('/addrule', {
+            rules_variables : rules_variables,
+            controlaction_id : controlaction_id,
+            column : column
+          })
+          .then(function (response){
+            rule_id = response.data.rule_id;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
           var column_index = -1;
           columns.forEach(function(column_name) {
             var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
@@ -1455,7 +1449,6 @@ for (i = 0; i < acc.length; i++) {
             })
             column_index++;
             axios.post('/adduca', {
-              id : id,
               unsafe_control_action : sc.unsafe_control_action,
               safety_constraint : sc.safety_constraint,
               type : columns[column_index],
@@ -1469,7 +1462,6 @@ for (i = 0; i < acc.length; i++) {
           });
           setTimeout(function(){
             var ca = window.location.search.substr(1).split("=");
-            console.log(ca);
             if (ca.length > 1){
               var currentURL = window.location.href.split("?");
               window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
@@ -1478,20 +1470,89 @@ for (i = 0; i < acc.length; i++) {
               window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             } 
           }, 2000);
-
-          append += '<div class="text">' +
-                        '<form action="/deleterule" class="delete-form" data-delete="rules" method="POST">' +
-                            '<input type="hidden" name="_token" value="{{csrf_token()}}">' +
-                            '<input type="hidden" name="controlaction_id" id="controlaction_id" value="' + controlaction_id + '">' +
-                            '<input type="hidden" name="rule_index" id="rule_index" value="' + rule_index + '">' +
-                            '<input type="image" src="/images/delete.ico" alt="Delete" width="20" class="navbar__logo">' +
-                        '</form>' +
-                    '</div>';
-          append += '</div>';
       }
     }  
   });
 });
+
+$("img[id^='cancel-edit-rule']").hover(function(){
+  $(this).css('cursor','pointer');
+})
+
+$("img[id^='cancel-edit-rule']").on('click', function(event) {
+
+    var ids = $(this).attr("name").split("-");
+
+    $("#rule-" + ids[0] + "-" + ids[1] + "-edition").hide();
+    $("#rule-" + ids[0] + "-" + ids[1] + "-view").show();
+});
+  
+  //EDIT RULES
+  $('body').on('submit', '.edit-rule-form', function(event){
+
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var activity = form.data("edit");
+    
+    if(activity == 'rules'){
+      var rule_id = form.find("#rule_id").val();
+      var controlaction_id = form.find('#controlaction_id').val();
+      console.log($("input[type=image][clicked=true]").val());
+      if($("#rule-" + rule_id + "-" + controlaction_id + "-edition").is(":hidden")){
+        $("#rule-" + rule_id + "-" + controlaction_id + "-edition").show();
+        $("#rule-" + rule_id + "-" + controlaction_id + "-view").hide();
+      }
+      else{
+        
+        //edit rule
+        vex.dialog.confirm({
+          message: 'Editing a rule implies on refresh the page. All unsaved data will be lost.  Are you sure?',
+          callback: function(value){
+            if(value){
+              var controlaction_id = form.find("#controlaction_id").val();
+              var rule_id = form.find("#rule_id").val();
+              var column = "";
+              var columns = form.find("#rule_column_edition").val();
+              for (var i=0; i < columns.length; i++) {
+                column += (i < columns.length-1) ? columns[i] + ";" : columns[i];
+              }
+              var rules_variables = [];
+
+              var variables = form.find('[id^="variable_id_"]').each(function() {
+                var ids = $(this).val().split("-");
+                var variable_id = ids[0];
+                var state_id = ids[1];
+                
+                rules_variables.push({variable_id: variable_id, state_id: state_id});
+              });
+
+              axios.post('/editrule', {
+                  rule_id: rule_id,
+                  rules_variables: rules_variables,
+                  column : column
+              })
+              .then(function (response){
+                setTimeout(function(){
+                  var ca = window.location.search.substr(1).split("=");
+                  if (ca.length > 1){
+                    var currentURL = window.location.href.split("?");
+                    window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                  }
+                  else{
+                    window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                  } 
+                }, 2000);
+              })
+              .catch(function (error) {
+                  console.log(error);
+              });
+              
+            }
+          }
+        });
+      }
+    }
+  });
 
 
   // DELETE RULES AND UCA/SC
@@ -1504,15 +1565,20 @@ for (i = 0; i < acc.length; i++) {
       callback: function (value) {
         if (value) {
           if(activity == 'rules'){
-            var rule_index = form.find("#rule_index").val();
-            var controlaction_id = form.find('#controlaction_id').val();
-            axios.post('/deleterule', {
-                rule_index : rule_index,
-                controlaction_id : controlaction_id
+            var rule_id = form.find("#rule_id").val();
+             var controlaction_id = form.find("#controlaction_id").val();
+              axios.post('/deleterule', {
+                rule_id : rule_id,
               })
               .then(function (response) {
-                $(".rules-ca-" + controlaction_id + "-rule-" + rule_index).remove();
-                location.reload();
+                var ca = window.location.search.substr(1).split("=");
+                if (ca.length > 1){
+                  var currentURL = window.location.href.split("?");
+                  window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                }
+                else{
+                  window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                } 
               })
               .catch(function (error) {
                 console.log(error);

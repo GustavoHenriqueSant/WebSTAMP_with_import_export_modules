@@ -1,4 +1,4 @@
-<div class="substep__title">
+    <div class="substep__title">
     Add new rule to hazardous control action - {{$ca->name}}
 </div>
 
@@ -10,7 +10,7 @@
 
             <div class="table-row header">
                 <div class="text">Apply the Rule to the columns</div>
-                @foreach (App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $controller->id])->get() as $variable)
+                @foreach (App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $controller->id])->orderBy('id', 'asc')->get() as $variable)
                     @if ($variable->name != "Default")
                     <div class="text">{{$variable->name}}</div>
                     @endif
@@ -30,7 +30,7 @@
                         <option value="Stopped too soon">Stopped too soon</option>
                         <option value="Applied too long">Applied too long</option>
                     </select>
-                    @foreach (App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $controller->id])->get() as $variable)
+                    @foreach (App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $controller->id])->orderBy('id', 'asc')->get() as $variable)
                         <select id="variable_id_{{$variable->id}}" name="variable_id_{{$variable->id}}" class="text">
                             <option value="{{$variable->id}}-0" name="ANY">ANY</option>
                             @foreach (App\State::where('variable_id', $variable->id)->get() as $state)

@@ -11,7 +11,7 @@ class Variable extends Model
 		return $this->hasMany(State::class);
 	}
 	
-    public function project(){
+    	public function project(){
 		return $this->belongsTo(Projects::class);
 	}
 

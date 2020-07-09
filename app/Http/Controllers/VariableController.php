@@ -10,7 +10,9 @@ use App\Variable;
 
 use App\State;
 
-use App\Rules;
+use App\Rule;
+
+use App\RulesVariables;
 
 use App\Controllers;
 
@@ -45,40 +47,38 @@ class VariableController extends Controller
 
 		if ($variable->controller_id > 0){
 			foreach(CA::where('controller_id', $variable->controller_id)->get() as $control_action) {
-				foreach(Rules::distinct()->select('index')->where('controlaction_id', $control_action->id)->get() as $rules) {
-					$rule = new Rules();
-					$rule->index = $rules->index;
-					$rule->variable_id = $variable->id;
-					$rule->state_id = 0;
-					$rule->controlaction_id = $control_action->id;
-					$rule->save();
+				foreach(Rule::distinct()->select('id')->where('controlaction_id', $control_action->id)->get() as $rule) {
+					$rule_variable = new RulesVariables();
+					$rule_variable->rule_id = $rule->id;
+					$rule_variable->variable_id = $variable->id;
+					$rule_variable->state_id = 0;
+					$rule_variable->save();
 				}
 			}
 		} else {
-			foreach(Controllers::where('project_id', 1)->get() as $controller) {
+			foreach(Controllers::where('project_id', $variable->project_id)->get() as $controller) {
 				foreach(CA::where('controller_id', $controller->id)->get() as $control_action) {
-					foreach(Rules::distinct()->select('index')->where('controlaction_id', $control_action->id)->get() as $rules) {
-						$rule = new Rules();
-						$rule->index = $rules->index;
-						$rule->variable_id = $variable->id;
-						$rule->state_id = 0;
-						$rule->controlaction_id = $control_action->id;
-						$rule->save();
+					foreach(Rule::distinct()->select('id')->where('controlaction_id', $control_action->id)->get() as $rule) {
+						$rule_variable = new RulesVariables();
+						$rule_variable->rule_id = $rule->id;
+						$rule_variable->variable_id = $variable->id;
+						$rule_variable->state_id = 0;
+						$rule_variable->save();
 					}
 				}
 			}
 		}
 
 		return response()->json([
-        	'name' => $variable->name,
-        	'id' => $variable->id,
-        	'controller_id' => $variable->controller_id,
-        	'states' => $states
-    	]);
+	        	'name' => $variable->name,
+	        	'id' => $variable->id,
+	        	'controller_id' => $variable->controller_id,
+	        	'states' => $states
+    		]);
 	}
 
 	public function delete(Request $request){
-		Rules::where('variable_id', $request->input('id'))->delete();
+		RulesVariables::where('variable_id', $request->input('id'))->delete();
 		$states = State::where('variable_id', $request->input('id'))->get();
 		foreach($states as $state) {
 			DB::select(DB::raw("UPDATE context_tables SET context = REPLACE(context, ',".$state->id.",', ',') WHERE context like '%,".$state->id.",%'"));

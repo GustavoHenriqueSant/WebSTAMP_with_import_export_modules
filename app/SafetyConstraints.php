@@ -9,7 +9,7 @@ class SafetyConstraints extends Model
 
 	protected $table = 'safety_constraints';
 
-    public function controlaction(){
+    	public function controlaction(){
 		return $this->belongsTo(ControlAction::class);
 	}
 

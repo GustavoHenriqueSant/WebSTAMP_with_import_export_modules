@@ -45,6 +45,14 @@
   white-space: wrap;
   text-overflow: ellipsis; }
 
+.edit-rule-field {
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-grow: 1;
+  white-space: wrap;
+  text-overflow: ellipsis;
+  width: 100px; }
+
 .text {
   width: 180px; }
 

@@ -219,7 +219,7 @@ Route::post('/deletealltuple', 'CausalAnalysisController@deleteAll');
 Route::post('/deletelossassociated', 'LossHazardController@delete');
 
 Route::post('/addrule', 'RuleController@add');
-Route::post('/refreshPage', 'RuleController@refreshPage');
+Route::post('/editrule', 'RuleController@edit');
 Route::post('/deleterule', 'RuleController@delete');
 Route::post('/deleteallrules', 'RuleController@deleteAll');
 

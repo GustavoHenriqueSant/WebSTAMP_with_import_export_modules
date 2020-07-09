@@ -4,15 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rules extends Model
+class Rule extends Model
 {
-
-	public function project(){
-		return $this->belongsTo(project::class);
-	}
-
 	public function controlAction(){
 		return $this->belongsTo(ControlAction::class);
 	}
 
+	public function variables(){
+		return $this->hasMany('App\RulesVariables');
+	}
 }
