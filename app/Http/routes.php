@@ -112,8 +112,9 @@ Route::match(array('GET', 'POST'), '{slug}/stepthree', ['as' => 'stepthree', fun
 		$project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
         $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
         $belongsToProject = Team::where('project_id', $project_id)->where('user_id', Auth::user()->id)->first() != null;
+        $hazard_map = mapHazard($project_id);
         if ($belongsToProject)
-    	   return view('pages.stepthree', compact("project_id", "project_type", "slug"));
+    	   return view('pages.stepthree', compact("project_id", "project_type", "slug", "hazard_map"));
 	}
     else
     	return view('home');
@@ -206,6 +207,9 @@ Route::post('/deletestate', 'StateController@delete');
 
 Route::post('/adduca', 'SafetyConstraintsController@add');
 Route::post('/edituca', 'SafetyConstraintsController@edit');
+Route::post('/scdata', 'SafetyConstraintsController@getSafetyConstraint');
+Route::post('/editucaByRule', 'SafetyConstraintsController@editByRule');
+Route::post('/refreshUcasByRule' , 'SafetyConstraintsController@refreshUcasWithRules');
 Route::post('/deleteuca', 'SafetyConstraintsController@delete');
 Route::post('/deletealluca', 'SafetyConstraintsController@deleteAll');
 // Route::post('/addsuggesteduca', 'SystemSafetyConstraintController@save');

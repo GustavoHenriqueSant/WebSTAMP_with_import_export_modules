@@ -16395,27 +16395,78 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   */
   // STEP 3
 } else if (actualPage.includes('stepthree')) {
-  var edit_uca_sc = function edit_uca_sc(id) {
-    var unsafe_control_action = $("#unsafe_control_action-" + id).val();
-    var type = $("#type-" + id + " option:selected").val();
-    var safety_constraint = $("#safety_constraint-" + id).val();
-    axios.post('/edituca', {
-      id: id,
-      unsafe_control_action: unsafe_control_action,
-      type: type,
-      safety_constraint: safety_constraint
-    }).then(function (response) {
-      $("#unsafe_control_action-" + id).prop('disabled', true);
-      $("#type-" + id).prop('disabled', true);
-      $("#safety_constraint-" + id).prop('disabled', true);
-    }).catch(function (error) {
-      console.log(error);
-    });
-  };
+
+  //apaga depois
+
+
+  // function edit_uca_sc(id) {
+  //   var unsafe_control_action = $("#unsafe_control_action-" + id).val();
+  //   var type = $("#type-" + id + " option:selected").val();
+  //   var safety_constraint = $("#safety_constraint-" + id).val();
+  //   axios.post('/edituca', {
+  //     id : id,
+  //     unsafe_control_action : unsafe_control_action,
+  //     type : type,
+  //     safety_constraint : safety_constraint
+  //   })
+  //   .then(function(response) {
+  //     $("#unsafe_control_action-"+id).prop('disabled', true);
+  //     $("#type-"+id).prop('disabled', true);
+  //     $("#safety_constraint-"+id).prop('disabled', true);
+  //   })
+  //   .catch(function(error) {
+  //     console.log(error);
+  //   })
+  // }
+
+
+  // $('.add-uca').each(function(index, f){
+  //   uca.push(f.id);
+  // })
+  // uca.forEach(function(f) {
+  //   var drop = new Drop({
+  //     target: document.querySelector('[data-add="' + f + '"]'),
+  //     content: document.querySelector('[data-drop="' + f + '"]'),
+  //     openOn: 'click',
+  //     remove: true,
+  //     tetherOptions: {
+  //       attachment: 'top left',
+  //       targetAttachment: 'middle right',
+  //       constraints: [
+  //         {
+  //           to: 'scrollParent',
+  //           attachment: 'together'
+  //         }
+  //       ]
+  //     }
+  //   });
+  // });
 
   var convertType = function convertType(type) {
     if (type == "provided") return "Provided";else if (type == "not provided") return "Not provided";else if (type == "wrong time") return "Provided in wrong order";else if (type == "wrong order") return "Provided in wrong order";else if (type == "too early") return "Provided too early";else if (type == "too late") return "Provided too late";else if (type == "too soon") return "Stopped too soon";else if (type == "too long") return "Applied too long";
   };
+
+  // $('body').on('click', '.add-new-uca', function(event){
+  //   event.preventDefault();
+  //   $(".unsafe-control").each(function(){
+  //     $(this).html("");
+  //   });
+  //   $(".safety-control").each(function(){
+  //     $(this).html("");
+  //   });
+  //   var form = $(event.currentTarget);
+  //   var controlaction_id = form.attr("id").split("-")[1];
+  //   vex.closeAll();
+  //   vex.open({
+  //     unsafeContent: $("#add-new-uca-" + controlaction_id).html(),
+  //     buttons: [
+  //       $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+  //       $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+  //     ],
+  //     showCloseButton: true,
+  //     className: "vex-theme-default"
+  //   });
+  // });
 
   var getVariableName = function getVariableName(id) {
     var new_id = $("#associated-variable-id-" + id).val();
@@ -16430,8 +16481,8 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     var unsafe_control_action = "";
     var safety_constraint = "";
     if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
-      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
-      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
     } else if (type.includes("wrong time") || type.includes("wrong order")) {
       unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
       safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
@@ -16506,34 +16557,37 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     }
   });
 
-  $("body").on('blur', '.uca_list_textarea', function (event) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[1];
-    var activity = split[0];
-    $("#type-" + id).attr('class', 'type-combo');
-    edit_uca_sc(id);
-  });
+  //vai apagar depois
 
-  $("body").on('change', '.item__input__active', function (event) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[1];
-    var activity = split[0];
-    $("#type-" + id).attr('class', 'type-combo');
-    edit_uca_sc(id);
-  });
+  // $("body").on('blur', '.uca_list_textarea', function(event) {
+  //   event.preventDefault();
+  //   var split = event.currentTarget.id.split("-");
+  //   var id = split[1];
+  //   var activity = split[0];
+  //   $("#type-"+id).attr('class', 'type-combo');
+  //   edit_uca_sc(id);
+  // });
 
-  // EDIT WHEN KEY "ENTER" WAS PRESSED
-  $("body").on('keypress', '.uca_list_textarea', function (event) {
-    if (event.which == 13) {
-      event.preventDefault();
-      var split = event.currentTarget.id.split("-");
-      var id = split[2];
-      var activity = split[0];
-      edit_uca_sc(id, activity);
-    }
-  });
+  // $("body").on('change', '.item__input__active', function(event) {
+  //   event.preventDefault();
+  //   var split = event.currentTarget.id.split("-");
+  //   var id = split[1];
+  //   var activity = split[0];
+  //   $("#type-"+id).attr('class', 'type-combo');
+  //   edit_uca_sc(id);
+  // });
+
+
+  // // // EDIT WHEN KEY "ENTER" WAS PRESSED
+  // // $("body").on('keypress', '.uca_list_textarea', function(event) {
+  // //   if (event.which == 13) {
+  // //     event.preventDefault();
+  // //     var split = event.currentTarget.id.split("-");
+  // //     var id = split[2];
+  // //     var activity = split[0];
+  // //     edit_uca_sc(id, activity);
+  // //   }
+  // // });
 
   $("body").on('change', '.type-combo', function (event) {
     event.preventDefault();
@@ -16541,48 +16595,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     var id = split[1];
     var activity = split[0];
     edit_causal_analysis(id);
-  });
-
-  $('.add-uca').each(function (index, f) {
-    uca.push(f.id);
-  });
-  uca.forEach(function (f) {
-    var drop = new Drop({
-      target: document.querySelector('[data-add="' + f + '"]'),
-      content: document.querySelector('[data-drop="' + f + '"]'),
-      openOn: 'click',
-      remove: true,
-      tetherOptions: {
-        attachment: 'top left',
-        targetAttachment: 'middle right',
-        constraints: [{
-          to: 'scrollParent',
-          attachment: 'together'
-        }]
-      }
-    });
-  });
-
-  $('body').on('click', '.add-new-uca', function (event) {
-    event.preventDefault();
-    $(".unsafe-control").each(function () {
-      $(this).html("");
-    });
-    $(".safety-control").each(function () {
-      $(this).html("");
-    });
-    var form = $(event.currentTarget);
-    var controlaction_id = form.attr("id").split("-")[1];
-    vex.closeAll();
-    vex.open({
-      unsafeContent: $("#add-new-uca-" + controlaction_id).html(),
-      buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
-      showCloseButton: true,
-      className: "vex-theme-default"
-    });
-  });
-
-  $('body').on('click', '.suggested-uca', function (event) {
+  });$('body').on('click', '.suggested-uca', function (event) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var controlaction_id = form.attr("id").split("-")[2];
@@ -16825,6 +16838,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     });
   });
 
+  //Perguntar depois
   $('body').on('submit', '.adding-uca', function (event) {
     event.preventDefault();
     vex.closeAll();
@@ -16858,14 +16872,14 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     });
   });
 
-  $('body').on('change', '.mudanca', function (event) {
+  $('body').on('change', '.add-uca-change', function (event) {
     var form = $(event.currentTarget).closest(".adding-manual-uca");
     var controlaction_id = form.find("#controlaction_id").val();
     var controller_name = form.find("#controller_name").val();
     var controlaction_name = form.find("#controlaction_name").val();
     var type = "";
     $(".type-uca").each(function (index, f) {
-      if (index > 0 && f.id.split("-")[2] == controlaction_id) {
+      if (index >= 0 && f.id.split("-")[2] == controlaction_id) {
         type = $(f).find("option:selected").val();
       }
     });
@@ -16880,8 +16894,8 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     var unsafe_control_action = "";
     var safety_constraint = "";
     if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
-      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
-      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
     } else if (type.includes("wrong time") || type.includes("wrong order")) {
       unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
       safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
@@ -16921,42 +16935,263 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   $('body').on('submit', '.adding-manual-uca', function (event) {
     event.preventDefault();
     var form = $(event.currentTarget);
-    console.log(form);
     var controlaction_id = form.find("#controlaction_id").val();
     var unsafe_control_action = form.find(".unsafe-control-name").html();
     var safety_constraint = form.find(".safety-control-name").html();
     var type = form.find("#type-uca-" + controlaction_id + " option:selected").val();
     var context = form.find("#context").val();
+    var hazard_column = form.find("#hazard_column");
+    var hazards_ids = hazard_column.val();
+    var hazards_infos = [];
+    var token = form.find("input[name='_token']").val();
+    hazard_column.find('option:selected').each(function (index, hazard) {
+      hazards_infos.push(hazard.getAttribute('name'));
+    });
     // Rule_is is always zero when the analyst add it.
     var rule_id = 0;
     var id = 0;
-    console.log("CA: " + controlaction_id + " UCA: " + unsafe_control_action + " SC: " + safety_constraint + " Type: " + type + " Context: " + context);
-    axios.post('/adduca', {
-      id: id,
-      unsafe_control_action: unsafe_control_action,
-      safety_constraint: safety_constraint,
-      type: type,
-      controlaction_id: controlaction_id,
-      context: context,
-      rule_id: rule_id
-    }).then(function (response) {
-      $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
-      vex.closeAll();
-    }).catch(function (error) {
-      console.log(error);
-    });
+    function checkStates(state) {
+      return state.value === "";
+    }
+
+    var states = form.find(".uca-row-" + controlaction_id + " option:selected").toArray();
+    if (states.every(checkStates)) {
+      vex.dialog.alert("Select at least one variable state option to edit the unsafe control action");
+    } else {
+      axios.post('/adduca', {
+        id: id,
+        unsafe_control_action: unsafe_control_action,
+        safety_constraint: safety_constraint,
+        type: type,
+        controlaction_id: controlaction_id,
+        context: context,
+        rule_id: rule_id,
+        hazards_ids: hazards_ids
+      }).then(function (response) {
+        $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data, hazards_infos, token));
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
   });
 
-  $('body').on('click', '.edit-form', function (event) {
+  $('.option_text').mousedown(function (e) {
+    e.preventDefault();
+    var originalScrollTop = $(this).parent().scrollTop();
+    $(this).prop('selected', $(this).prop('selected') ? false : true);
+    var self = this;
+    $(this).parent().focus();
+    setTimeout(function () {
+      $(self).parent().scrollTop(originalScrollTop);
+    }, 0);
+
+    return false;
+  });
+
+  $('body').on('change', '.edit-uca-change', function (event) {
+    var form = $(event.currentTarget).closest(".edit-manual-uca");
+    var controlaction_id = form.find("#controlaction_id").val();
+    var controller_name = form.find("#controller_name").val();
+    var controlaction_name = form.find("#controlaction_name").val();
+    var type = "";
+    $(".edit_type-uca").each(function (index, f) {
+      if (index >= 0 && f.id.split("-")[2] == controlaction_id) {
+        type = $(f).find("option:selected").val();
+      }
+    });
+    var states = [];
+    var states_name = [];
+    var contador = 0;
+    var variables = form.find(".uca-edit-row-" + controlaction_id + " option:selected");
+    var i = 0;
+    $('input#sc_flag').val(0);
+    for (i = 0; i < variables.length; i++) {
+      if (variables[i].value.split("-")[0] > 0) {
+        if ($.inArray(variables[i].value.split("-")[0], states) == -1) {
+          states.push(variables[i].value.split("-")[0]);
+          states_name.push(variables[i].value.split("-")[1] + " is " + variables[i].text);
+        }
+      }
+    }
+
+    var unsafe_control_action = "";
+    var safety_constraint = "";
+    if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+    } else if (type.includes("wrong time") || type.includes("wrong order")) {
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+    } else {
+      unsafe_control_action = controller_name.toLowerCase() + " " + type.toLowerCase() + " " + controlaction_name.toLowerCase() + " when";
+      if (type.includes("not provided")) {
+        safety_constraint = controller_name.toLowerCase() + " must provide " + controlaction_name.toLowerCase() + " when";
+      } else {
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " when";
+      }
+    }
+    unsafe_control_action = unsafe_control_action[0].toUpperCase() + unsafe_control_action.slice(1);
+    safety_constraint = safety_constraint[0].toUpperCase() + safety_constraint.slice(1);
+    var states_size = states_name.length;
+    states_name.forEach(function (f, index) {
+      if (index != states_size - 1) {
+        unsafe_control_action += ", " + f.toLowerCase();
+        safety_constraint += ", " + f.toLowerCase();
+      } else {
+        unsafe_control_action += " and " + f.toLowerCase();
+        safety_constraint += " and " + f.toLowerCase();
+      }
+    });
+    unsafe_control_action = unsafe_control_action.replace("when and", "when");
+    unsafe_control_action = unsafe_control_action.replace("when,", "when");
+    safety_constraint = safety_constraint.replace("when and", "when");
+    safety_constraint = safety_constraint.replace("when,", "when");
+    // if(states_name.length > 0){
+
+    $(".edit-safety-text").val(safety_constraint);
+    $(".edit-unsafe-text").val(unsafe_control_action);
+
+    $(".uca-edition-text").html("Updated unsafe control action:");
+
+    $(".edit-manual-uca").find("#context").val(states.join(",")); //.val();
+  });
+
+  $('body').on('keypress', '.uca_list_textarea', function (event) {
+    if ($('#sc_flag').val() == 0) {
+      vex.dialog.confirm({
+        unsafeMessage: 'If you check this warning message with "OK" and manually update the text of unsafe control action and save it, it will imply in: <br>' + "1. You will not be able to use the Template Instantiation on the Identify Loss Scenarios step; <br>" + "2. If you change the context of the unsafe control action using the select boxes, the edition made manually in the text will be lost;<br>" + "3. To use the Template Instantiation again, update the unsafe control action selecting its context using the select boxes. Make sure that you will not edit the text manually.<br>" + 'Click "Ok" to continue editing, or "Cancel" to abort.',
+        callback: function callback(value) {
+          if (value) {
+            $('input#sc_flag').val(1);
+          }
+        }
+      });
+    }
+  });
+
+  $('body').on('submit', '.edit-form', function (event) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var activity = form.data("edit");
     var controlaction_id = form.find("#controlaction_id").val();
     var safety_constraint_id = form.find("#safety_constraint_id").val();
+    var safety_constraint_type = form.find("#safety_constraint_type").val();
     if (activity === "uca") {
-      $('#unsafe_control_action-' + safety_constraint_id).prop('disabled', false);
-      $('#type-' + safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
-      $('#safety_constraint-' + safety_constraint_id).prop('disabled', false);
+
+      axios.post('/scdata', { sc_id: safety_constraint_id }).then(function (response) {
+        vex.closeAll();
+        vex.open({
+          unsafeContent: $(".edit-uca-" + controlaction_id).html(),
+          showCloseButton: true,
+          className: "vex-theme-default",
+          afterOpen: function afterOpen(callback) {
+
+            $('.option_text').mousedown(function (e) {
+              e.preventDefault();
+              var originalScrollTop = $(this).parent().scrollTop();
+              $(this).prop('selected', $(this).prop('selected') ? false : true);
+              var self = this;
+              $(this).parent().focus();
+              setTimeout(function () {
+                $(self).parent().scrollTop(originalScrollTop);
+              }, 0);
+
+              return false;
+            });
+
+            var context = response.data.context.split(',');
+
+            //set the context of safety constraint
+            $("select.edit_type-uca option:selected").each(function () {
+              $(this).prop("selected", false);
+            });
+
+            $("select.edit_type-uca option[value='" + response.data.type + "']").prop('selected', true);
+
+            //clear all variables selects before set the safety constraint states of context
+            $('.uca-edit-row-' + controlaction_id + ' option:selected').each(function () {
+              $(this).prop("selected", false);
+            });
+
+            //set variables states of safety constraints
+            context.forEach(function (element) {
+              $('.uca-edit-row-' + controlaction_id + ' option[value^="' + element + '"').prop("selected", true);
+            });
+
+            $("input#id_sc_ca_" + controlaction_id).val(safety_constraint_id);
+            $("input#sc_flag").val(response.data.flag);
+            $(".edit-unsafe-text").html("" + response.data.uca);
+            $(".edit-safety-text").html("" + response.data.sc);
+
+            //clear all hazards selecteds in associated hazards select field
+            $('.hazard_column_edit_uca option:selected').each(function () {
+              $(this).prop("selected", false);
+            });
+
+            //set associated hazards of safety constraint
+            var hazards = response.data.hazards;
+            hazards.forEach(function (element) {
+              $('.hazard_column_edit_uca option[value="' + element.hazard_id + '"]').prop("selected", true);
+            });
+          }
+        });
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  });
+
+  $('body').on('submit', '.edit-manual-uca', function (event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var controlaction_id = form.find("#controlaction_id").val();
+
+    function checkStates(state) {
+      return state.value === "";
+    }
+
+    var states = form.find(".uca-edit-row-" + controlaction_id + " option:selected").toArray();
+    if (states.every(checkStates)) {
+      vex.dialog.alert("Select at least one variable state option to edit the unsafe control action");
+    } else {
+      vex.dialog.confirm({
+        message: "Update the unsafe control action implies on refresh the page. All unsaved data will be lost. Are you sure?",
+        callback: function callback(confirmation) {
+          if (confirmation) {
+
+            var safety_constraint_id = form.find("#id_sc_ca_" + controlaction_id).val();
+            var safety_constraint_type = form.find("#edit_type-uca-" + controlaction_id).val();
+            var unsafe_text = form.find(".edit-unsafe-text").val();
+            var constraint_text = form.find(".edit-safety-text").val();
+            var hazards_ids = form.find(".hazard_column_edit_uca").val();
+            var context = form.find("#context").val();
+            var flag = form.find("#sc_flag").val();
+
+            axios.post('/edituca', {
+              id: safety_constraint_id,
+              unsafe_control_action: unsafe_text,
+
+              safety_constraint: constraint_text,
+              type: safety_constraint_type,
+              context: context,
+              flag: flag,
+              hazards_ids: hazards_ids
+            }).then(function (response) {
+              setTimeout(function () {
+                var ca = window.location.search.substr(1).split("=");
+                if (ca.length > 1) {
+                  var currentURL = window.location.href.split("?");
+                  window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                } else {
+                  window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                }
+              }, 2000);
+            }).catch(function (error) {
+              console.log(error);
+            });
+          }
+        }
+      });
     }
   });
 
@@ -16999,12 +17234,11 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
           });
           setTimeout(function () {
             var ca = window.location.search.substr(1).split("=");
-            console.log(ca);
             if (ca.length > 1) {
               var currentURL = window.location.href.split("?");
-              window.location.href = currentURL[0] + '?ca=' + controlaction_id;
+              window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             } else {
-              window.location.href += '?ca=' + controlaction_id;
+              window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             }
           }, 2000);
         }
@@ -17053,6 +17287,9 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
 
           var column = "";
           var columns = form.find("#rule_column").val();
+          var hazards = form.find("#hazard_column").val();
+
+          //console.log(hazards);
           for (var i = 0; i < columns.length; i++) {
             column += i < columns.length - 1 ? columns[i] + ";" : columns[i];
           }
@@ -17071,47 +17308,47 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
             rules_variables.push({ variable_id: variable_id, state_id: state_id });
           });
 
-          var rule_id;
-
           axios.post('/addrule', {
             rules_variables: rules_variables,
             controlaction_id: controlaction_id,
             column: column
           }).then(function (response) {
-            rule_id = response.data.rule_id;
+            var rule_id = response.data.rule_id;
+
+            var column_index = -1;
+            columns.forEach(function (column_name) {
+              var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
+              var context = "";
+              variables_array.forEach(function (f, index) {
+                //console.log(f);
+                if (index == 0) context += f;else if (index < variables_array.length) context += "," + f;
+              });
+              column_index++;
+              axios.post('/adduca', {
+                unsafe_control_action: sc.unsafe_control_action,
+                safety_constraint: sc.safety_constraint,
+                type: columns[column_index],
+                controlaction_id: controlaction_id,
+                hazards_ids: hazards,
+                rule_id: rule_id,
+                context: context
+              }).then(function (response) {
+                setTimeout(function () {
+                  var ca = window.location.search.substr(1).split("=");
+                  if (ca.length > 1) {
+                    var currentURL = window.location.href.split("?");
+                    window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                  } else {
+                    window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                  }
+                }, 2000);
+              }).catch(function (error) {
+                console.log(error);
+              });
+            });
           }).catch(function (error) {
             console.log(error);
           });
-
-          var column_index = -1;
-          columns.forEach(function (column_name) {
-            var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
-            var context = "";
-            variables_array.forEach(function (f, index) {
-              console.log(f);
-              if (index == 0) context += f;else if (index < variables_array.length) context += "," + f;
-            });
-            column_index++;
-            axios.post('/adduca', {
-              unsafe_control_action: sc.unsafe_control_action,
-              safety_constraint: sc.safety_constraint,
-              type: columns[column_index],
-              controlaction_id: controlaction_id,
-              rule_id: rule_id,
-              context: context
-            }).catch(function (error) {
-              console.log(error);
-            });
-          });
-          setTimeout(function () {
-            var ca = window.location.search.substr(1).split("=");
-            if (ca.length > 1) {
-              var currentURL = window.location.href.split("?");
-              window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-            } else {
-              window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-            }
-          }, 2000);
         }
       }
     });
@@ -17139,30 +17376,37 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     if (activity == 'rules') {
       var rule_id = form.find("#rule_id").val();
       var controlaction_id = form.find('#controlaction_id').val();
-      console.log($("input[type=image][clicked=true]").val());
       if ($("#rule-" + rule_id + "-" + controlaction_id + "-edition").is(":hidden")) {
         $("#rule-" + rule_id + "-" + controlaction_id + "-edition").show();
         $("#rule-" + rule_id + "-" + controlaction_id + "-view").hide();
       } else {
-
         //edit rule
         vex.dialog.confirm({
           message: 'Editing a rule implies on refresh the page. All unsaved data will be lost.  Are you sure?',
           callback: function callback(value) {
             if (value) {
               var controlaction_id = form.find("#controlaction_id").val();
+              var controlaction_name = $("#controlaction_name_" + controlaction_id).val();
+              var controller_name = $("#controller_name_" + controlaction_id).val();
               var rule_id = form.find("#rule_id").val();
               var column = "";
               var columns = form.find("#rule_column_edition").val();
+              var hazards = form.find('#hazard_column_edition').val();
+
               for (var i = 0; i < columns.length; i++) {
                 column += i < columns.length - 1 ? columns[i] + ";" : columns[i];
               }
+              var variables_array = [];
+              var states_final = [];
               var rules_variables = [];
 
               var variables = form.find('[id^="variable_id_"]').each(function () {
                 var ids = $(this).val().split("-");
                 var variable_id = ids[0];
                 var state_id = ids[1];
+                if (state_id > 0) variables_array.push(state_id);
+                var name = $(this).find('option:selected').attr('name');
+                if (name !== "ANY") states_final.push(getVariableName(state_id) + " is " + getStateName(state_id));
 
                 rules_variables.push({ variable_id: variable_id, state_id: state_id });
               });
@@ -17172,15 +17416,43 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
                 rules_variables: rules_variables,
                 column: column
               }).then(function (response) {
-                setTimeout(function () {
-                  var ca = window.location.search.substr(1).split("=");
-                  if (ca.length > 1) {
-                    var currentURL = window.location.href.split("?");
-                    window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-                  } else {
-                    window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-                  }
-                }, 2000);
+                var column_index = -1;
+                columns.forEach(function (column_name) {
+                  var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
+                  var context = "";
+                  variables_array.forEach(function (f, index) {
+                    //console.log(f);
+                    if (index == 0) context += f;else if (index < variables_array.length) context += "," + f;
+                  });
+                  column_index++;
+                  axios.post('/editucaByRule', {
+                    unsafe_control_action: sc.unsafe_control_action,
+                    safety_constraint: sc.safety_constraint,
+                    type: columns[column_index],
+                    controlaction_id: controlaction_id,
+                    hazards_ids: hazards,
+                    rule_id: rule_id,
+                    context: context
+                  }).catch(function (error) {
+                    console.log(error);
+                  });
+                });
+
+                axios.post('/refreshUcasByRule', {
+                  rule_id: rule_id
+                }).then(function (response) {
+                  setTimeout(function () {
+                    var ca = window.location.search.substr(1).split("=");
+                    if (ca.length > 1) {
+                      var currentURL = window.location.href.split("?");
+                      window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                    } else {
+                      window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                    }
+                  }, 2000);
+                }).catch(function (error) {
+                  console.log(error);
+                });
               }).catch(function (error) {
                 console.log(error);
               });
@@ -18388,32 +18660,21 @@ module.exports = function (context, exihibition_id) {
 },{}],54:[function(require,module,exports){
 'use strict';
 
-module.exports = function (context) {
+module.exports = function (context, associated_hazards, token) {
 
     var uca_size = context.unsafe_control_action.length;
     var sc_size = context.safety_constraint.length;
 
-    var type = '<select id="type-' + context.id + '" style="-webkit-appearance: none; box-shadow: none !important; border: 0;" disabled>';
+    var hazards_tags = '';
 
-    if (context.type === 'provided' || context.type === 'Provided') type += '<option value="Provided" selected>[Provided]</option>';else type += '<option value="Provided">[Provided]</option>';
+    associated_hazards.forEach(function (hazard, index) {
+        var infos = hazard.split(':');
+        var code = infos[0];
+        var name = infos[1];
+        hazards_tags += '<a class="uca_association" title="' + name + '">' + code + '</a>\n';
+    });
 
-    if (context.type === 'not provided' || context.type === 'Not provided' || context.type === 'Not Provided') type += '<option value="Not Provided" selected>[Not Provided]</option>';else type += '<option value="Not Provided">[Not Provided]</option>';
-
-    if (context.type === 'wrong time' || context.type === 'Provided in wrong time' || context.type === 'Wrong Time') type += '<option value="Wrong Time" selected>[Wrong Time]</option>';else type += '<option value="Wrong Time">[Wrong Time]</option>';
-
-    if (context.type === 'wrong order' || context.type === 'Provided in wrong order' || context.type === 'Wrong Order') type += '<option value="Wrong Order" selected>[Wrong Order]</option>';else type += '<option value="Wrong Order">[Wrong Order]</option>';
-
-    if (context.type === 'too early' || context.type === 'Provided too early') type += '<option value="Provided too early" selected>[Provided too early]</option>';else type += '<option value="Provided too early">[Provided too early]</option>';
-
-    if (context.type === 'too late' || context.type === 'Provided too late') type += '<option value="Provided too late" selected>[Provided too late]</option>';else type += '<option value="Provided too late">[Provided too late]</option>';
-
-    if (context.type === 'too soon' || context.type === 'Stopped too soon') type += '<option value="Stopped too soon" selected>[Stopped too soon]</option>';else type += '<option value="Stopped too soon">[Stopped too soon]</option>';
-
-    if (context.type === 'too long' || context.type === 'Applied too long') type += '<option value="Applied too long" selected>[Applied too long]</option>';else type += '<option value="Applied too long">[Applied too long]</option>';
-
-    type += '</select>';
-
-    return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="unsafe_control_action-' + context.id + '" disabled>' + context.unsafe_control_action + '</textarea>\n                    </div>\n                    \n                    <div class="text">\n                        ' + type + '\n                        <textarea class="uca_list_textarea" id="safety_constraint-' + context.id + '" disabled>' + context.safety_constraint + '</textarea>\n                    </div>\n                    \n                    <div class="content-uca">\n                        <form action="/edituca" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n        </div>';
+    return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="unsafe_control_action-' + context.id + '" disabled>' + context.unsafe_control_action + '</textarea>\n\n                        ' + hazards_tags + '\n                        <br/>\n                        <br/>\n                    </div>\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="safety_constraint-' + context.id + '" disabled>' + context.safety_constraint + '</textarea>\n                    </div>\n                    \n                    <div class="content-uca">\n                        <form class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="' + token + '">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.controlaction_id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="' + token + '">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.controlaction_id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n        </div>';
 };
 
 },{}],55:[function(require,module,exports){
@@ -18426,7 +18687,7 @@ module.exports = function (context, firstAppend) {
         if (firstAppend) statesList += "<div class=\"item__actions__action\" id=\"state-associated-" + value.id + "\">\n                            <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"variable\" data-index=\"" + value.id + "\">\xD7</a> " + value.name + "\n                        </div>";else statesList += "<div class=\"item__actions__action state-associated-" + value.id + "\">\n                            <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"variable\" data-index=\"" + value.id + "\">\xD7</a> " + value.name + "\n                        </div>";
     });
     statesList += "</span>";
-    var edit_delete = "<div class=\"item__actions\">\n                    <form action =\"/editvariable\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"variable\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"variable_id\" name=\"variable_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                    <form action =\"/deletevariable\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"variable\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"variable_id\" name=\"variable_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                </div>";
+    var edit_delete = "<div class=\"item__actions\">\n                    <form action =\"/editvariable\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"variable\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"variable_id\" name=\"variable_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                    <form action =\"/deletevariable\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"variable\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"variable_id\" name=\"variable_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                </div>";
     if (firstAppend) return "\n            <li class=\"item\" id=\"variable-" + context.id + "\">\n                <div class=\"item__title\">\n                    <input type=\"text\" class=\"item__input\" id=\"variable-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" disabled>\n                </div>\n                " + statesList + ("\n                <div class=\"item__actions__add drop-target\" style=\"display: none;\" id=\"state-variable-" + context.id + "\" data-component=\"add-button\" data-add=\"state-variable-" + context.id + "\">\n                    <input type=\"image\" src=\"/images/plus.png\" alt=\"Add State\" width=13\" class=\"navbar__logo\">\n                </div>\n                ") + edit_delete + "\n            </li>";else return "\n            <li class=\"item variable-" + context.id + "\">\n                <div class=\"item__title\">\n                    <input type=\"text\" class=\"item__input variable-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" disabled>\n                </div>\n                " + statesList + ("\n                <div class=\"item__actions__add state-variable-" + context.id + "\" style=\"display: none;\">\n                    <input type=\"image\" src=\"/images/plus.png\" alt=\"Add State\" width=13\" class=\"navbar__logo\">\n                </div>\n            </li>");
 };
 

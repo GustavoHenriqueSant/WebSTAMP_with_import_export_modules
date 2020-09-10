@@ -15,6 +15,7 @@
                 @foreach (App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $controller->id])->orderBy('id', 'asc')->get() as $variable)
                     <div class="text">{{$variable->name}}</div>
                 @endforeach
+                <div class="text">Associated Hazards</div>
                 <div class="content-uca">
                     <!-- Header to delete a rule -->
                 </div>
@@ -41,13 +42,53 @@
                             ?>
                             {{$final_column_name}}
                         </div>
-                        @foreach (App\RulesVariables::where('rule_id', $rule->id)->orderBy('variable_id', 'asc')->get() as $rule_variable)
+                        @foreach (App\RulesVariablesStates::where('rule_id', $rule->id)->orderBy('variable_id', 'asc')->get() as $rule_variable)
                             @if ($rule_variable->state_id == 0)
                                 <div class="text center">ANY</div>
                             @else
                                 <div class="text center">{{App\State::find($rule_variable->state_id)->name}}</div>
                             @endif
                         @endforeach
+
+                        <?php
+                            $rules_hazards = App\RulesSafetyConstraintsHazards::where('rule_id', $rule->id)->groupBy('hazard_id')->get();
+                            $len = count($rules_hazards);
+                            $i = 0;
+                            
+
+                            
+                            if($len == 1){
+                                $hazard = App\Hazards::where('id', $rules_hazards[0]->hazard_id)->first();
+
+                                echo '<div class="text center"> <a title="'. $hazard->name . '">[H-'. $hazard_map[$hazard->id] .']</a></div>';
+                            }
+                            else if ($len == 2){
+                                $hazard1 = App\Hazards::where('id', $rules_hazards[0]->hazard_id)->first();
+                                $hazard2 = App\Hazards::where('id', $rules_hazards[1]->hazard_id)->first();
+
+                                echo '<div class="text center"> <a title="'. $hazard1->name .'">[H-'. $hazard_map[$hazard1->id].']</a> and <a title="' . $hazard2->name . '">[H-'. $hazard_map[$hazard2->id] .']</a></div>';
+                            }
+                            
+                            else if($len > 0){
+                                $hazardsList = '<div class="text center">';
+
+                                foreach ($rules_hazards as $key => $rule_hazard){
+                                    $hazard = App\Hazards::where('id', $rule_hazard->hazard_id)->first();
+
+                                    if($i != $len-1)
+                                        $hazardsList .= "<a title='". $hazard->name ."'>[H-".$hazard_map[$rule_hazard->hazard_id].']</a>,';
+                                    else
+                                        $hazardsList .= "<a title='". $hazard->name ."'>[H-".$hazard_map[$rule_hazard->hazard_id].']</a></div>';
+
+                                    $i++;
+                                }
+
+                                echo $hazardsList;
+                            }
+                            
+
+                        ?>
+
 
                         <div class="content-uca">
                             <form action="/editrule" class="edit-rule-form" data-edit="rules" method="POST">
@@ -88,25 +129,26 @@
                                 $column_selected_aux[$column] = true;
                             }
                         ?>
+                        <div class="edit-rule-field">
+                            <select id="rule_column_edition" name="rule_column"  class="select_from_form_rule" multiple required title=""> 
+                                <option class="option_text" value="Provided" <?php echo (($column_selected_aux['Provided'] == 1)? 'selected' : ''); ?> > Provided </option>
 
-                        <select id="rule_column_edition" name="rule_column" class="edit-rule-field" multiple>
-                            <option value="Provided" <?php echo (($column_selected_aux['Provided'] == 1)? 'selected' : ''); ?> > Provided </option>
+                                <option class="option_text" value="Not Provided" <?php echo (($column_selected_aux['Not Provided'] == 1)? 'selected' : ''); ?> > Not Provided</option>
 
-                            <option value="Not Provided" <?php echo (($column_selected_aux['Not Provided'] == 1)? 'selected' : ''); ?> > Not Provided</option>
+                                <option class="option_text" value="Provided too early" <?php echo (($column_selected_aux['Provided too early'] == 1)? 'selected' : ''); ?> > Provided too early </option>
 
-                            <option value="Provided too early" <?php echo (($column_selected_aux['Provided too early'] == 1)? 'selected' : ''); ?> > Provided too early </option>
+                                <option class="option_text" value="Provided too late"<?php echo (($column_selected_aux['Provided too late'] == 1)? 'selected' : ''); ?> > Provided too late </option>
 
-                            <option value="Provided too late"<?php echo (($column_selected_aux['Provided too late'] == 1)? 'selected' : ''); ?> > Provided too late </option>
+                                <option class="option_text" value="Wrong order" <?php echo (($column_selected_aux['Wrong order'] == 1)? 'selected' : '') ; ?> > Wrong order</option>
 
-                            <option value="Wrong order" <?php echo (($column_selected_aux['Wrong order'] == 1)? 'selected' : '') ; ?> > Wrong order</option>
+                                <option class="option_text" value="Stopped too soon" <?php echo (($column_selected_aux['Stopped too soon'] == 1)? 'selected' : '') ; ?> > Stopped too soon </option>
 
-                            <option value="Stopped too soon" <?php echo (($column_selected_aux['Stopped too soon'] == 1)? 'selected' : '') ; ?> > Stopped too soon </option>
-
-                            <option value="Applied too long" <?php echo  (($column_selected_aux['Applied too long'] == 1)? 'selected' : '') ; ?> > Applied too long </option>
-                        </select>
+                                <option class="option_text" value="Applied too long" <?php echo  (($column_selected_aux['Applied too long'] == 1)? 'selected' : '') ; ?> > Applied too long </option>
+                            </select>
+                        </div>
                         
                         
-                       @foreach (App\RulesVariables::where('rule_id', $rule->id)->orderBy('variable_id', 'asc')->get() as $rule_variable)
+                       @foreach (App\RulesVariablesStates::where('rule_id', $rule->id)->orderBy('variable_id', 'asc')->get() as $rule_variable)
                             <select id="variable_id_{{$rule_variable->variable_id}}" name="variable_id_{{$rule_variable->variable_id}}" class="edit-rule-field">
                                 <option value="{{$rule_variable->variable_id}}-0" name="ANY">ANY</option>
                                 @foreach (App\State::where('variable_id', $rule_variable->variable_id)->get() as $state)
@@ -118,7 +160,24 @@
                                 @endforeach
                             </select>
                         @endforeach
-                        
+
+                        <?php
+                            $rulesHazards = App\RulesSafetyConstraintsHazards::where('rule_id', $rule->id)->groupBy('hazard_id')->get();
+                        ?>
+
+                        <div class="edit-rule-field">
+                            <select id="hazard_column_edition" name="hazard_column" class="select_from_form_rule"  multiple required title="">
+                                @foreach(App\Hazards::where('project_id', $project_id)->orderBy('id', 'asc')->get() as $hazard)
+                                    @if($rulesHazards->contains('hazard_id', $hazard->id))
+                                        <option class="option_text" value="{{$hazard->id}}" selected> [H-{{$hazard_map[$hazard->id]}}] {{$hazard->name}}</option>
+                                    @else
+                                        <option class="option_text" value="{{$hazard->id}}"> [H-{{$hazard_map[$hazard->id]}}] {{$hazard->name}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                         
+                            
                         <div class="content-uca">
                             
                             <input type="hidden" name="_token" value="{{csrf_token()}}">

@@ -104,7 +104,9 @@
                         <div class="table-row">
                             <div class="text center">
                                 <form action="/" class="teste-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
-                                    <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Template Instantiation</button>
+                                    @if($safety_constraint->flag == 0)
+                                        <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Template Instantiation</button>
+                                    @endif
                                 </form>
                                 <form action="/testeUCA" class="test-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
                                     <button class="font-button"><img src="/images/plus.png" class="steptwo-button" width="15"/> Add New 4-tuple</button>
