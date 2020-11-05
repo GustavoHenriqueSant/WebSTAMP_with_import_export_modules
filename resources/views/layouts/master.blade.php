@@ -106,7 +106,7 @@
       <div class="navbar__item">
         <div class="navbar__item__content">
           <a href="/#tool" class="navbar__item__link">
-            STPA Tool
+            WebSTAMP
           </a>
         </div>
       </div>

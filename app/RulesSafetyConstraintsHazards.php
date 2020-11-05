@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RulesSafetyConstraintsHazards extends Model
 {
-    protected $table = "rules_safetyContrainsts_hazards";
+    protected $table = "rules_safetyConstraints_hazards";
 
     function rule(){
     	return $this->belongsTo('App\Rule');

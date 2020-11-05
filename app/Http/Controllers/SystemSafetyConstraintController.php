@@ -8,6 +8,8 @@ use App\Http\Requests;
 
 use App\SystemSafetyConstraints;
 
+use App\SystemSafetyConstraintHazards;
+
 use Illuminate\Routing\Redirector;
 
 class SystemSafetyConstraintController extends Controller
@@ -21,20 +23,46 @@ class SystemSafetyConstraintController extends Controller
 
 		$sys_safety_contraint->save();
 
+		$hazards_ids = $request->input('hazards_ids');
+
+		foreach ($hazards_ids as $hazard_id) {
+			$sys_safety_contraint_hazards = new SystemSafetyConstraintHazards();
+			$sys_safety_contraint_hazards->ssc_id = $sys_safety_contraint->id;
+			$sys_safety_contraint_hazards->hazard_id = $hazard_id;
+			$sys_safety_contraint_hazards->save();
+		}
+
 		return response()->json([
-        	'name' => $sys_safety_contraint->name,
-        	'id' => $sys_safety_contraint->id
-    	]);
+	        	'name' => $sys_safety_contraint->name,
+	        	'id' => $sys_safety_contraint->id
+    		]);
 	}
 
 	public function delete(Request $request){
 		SystemSafetyConstraints::destroy($request->input('id'));
+		SystemSafetyConstraintHazards::where('ssc_id', $request->input('id'))->delete();
 	}
 
 	public function edit(Request $request) {
 		$sys_safety_contraint = SystemSafetyConstraints::find($request->input('id'));
 		$sys_safety_contraint->name = $request->input('name');
 		$sys_safety_contraint->save();
+	}
+
+	public function getText(Request $request){
+		$ssc = SystemSafetyConstraints::find($request->input('id'));
+		return response()->json([
+	        	'name' => $ssc->name
+    		]);
+	}
+
+	public function deleteAssociatedHazard(Request $request){
+		SystemSafetyConstraintHazards::where('ssc_id', $request->input('id_1'))->where('hazard_id', $request->input('id_2'))->delete();
+		$count = SystemSafetyConstraintHazards::where('ssc_id', $request->input('id_1'))->count();
+		
+		return response()->json([
+			'count' => $count
+		]);
 	}
 
 }

@@ -47,7 +47,7 @@
                         <select name="hazard_column" class="select_from_form_rule hazard_column_edit_uca" multiple required title="">
                             @foreach(App\Hazards::where('project_id', $project_id)->orderBy('id', 'asc')->get() as $hazard)
 
-                                <option name="abluble" class="option_text" value="{{$hazard->id}}" name="[H-{{$hazard_map[$hazard->id]}}]:{{$hazard->name}}"> [H-{{$hazard_map[$hazard->id]}}] {{$hazard->name}}</option>
+                                <option class="option_text" value="{{$hazard->id}}" name="[H-{{$hazard_map[$hazard->id]}}]:{{$hazard->name}}"> [H-{{$hazard_map[$hazard->id]}}] {{$hazard->name}}</option>
                                 
                             @endforeach
                         </select>

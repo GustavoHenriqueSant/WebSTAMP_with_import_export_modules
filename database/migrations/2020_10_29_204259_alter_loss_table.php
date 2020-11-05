@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterSafetyConstraintTable extends Migration
+class AlterLossTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class AlterSafetyConstraintTable extends Migration
      */
     public function up()
     {
-        Schema::table("safety_constraints", function(Blueprint $table){
-            $table->integer("flag");
+        Schema::table('losses', function (Blueprint $table){
+            $table->string('name', 500)->change();
         });
     }
 
@@ -24,6 +24,6 @@ class AlterSafetyConstraintTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("safety_constraints");
+        //
     }
 }

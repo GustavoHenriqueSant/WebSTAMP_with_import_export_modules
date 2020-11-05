@@ -1,5 +1,5 @@
 <div class="substep__title">
-    Create new Hazardous Control Action - {{$ca->name}}
+    Create new Hazardous Control Action - {{$ca->name}}&nbsp<i class="fa fa-question-circle" title="An Unsafe or Hazardous Control Action (UCA or HCA) is a control action that, in a particular context and worst-case environment, will lead to a hazard. (Adapted from STPA Handbook, p. 35)"></i>
 </div>
 
 <?php

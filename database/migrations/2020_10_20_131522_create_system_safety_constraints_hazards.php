@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRulesHazards extends Migration
+class CreateSystemSafetyConstraintsHazards extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,8 @@ class CreateRulesHazards extends Migration
      */
     public function up()
     {
-        Schema::create("rules_safetyConstraints_hazards", function(Blueprint $table){
-            $table->integer("rule_id")->unsigned();
-            $table->integer("sc_id")->unsigned();
+        Schema::create("systemSafetyConstraint_hazards", function(Blueprint $table){
+            $table->integer("ssc_id")->unsigned();
             $table->integer("hazard_id")->unsigned();
             $table->timestamps();
         });
@@ -27,6 +26,6 @@ class CreateRulesHazards extends Migration
      */
     public function down()
     {
-        Schema::dropIsExists("rules_safetyConstraints_hazards");
+        Schema::dropIsExists("systemSafatyConstraint_hazards");
     }
 }

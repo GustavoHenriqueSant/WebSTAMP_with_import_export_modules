@@ -1,0 +1,29 @@
+.responsive_textarea{
+	background: white;
+	border: 0;
+	min-width: 100%;
+	width: 100%;
+	font-size: 1rem;
+	color: black;
+	resize: none;
+	overflow: hidden;
+	padding: 0;
+	vertical-align: top;
+	font-family: helvetica;
+	&_active{
+		width: 100%;
+		vertical-align: top;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-sizing: border-box;
+		resize: none;
+		overflow: hidden;
+		font-size: 1rem;
+		padding: 0;
+		font-family: helvetica;
+	}
+}
+
+label{
+	font-weight: bold;
+}

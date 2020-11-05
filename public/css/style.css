@@ -206,6 +206,33 @@ div.panel.show {
   overflow: auto;
   max-height: 150px; }
 
+.responsive_textarea {
+  background: white;
+  border: 0;
+  min-width: 100%;
+  width: 100%;
+  font-size: 1rem;
+  color: black;
+  resize: none;
+  overflow: hidden;
+  padding: 0;
+  vertical-align: top;
+  font-family: helvetica; }
+  .responsive_textarea_active {
+    width: 100%;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: 0;
+    font-family: helvetica; }
+
+label {
+  font-weight: bold; }
+
 html, body {
   height: 100%;
   margin: 0;
@@ -376,6 +403,21 @@ html, body {
   padding: 5px;
   border: 0; }
 
+.ssc_hazard_association {
+  background-color: #2a3f50;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  border: 0; }
+
+.hazard_loss_association {
+  margin: 50px 0;
+  background-color: #2a3f50;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  border: 0; }
+
 .guideword-combo {
   -webkit-appearance: none;
   box-shadow: none;
@@ -522,6 +564,9 @@ textarea.mission-assurance {
   width: 100%;
   height: 100px; }
 
+.delete_step1_association {
+  cursor: pointer; }
+
 .login {
   font-family: "Lato";
   border: 3px solid #2c3e50;
@@ -621,6 +666,17 @@ textarea.mission-assurance {
     margin: 0;
     padding: 0;
     list-style-type: none; }
+  .substep__itens {
+    margin: 0;
+    padding: 0;
+    list-style-type: none; }
+
+.step1_itens {
+  padding: 5px; }
+  .step1_itens:after {
+    content: "";
+    display: table;
+    clear: both; }
 
 .item {
   border-bottom: 1px solid #ecf0f1;
@@ -634,11 +690,19 @@ textarea.mission-assurance {
   .item:last-child {
     padding-bottom: 0;
     border-bottom: none; }
+  .item__list {
+    white-space: nowrap;
+    width: 100%; }
   .item__title, .item__actions {
-    display: inline-block; }
+    display: inline-block;
+    white-space: nowrap; }
   .item__title {
     float: left;
     font-size: 1rem; }
+  .item__title__textarea {
+    float: left;
+    font-size: 1rem;
+    width: 85%; }
   .item__input {
     background: white;
     border: 0;

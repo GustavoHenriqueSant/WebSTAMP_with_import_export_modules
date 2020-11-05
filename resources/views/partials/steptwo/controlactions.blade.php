@@ -1,5 +1,5 @@
 <div class="substep__title">
-    Control Actions
+    Control Actions&nbsp<i class="fa fa-question-circle" title=""></i>
 </div>
 
 <div class="substep__add" data-component="add-button" data-add="controlactions_content-{{$component_id}}">

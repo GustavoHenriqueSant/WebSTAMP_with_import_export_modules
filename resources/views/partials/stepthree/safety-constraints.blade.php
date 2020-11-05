@@ -13,8 +13,8 @@
         <div class="container-fluid" style="margin-top: 10px">
 
             <div class="table-row header">
-                <div class="text">Hazardous Control Actions</div>
-                <div class="text">Associated Safety & Security Constraint</div>
+                <div class="text">Hazardous Control Actions&nbsp<i class="fa fa-question-circle" title="An Unsafe or Hazardous Control Action (UCA or HCA) is a control action that, in a particular context and worst-case environment, will lead to a hazard. (Adapted from STPA Handbook, p. 35)"></i></div>
+                <div class="text">Associated Safety & Security Constraint&nbsp<i class="fa fa-question-circle" title="A controller constraint specifies the controller behaviors that need to be satisfied to prevent UCAs (STPA Handbook, p. 41)"></i></div>
                 <div class="number-contexttable"><!-- Edit/Delete icons --></div>
             </div>
 

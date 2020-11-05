@@ -56,8 +56,10 @@
                             $i = 0;
                             
 
-                            
-                            if($len == 1){
+                            if($len == 0){
+                                 echo '<div class="text center">&nbsp</div>';
+                            }
+                            else if($len == 1){
                                 $hazard = App\Hazards::where('id', $rules_hazards[0]->hazard_id)->first();
 
                                 echo '<div class="text center"> <a title="'. $hazard->name . '">[H-'. $hazard_map[$hazard->id] .']</a></div>';
@@ -68,7 +70,6 @@
 
                                 echo '<div class="text center"> <a title="'. $hazard1->name .'">[H-'. $hazard_map[$hazard1->id].']</a> and <a title="' . $hazard2->name . '">[H-'. $hazard_map[$hazard2->id] .']</a></div>';
                             }
-                            
                             else if($len > 0){
                                 $hazardsList = '<div class="text center">';
 

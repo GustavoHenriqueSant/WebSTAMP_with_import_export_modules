@@ -22,9 +22,9 @@ class AssumptionsController extends Controller
 		$assumption->save();
 
 		return response()->json([
-        	'name' => $assumption->name,
-        	'id' => $assumption->id
-    	]);
+	        	'name' => $assumption->name,
+	        	'id' => $assumption->id
+    		]);
 	}
 
 	public function delete(Request $request){
@@ -35,6 +35,13 @@ class AssumptionsController extends Controller
 		$assumption = Assumptions::find($request->input('id'));
 		$assumption->name = $request->input('name');
 		$assumption->save();
+	}
+
+	public function getText(Request $request){
+		$assumption = Assumptions::find($request->input('id'));
+		return response()->json([
+	        	'name' => $assumption->name
+    		]);
 	}
 
 }
