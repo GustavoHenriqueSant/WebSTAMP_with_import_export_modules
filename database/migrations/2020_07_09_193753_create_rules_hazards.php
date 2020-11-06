@@ -27,6 +27,6 @@ class CreateRulesHazards extends Migration
      */
     public function down()
     {
-        Schema::dropIsExists("rules_safetyConstraints_hazards");
+        Schema::dropIfExists("rules_safetyConstraints_hazards");
     }
 }

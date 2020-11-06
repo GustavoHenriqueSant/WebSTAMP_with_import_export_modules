@@ -26,6 +26,6 @@ class CreateSystemSafetyConstraintsHazards extends Migration
      */
     public function down()
     {
-        Schema::dropIsExists("systemSafatyConstraint_hazards");
+        Schema::dropIfExists("systemSafatyConstraint_hazards");
     }
 }

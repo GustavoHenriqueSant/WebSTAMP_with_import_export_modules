@@ -15,7 +15,6 @@ class AlterLossesHazardsTable extends Migration
          Schema::table('losses_hazards', function (Blueprint $table) {
             $table->renameColumn('losses_id', 'loss_id');
             $table->renameColumn('hazards_id', 'hazard_id');
-            $table->dropColumn('id');
         });
     }
 
