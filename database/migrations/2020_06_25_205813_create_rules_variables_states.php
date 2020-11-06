@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSafetyConstraintTable extends Migration
+class CreateRulesVariablesStates extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,10 @@ class CreateSafetyConstraintTable extends Migration
      */
     public function up()
     {
-        Schema::create('system_safety_constraint', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->text('description');
-            $table->integer('project_id')->unsigned();
+        Schema::create('rules_variables_states', function(Blueprint $table){
+            $table->integer('rule_id')->unsigned();
+            $table->integer('variable_id')->unsigned();
+            $table->integer('state_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateSafetyConstraintTable extends Migration
      */
     public function down()
     {
-        Schema::drop('system_safety_constraint');
+        Schema::drop('rules_variables_states');
     }
 }

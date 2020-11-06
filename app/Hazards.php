@@ -9,7 +9,7 @@ class Hazards extends Model
 
 	protected $table = 'hazards';
 
-    public function project(){
+    	public function project(){
 		return $this->belongsTo(Projects::class);
 	}
 

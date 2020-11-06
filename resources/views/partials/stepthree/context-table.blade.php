@@ -74,7 +74,7 @@
     $rules_variables_states = [];
     if (count($rules) > 0) {
         foreach($rules as $rule) {
-            array_push($rules_variables_states, App\RulesVariables::where('rule_id', $rule->id)->orderBy('rule_id')->orderBy('variable_id')->get());
+            array_push($rules_variables_states, App\RulesVariablesStates::where('rule_id', $rule->id)->orderBy('rule_id')->orderBy('variable_id')->get());
         }
     }
 

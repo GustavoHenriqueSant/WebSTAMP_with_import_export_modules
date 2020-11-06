@@ -37,5 +37,12 @@ class SystemGoalController extends Controller
 		$systemGoal->save();
 	}
 
+	public function getText(Request $request){
+		$systemGoal = SystemGoals::find($request->input('id'));
+		return response()->json([
+	        	'name' => $systemGoal->name
+    		]);
+	}
+
 
 }

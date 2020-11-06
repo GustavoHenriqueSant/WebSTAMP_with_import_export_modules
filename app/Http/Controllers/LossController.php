@@ -35,10 +35,7 @@ class LossController extends Controller
 
 		$id = $request->input('id');
 
-		$lossesHazards = LossesHazards::where("losses_id",$id)->get();
-		foreach($lossesHazards as $lossHazard){
-			LossesHazards::destroy($lossHazard->id);
-		}
+		LossesHazards::where('loss_id', $id)->delete();
 
 		Losses::destroy($id);
 
@@ -50,6 +47,13 @@ class LossController extends Controller
 		$loss =Losses::find($request->input('id'));
 		$loss->name = $request->input('name');
 		$loss->save();
+	}
+
+	public function getText(Request $request){
+		$loss = Losses::find($request->input('id'));
+		return response()->json([
+	        	'name' => $loss->name
+    		]);
 	}
 
 }

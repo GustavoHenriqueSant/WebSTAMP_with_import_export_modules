@@ -15682,7 +15682,7 @@ module.exports = {
 	addLoss: addLoss
 };
 
-},{"./axios":34,"./elements/hazards":36,"./templates/loss_template":49,"jquery":27}],34:[function(require,module,exports){
+},{"./axios":34,"./elements/hazards":36,"./templates/loss_template":50,"jquery":27}],34:[function(require,module,exports){
 'use strict';
 
 var axios = require('axios');
@@ -15754,17 +15754,51 @@ function showLosses() {
 	var index = 0;
 	var retorno = losses.map(function (loss) {
 		index++;
-		return "<option value=\"" + loss.id + "\">[L-" + index + "] " + loss.name + "</option>";
+		return "<option value=\"" + loss.id + "\" name=\"[L-" + index + "]\">[L-" + index + "] " + loss.name + "</option>";
 	});
 	listLosses.html(retorno);
 }
 
 },{"jquery":27}],37:[function(require,module,exports){
+"use strict";
+
+var $ = require('jquery');
+
+var hazards = [];
+
+function addHazard(hazard) {
+	hazards.push(hazard);
+}
+
+module.exports = {
+	addHazard: addHazard,
+	init: init,
+	showHazards: showHazards
+};
+
+function init() {
+	hazards = $("#ssc_content").data("hazards");
+}
+
+function showHazards() {
+	var listHazards = $("#ssc-hazard-association");
+	var project_type = $("#project_type").val();
+	var index = 0;
+	var retorno = hazards.map(function (hazard) {
+		index++;
+		return "<option value=\"" + hazard.id + "\" name=\"[H-" + index + "]\">[H-" + index + "] " + hazard.name + "</option>";
+	});
+	listHazards.html(retorno);
+}
+
+},{"jquery":27}],38:[function(require,module,exports){
 'use strict';
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
+
+require('./textarea_script');
 
 require('./steptwo');
 
@@ -15780,103 +15814,82 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     return result;
   };
 
-  var getLossesId = function getLossesId(myString) {
-    var myRegexp = /\[L\-\d+\]/g;
-    var match = myRegexp.exec(myString);
-    var str_return = "";
-    var matches = [];
-    while (match != null) {
-      str_return += match[0];
-      match = myRegexp.exec(myString);
-      str_return += match != null ? "," : "";
-    }
-    myRegexp = /\d+/g;
-    match = myRegexp.exec(str_return);
-    str_return = "";
-    while (match != null) {
-      str_return += match[0];
-      match = myRegexp.exec(myString);
-      str_return += match != null ? "," : "";
-    }
-    return str_return;
-  };
-
-  // ADD
-
   // FUNCTION TO EDIT FUNDAMENTALS
 
-  var edit_stepone = function edit_stepone(id, activity) {
+  var edit_stepone = function edit_stepone(id, activity, text) {
+    var result = true;
     if (activity == "loss") {
-      var name = $("#loss-description-" + id).val();
       axios.post('/editloss', {
         id: id,
-        name: name
+        name: text
       }).then(function (response) {
-        $("#loss-description-" + id).replaceWith('<input type="text" class="item__input" id="loss-description-' + id + '" value="' + name + '" size="' + name.length + '" disabled>');
+        result = true;
       }).catch(function (error) {
         console.log(error);
       });
-      return false;
     } else if (activity == "hazard") {
-      var name = $("#hazard-description-" + id).val();
       axios.post('/edithazard', {
         id: id,
-        name: name
+        name: text
       }).then(function (response) {
-        $("#hazard-description-" + id).replaceWith('<input type="text" class="item__input" id="hazard-description-' + id + '" value="' + name + '" size="' + name.length + '">');
-        document.getElementById("hazard-description-" + id).disabled = true;
+        result = true;
       }).catch(function (error) {
         console.log(error);
       });
-      return false;
     } else if (activity == "systemgoal") {
-      var name = $("#systemgoal-description-" + id).val();
       axios.post('/editsystemgoal', {
         id: id,
-        name: name
+        name: text
       }).then(function (response) {
-        $("#systemgoal-description-" + id).replaceWith('<input type="text" class="item__input" id="systemgoal-description-' + id + '" value="' + name + '" size="100">');
-        document.getElementById("systemgoal-description-" + id).disabled = true;
+        result = true;
       }).catch(function (error) {
         console.log(error);
       });
-      return false;
     } else if (activity == "assumption") {
-      //aquiii
-      var name = $("#assumption-description-" + id).val();
       axios.post('/editassumption', {
         id: id,
-        name: name
+        name: text
       }).then(function (response) {
-        $("#assumption-description-" + id).replaceWith('<textarea class="item__textarea" id="assumption-description-' + id + '" rows="5" cols = "100" style="resize: none; height: auto;" disabled>' + name + '</textarea>');
-        document.getElementById("assumption-description-" + id).disabled = true;
+        result = true;
       }).catch(function (error) {
         console.log(error);
       });
-      return false;
     } else if (activity == "systemsafetyconstraint") {
-      var name = $("#systemsafetyconstraint-description-" + id).val();
       axios.post('/editsystemsafetyconstraint', {
         id: id,
-        name: name
+        name: text
       }).then(function (response) {
-        $("#systemsafetyconstraint-description-" + id).replaceWith('<input type="text" class="item__input" id="systemsafetyconstraint-description-' + id + '" value="' + name + '" size="100">');
-        document.getElementById("systemsafetyconstraint-description-" + id).disabled = true;
+        result = true;
       }).catch(function (error) {
         console.log(error);
       });
-      return false;
     }
+
+    return result;
   };
 
-  // EDIT WHEN INPUT LOSES FOCUS
+  // EDIT WHEN KEY "ENTER" WAS PRESSED OR CANCEL WHEN KEY "ESC" WAS PRESSED
 
+
+  var cancel_edit = function cancel_edit(id, activity) {
+    $('#default-menu-' + activity + '-' + id).show();
+    $('#edition-menu-' + activity + '-' + id).hide();
+    axios.post("/text" + activity, {
+      id: id
+    }).then(function (response) {
+      $('#' + activity + '-description-' + id).val(response.data.name);
+    }).catch(function (error) {
+      console.log(error);
+    });
+    $('#' + activity + '-description-' + id).attr('class', 'responsive_textarea').prop('disabled', true);
+  };
 
   var $ = require('jquery');
 
   var Hazard = require('./elements/hazards');
   //var State = require('./elements/states');
   var ControlActions = require('./elements/controlactions');
+  var SystemSafetyConstraint = require('./elements/system_safety_constraints');
   var Drop = require('tether-drop');
 
   var vex = require('vex-js');
@@ -16063,6 +16076,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   });
 
   Hazard.init();
+  SystemSafetyConstraint.init();
   //State.init();
   ControlActions.init();
   var stepone = ['hazard', 'systemgoal', 'assumption', 'loss', 'systemsafetyconstraint'];
@@ -16084,6 +16098,8 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     drop.on("open", function () {
       if (f === "hazard") {
         Hazard.showLosses();
+      } else if (f === "systemsafetyconstraint") {
+        SystemSafetyConstraint.showHazards();
       }
     });
   });
@@ -16096,94 +16112,162 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   var hazard = require('./templates/hazard_template');
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
 
-  $('body').on('submit', '.add-form', function (event) {
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    var activity = form.data("add");
-    var activity_name = activity + '-name';
-    var name = form.find("#" + activity_name).val();
-    var project_id = $('#project_id').val();
-    var id = 0;
-    // Verifies if activity is system goal
-    if (activity === 'systemgoal') {
-      var $newSystemGoal = $('#systemgoals').find(".substep__list");
-      axios.post('/addsystemgoal', {
-        name: name,
-        id: id,
-        project_id: project_id
-      }).then(function (response) {
-        var exihibition_id = $('#systemgoals').find(".substep__list").children().length + 1;
-        $newSystemGoal.append(systemgoal(response.data, exihibition_id));
-      }).catch(function (error) {
-        console.log(error);
-      });
-    }
-    // Verifies if activity is assumption
-    else if (activity == 'assumption') {
-        var $newAssumption = $('#assumptions').find(".substep__list");
-        axios.post('/addassumption', {
+  // da para apagar depois
+
+  // function getLossesId(myString) {
+  //   var myRegexp = /\[L\-\d+\]/g;
+  //   var match = myRegexp.exec(myString);
+  //   var str_return = "";
+  //   var matches = [];
+  //   while (match != null) {
+  //     str_return += match[0];
+  //     match = myRegexp.exec(myString);
+  //     str_return += (match != null) ? "," : "";
+  //   }
+  //   myRegexp = /\d+/g;
+  //   match = myRegexp.exec(str_return);
+  //   str_return = "";
+  //   while (match != null) {
+  //     str_return += match[0];
+  //     match = myRegexp.exec(myString);
+  //     str_return += (match != null) ? "," : "";
+  //   }
+  //   return str_return;
+  // }
+
+  // ADD
+
+  $('body').on('submit keydown', '.add-form', function (event) {
+    if (event.type == "submit" || event.type == "keydown" && event.keyCode == 13 && !event.shiftKey) {
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      var activity = form.data("add");
+      var activity_name = activity + '-name';
+      var name = form.find("#" + activity_name).val();
+      if (name.length == 0) {
+        vex.dialog.alert("This field is required");
+        return;
+      }
+      var project_id = $('#project_id').val();
+      var id = 0;
+      // Verifies if activity is system goal
+      if (activity === 'systemgoal') {
+        var $newSystemGoal = $('#systemgoals').find(".substep__list");
+        axios.post('/addsystemgoal', {
           name: name,
           id: id,
           project_id: project_id
         }).then(function (response) {
-          var exihibition_id = $newAssumption.children().length + 1;
-          console.log($('#assumptions').find("substep__list").children());
-          $newAssumption.append(assumption(response.data, exihibition_id));
+          var exihibition_id = $('#systemgoals').find(".substep__list").children().length + 1;
+          $newSystemGoal.append(systemgoal(response.data, exihibition_id));
+          $("textarea").each(function (textarea) {
+            $(this).height($(this)[0].scrollHeight);
+          });
         }).catch(function (error) {
           console.log(error);
         });
       }
-      // Verifies if activity is loss
-      else if (activity === 'loss') {
-          var $newLoss = $('#losses').find(".substep__list");
-          axios.post('/addloss', {
+      // Verifies if activity is assumption
+      else if (activity == 'assumption') {
+          var $newAssumption = $('#assumptions').find(".substep__list");
+          axios.post('/addassumption', {
             name: name,
             id: id,
             project_id: project_id
           }).then(function (response) {
-            Hazard.addLoss(response.data);
-            var exihibition_id = $('#losses').find(".substep__list").children().length + 1;
-            $newLoss.append(loss(response.data, exihibition_id));
-          }).catch(function (error) {
-            console.log(error);
-          });
-          // Verify if activity is hazard
-        } else if (activity === 'hazard') {
-          var losses_associated = form.find("#hazard-loss-association").val();
-          var losses_id = getLossesId(form.find("#hazard-loss-association :selected").text()).split(",");
-          var $newHazard = $('#hazards').find(".substep__list");
-          var losses_associated_id;
-          var project_type = $('#project_type').val();
-          axios.post('/addhazard', {
-            name: name,
-            id: id,
-            losses_associated: losses_associated,
-            losses_associated_id: losses_associated_id,
-            project_id: project_id,
-            project_type: project_type
-          }).then(function (response) {
-            var exihibition_id = $("#hazards_content").children().children().length + 1;
-            $newHazard.append(hazard(response.data, exihibition_id, losses_id));
+            var exihibition_id = $newAssumption.children().length + 1;
+            console.log($('#assumptions').find("substep__list").children());
+            $newAssumption.append(assumption(response.data, exihibition_id));
+            $("textarea").each(function (textarea) {
+              $(this).height($(this)[0].scrollHeight);
+            });
           }).catch(function (error) {
             console.log(error);
           });
         }
-        // Verify if activity is System Safety Constraint
-        else if (activity === 'systemsafetyconstraint') {
-            var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
-            axios.post('/addsystemsafetyconstraint', {
+        // Verifies if activity is loss
+        else if (activity === 'loss') {
+            var $newLoss = $('#losses').find(".substep__list");
+            axios.post('/addloss', {
               name: name,
               id: id,
               project_id: project_id
             }).then(function (response) {
-              var exihibition_id = $('#systemsafetyconstraint').find(".substep__list").children().length + 1;
-              $newSSC.append(systemsafetyconstraint(response.data, exihibition_id));
+              Hazard.addLoss(response.data);
+              var exihibition_id = $('#losses').find(".substep__list").children().length + 1;
+              $newLoss.append(loss(response.data, exihibition_id));
+              $("textarea").each(function (textarea) {
+                $(this).height($(this)[0].scrollHeight);
+              });
+            }).catch(function (error) {
+              console.log(error);
+            });
+            // Verify if activity is hazard
+          } else if (activity === 'hazard') {
+            var losses_associated = form.find("#hazard-loss-association").val();
+            if (losses_associated == null) {
+              vex.dialog.alert("Select at least one Loss to associate");
+              return;
+            }
+            var $newHazard = $('#hazards').find(".substep__list");
+            var project_type = $('#project_type').val();
+
+            var losses_map = [];
+            var aux = form.find("#hazard-loss-association :selected");
+            for (var i = 0; i < aux.length; i++) {
+              losses_map[aux[i].value] = aux[i].attributes[1].nodeValue;
+            }
+
+            axios.post('/addhazard', {
+              name: name,
+              id: id,
+              losses_associated: losses_associated,
+              project_id: project_id,
+              project_type: project_type
+            }).then(function (response) {
+              SystemSafetyConstraint.addHazard(response.data);
+              var exihibition_id = $("#hazards_content").children().children().length + 1;
+              $newHazard.append(hazard(response.data, exihibition_id, losses_associated, losses_map));
+              $("textarea").each(function (textarea) {
+                $(this).height($(this)[0].scrollHeight);
+              });
             }).catch(function (error) {
               console.log(error);
             });
           }
+          // Verify if activity is System Safety Constraint
+          else if (activity === 'systemsafetyconstraint') {
+              var hazards_associated = form.find("#ssc-hazard-association").val();
+              var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
+              if (hazards_associated == null) {
+                vex.dialog.alert("Select at least one System-level Hazard to associate");
+                return;
+              }
+              var hazards_map = [];
+              var aux = form.find("#ssc-hazard-association :selected");
+              for (var i = 0; i < aux.length; i++) {
+                hazards_map[aux[i].value] = aux[i].attributes[1].nodeValue;
+              }
 
-    return false;
+              console.log(hazards_map);
+              axios.post('/addsystemsafetyconstraint', {
+                name: name,
+                id: id,
+                project_id: project_id,
+                hazards_ids: hazards_associated
+              }).then(function (response) {
+                var exihibition_id = $('#systemsafetyconstraint').find(".substep__list").children().length + 1;
+                $newSSC.append(systemsafetyconstraint(response.data, exihibition_id, hazards_associated, hazards_map));
+                $("textarea").each(function (textarea) {
+                  $(this).height($(this)[0].scrollHeight);
+                });
+              }).catch(function (error) {
+                console.log(error);
+              });
+            }
+
+      return false;
+    }
   });
 
   // DELETE
@@ -16201,6 +16285,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
             axios.post('/deleteloss', {
               id: id
             }).then(function (response) {
+              $("a[id^='hazard_loss_'][id$='" + id + "'").remove();
               $("#loss-" + id).remove();
             }).catch(function (error) {
               console.log(error);
@@ -16231,6 +16316,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
             axios.post('/deletehazard', {
               id: id
             }).then(function (response) {
+              $("a[id^='ssc_hazard_'][id$='" + id + "'").remove();
               $("#hazard-" + id).remove();
             }).catch(function (error) {
               console.log(error);
@@ -16279,26 +16365,53 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
       showCloseButton: true,
       className: "vex-theme-default"
     });
-  });$("body").on('blur', '.item__input__active', function (event) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[2];
-    var activity = split[0];
-    edit_stepone(id, activity);
+  });$("body").on('keydown', '.responsive_textarea_active', function (event) {
+    if (event.keyCode == 27) {
+      event.preventDefault();
+      var split = event.currentTarget.id.split("-");
+      var id = split[2];
+      var activity = split[0];
+      cancel_edit(id, activity);
+    }
+    if (event.keyCode == 13 && !event.shiftKey) {
+      //event.preventDefault();
+      var split = event.currentTarget.id.split("-");
+      var id = split[2];
+      var activity = split[0];
+      var text = $("#" + activity + "-description-" + id).val();
+      var result = edit_stepone(id, activity, text);
+      if (result) {
+        $('#default-menu-' + activity + '-' + id).show();
+        $('#edition-menu-' + activity + '-' + id).hide();
+        $('#' + activity + '-description-' + id).attr('class', 'responsive_textarea').prop('disabled', true);
+      }
+    }
   });
 
-  // EDIT WHEN KEY "ENTER" WAS PRESSED
-  $("body").on('keypress', '.item__input__active', function (event) {
-    if (event.which == 13) {
-      if (event.shifKey && activity == "assumptions") {
-        //do nothing
-      } else {
-        event.preventDefault();
-        var split = event.currentTarget.id.split("-");
-        var id = split[2];
-        var activity = split[0];
-        edit_stepone(id, activity);
-      }
+  $(document).ready(function () {
+    $("textarea").each(function (textarea) {
+      $(this).height($(this)[0].scrollHeight);
+    });
+  });
+
+  $('body').on('click', '.edit-btn', function (event) {
+    var id = $(this).attr('name');
+    var activity = $(this).attr('alt').split('-')[1];
+    $('#default-menu-' + activity + '-' + id).hide();
+    $('#edition-menu-' + activity + '-' + id).show();
+    $('#' + activity + '-description-' + id).attr('class', 'responsive_textarea_active').prop('disabled', false);
+
+    if (activity == "systemsafetyconstraint") {
+      $('#add-hazard-association-' + id).show();
+    }
+  });
+
+  $('body').on('click', '.cancel-edit-btn', function (event) {
+    var id = $(this).attr('name');
+    var activity = $(this).attr('alt').split('-')[1];
+    cancel_edit(id, activity);
+    if (activity == "systemsafetyconstraint") {
+      $('#add-hazard-association-' + id).hide();
     }
   });
 
@@ -16306,27 +16419,45 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var activity = form.data("edit");
-    if (activity == "loss") {
-      var id = form.find("#loss_id").val();
-      $('#loss-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "hazard") {
-      var id = form.find("#hazard_id").val();
-      $('#hazard-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "systemgoal") {
-      var id = form.find("#systemgoal_id").val();
-      $('#systemgoal-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "assumption") {
-      var id = form.find("#assumption_id").val();
-      $('#assumption-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "systemsafetyconstraint") {
-      var id = form.find("#systemsafetyconstraint_id").val();
-      $('#systemsafetyconstraint-description-' + id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
+    var id = form.find("#" + activity + "_id").val();
+    var text = $("#" + activity + "-description-" + id).val();
+    var result = edit_stepone(id, activity, text);
+    if (result) {
+      $('#default-menu-' + activity + '-' + id).show();
+      $('#edition-menu-' + activity + '-' + id).hide();
+      $('#' + activity + '-description-' + id).attr('class', 'responsive_textarea').prop('disabled', true);
     }
+  });
+
+  $('body').on('click', '.add-hazard-association', function (event) {});
+
+  $('body').on('click', '.delete_step1_association', function (event) {
+    var item = $(this);
+    vex.dialog.confirm({
+      message: 'Are you sure you want to delete this item?',
+      callback: function callback(value) {
+        if (value) {
+          var ids = item.attr("name").split('-');
+          var activity = item.attr("alt");
+          axios.post('/delete' + activity, {
+            id_1: ids[1], //ssc id for ssc->hazard association //hazard id for hazard->loss association
+            id_2: ids[2] //hazard id for ssc->hazard association //loss id for hazard->loss association
+          }).then(function (response) {
+            if (activity == "systemSafetyConstraintHazardAssociation") {
+              $("#ssc_hazard_" + ids[1] + "_" + ids[2]).remove();
+
+              if (response.data.count <= 1) $('.delete_ssc_hazard_association_' + ids[1]).hide();
+            } else {
+              $("#hazard_loss_" + ids[1] + "_" + ids[2]).remove();
+
+              if (response.data.count <= 1) $('.delete_hazard_loss_assocation_' + ids[1]).hide();
+            }
+          }).catch(function (error) {
+            console.log(error);
+          });
+        }
+      }
+    });
   });
 
   $('.item__input').on('keyup', function (event) {
@@ -16395,27 +16526,78 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   */
   // STEP 3
 } else if (actualPage.includes('stepthree')) {
-  var edit_uca_sc = function edit_uca_sc(id) {
-    var unsafe_control_action = $("#unsafe_control_action-" + id).val();
-    var type = $("#type-" + id + " option:selected").val();
-    var safety_constraint = $("#safety_constraint-" + id).val();
-    axios.post('/edituca', {
-      id: id,
-      unsafe_control_action: unsafe_control_action,
-      type: type,
-      safety_constraint: safety_constraint
-    }).then(function (response) {
-      $("#unsafe_control_action-" + id).prop('disabled', true);
-      $("#type-" + id).prop('disabled', true);
-      $("#safety_constraint-" + id).prop('disabled', true);
-    }).catch(function (error) {
-      console.log(error);
-    });
-  };
+
+  //apaga depois
+
+
+  // function edit_uca_sc(id) {
+  //   var unsafe_control_action = $("#unsafe_control_action-" + id).val();
+  //   var type = $("#type-" + id + " option:selected").val();
+  //   var safety_constraint = $("#safety_constraint-" + id).val();
+  //   axios.post('/edituca', {
+  //     id : id,
+  //     unsafe_control_action : unsafe_control_action,
+  //     type : type,
+  //     safety_constraint : safety_constraint
+  //   })
+  //   .then(function(response) {
+  //     $("#unsafe_control_action-"+id).prop('disabled', true);
+  //     $("#type-"+id).prop('disabled', true);
+  //     $("#safety_constraint-"+id).prop('disabled', true);
+  //   })
+  //   .catch(function(error) {
+  //     console.log(error);
+  //   })
+  // }
+
+
+  // $('.add-uca').each(function(index, f){
+  //   uca.push(f.id);
+  // })
+  // uca.forEach(function(f) {
+  //   var drop = new Drop({
+  //     target: document.querySelector('[data-add="' + f + '"]'),
+  //     content: document.querySelector('[data-drop="' + f + '"]'),
+  //     openOn: 'click',
+  //     remove: true,
+  //     tetherOptions: {
+  //       attachment: 'top left',
+  //       targetAttachment: 'middle right',
+  //       constraints: [
+  //         {
+  //           to: 'scrollParent',
+  //           attachment: 'together'
+  //         }
+  //       ]
+  //     }
+  //   });
+  // });
 
   var convertType = function convertType(type) {
     if (type == "provided") return "Provided";else if (type == "not provided") return "Not provided";else if (type == "wrong time") return "Provided in wrong order";else if (type == "wrong order") return "Provided in wrong order";else if (type == "too early") return "Provided too early";else if (type == "too late") return "Provided too late";else if (type == "too soon") return "Stopped too soon";else if (type == "too long") return "Applied too long";
   };
+
+  // $('body').on('click', '.add-new-uca', function(event){
+  //   event.preventDefault();
+  //   $(".unsafe-control").each(function(){
+  //     $(this).html("");
+  //   });
+  //   $(".safety-control").each(function(){
+  //     $(this).html("");
+  //   });
+  //   var form = $(event.currentTarget);
+  //   var controlaction_id = form.attr("id").split("-")[1];
+  //   vex.closeAll();
+  //   vex.open({
+  //     unsafeContent: $("#add-new-uca-" + controlaction_id).html(),
+  //     buttons: [
+  //       $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+  //       $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+  //     ],
+  //     showCloseButton: true,
+  //     className: "vex-theme-default"
+  //   });
+  // });
 
   var getVariableName = function getVariableName(id) {
     var new_id = $("#associated-variable-id-" + id).val();
@@ -16430,8 +16612,8 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     var unsafe_control_action = "";
     var safety_constraint = "";
     if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
-      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
-      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
     } else if (type.includes("wrong time") || type.includes("wrong order")) {
       unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
       safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
@@ -16506,34 +16688,37 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     }
   });
 
-  $("body").on('blur', '.uca_list_textarea', function (event) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[1];
-    var activity = split[0];
-    $("#type-" + id).attr('class', 'type-combo');
-    edit_uca_sc(id);
-  });
+  //vai apagar depois
 
-  $("body").on('change', '.item__input__active', function (event) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[1];
-    var activity = split[0];
-    $("#type-" + id).attr('class', 'type-combo');
-    edit_uca_sc(id);
-  });
+  // $("body").on('blur', '.uca_list_textarea', function(event) {
+  //   event.preventDefault();
+  //   var split = event.currentTarget.id.split("-");
+  //   var id = split[1];
+  //   var activity = split[0];
+  //   $("#type-"+id).attr('class', 'type-combo');
+  //   edit_uca_sc(id);
+  // });
 
-  // EDIT WHEN KEY "ENTER" WAS PRESSED
-  $("body").on('keypress', '.uca_list_textarea', function (event) {
-    if (event.which == 13) {
-      event.preventDefault();
-      var split = event.currentTarget.id.split("-");
-      var id = split[2];
-      var activity = split[0];
-      edit_uca_sc(id, activity);
-    }
-  });
+  // $("body").on('change', '.item__input__active', function(event) {
+  //   event.preventDefault();
+  //   var split = event.currentTarget.id.split("-");
+  //   var id = split[1];
+  //   var activity = split[0];
+  //   $("#type-"+id).attr('class', 'type-combo');
+  //   edit_uca_sc(id);
+  // });
+
+
+  // // // EDIT WHEN KEY "ENTER" WAS PRESSED
+  // // $("body").on('keypress', '.uca_list_textarea', function(event) {
+  // //   if (event.which == 13) {
+  // //     event.preventDefault();
+  // //     var split = event.currentTarget.id.split("-");
+  // //     var id = split[2];
+  // //     var activity = split[0];
+  // //     edit_uca_sc(id, activity);
+  // //   }
+  // // });
 
   $("body").on('change', '.type-combo', function (event) {
     event.preventDefault();
@@ -16541,48 +16726,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     var id = split[1];
     var activity = split[0];
     edit_causal_analysis(id);
-  });
-
-  $('.add-uca').each(function (index, f) {
-    uca.push(f.id);
-  });
-  uca.forEach(function (f) {
-    var drop = new Drop({
-      target: document.querySelector('[data-add="' + f + '"]'),
-      content: document.querySelector('[data-drop="' + f + '"]'),
-      openOn: 'click',
-      remove: true,
-      tetherOptions: {
-        attachment: 'top left',
-        targetAttachment: 'middle right',
-        constraints: [{
-          to: 'scrollParent',
-          attachment: 'together'
-        }]
-      }
-    });
-  });
-
-  $('body').on('click', '.add-new-uca', function (event) {
-    event.preventDefault();
-    $(".unsafe-control").each(function () {
-      $(this).html("");
-    });
-    $(".safety-control").each(function () {
-      $(this).html("");
-    });
-    var form = $(event.currentTarget);
-    var controlaction_id = form.attr("id").split("-")[1];
-    vex.closeAll();
-    vex.open({
-      unsafeContent: $("#add-new-uca-" + controlaction_id).html(),
-      buttons: [$.extend({}, vex.dialog.buttons.YES, { text: 'Include' }), $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })],
-      showCloseButton: true,
-      className: "vex-theme-default"
-    });
-  });
-
-  $('body').on('click', '.suggested-uca', function (event) {
+  });$('body').on('click', '.suggested-uca', function (event) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var controlaction_id = form.attr("id").split("-")[2];
@@ -16825,6 +16969,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     });
   });
 
+  //Perguntar depois
   $('body').on('submit', '.adding-uca', function (event) {
     event.preventDefault();
     vex.closeAll();
@@ -16858,14 +17003,14 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     });
   });
 
-  $('body').on('change', '.mudanca', function (event) {
+  $('body').on('change', '.add-uca-change', function (event) {
     var form = $(event.currentTarget).closest(".adding-manual-uca");
     var controlaction_id = form.find("#controlaction_id").val();
     var controller_name = form.find("#controller_name").val();
     var controlaction_name = form.find("#controlaction_name").val();
     var type = "";
     $(".type-uca").each(function (index, f) {
-      if (index > 0 && f.id.split("-")[2] == controlaction_id) {
+      if (index >= 0 && f.id.split("-")[2] == controlaction_id) {
         type = $(f).find("option:selected").val();
       }
     });
@@ -16880,8 +17025,8 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     var unsafe_control_action = "";
     var safety_constraint = "";
     if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
-      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
-      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
     } else if (type.includes("wrong time") || type.includes("wrong order")) {
       unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
       safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
@@ -16921,42 +17066,263 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   $('body').on('submit', '.adding-manual-uca', function (event) {
     event.preventDefault();
     var form = $(event.currentTarget);
-    console.log(form);
     var controlaction_id = form.find("#controlaction_id").val();
     var unsafe_control_action = form.find(".unsafe-control-name").html();
     var safety_constraint = form.find(".safety-control-name").html();
     var type = form.find("#type-uca-" + controlaction_id + " option:selected").val();
     var context = form.find("#context").val();
+    var hazard_column = form.find("#hazard_column");
+    var hazards_ids = hazard_column.val();
+    var hazards_infos = [];
+    var token = form.find("input[name='_token']").val();
+    hazard_column.find('option:selected').each(function (index, hazard) {
+      hazards_infos.push(hazard.getAttribute('name'));
+    });
     // Rule_is is always zero when the analyst add it.
     var rule_id = 0;
     var id = 0;
-    console.log("CA: " + controlaction_id + " UCA: " + unsafe_control_action + " SC: " + safety_constraint + " Type: " + type + " Context: " + context);
-    axios.post('/adduca', {
-      id: id,
-      unsafe_control_action: unsafe_control_action,
-      safety_constraint: safety_constraint,
-      type: type,
-      controlaction_id: controlaction_id,
-      context: context,
-      rule_id: rule_id
-    }).then(function (response) {
-      $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
-      vex.closeAll();
-    }).catch(function (error) {
-      console.log(error);
-    });
+    function checkStates(state) {
+      return state.value === "";
+    }
+
+    var states = form.find(".uca-row-" + controlaction_id + " option:selected").toArray();
+    if (states.every(checkStates)) {
+      vex.dialog.alert("Select at least one variable state option to edit the unsafe control action");
+    } else {
+      axios.post('/adduca', {
+        id: id,
+        unsafe_control_action: unsafe_control_action,
+        safety_constraint: safety_constraint,
+        type: type,
+        controlaction_id: controlaction_id,
+        context: context,
+        rule_id: rule_id,
+        hazards_ids: hazards_ids
+      }).then(function (response) {
+        $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data, hazards_infos, token));
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
   });
 
-  $('body').on('click', '.edit-form', function (event) {
+  $('.option_text').mousedown(function (e) {
+    e.preventDefault();
+    var originalScrollTop = $(this).parent().scrollTop();
+    $(this).prop('selected', $(this).prop('selected') ? false : true);
+    var self = this;
+    $(this).parent().focus();
+    setTimeout(function () {
+      $(self).parent().scrollTop(originalScrollTop);
+    }, 0);
+
+    return false;
+  });
+
+  $('body').on('change', '.edit-uca-change', function (event) {
+    var form = $(event.currentTarget).closest(".edit-manual-uca");
+    var controlaction_id = form.find("#controlaction_id").val();
+    var controller_name = form.find("#controller_name").val();
+    var controlaction_name = form.find("#controlaction_name").val();
+    var type = "";
+    $(".edit_type-uca").each(function (index, f) {
+      if (index >= 0 && f.id.split("-")[2] == controlaction_id) {
+        type = $(f).find("option:selected").val();
+      }
+    });
+    var states = [];
+    var states_name = [];
+    var contador = 0;
+    var variables = form.find(".uca-edit-row-" + controlaction_id + " option:selected");
+    var i = 0;
+    $('input#sc_flag').val(0);
+    for (i = 0; i < variables.length; i++) {
+      if (variables[i].value.split("-")[0] > 0) {
+        if ($.inArray(variables[i].value.split("-")[0], states) == -1) {
+          states.push(variables[i].value.split("-")[0]);
+          states_name.push(variables[i].value.split("-")[1] + " is " + variables[i].text);
+        }
+      }
+    }
+
+    var unsafe_control_action = "";
+    var safety_constraint = "";
+    if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")) {
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+    } else if (type.includes("wrong time") || type.includes("wrong order")) {
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+    } else {
+      unsafe_control_action = controller_name.toLowerCase() + " " + type.toLowerCase() + " " + controlaction_name.toLowerCase() + " when";
+      if (type.includes("not provided")) {
+        safety_constraint = controller_name.toLowerCase() + " must provide " + controlaction_name.toLowerCase() + " when";
+      } else {
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " when";
+      }
+    }
+    unsafe_control_action = unsafe_control_action[0].toUpperCase() + unsafe_control_action.slice(1);
+    safety_constraint = safety_constraint[0].toUpperCase() + safety_constraint.slice(1);
+    var states_size = states_name.length;
+    states_name.forEach(function (f, index) {
+      if (index != states_size - 1) {
+        unsafe_control_action += ", " + f.toLowerCase();
+        safety_constraint += ", " + f.toLowerCase();
+      } else {
+        unsafe_control_action += " and " + f.toLowerCase();
+        safety_constraint += " and " + f.toLowerCase();
+      }
+    });
+    unsafe_control_action = unsafe_control_action.replace("when and", "when");
+    unsafe_control_action = unsafe_control_action.replace("when,", "when");
+    safety_constraint = safety_constraint.replace("when and", "when");
+    safety_constraint = safety_constraint.replace("when,", "when");
+    // if(states_name.length > 0){
+
+    $(".edit-safety-text").val(safety_constraint);
+    $(".edit-unsafe-text").val(unsafe_control_action);
+
+    $(".uca-edition-text").html("Updated unsafe control action:");
+
+    $(".edit-manual-uca").find("#context").val(states.join(",")); //.val();
+  });
+
+  $('body').on('keypress', '.uca_list_textarea', function (event) {
+    if ($('#sc_flag').val() == 0) {
+      vex.dialog.confirm({
+        unsafeMessage: 'If you check this warning message with "OK" and manually update the text of unsafe control action and save it, it will imply in: <br>' + "1. You will not be able to use the Template Instantiation on the Identify Loss Scenarios step; <br>" + "2. If you change the context of the unsafe control action using the select boxes, the edition made manually in the text will be lost;<br>" + "3. To use the Template Instantiation again, update the unsafe control action selecting its context using the select boxes. Make sure that you will not edit the text manually. <br>" + 'Click "Ok" to continue editing, or "Cancel" to abort.',
+        callback: function callback(value) {
+          if (value) {
+            $('input#sc_flag').val(1);
+          }
+        }
+      });
+    }
+  });
+
+  $('body').on('submit', '.edit-form', function (event) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var activity = form.data("edit");
     var controlaction_id = form.find("#controlaction_id").val();
     var safety_constraint_id = form.find("#safety_constraint_id").val();
+    var safety_constraint_type = form.find("#safety_constraint_type").val();
     if (activity === "uca") {
-      $('#unsafe_control_action-' + safety_constraint_id).prop('disabled', false);
-      $('#type-' + safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
-      $('#safety_constraint-' + safety_constraint_id).prop('disabled', false);
+
+      axios.post('/scdata', { sc_id: safety_constraint_id }).then(function (response) {
+        vex.closeAll();
+        vex.open({
+          unsafeContent: $(".edit-uca-" + controlaction_id).html(),
+          showCloseButton: true,
+          className: "vex-theme-default",
+          afterOpen: function afterOpen(callback) {
+
+            $('.option_text').mousedown(function (e) {
+              e.preventDefault();
+              var originalScrollTop = $(this).parent().scrollTop();
+              $(this).prop('selected', $(this).prop('selected') ? false : true);
+              var self = this;
+              $(this).parent().focus();
+              setTimeout(function () {
+                $(self).parent().scrollTop(originalScrollTop);
+              }, 0);
+
+              return false;
+            });
+
+            var context = response.data.context.split(',');
+
+            //set the context of safety constraint
+            $("select.edit_type-uca option:selected").each(function () {
+              $(this).prop("selected", false);
+            });
+
+            $("select.edit_type-uca option[value='" + response.data.type + "']").prop('selected', true);
+
+            //clear all variables selects before set the safety constraint states of context
+            $('.uca-edit-row-' + controlaction_id + ' option:selected').each(function () {
+              $(this).prop("selected", false);
+            });
+
+            //set variables states of safety constraints
+            context.forEach(function (element) {
+              $('.uca-edit-row-' + controlaction_id + ' option[value^="' + element + '"').prop("selected", true);
+            });
+
+            $("input#id_sc_ca_" + controlaction_id).val(safety_constraint_id);
+            $("input#sc_flag").val(response.data.flag);
+            $(".edit-unsafe-text").html("" + response.data.uca);
+            $(".edit-safety-text").html("" + response.data.sc);
+
+            //clear all hazards selecteds in associated hazards select field
+            $('.hazard_column_edit_uca option:selected').each(function () {
+              $(this).prop("selected", false);
+            });
+
+            //set associated hazards of safety constraint
+            var hazards = response.data.hazards;
+            hazards.forEach(function (element) {
+              $('.hazard_column_edit_uca option[value="' + element.hazard_id + '"]').prop("selected", true);
+            });
+          }
+        });
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  });
+
+  $('body').on('submit', '.edit-manual-uca', function (event) {
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var controlaction_id = form.find("#controlaction_id").val();
+
+    function checkStates(state) {
+      return state.value === "";
+    }
+
+    var states = form.find(".uca-edit-row-" + controlaction_id + " option:selected").toArray();
+    if (states.every(checkStates)) {
+      vex.dialog.alert("Select at least one variable state option to edit the unsafe control action");
+    } else {
+      vex.dialog.confirm({
+        message: "Update the unsafe control action implies on refresh the page. All unsaved data will be lost. Are you sure?",
+        callback: function callback(confirmation) {
+          if (confirmation) {
+
+            var safety_constraint_id = form.find("#id_sc_ca_" + controlaction_id).val();
+            var safety_constraint_type = form.find("#edit_type-uca-" + controlaction_id).val();
+            var unsafe_text = form.find(".edit-unsafe-text").val();
+            var constraint_text = form.find(".edit-safety-text").val();
+            var hazards_ids = form.find(".hazard_column_edit_uca").val();
+            var context = form.find("#context").val();
+            var flag = form.find("#sc_flag").val();
+
+            axios.post('/edituca', {
+              id: safety_constraint_id,
+              unsafe_control_action: unsafe_text,
+
+              safety_constraint: constraint_text,
+              type: safety_constraint_type,
+              context: context,
+              flag: flag,
+              hazards_ids: hazards_ids
+            }).then(function (response) {
+              setTimeout(function () {
+                var ca = window.location.search.substr(1).split("=");
+                if (ca.length > 1) {
+                  var currentURL = window.location.href.split("?");
+                  window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                } else {
+                  window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                }
+              }, 2000);
+            }).catch(function (error) {
+              console.log(error);
+            });
+          }
+        }
+      });
     }
   });
 
@@ -16999,12 +17365,11 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
           });
           setTimeout(function () {
             var ca = window.location.search.substr(1).split("=");
-            console.log(ca);
             if (ca.length > 1) {
               var currentURL = window.location.href.split("?");
-              window.location.href = currentURL[0] + '?ca=' + controlaction_id;
+              window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             } else {
-              window.location.href += '?ca=' + controlaction_id;
+              window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             }
           }, 2000);
         }
@@ -17053,6 +17418,9 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
 
           var column = "";
           var columns = form.find("#rule_column").val();
+          var hazards = form.find("#hazard_column").val();
+
+          //console.log(hazards);
           for (var i = 0; i < columns.length; i++) {
             column += i < columns.length - 1 ? columns[i] + ";" : columns[i];
           }
@@ -17071,47 +17439,47 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
             rules_variables.push({ variable_id: variable_id, state_id: state_id });
           });
 
-          var rule_id;
-
           axios.post('/addrule', {
             rules_variables: rules_variables,
             controlaction_id: controlaction_id,
             column: column
           }).then(function (response) {
-            rule_id = response.data.rule_id;
+            var rule_id = response.data.rule_id;
+
+            var column_index = -1;
+            columns.forEach(function (column_name) {
+              var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
+              var context = "";
+              variables_array.forEach(function (f, index) {
+                //console.log(f);
+                if (index == 0) context += f;else if (index < variables_array.length) context += "," + f;
+              });
+              column_index++;
+              axios.post('/adduca', {
+                unsafe_control_action: sc.unsafe_control_action,
+                safety_constraint: sc.safety_constraint,
+                type: columns[column_index],
+                controlaction_id: controlaction_id,
+                hazards_ids: hazards,
+                rule_id: rule_id,
+                context: context
+              }).then(function (response) {
+                setTimeout(function () {
+                  var ca = window.location.search.substr(1).split("=");
+                  if (ca.length > 1) {
+                    var currentURL = window.location.href.split("?");
+                    window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                  } else {
+                    window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                  }
+                }, 2000);
+              }).catch(function (error) {
+                console.log(error);
+              });
+            });
           }).catch(function (error) {
             console.log(error);
           });
-
-          var column_index = -1;
-          columns.forEach(function (column_name) {
-            var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
-            var context = "";
-            variables_array.forEach(function (f, index) {
-              console.log(f);
-              if (index == 0) context += f;else if (index < variables_array.length) context += "," + f;
-            });
-            column_index++;
-            axios.post('/adduca', {
-              unsafe_control_action: sc.unsafe_control_action,
-              safety_constraint: sc.safety_constraint,
-              type: columns[column_index],
-              controlaction_id: controlaction_id,
-              rule_id: rule_id,
-              context: context
-            }).catch(function (error) {
-              console.log(error);
-            });
-          });
-          setTimeout(function () {
-            var ca = window.location.search.substr(1).split("=");
-            if (ca.length > 1) {
-              var currentURL = window.location.href.split("?");
-              window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-            } else {
-              window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-            }
-          }, 2000);
         }
       }
     });
@@ -17139,30 +17507,37 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     if (activity == 'rules') {
       var rule_id = form.find("#rule_id").val();
       var controlaction_id = form.find('#controlaction_id').val();
-      console.log($("input[type=image][clicked=true]").val());
       if ($("#rule-" + rule_id + "-" + controlaction_id + "-edition").is(":hidden")) {
         $("#rule-" + rule_id + "-" + controlaction_id + "-edition").show();
         $("#rule-" + rule_id + "-" + controlaction_id + "-view").hide();
       } else {
-
         //edit rule
         vex.dialog.confirm({
           message: 'Editing a rule implies on refresh the page. All unsaved data will be lost.  Are you sure?',
           callback: function callback(value) {
             if (value) {
               var controlaction_id = form.find("#controlaction_id").val();
+              var controlaction_name = $("#controlaction_name_" + controlaction_id).val();
+              var controller_name = $("#controller_name_" + controlaction_id).val();
               var rule_id = form.find("#rule_id").val();
               var column = "";
               var columns = form.find("#rule_column_edition").val();
+              var hazards = form.find('#hazard_column_edition').val();
+
               for (var i = 0; i < columns.length; i++) {
                 column += i < columns.length - 1 ? columns[i] + ";" : columns[i];
               }
+              var variables_array = [];
+              var states_final = [];
               var rules_variables = [];
 
               var variables = form.find('[id^="variable_id_"]').each(function () {
                 var ids = $(this).val().split("-");
                 var variable_id = ids[0];
                 var state_id = ids[1];
+                if (state_id > 0) variables_array.push(state_id);
+                var name = $(this).find('option:selected').attr('name');
+                if (name !== "ANY") states_final.push(getVariableName(state_id) + " is " + getStateName(state_id));
 
                 rules_variables.push({ variable_id: variable_id, state_id: state_id });
               });
@@ -17172,15 +17547,43 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
                 rules_variables: rules_variables,
                 column: column
               }).then(function (response) {
-                setTimeout(function () {
-                  var ca = window.location.search.substr(1).split("=");
-                  if (ca.length > 1) {
-                    var currentURL = window.location.href.split("?");
-                    window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-                  } else {
-                    window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-                  }
-                }, 2000);
+                var column_index = -1;
+                columns.forEach(function (column_name) {
+                  var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
+                  var context = "";
+                  variables_array.forEach(function (f, index) {
+                    //console.log(f);
+                    if (index == 0) context += f;else if (index < variables_array.length) context += "," + f;
+                  });
+                  column_index++;
+                  axios.post('/editucaByRule', {
+                    unsafe_control_action: sc.unsafe_control_action,
+                    safety_constraint: sc.safety_constraint,
+                    type: columns[column_index],
+                    controlaction_id: controlaction_id,
+                    hazards_ids: hazards,
+                    rule_id: rule_id,
+                    context: context
+                  }).catch(function (error) {
+                    console.log(error);
+                  });
+                });
+
+                axios.post('/refreshUcasByRule', {
+                  rule_id: rule_id
+                }).then(function (response) {
+                  setTimeout(function () {
+                    var ca = window.location.search.substr(1).split("=");
+                    if (ca.length > 1) {
+                      var currentURL = window.location.href.split("?");
+                      window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                    } else {
+                      window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                    }
+                  }, 2000);
+                }).catch(function (error) {
+                  console.log(error);
+                });
               }).catch(function (error) {
                 console.log(error);
               });
@@ -17628,7 +18031,7 @@ else if (actualPage.includes('stepfour')) {
     });
   }
 
-},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./elements/hazards":36,"./jquery.floating.min.js":38,"./steptwo":39,"./templates/assumption_template":42,"./templates/causal_template":43,"./templates/hazard_template":48,"./templates/loss_template":49,"./templates/systemgoal_template":52,"./templates/systemsafetyconstraint_template":53,"./templates/unsafecontrolaction_template":54,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],38:[function(require,module,exports){
+},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./elements/hazards":36,"./elements/system_safety_constraints":37,"./jquery.floating.min.js":39,"./steptwo":40,"./templates/assumption_template":43,"./templates/causal_template":44,"./templates/hazard_template":49,"./templates/loss_template":50,"./templates/systemgoal_template":53,"./templates/systemsafetyconstraint_template":54,"./templates/unsafecontrolaction_template":55,"./textarea_script":57,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],39:[function(require,module,exports){
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -17727,7 +18130,7 @@ https://amphiluke.github.io/floating-scroll/
   });
 });
 
-},{"jquery":27}],39:[function(require,module,exports){
+},{"jquery":27}],40:[function(require,module,exports){
 'use strict';
 
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
@@ -18220,7 +18623,7 @@ if (actualPage.includes('steptwo')) {
 	});
 }
 
-},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./templates/actuator_template":40,"./templates/add-state_template":41,"./templates/component_template":44,"./templates/connection_template":45,"./templates/controlaction_template":46,"./templates/controlledprocess_template":47,"./templates/sensor_template":50,"./templates/state_template":51,"./templates/variable_template":55,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],40:[function(require,module,exports){
+},{"./ajax_functions":33,"./axios":34,"./elements/controlactions":35,"./templates/actuator_template":41,"./templates/add-state_template":42,"./templates/component_template":45,"./templates/connection_template":46,"./templates/controlaction_template":47,"./templates/controlledprocess_template":48,"./templates/sensor_template":51,"./templates/state_template":52,"./templates/variable_template":56,"jquery":27,"tether-drop":29,"vex-dialog":31,"vex-js":32}],41:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18228,7 +18631,7 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Actuator]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-actuator\">\n                <li class=\"item\" id=\"actuator-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editactuator\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"actuator\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deleteactuator\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"actuator\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n        </div>";
 };
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18236,15 +18639,15 @@ module.exports = function (context) {
     return "<div data-component=\"drop\" data-drop=\"form-state-variable-" + context.id + "\" class=\"add-drop\">\n        <form action =\"/addstate-variable-" + context.id + "\" method=\"POST\" class=\"add-form\" data-add=\"state-variable-" + context.id + "\">\n            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n            <div class=\"add-drop__content\">\n                <label for=\"state-name-" + context.id + "\" class=\"add-drop__label\">\n                    State name\n                </label>\n                <input id=\"state-name-" + context.id + "\" name=\"state-name-" + context.id + "\" type=\"text\" class=\"add-drop__input\">\n                <input type=\"hidden\" name=\"variable_id\" id=\"variable_id\" value=\"" + context.id + "\">\n            </div>\n            <div class=\"add-drop__buttons\">\n                    <button class=\"add-drop__action\">\n                      Cancel\n                    </button>\n                    <button type=\"submit\" class=\"add-drop__action\">\n                      Add\n                    </button>\n            </div>\n        </form>\n    </div>";
 };
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
     var size = context.name.length;
-    return "\n        <li class=\"item\" id=\"assumption-" + context.id + "\">\n                <div class=\"item__title\">\n                    A-" + exihibition_id + ": <br/> <textarea class=\"item__textarea\" id=\"assumption-description-" + context.id + "\"  rows=\"5\" cols = \"100\" style=\"resize: none;\n    height: auto;\" disabled>" + context.name + "</textarea>\n                </div>\n                <div class=\"item__actions\">\n                    <form action =\"/editassumption\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"assumption\">\n                        <div class=\"item__title\">\n                           <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                       </div>\n                    </form>\n                    <form action=\"deleteassumption\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"assumption\">\n                       <div class=\"item__title\">\n                           <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                       </div>\n                    </form>\n                </div>\n        </li>";
+    return "\n        <li class=\"item\" id=\"assumption-" + context.id + "\">\n                <div class=\"item__list\">\n                    <div class=\"item__title__textarea\">\n                        <label for=\"assumption-description-" + context.id + "\">A-" + exihibition_id + ":</label>\n                        <textarea maxlength=\"500\" class=\"responsive_textarea\" rows=\"1\" id=\"assumption-description-" + context.id + "\" disabled>" + context.name + "</textarea>\n                    </div>\n                    <div class=\"item__actions\">\n\n                        <div id=\"default-menu-assumption-" + context.id + "\">\n                            <div class=\"item__title\">\n                                <input type=\"image\" id=\"edit-assumption-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/edit.ico\" alt=\"edit-assumption\" width=\"20\" class=\"navbar__logo edit-btn\">\n                            </div>\n                             \n\n                            <form action =\"/deleteassumption\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"assumption\">\n                                <div class=\"item__title\">\n                                    <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                    <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                    <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                    <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                                </div>\n                            </form>\n                        </div>\n\n                        <div id=\"edition-menu-assumption-" + context.id + "\" style=\"display: none;\">\n                             <form action =\"/editassumption\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"assumption\">\n                                <div class=\"item__title\">\n                                    <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                    <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                    <input id=\"assumption_id\" name=\"assumption_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                    <input type=\"image\" id=\"save-assumption-" + context.id + "\" src=\"/images/save.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                                </div>\n                            </form>\n                            \n                            <div class=\"item__title\">\n                                <input type=\"image\" id=\"cancel-edit-assumption-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/delete.ico\" alt=\"Cancel-assumption\" width=\"20\" class=\"navbar__logo cancel-edit-btn\">\n                            </div>\n                             \n                        </div> \n                    </div>\n                </div>\n            </li>";
 };
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18291,7 +18694,7 @@ module.exports = function (context) {
     return "<div class=\"table-row\" id=\"causal-row-" + context.id + "\"\">\n            <div class=\"text\">\n                " + select + "<br/>\n            <textarea class=\"step2_textarea\" name=\"scenario-" + context.id + "\" id=\"scenario-" + context.id + "\" placeholder=\"Scenario\" disabled>" + context.scenario + "</textarea>\n            </div>\n\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"associated-" + context.id + "\" placeholder=\"Associated Causal Factors\" disabled>" + context.associated + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"requirement-" + context.id + "\" placeholder=\"Requirements\" disabled>" + context.requirement + "</textarea></div>\n    <div class=\"text center\"><br/><textarea class=\"step2_textarea\" id=\"rationale-" + context.id + "\" placeholder=\"Rationales\" disabled>" + context.rationale + "</textarea></div>\n    <div class=\"content-uca\">\n            <br/>\n            <form action=\"/edittuple\" class=\"edit-form\" data-edit=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n            <form action=\"/deletetuple\" class=\"delete-form\" data-delete=\"uca\" method=\"POST\" style=\"display: inline-block; float: left;\">\n                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                <input type=\"hidden\" name=\"causal_id\" id=\"causal_id\" value=\"" + context.id + "\">\n                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n            </form>\n    </div>\n</div>";
 };
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18299,7 +18702,7 @@ module.exports = function (context) {
     return "\n        <li class=\"item\" id=\"" + type + "-" + context.id + "\">\n            <div class=\"item__title\">\n                " + context.name + "\n            </div>\n            <div class=\"item__actions\">\n                <div class=\"item__title\">\n                    <img src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                </div>\n                <form action =\"/deletecomponent\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"component\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
 };
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18317,14 +18720,14 @@ module.exports = function (context) {
                 </form>
 */
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, controller_name) {
     return "\n        <li class=\"item\" id=\"controlaction-" + context.id + "\">\n                <div class=\"item__title\">\n                    " + context.name + "\n                </div>\n                <div class=\"item__actions\">\n                    <div class=\"item__title\">\n                        <img src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                    <form action=\"/deletecontrolaction\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"controlaction\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"controlaction_id\" name=\"controlaction_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                </div>\n            </li>";
 };
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18332,29 +18735,31 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Controlled Process]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-controlledprocess\">\n                <li class=\"item\" id=\"controlledprocess-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editcontrolledprocess method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"controlledprocess\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deletecontrolledprocess\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"controlledprocess\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n            <div class=\"substep substep--variables-associated\" id=\"variables-0\">\n                <div class=\"substep__title\">\n                    System Variables\n                </div>\n                <div class=\"substep__add\" data-component=\"add-button\" data-add=\"variable-0\">\n                    +\n                </div>\n                <div class=\"substep__content variables-content\" id=variable-0>\n                    <ul class=\"substep__list\">\n                    </ul>\n                </div>\n            </div>\n        </div>";
 };
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 
-module.exports = function (context, exihibition_id, losses) {
+module.exports = function (context, exihibition_id, losses, losses_map) {
     var size = context.name.length;
-    var losses_associated = "";
 
-    context.losses_associated.forEach(function (value, index) {
-        losses_associated += "<div class=\"item__actions__action\" id=\"loss-associated-" + context.losses_associated_id[index] + "\">\n                <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"hazard\" data-index=\"" + context.losses_associated_id[index] + "\">\xD7</a> [L-" + losses[index] + "]\n            </div>";
+    var list_of_losses = "";
+
+    losses.forEach(function (f, index) {
+        if (losses.length > 1) list_of_losses += "<a class=\"hazard_loss_association\" id=\"hazard_loss_" + context.id + "_" + f + "\"><span class=\"delete_step1_association delete_hazard_loss_assocation_" + context.id + "\" alt=\"hazardLossAssociation\" name=\"ids-" + context.id + "-" + f + "\">\xD7</span> " + losses_map[f] + "</a>&nbsp&nbsp";else list_of_losses += "<a class=\"hazard_loss_association\" id=\"hazard_loss_" + context.id + "_" + f + "\"><span style=\"display: none;\" class=\"delete_step1_association delete_hazard_loss_assocation_" + context.id + "\" alt=\"hazardLossAssociation\" name=\"ids-" + context.id + "-" + f + "\">\xD7</span> " + losses_map[f] + "</a>&nbsp&nbsp";
     });
-    return "\n        <li class=\"item\" id=\"hazard-" + context.id + "\">\n            <div class=\"item__title\">\n                H-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"hazard-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeyup=\"this.size=this.value.length\" disabled>\n            </div>\n            " + losses_associated + "\n            <div class=\"item__actions\">\n                <form action =\"/edit-formhazard\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deletehazard\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"hazard\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
+
+    return "\n            <li class=\"item\" id=\"hazard-" + context.id + "\">\n\n                <div class=\"item__list\">\n\n                    <ul class=\"substep__itens\">\n                        <li class=\"step1_itens\">\n\n                            <div class=\"item__title__textarea\">\n                                <label for=\"hazard-description-" + context.id + "\">H-" + exihibition_id + ":</label>\n                                <textarea maxlength=\"500\" class=\"responsive_textarea\" rows=\"1\" id=\"hazard-description-" + context.id + "\" disabled>" + context.name + "</textarea>\n                            </div>\n\n                            <div class=\"item__actions\">\n\n                                <div id=\"default-menu-hazard-" + context.id + "\">\n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"edit-hazard-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/edit.ico\" alt=\"Edit-hazard\" width=\"20\" class=\"navbar__logo edit-btn\">\n                                    </div>\n                                     \n\n                                    <form action =\"/deletehazard\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"hazard\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                </div>\n\n                                <div id=\"edition-menu-hazard-" + context.id + "\" style=\"display: none;\">\n                                     <form action =\"/edithazard\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"hazard\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" id=\"save-hazard-" + context.id + "\" src=\"/images/save.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                    \n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"cancel-edit-hazard-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/delete.ico\" alt=\"Cancel-hazard\" width=\"20\" class=\"navbar__logo cancel-edit-btn\">\n                                    </div>\n                                     \n                                </div> \n                            </div>\n                        </li>\n                        <li class=\"step1_itens\">\n\n                            <div id=\"hazard_" + context.id + "_losses\"style=\"margin: 0 0 15px 0;\">\n                                \n                                " + list_of_losses + "\n\n                                <!-- <input id=\"losses-associated-with-" + context.id + "\" type=\"hidden\" name=\"_token\" value=\"" + losses + "\" > --!>\n                                <!--  <input id=\"add-loss-association-" + context.id + "\" value=\"" + context.id + "\" type=\"image\" src=\"images/plus.png\" width=\"13\" class=\"navbar__logo add-loss-association\"  style=\"display: none;\"> -->\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </li>";
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, exihibition_id) {
     console.log(context);
     var size = context.name.length;
-    return "\n        <li class=\"item\" id=\"loss-" + context.id + "\">\n            <div class=\"item__title\">\n                L-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"loss-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n            </div>\n            <div class=\"item__actions\">\n                <form action =\"/editloss\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"loss\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n                <form action =\"/deleteloss\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"loss\">\n                    <div class=\"item__title\">\n                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                    </div>\n                </form>\n            </div>\n        </li>";
+    return "\n        <li class=\"item\" id=\"loss-" + context.id + "\">\n                <div class=\"item__list\">\n                    <div class=\"item__title__textarea\">\n                        <label for=\"loss-description-" + context.id + "\">L-" + exihibition_id + ":</label>\n                        <textarea maxlength=\"500\" class=\"responsive_textarea\" rows=\"1\" id=\"loss-description-" + context.id + "\" disabled>" + context.name + "</textarea>\n                    </div>\n\n                    <div class=\"item__actions\">\n\n                        <div id=\"default-menu-loss-" + context.id + "\">\n                                <div class=\"item__title\">\n                                    <input type=\"image\" id=\"ediloss->id}}\" name=\"" + context.id + "\" src=\"/images/edit.ico\" alt=\"Edit-loss\" width=\"20\" class=\"navbar__logo edit-btn\">\n                                </div>\n                                 \n\n                                <form action =\"/deleteassumption\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"loss\">\n                                    <div class=\"item__title\">\n                                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                        <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                                    </div>\n                                </form>\n                            </div>\n\n                            <div id=\"edition-menu-loss-" + context.id + "\" style=\"display: none;\">\n                                 <form action =\"/editassumption\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"loss\">\n                                    <div class=\"item__title\">\n                                        <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                        <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                        <input id=\"loss_id\" name=\"loss_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                        <input type=\"image\" id=\"save-loss-" + context.id + "\" src=\"/images/save.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                                    </div>\n                                </form>\n                                \n                                <div class=\"item__title\">\n                                    <input type=\"image\" id=\"cancel-edit-loss-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/delete.ico\" alt=\"Cancel-loss\" width=\"20\" class=\"navbar__logo cancel-edit-btn\">\n                                </div>\n                            </div> \n                    </div>\n                </div>\n            </li>";
 };
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context) {
@@ -18362,19 +18767,11 @@ module.exports = function (context) {
     return "\n        <button class=\"accordion\"><b>[Sensor]</b> " + context.name + "</button>\n        <div class=\"panel\">\n            <ul class=\"substep__list\" id=\"add-sensor\">\n                <li class=\"item\" id=\"sensor-" + context.id + "\">\n                    <div class=\"item__title\">\n                        " + context.name + "\n                    </div>\n                    <div class=\"item__actions\">\n                        <form action =\"/editsensor\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"sensor\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                        <form action =\"/deletesensor\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"sensor\">\n                            <div class=\"item__title\">\n                                <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                <input id=\"component_id\" name=\"component_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                            </div>\n                        </form>\n                    </div>\n                </li>\n            </ul>\n        </div>";
 };
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, id_or_class) {
     if (id_or_class) return "\n            <div class=\"item__actions__action\" id=\"state-associated-" + context.id + "\">\n                <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"variable\" data-index=\"" + context.id + "\">\xD7</a> " + context.name + "\n            </div>";else return "\n            <div class=\"item__actions__action state-associated-" + context.id + "\">\n                " + context.name + "\n            </div>";
-};
-
-},{}],52:[function(require,module,exports){
-"use strict";
-
-module.exports = function (context, exihibition_id) {
-                           var size = context.name.length;
-                           return "\n        <li class=\"item\" id=\"systemgoal-" + context.id + "\">\n                <div class=\"item__title\">\n                    G-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"systemgoal-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n                </div>\n                <div class=\"item__actions\">\n\t                <form action =\"/editsystemgoal\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"systemgoal\">\n                        <div class=\"item__title\">\n\t                       <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n                    <form action=\"deletesystemgoal\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"systemgoal\">\n\t                   <div class=\"item__title\">\n\t                       <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n             \t</div>\n        </li>";
 };
 
 },{}],53:[function(require,module,exports){
@@ -18382,41 +18779,45 @@ module.exports = function (context, exihibition_id) {
 
 module.exports = function (context, exihibition_id) {
     var size = context.name.length;
-    return "\n        <li class=\"item\" id=\"systemsafetyconstraint-" + context.id + "\">\n                <div class=\"item__title\">\n                    SSC-" + exihibition_id + ": <input type=\"text\" class=\"item__input\" id=\"systemsafetyconstraint-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" onkeypress=\"this.size=this.value.length\" disabled>\n                </div>\n                <div class=\"item__actions\">\n\t                <form action=\"editsystemsafetyconstraint\" method=\"POST\"  class=\"edit-form ajaxform\" data-edit=\"systemsafetyconstraint\">\n                       <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n                    <form action=\"deletesystemsafetyconstraint\" method=\"POST\"  class=\"delete-form ajaxform\" data-delete=\"systemsafetyconstraint\">\n\t                   <div class=\"item__title\">\n\t                       <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n\t                   </div>\n                    </form>\n             \t</div>\n        </li>";
+    return "\n        <li class=\"item\" id=\"systemgoal-" + context.id + "\">\n                <div class=\"item__list\">\n                    <div class=\"item__title__textarea\">\n                        <label for=\"systemgoal-description-" + context.id + "\">G-" + exihibition_id + ":</label>\n                        <textarea maxlength=\"500\" class=\"responsive_textarea\" rows=\"1\" id=\"systemgoal-description-" + context.id + "\" disabled>" + context.name + "</textarea>\n                    </div>\n\n                    <div class=\"item__actions\">\n\n                        <div id=\"default-menu-systemgoal-" + context.id + "\">\n                            <div class=\"item__title\">\n                                <input type=\"image\" id=\"edit-systemgoal-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/edit.ico\" alt=\"Edit-systemgoal\" width=\"20\" class=\"navbar__logo edit-btn\">\n                            </div>\n                             \n\n                            <form action =\"/deletesystemgoal\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"systemgoal\">\n                                <div class=\"item__title\">\n                                    <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                    <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                    <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                    <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                                </div>\n                            </form>\n                        </div>\n\n                        <div id=\"edition-menu-systemgoal-" + context.id + "\" style=\"display: none;\">\n                             <form action =\"/editsystemgoal\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"systemgoal\">\n                                <div class=\"item__title\">\n                                    <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                    <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                    <input id=\"systemgoal_id\" name=\"systemgoal_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                    <input type=\"image\" id=\"save-systemgoal-" + context.id + "\" src=\"/images/save.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                                </div>\n                            </form>\n                            \n                            <div class=\"item__title\">\n                                <input type=\"image\" id=\"cancel-edit-systemgoal-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/delete.ico\" alt=\"Cancel-systemgoal\" width=\"20\" class=\"navbar__logo cancel-edit-btn\">\n                            </div>\n                             \n                        </div> \n                    </div>\n                </div>\n            </li>";
 };
 
 },{}],54:[function(require,module,exports){
+"use strict";
+
+module.exports = function (context, exihibition_id, hazards, hazards_map) {
+    var size = context.name.length;
+
+    var list_of_hazards = "";
+
+    hazards.forEach(function (f, index) {
+        if (hazards.length > 1) list_of_hazards += "<a class=\"ssc_hazard_association\" id=\"ssc_hazard_" + context.id + "_" + f + "\"><span class=\"delete_step1_association delete_ssc_hazard_association_" + context.id + "\" alt=\"systemSafetyConstraintHazardAssociation\" name=\"ids-" + context.id + "-" + f + "\">\xD7</span> " + hazards_map[f] + "</a>&nbsp&nbsp";else list_of_hazards += "<a class=\"ssc_hazard_association\" id=\"ssc_hazard_" + context.id + "_" + f + "\"><span style=\"display:none;\" class=\"delete_step1_association delete_ssc_hazard_association_" + context.id + "\" alt=\"systemSafetyConstraintHazardAssociation\" name=\"ids-" + context.id + "-" + f + "\">\xD7</span> " + hazards_map[f] + "</a>&nbsp&nbsp";
+    });
+
+    return "\n            <li class=\"item\" id=\"systemsafetyconstraint-" + context.id + "\">\n\n                <div class=\"item__list\">\n                    <ul class=\"substep__itens\">\n                        <li class=\"step1_itens\">\n                             <div class=\"item__title__textarea\">\n                                <label for=\"systemsafetyconstraint-description-" + context.id + "\">SSC-" + exihibition_id + ":</label>\n                                <textarea maxlength=\"500\" class=\"responsive_textarea\" rows=\"1\" id=\"systemsafetyconstraint-description-" + context.id + "\" disabled>" + context.name + "</textarea>\n                            </div>\n\n                            <div class=\"item__actions\">\n\n                                <div id=\"default-menu-systemsafetyconstraint-" + context.id + "\">\n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"edit-systemsafetyconstraint-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/edit.ico\" alt=\"Edit-systemsafetyconstraint\" width=\"20\" class=\"navbar__logo edit-btn\">\n                                    </div>\n                                     \n\n                                    <form action =\"/deletesystemsafetyconstraint\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"systemsafetyconstraint\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                </div>\n\n                                <div id=\"edition-menu-systemsafetyconstraint-" + context.id + "\" style=\"display: none;\">\n                                     <form action =\"/editsystemsafetyconstraint\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"systemsafetyconstraint\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" id=\"save-systemsafetyconstraint-" + context.id + "\" src=\"/images/save.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                    \n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"cancel-edit-systemsafetyconstraint-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/delete.ico\" alt=\"Cancel-systemsafetyconstraint\" width=\"20\" class=\"navbar__logo cancel-edit-btn\">\n                                    </div>\n                                     \n                                </div> \n                            </div>\n                        </li>\n\n                        <li class=\"step1_itens\">\n\n                            <div id=\"ssc_" + context.id + "_hazards\"style=\"margin: 0 0 15px 0;\">\n                             \n                                " + list_of_hazards + "\n\n                                <!-- <input id=\"hazards-associated-with-\" type=\"hidden\" name=\"_token\" value=\"" + hazards + "\" > --!>\n                                <!-- <input id=\"add-hazard-association-" + context.id + "\" value=\"" + context.id + "\" type=\"image\" src=\"/images/plus.png\" alt=\"Add State\" width=\"13\" class=\"navbar__logo add-hazard-association\"  style=\"display: none;\"> --!>\n                            </div>\n                        </li>\n                    </ul>\n\n                </div>\n            </li>";
+};
+
+},{}],55:[function(require,module,exports){
 'use strict';
 
-module.exports = function (context) {
+module.exports = function (context, associated_hazards, token) {
 
     var uca_size = context.unsafe_control_action.length;
     var sc_size = context.safety_constraint.length;
 
-    var type = '<select id="type-' + context.id + '" style="-webkit-appearance: none; box-shadow: none !important; border: 0;" disabled>';
+    var hazards_tags = '';
 
-    if (context.type === 'provided' || context.type === 'Provided') type += '<option value="Provided" selected>[Provided]</option>';else type += '<option value="Provided">[Provided]</option>';
+    associated_hazards.forEach(function (hazard, index) {
+        var infos = hazard.split(':');
+        var code = infos[0];
+        var name = infos[1];
+        hazards_tags += '<a class="uca_association" title="' + name + '">' + code + '</a>\n';
+    });
 
-    if (context.type === 'not provided' || context.type === 'Not provided' || context.type === 'Not Provided') type += '<option value="Not Provided" selected>[Not Provided]</option>';else type += '<option value="Not Provided">[Not Provided]</option>';
-
-    if (context.type === 'wrong time' || context.type === 'Provided in wrong time' || context.type === 'Wrong Time') type += '<option value="Wrong Time" selected>[Wrong Time]</option>';else type += '<option value="Wrong Time">[Wrong Time]</option>';
-
-    if (context.type === 'wrong order' || context.type === 'Provided in wrong order' || context.type === 'Wrong Order') type += '<option value="Wrong Order" selected>[Wrong Order]</option>';else type += '<option value="Wrong Order">[Wrong Order]</option>';
-
-    if (context.type === 'too early' || context.type === 'Provided too early') type += '<option value="Provided too early" selected>[Provided too early]</option>';else type += '<option value="Provided too early">[Provided too early]</option>';
-
-    if (context.type === 'too late' || context.type === 'Provided too late') type += '<option value="Provided too late" selected>[Provided too late]</option>';else type += '<option value="Provided too late">[Provided too late]</option>';
-
-    if (context.type === 'too soon' || context.type === 'Stopped too soon') type += '<option value="Stopped too soon" selected>[Stopped too soon]</option>';else type += '<option value="Stopped too soon">[Stopped too soon]</option>';
-
-    if (context.type === 'too long' || context.type === 'Applied too long') type += '<option value="Applied too long" selected>[Applied too long]</option>';else type += '<option value="Applied too long">[Applied too long]</option>';
-
-    type += '</select>';
-
-    return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="unsafe_control_action-' + context.id + '" disabled>' + context.unsafe_control_action + '</textarea>\n                    </div>\n                    \n                    <div class="text">\n                        ' + type + '\n                        <textarea class="uca_list_textarea" id="safety_constraint-' + context.id + '" disabled>' + context.safety_constraint + '</textarea>\n                    </div>\n                    \n                    <div class="content-uca">\n                        <form action="/edituca" class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="{{csrf_token()}}">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n        </div>';
+    return '\n        <div class="table-row" id="uca-row-' + context.id + '">\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="unsafe_control_action-' + context.id + '" disabled>' + context.unsafe_control_action + '</textarea>\n\n                        ' + hazards_tags + '\n                        <br/>\n                        <br/>\n                    </div>\n                    \n                    <div class="text">\n                        <br/>\n                        <textarea class="uca_list_textarea" id="safety_constraint-' + context.id + '" disabled>' + context.safety_constraint + '</textarea>\n                    </div>\n                    \n                    <div class="content-uca">\n                        <form class="edit-form" data-edit="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="' + token + '">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.controlaction_id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/edit.ico" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                        <form action="/deleteuca" class="delete-form" data-delete="uca" method="POST" style="display: inline-block; float: left;">\n                            <input type="hidden" name="_token" value="' + token + '">\n                            <input type="hidden" name="controlaction_id" id="controlaction_id" value="' + context.controlaction_id + '">\n                            <input type="hidden" name="safety_constraint_id" id="safety_constraint_id" value="' + context.id + '">\n                            <input type="image" src="/images/trash.png" alt="Delete" width="20" class="navbar__logo">\n                        </form>\n                    </div>\n        </div>';
 };
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 "use strict";
 
 module.exports = function (context, firstAppend) {
@@ -18426,10 +18827,47 @@ module.exports = function (context, firstAppend) {
         if (firstAppend) statesList += "<div class=\"item__actions__action\" id=\"state-associated-" + value.id + "\">\n                            <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"variable\" data-index=\"" + value.id + "\">\xD7</a> " + value.name + "\n                        </div>";else statesList += "<div class=\"item__actions__action state-associated-" + value.id + "\">\n                            <a href=\"javascript:;\" class=\"item__delete__box\" data-type=\"variable\" data-index=\"" + value.id + "\">\xD7</a> " + value.name + "\n                        </div>";
     });
     statesList += "</span>";
-    var edit_delete = "<div class=\"item__actions\">\n                    <form action =\"/editvariable\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"variable\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"variable_id\" name=\"variable_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                    <form action =\"/deletevariable\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"variable\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"variable_id\" name=\"variable_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                </div>";
+    var edit_delete = "<div class=\"item__actions\">\n                    <form action =\"/editvariable\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"variable\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"variable_id\" name=\"variable_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/edit.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                    <form action =\"/deletevariable\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"variable\">\n                        <div class=\"item__title\">\n                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                            <input id=\"variable_id\" name=\"variable_id\" type=\"hidden\" value=\"" + context.id + "\">\n                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                        </div>\n                    </form>\n                </div>";
     if (firstAppend) return "\n            <li class=\"item\" id=\"variable-" + context.id + "\">\n                <div class=\"item__title\">\n                    <input type=\"text\" class=\"item__input\" id=\"variable-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" disabled>\n                </div>\n                " + statesList + ("\n                <div class=\"item__actions__add drop-target\" style=\"display: none;\" id=\"state-variable-" + context.id + "\" data-component=\"add-button\" data-add=\"state-variable-" + context.id + "\">\n                    <input type=\"image\" src=\"/images/plus.png\" alt=\"Add State\" width=13\" class=\"navbar__logo\">\n                </div>\n                ") + edit_delete + "\n            </li>";else return "\n            <li class=\"item variable-" + context.id + "\">\n                <div class=\"item__title\">\n                    <input type=\"text\" class=\"item__input variable-description-" + context.id + "\" value=\"" + context.name + "\" size=\"" + size + "\" disabled>\n                </div>\n                " + statesList + ("\n                <div class=\"item__actions__add state-variable-" + context.id + "\" style=\"display: none;\">\n                    <input type=\"image\" src=\"/images/plus.png\" alt=\"Add State\" width=13\" class=\"navbar__logo\">\n                </div>\n            </li>");
 };
 
-},{}]},{},[37]);
+},{}],57:[function(require,module,exports){
+'use strict';
+
+var $ = require('jquery');
+
+function resize(element) {
+	$(element).css('height', 'auto');
+	$(element).height($(element).prop('scrollHeight') + 'px');
+}
+
+function delayedResize(element) {
+	window.setTimeout(function () {
+		resize(element);
+	}, 0);
+}
+
+$('.responsive_textarea').on({
+	change: function change() {
+		resize(this);
+	},
+	cut: function cut() {
+		delayedResize(this);
+	},
+	paste: function paste() {
+		delayedResize(this);
+	},
+	drop: function drop() {
+		delayedResize(this);
+	},
+	keydown: function keydown() {
+		delayedResize(this);
+	},
+	keypress: function keypress() {
+		delayedResize(this);
+	}
+});
+
+},{"jquery":27}]},{},[38]);
 
 //# sourceMappingURL=app.js.map

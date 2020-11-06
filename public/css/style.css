@@ -17,6 +17,13 @@
   -webkit-flex-wrap: nowrap;
   width: 100%;
   overflow: auto;
+  overflow-y: hidden;
+  table-layout: auto; }
+
+.addrule-table {
+  display: inline-block;
+  width: 100%;
+  overflow: auto;
   overflow-y: hidden; }
 
 .table-row {
@@ -38,12 +45,18 @@
   border-collapse: collapse;
   padding-top: 5px; }
 
+tbody {
+  display: inline-block; }
+
 .text {
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-flex-grow: 1;
   white-space: wrap;
   text-overflow: ellipsis; }
+
+.text {
+  width: 180px; }
 
 .edit-rule-field {
   -ms-flex-positive: 1;
@@ -52,9 +65,6 @@
   white-space: wrap;
   text-overflow: ellipsis;
   width: 100px; }
-
-.text {
-  width: 180px; }
 
 select.text {
   width: 100%; }
@@ -79,14 +89,14 @@ select.text {
   padding-right: 20px;
   width: 180px; }
 
+td.number-contexttale {
+  max-width: 80px !important; }
+
 td {
   width: 180px; }
 
 th {
   width: 180px; }
-
-.num {
-  width: 80px; }
 
 /*
  * General good-look styles, not mandatory.
@@ -117,8 +127,7 @@ body {
   font-weight: bold;
   padding-top: 8px;
   padding-bottom: 8px;
-  text-align: center;
-  width: 100%; }
+  text-align: center; }
 
 .table-row.header-blue {
   background-color: #2c3e50;
@@ -127,7 +136,8 @@ body {
   padding-bottom: 8px;
   text-align: center;
   color: white;
-  border-radius: 10px; }
+  border-radius: 10px;
+  width: 100%; }
 
 .container-fluid {
   margin-top: 10px; }
@@ -168,6 +178,60 @@ div.panel {
 div.panel.show {
   opacity: 1;
   max-height: 100%; }
+
+.option_text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; }
+
+.option_text:not(:checked):hover {
+  overflow: visible;
+  white-space: normal;
+  font-weight: bold;
+  background-color: #ADD8E6; }
+
+.option_text:checked {
+  border-bottom: dashed 1px black;
+  overflow: visible;
+  white-space: normal;
+  font-weight: bold;
+  background: linear-gradient(#ADD8E6, #ADD8E6);
+  background-color: #ADD8E6 !important;
+  color: black;
+  -webkit-text-fill-color: black; }
+
+.select_from_form_rule {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  max-height: 150px; }
+
+.responsive_textarea {
+  background: white;
+  border: 0;
+  min-width: 100%;
+  width: 100%;
+  font-size: 1rem;
+  color: black;
+  resize: none;
+  overflow: hidden;
+  padding: 0;
+  vertical-align: top;
+  font-family: helvetica; }
+  .responsive_textarea_active {
+    width: 100%;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: 0;
+    font-family: helvetica; }
+
+label {
+  font-weight: bold; }
 
 html, body {
   height: 100%;
@@ -330,8 +394,29 @@ html, body {
     box-shadow: none;
     border: 0;
     width: 100%;
-    background-color: white;
-    height: 80px; }
+    background-color: white; }
+
+.uca_association {
+  background-color: #2a3f50;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  border: 0; }
+
+.ssc_hazard_association {
+  background-color: #2a3f50;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  border: 0; }
+
+.hazard_loss_association {
+  margin: 50px 0;
+  background-color: #2a3f50;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  border: 0; }
 
 .guideword-combo {
   -webkit-appearance: none;
@@ -477,7 +562,10 @@ input.add-button {
 
 textarea.mission-assurance {
   width: 100%;
-  height: 100px; }
+  height: 100px !important; }
+
+.delete_step1_association {
+  cursor: pointer; }
 
 .login {
   font-family: "Lato";
@@ -578,6 +666,17 @@ textarea.mission-assurance {
     margin: 0;
     padding: 0;
     list-style-type: none; }
+  .substep__itens {
+    margin: 0;
+    padding: 0;
+    list-style-type: none; }
+
+.step1_itens {
+  padding: 5px; }
+  .step1_itens:after {
+    content: "";
+    display: table;
+    clear: both; }
 
 .item {
   border-bottom: 1px solid #ecf0f1;
@@ -591,11 +690,19 @@ textarea.mission-assurance {
   .item:last-child {
     padding-bottom: 0;
     border-bottom: none; }
+  .item__list {
+    white-space: nowrap;
+    width: 100%; }
   .item__title, .item__actions {
-    display: inline-block; }
+    display: inline-block;
+    white-space: nowrap; }
   .item__title {
     float: left;
     font-size: 1rem; }
+  .item__title__textarea {
+    float: left;
+    font-size: 1rem;
+    width: 85%; }
   .item__input {
     background: white;
     border: 0;

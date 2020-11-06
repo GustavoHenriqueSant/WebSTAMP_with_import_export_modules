@@ -1,5 +1,7 @@
 var actualPage = window.location.href.substr(window.location.href.lastIndexOf("/") + 1);
 
+require('./textarea_script');
+
 require('./steptwo');
 
 if (actualPage.includes('stepone') || actualPage.includes('projects')) {
@@ -8,6 +10,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   var Hazard = require('./elements/hazards');
   //var State = require('./elements/states');
   var ControlActions = require('./elements/controlactions');
+  var SystemSafetyConstraint = require('./elements/system_safety_constraints');
   var Drop = require('tether-drop');
 
   var vex = require('vex-js');
@@ -223,6 +226,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   }
 
   Hazard.init();
+  SystemSafetyConstraint.init();
   //State.init();
   ControlActions.init();
   var stepone = ['hazard', 'systemgoal', 'assumption', 'loss', 'systemsafetyconstraint'];
@@ -247,6 +251,9 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
       if (f === "hazard"){
         Hazard.showLosses();
       }
+      else if(f === "systemsafetyconstraint"){
+        SystemSafetyConstraint.showHazards();
+      }
     })
   });
 
@@ -258,128 +265,175 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   var hazard = require('./templates/hazard_template');
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
 
+  // da para apagar depois
   
-  function getLossesId(myString) {
-    var myRegexp = /\[L\-\d+\]/g;
-    var match = myRegexp.exec(myString);
-    var str_return = "";
-    var matches = [];
-    while (match != null) {
-      str_return += match[0];
-      match = myRegexp.exec(myString);
-      str_return += (match != null) ? "," : "";
-    }
-    myRegexp = /\d+/g;
-    match = myRegexp.exec(str_return);
-    str_return = "";
-    while (match != null) {
-      str_return += match[0];
-      match = myRegexp.exec(myString);
-      str_return += (match != null) ? "," : "";
-    }
-    return str_return;
-  }
+  // function getLossesId(myString) {
+  //   var myRegexp = /\[L\-\d+\]/g;
+  //   var match = myRegexp.exec(myString);
+  //   var str_return = "";
+  //   var matches = [];
+  //   while (match != null) {
+  //     str_return += match[0];
+  //     match = myRegexp.exec(myString);
+  //     str_return += (match != null) ? "," : "";
+  //   }
+  //   myRegexp = /\d+/g;
+  //   match = myRegexp.exec(str_return);
+  //   str_return = "";
+  //   while (match != null) {
+  //     str_return += match[0];
+  //     match = myRegexp.exec(myString);
+  //     str_return += (match != null) ? "," : "";
+  //   }
+  //   return str_return;
+  // }
 
   // ADD
 
-  $('body').on('submit', '.add-form', function(event) {
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    var activity = form.data("add");
-    var activity_name = activity + '-name';
-    var name = form.find("#" + activity_name).val();
-    var project_id = $('#project_id').val();
-    var id = 0;
-    // Verifies if activity is system goal
-    if (activity === 'systemgoal') {
-      var $newSystemGoal = $('#systemgoals').find(".substep__list");
-      axios.post('/addsystemgoal', {
-        name: name,
-        id : id,
-        project_id : project_id
-      })
-      .then(function (response) {
-        var exihibition_id = $('#systemgoals').find(".substep__list").children().length + 1; 
-        $newSystemGoal.append(systemgoal(response.data, exihibition_id));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
-    // Verifies if activity is assumption
-    else if(activity == 'assumption'){
-      var $newAssumption = $('#assumptions').find(".substep__list");
-      axios.post('/addassumption', {
-        name: name,
-        id : id,
-        project_id : project_id
-      })
-      .then(function(response){
-        var exihibition_id = $newAssumption.children().length + 1;
-        console.log($('#assumptions').find("substep__list").children());
-        $newAssumption.append(assumption(response.data, exihibition_id));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
-    // Verifies if activity is loss
-    else if (activity === 'loss') {
-      var $newLoss = $('#losses').find(".substep__list");
-      axios.post('/addloss', {
-        name: name,
-        id : id,
-        project_id : project_id
-      })
-      .then(function (response) { 
-        Hazard.addLoss(response.data);
-        var exihibition_id = $('#losses').find(".substep__list").children().length + 1;
-        $newLoss.append(loss(response.data, exihibition_id));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    // Verify if activity is hazard
-    } else if (activity === 'hazard') { 
-      var losses_associated = form.find("#hazard-loss-association").val();
-      var losses_id = getLossesId(form.find("#hazard-loss-association :selected").text()).split(",");
-      var $newHazard = $('#hazards').find(".substep__list");
-      var losses_associated_id;
-      var project_type = $('#project_type').val();
-      axios.post('/addhazard', {
-        name : name,
-        id : id,
-        losses_associated : losses_associated,
-        losses_associated_id : losses_associated_id,
-        project_id : project_id,
-        project_type : project_type
-      })
-      .then(function(response) {
-        var exihibition_id = $("#hazards_content").children().children().length + 1;
-        $newHazard.append(hazard(response.data, exihibition_id, losses_id));
-      })
-      .catch(function(error) {
-        console.log(error);
-      })
-    }
-    // Verify if activity is System Safety Constraint
-    else if (activity === 'systemsafetyconstraint') {
-      var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
-      axios.post('/addsystemsafetyconstraint', {
-        name : name,
-        id : id,
-        project_id : project_id
-      })
-      .then(function(response) {
-        var exihibition_id = $('#systemsafetyconstraint').find(".substep__list").children().length + 1;  
-        $newSSC.append(systemsafetyconstraint(response.data, exihibition_id));
-      })
-      .catch(function(error) {
-        console.log(error);
-      })
+  $('body').on('submit keydown', '.add-form', function(event) {
+    if(event.type == "submit" || (event.type == "keydown" && event.keyCode == 13 && !event.shiftKey))
+    {
+      event.preventDefault();
+      var form = $(event.currentTarget);
+      var activity = form.data("add");
+      var activity_name = activity + '-name';
+      var name = form.find("#" + activity_name).val();
+      if(name.length == 0){
+        vex.dialog.alert("This field is required");
+        return;
+      }
+      var project_id = $('#project_id').val();
+      var id = 0;
+      // Verifies if activity is system goal
+      if (activity === 'systemgoal') {
+        var $newSystemGoal = $('#systemgoals').find(".substep__list");
+        axios.post('/addsystemgoal', {
+          name: name,
+          id : id,
+          project_id : project_id
+        })
+        .then(function (response) {
+          var exihibition_id = $('#systemgoals').find(".substep__list").children().length + 1; 
+          $newSystemGoal.append(systemgoal(response.data, exihibition_id));
+          $("textarea").each(function(textarea) {
+            $(this).height($(this)[0].scrollHeight);
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+      // Verifies if activity is assumption
+      else if(activity == 'assumption'){
+        var $newAssumption = $('#assumptions').find(".substep__list");
+        axios.post('/addassumption', {
+          name: name,
+          id : id,
+          project_id : project_id
+        })
+        .then(function(response){
+          var exihibition_id = $newAssumption.children().length + 1;
+          console.log($('#assumptions').find("substep__list").children());
+          $newAssumption.append(assumption(response.data, exihibition_id));
+          $("textarea").each(function(textarea) {
+            $(this).height($(this)[0].scrollHeight);
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+      // Verifies if activity is loss
+      else if (activity === 'loss') {
+        var $newLoss = $('#losses').find(".substep__list");
+        axios.post('/addloss', {
+          name: name,
+          id : id,
+          project_id : project_id
+        })
+        .then(function (response) { 
+          Hazard.addLoss(response.data);
+          var exihibition_id = $('#losses').find(".substep__list").children().length + 1;
+          $newLoss.append(loss(response.data, exihibition_id));
+          $("textarea").each(function(textarea) {
+            $(this).height($(this)[0].scrollHeight);
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      // Verify if activity is hazard
+      } else if (activity === 'hazard') { 
+        var losses_associated = form.find("#hazard-loss-association").val();
+        if(losses_associated == null){
+          vex.dialog.alert("Select at least one Loss to associate");
+          return;
+        }
+        var $newHazard = $('#hazards').find(".substep__list");
+        var project_type = $('#project_type').val();
+
+        var losses_map = [];
+        var aux = form.find("#hazard-loss-association :selected");
+        for(var i = 0; i < aux.length; i++){
+          losses_map[aux[i].value] = aux[i].attributes[1].nodeValue;
+        }
+
+        axios.post('/addhazard', {
+          name : name,
+          id : id,
+          losses_associated : losses_associated,
+          project_id : project_id,
+          project_type : project_type
+        })
+        .then(function(response) {
+          SystemSafetyConstraint.addHazard(response.data);
+          var exihibition_id = $("#hazards_content").children().children().length + 1;
+          $newHazard.append(hazard(response.data, exihibition_id, losses_associated, losses_map));
+          $("textarea").each(function(textarea) {
+            $(this).height($(this)[0].scrollHeight);
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
+      }
+      // Verify if activity is System Safety Constraint
+      else if (activity === 'systemsafetyconstraint') {
+        var hazards_associated = form.find("#ssc-hazard-association").val();
+        var $newSSC = $('#systemsafetyconstraint').find(".substep__list");
+        if(hazards_associated == null){
+          vex.dialog.alert("Select at least one System-level Hazard to associate");
+          return;
+        }
+        var hazards_map = [];
+        var aux = form.find("#ssc-hazard-association :selected");
+        for(var i = 0; i < aux.length; i++){
+          hazards_map[aux[i].value] = aux[i].attributes[1].nodeValue;
+        }
+
+        console.log(hazards_map);
+        axios.post('/addsystemsafetyconstraint', {
+          name : name,
+          id : id,
+          project_id : project_id,
+          hazards_ids : hazards_associated
+        })
+        .then(function(response) {
+          var exihibition_id = $('#systemsafetyconstraint').find(".substep__list").children().length + 1;  
+          $newSSC.append(systemsafetyconstraint(response.data, exihibition_id, hazards_associated, hazards_map));
+          $("textarea").each(function(textarea) {
+            $(this).height($(this)[0].scrollHeight);
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
+      }
+      
+      return false;
+
     }
     
-    return false;
   });
 
 
@@ -399,6 +453,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
                 id : id,
               })
               .then(function (response) {
+                $("a[id^='hazard_loss_'][id$='" + id +"'").remove();
                 $("#loss-" + id).remove();
               })
               .catch(function (error) {
@@ -435,6 +490,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
                 id : id,
               })
               .then(function (response) {
+                $("a[id^='ssc_hazard_'][id$='" + id +"'").remove();
                 $("#hazard-" + id).remove();
               })
               .catch(function (error) {
@@ -482,8 +538,6 @@ $('body').on('click', '#editing-mission', function(event){
     });
     });
 
-  
-
 $('body').on('click', '.add-mission-assurance', function(event){
     event.preventDefault();
     vex.open({
@@ -499,134 +553,186 @@ $('body').on('click', '.add-mission-assurance', function(event){
 
 // FUNCTION TO EDIT FUNDAMENTALS
 
-function edit_stepone(id, activity) {
+function edit_stepone(id, activity, text) {
+  var result = true;
   if (activity == "loss") {
-    var name = $("#loss-description-"+id).val();
     axios.post('/editloss', {
         id : id,
-        name : name
+        name : text
       })
       .then(function (response) {
-        $("#loss-description-" + id).replaceWith('<input type="text" class="item__input" id="loss-description-'+id+'" value="'+name+'" size="'+name.length+'" disabled>');
+        result = true;
       })
       .catch(function (error) {
         console.log(error);
       })
-      return false;
   } else if (activity == "hazard") {
-    var name = $("#hazard-description-"+id).val();
     axios.post('/edithazard', {
         id : id,
-        name : name
+        name : text
       })
       .then(function (response) {
-        $("#hazard-description-" + id).replaceWith('<input type="text" class="item__input" id="hazard-description-'+id+'" value="'+name+'" size="'+name.length+'">');
-        document.getElementById("hazard-description-" + id).disabled = true;
+        result = true;
       })
       .catch(function (error) {
         console.log(error);
       })
-      return false;
   } else if (activity == "systemgoal") {
-    var name = $("#systemgoal-description-"+id).val();
     axios.post('/editsystemgoal', {
         id : id,
-        name : name
+        name : text
       })
       .then(function (response) {
-        $("#systemgoal-description-" + id).replaceWith('<input type="text" class="item__input" id="systemgoal-description-'+id+'" value="'+name+'" size="100">');
-        document.getElementById("systemgoal-description-" + id).disabled = true;
+        result = true;
       })
       .catch(function (error) {
         console.log(error);
       })
-      return false;
-  } else if (activity == "assumption") { //aquiii
-    var name = $("#assumption-description-"+id).val();
+  } else if (activity == "assumption") { 
     axios.post('/editassumption', {
         id : id,
-        name : name
+        name : text
       })
       .then(function (response) {
-        $("#assumption-description-" + id).replaceWith('<textarea class="item__textarea" id="assumption-description-' +id+ '" rows="5" cols = "100" style="resize: none; height: auto;" disabled>'+name+'</textarea>');
-        document.getElementById("assumption-description-" + id).disabled = true;
+        result = true;
       })
       .catch(function (error) {
         console.log(error);
-      })
-      return false;    
+      })   
   } else if (activity == "systemsafetyconstraint") {
-    var name = $("#systemsafetyconstraint-description-"+id).val();
     axios.post('/editsystemsafetyconstraint', {
         id : id,
-        name : name
+        name : text
       })
       .then(function (response) {
-        $("#systemsafetyconstraint-description-" + id).replaceWith('<input type="text" class="item__input" id="systemsafetyconstraint-description-'+id+'" value="'+name+'" size="100">');
-        document.getElementById("systemsafetyconstraint-description-" + id).disabled = true;
+        result = true;
       })
       .catch(function (error) {
         console.log(error);
       })
-      return false;
   }
+
+  return result;
 }
 
-// EDIT WHEN INPUT LOSES FOCUS
-$("body").on('blur', '.item__input__active', function(event) {
-  event.preventDefault();
-  var split = event.currentTarget.id.split("-");
-  var id = split[2];
-  var activity = split[0];
-  edit_stepone(id, activity);
-});
 
-// EDIT WHEN KEY "ENTER" WAS PRESSED
-$("body").on('keypress', '.item__input__active', function(event) {
-  if(event.which == 13) {
-    if(event.shifKey && activity == "assumptions")
-    {
-      //do nothing
+// EDIT WHEN KEY "ENTER" WAS PRESSED OR CANCEL WHEN KEY "ESC" WAS PRESSED
+$("body").on('keydown', '.responsive_textarea_active', function(event) {
+  if(event.keyCode == 27){
+    event.preventDefault();
+    var split = event.currentTarget.id.split("-");
+    var id = split[2];
+    var activity = split[0];
+    cancel_edit(id, activity);
+  }
+  if(event.keyCode == 13 && !event.shiftKey){
+    //event.preventDefault();
+    var split = event.currentTarget.id.split("-");
+    var id = split[2];
+    var activity = split[0];
+    var text = $("#" + activity + "-description-" + id).val();
+    var result = edit_stepone(id, activity, text);
+    if(result){
+      $('#default-menu-' + activity + '-' + id).show();
+      $('#edition-menu-' + activity + '-' + id).hide();
+      $('#'+ activity +'-description-' + id).attr('class', 'responsive_textarea').prop('disabled', true);
     }
-    else
-    {
-      event.preventDefault();
-      var split = event.currentTarget.id.split("-");
-      var id = split[2];
-      var activity = split[0];
-      edit_stepone(id, activity);
-    }
-    
   }
 });
 
-  $('body').on('click', '.edit-form', function(event) {
+  function cancel_edit(id, activity){
+    $('#default-menu-' + activity + '-' + id).show();
+    $('#edition-menu-' + activity + '-' + id).hide();
+    axios.post("/text" + activity, {
+      id: id
+    })
+    .then(function (response) {
+      $('#'+ activity +'-description-' + id).val(response.data.name);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    $('#'+ activity +'-description-' + id).attr('class', 'responsive_textarea').prop('disabled', true);
+  }
+
+  $(document).ready(function(){
+    $("textarea").each(function(textarea) {
+      $(this).height($(this)[0].scrollHeight);
+    });
+  });
+
+  $('body').on('click', '.edit-btn', function(event) {
+    var id = $(this).attr('name');
+    var activity = $(this).attr('alt').split('-')[1];
+    $('#default-menu-' + activity + '-' + id).hide();
+    $('#edition-menu-' + activity + '-' + id).show();
+    $('#'+ activity +'-description-' + id).attr('class', 'responsive_textarea_active').prop('disabled', false);
+
+    if(activity == "systemsafetyconstraint"){
+      $('#add-hazard-association-' + id).show();
+    }
+  });
+
+  $('body').on('click', '.cancel-edit-btn', function(event) {
+    var id = $(this).attr('name');
+    var activity = $(this).attr('alt').split('-')[1];
+    cancel_edit(id, activity);
+    if(activity == "systemsafetyconstraint"){
+      $('#add-hazard-association-' + id).hide();
+    }
+  });
+
+  $('body').on('click', '.edit-form', function(event){
     event.preventDefault();
     var form = $(event.currentTarget);
     var activity = form.data("edit");
-    if (activity == "loss") {
-      var id = form.find("#loss_id").val();
-      $('#loss-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "hazard") {
-      var id = form.find("#hazard_id").val();
-      $('#hazard-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "systemgoal") {
-      var id = form.find("#systemgoal_id").val();
-      $('#systemgoal-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
-    } else if (activity == "assumption") {
-      var id = form.find("#assumption_id").val();
-      $('#assumption-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;  
-    } else if (activity == "systemsafetyconstraint") {
-      var id = form.find("#systemsafetyconstraint_id").val();
-      $('#systemsafetyconstraint-description-'+id).attr('class', 'item__input__active').prop('disabled', false);
-      return false;
+    var id = form.find("#" + activity + "_id").val();
+    var text = $("#" + activity + "-description-" + id).val();
+    var result = edit_stepone(id, activity, text);
+    if(result){
+      $('#default-menu-' + activity + '-' + id).show();
+      $('#edition-menu-' + activity + '-' + id).hide();
+      $('#'+ activity +'-description-' + id).attr('class', 'responsive_textarea').prop('disabled', true);
     }
-
+    
   });
+
+  $('body').on('click', '.add-hazard-association', function(event){
+    
+  });
+
+  $('body').on('click', '.delete_step1_association', function(event){
+    var item = $(this);
+    vex.dialog.confirm({
+      message: 'Are you sure you want to delete this item?',
+      callback: function (value) {
+        if (value) {
+          var ids = item.attr("name").split('-');
+          var activity = item.attr("alt");
+          axios.post('/delete' + activity, {
+            id_1: ids[1], //ssc id for ssc->hazard association //hazard id for hazard->loss association
+            id_2: ids[2]  //hazard id for ssc->hazard association //loss id for hazard->loss association
+          }).then(function(response){
+            if(activity == "systemSafetyConstraintHazardAssociation"){
+              $("#ssc_hazard_" + ids[1] + "_" + ids[2]).remove();
+
+              if(response.data.count <= 1)
+                $('.delete_ssc_hazard_association_' + ids[1]).hide();
+            }
+            else{
+              $("#hazard_loss_" + ids[1] + "_" + ids[2]).remove();
+
+              if(response.data.count <= 1)
+                $('.delete_hazard_loss_assocation_' + ids[1]).hide();
+            }
+          }).catch(function (error) {
+            console.log(error);
+          });
+        }
+      }
+    });
+  });
+
 
   $('.item__input').on('keyup', function(event) {
     event.currentTarget.size = event.currentTarget.value.length;
@@ -740,34 +846,38 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 
-  $("body").on('blur', '.uca_list_textarea', function(event) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[1];
-    var activity = split[0];
-    $("#type-"+id).attr('class', 'type-combo');
-    edit_uca_sc(id);
-  });
+  //vai apagar depois
 
-  $("body").on('change', '.item__input__active', function(event) {
-    event.preventDefault();
-    var split = event.currentTarget.id.split("-");
-    var id = split[1];
-    var activity = split[0];
-    $("#type-"+id).attr('class', 'type-combo');
-    edit_uca_sc(id);
-  });
+  // $("body").on('blur', '.uca_list_textarea', function(event) {
+  //   event.preventDefault();
+  //   var split = event.currentTarget.id.split("-");
+  //   var id = split[1];
+  //   var activity = split[0];
+  //   $("#type-"+id).attr('class', 'type-combo');
+  //   edit_uca_sc(id);
+  // });
 
-  // EDIT WHEN KEY "ENTER" WAS PRESSED
-  $("body").on('keypress', '.uca_list_textarea', function(event) {
-    if (event.which == 13) {
-      event.preventDefault();
-      var split = event.currentTarget.id.split("-");
-      var id = split[2];
-      var activity = split[0];
-      edit_uca_sc(id, activity);
-    }
-  });
+  // $("body").on('change', '.item__input__active', function(event) {
+  //   event.preventDefault();
+  //   var split = event.currentTarget.id.split("-");
+  //   var id = split[1];
+  //   var activity = split[0];
+  //   $("#type-"+id).attr('class', 'type-combo');
+  //   edit_uca_sc(id);
+  // });
+
+
+
+  // // // EDIT WHEN KEY "ENTER" WAS PRESSED
+  // // $("body").on('keypress', '.uca_list_textarea', function(event) {
+  // //   if (event.which == 13) {
+  // //     event.preventDefault();
+  // //     var split = event.currentTarget.id.split("-");
+  // //     var id = split[2];
+  // //     var activity = split[0];
+  // //     edit_uca_sc(id, activity);
+  // //   }
+  // // });
 
   $("body").on('change', '.type-combo', function(event) {
     event.preventDefault();
@@ -777,49 +887,51 @@ for (i = 0; i < acc.length; i++) {
     edit_causal_analysis(id);
   });
 
-
-  function edit_uca_sc(id) {
-    var unsafe_control_action = $("#unsafe_control_action-" + id).val();
-    var type = $("#type-" + id + " option:selected").val();
-    var safety_constraint = $("#safety_constraint-" + id).val();
-    axios.post('/edituca', {
-      id : id,
-      unsafe_control_action : unsafe_control_action,
-      type : type,
-      safety_constraint : safety_constraint
-    })
-    .then(function(response) {
-      $("#unsafe_control_action-"+id).prop('disabled', true);
-      $("#type-"+id).prop('disabled', true);
-      $("#safety_constraint-"+id).prop('disabled', true);
-    })
-    .catch(function(error) {
-      console.log(error);
-    })
-  }
+  //apaga depois
 
 
-  $('.add-uca').each(function(index, f){
-    uca.push(f.id);
-  })
-  uca.forEach(function(f) {
-    var drop = new Drop({
-      target: document.querySelector('[data-add="' + f + '"]'),
-      content: document.querySelector('[data-drop="' + f + '"]'),
-      openOn: 'click',
-      remove: true,
-      tetherOptions: {
-        attachment: 'top left',
-        targetAttachment: 'middle right',
-        constraints: [
-          {
-            to: 'scrollParent',
-            attachment: 'together'
-          }
-        ]
-      }
-    });
-  });
+  // function edit_uca_sc(id) {
+  //   var unsafe_control_action = $("#unsafe_control_action-" + id).val();
+  //   var type = $("#type-" + id + " option:selected").val();
+  //   var safety_constraint = $("#safety_constraint-" + id).val();
+  //   axios.post('/edituca', {
+  //     id : id,
+  //     unsafe_control_action : unsafe_control_action,
+  //     type : type,
+  //     safety_constraint : safety_constraint
+  //   })
+  //   .then(function(response) {
+  //     $("#unsafe_control_action-"+id).prop('disabled', true);
+  //     $("#type-"+id).prop('disabled', true);
+  //     $("#safety_constraint-"+id).prop('disabled', true);
+  //   })
+  //   .catch(function(error) {
+  //     console.log(error);
+  //   })
+  // }
+
+
+  // $('.add-uca').each(function(index, f){
+  //   uca.push(f.id);
+  // })
+  // uca.forEach(function(f) {
+  //   var drop = new Drop({
+  //     target: document.querySelector('[data-add="' + f + '"]'),
+  //     content: document.querySelector('[data-drop="' + f + '"]'),
+  //     openOn: 'click',
+  //     remove: true,
+  //     tetherOptions: {
+  //       attachment: 'top left',
+  //       targetAttachment: 'middle right',
+  //       constraints: [
+  //         {
+  //           to: 'scrollParent',
+  //           attachment: 'together'
+  //         }
+  //       ]
+  //     }
+  //   });
+  // });
 
   function convertType(type){
     if (type == "provided")
@@ -841,27 +953,27 @@ for (i = 0; i < acc.length; i++) {
   }
 
 
-  $('body').on('click', '.add-new-uca', function(event){
-    event.preventDefault();
-    $(".unsafe-control").each(function(){
-      $(this).html("");
-    });
-    $(".safety-control").each(function(){
-      $(this).html("");
-    });
-    var form = $(event.currentTarget);
-    var controlaction_id = form.attr("id").split("-")[1];
-    vex.closeAll();
-    vex.open({
-      unsafeContent: $("#add-new-uca-" + controlaction_id).html(),
-      buttons: [
-        $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
-        $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
-      ],
-      showCloseButton: true,
-      className: "vex-theme-default"
-    });
-  });
+  // $('body').on('click', '.add-new-uca', function(event){
+  //   event.preventDefault();
+  //   $(".unsafe-control").each(function(){
+  //     $(this).html("");
+  //   });
+  //   $(".safety-control").each(function(){
+  //     $(this).html("");
+  //   });
+  //   var form = $(event.currentTarget);
+  //   var controlaction_id = form.attr("id").split("-")[1];
+  //   vex.closeAll();
+  //   vex.open({
+  //     unsafeContent: $("#add-new-uca-" + controlaction_id).html(),
+  //     buttons: [
+  //       $.extend({}, vex.dialog.buttons.YES, { text: 'Include' }),
+  //       $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+  //     ],
+  //     showCloseButton: true,
+  //     className: "vex-theme-default"
+  //   });
+  // });
 
   $('body').on('click', '.suggested-uca', function(event){
     event.preventDefault();
@@ -1129,6 +1241,7 @@ for (i = 0; i < acc.length; i++) {
     });
   });
 
+  //Perguntar depois
   $('body').on('submit', '.adding-uca', function(event) {
     event.preventDefault();
     vex.closeAll();
@@ -1168,8 +1281,8 @@ for (i = 0; i < acc.length; i++) {
     var unsafe_control_action = "";
     var safety_constraint = "";
     if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")){
-      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
-      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
     } else if (type.includes("wrong time") || type.includes("wrong order")){
       unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
       safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
@@ -1201,15 +1314,16 @@ for (i = 0; i < acc.length; i++) {
     return {unsafe_control_action: unsafe_control_action, safety_constraint: safety_constraint};
   }
 
-  $('body').on('change', '.mudanca', function(event) {
+  $('body').on('change', '.add-uca-change', function(event) {
     var form = $(event.currentTarget).closest(".adding-manual-uca");
     var controlaction_id = form.find("#controlaction_id").val();
     var controller_name = form.find("#controller_name").val();
     var controlaction_name = form.find("#controlaction_name").val();
     var type = "";
     $(".type-uca").each(function(index, f){
-      if (index > 0 && f.id.split("-")[2] == controlaction_id){
-        type = $(f).find("option:selected").val();         
+      if (index >= 0 && f.id.split("-")[2] == controlaction_id){
+        type = $(f).find("option:selected").val();
+
       }
     });
     var states = [];
@@ -1223,8 +1337,8 @@ for (i = 0; i < acc.length; i++) {
     var unsafe_control_action = "";
     var safety_constraint = "";
     if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")){
-      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
-      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase() + " when";
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
     } else if (type.includes("wrong time") || type.includes("wrong order")){
       unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
       safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
@@ -1265,46 +1379,285 @@ for (i = 0; i < acc.length; i++) {
   $('body').on('submit', '.adding-manual-uca', function(event) {
     event.preventDefault();
     var form = $(event.currentTarget);
-    console.log(form);
     var controlaction_id = form.find("#controlaction_id").val();
     var unsafe_control_action = form.find(".unsafe-control-name").html();
     var safety_constraint = form.find(".safety-control-name").html();
     var type = form.find("#type-uca-" + controlaction_id + " option:selected").val();
     var context = form.find("#context").val();
+    var hazard_column = form.find("#hazard_column");
+    var hazards_ids = hazard_column.val();
+    var hazards_infos = [];
+    var token = form.find("input[name='_token']").val();
+    hazard_column.find('option:selected').each(function(index, hazard){
+      hazards_infos.push(hazard.getAttribute('name'));
+    });
     // Rule_is is always zero when the analyst add it.
     var rule_id = 0;
     var id = 0;
-    console.log("CA: " + controlaction_id + " UCA: " + unsafe_control_action + " SC: " + safety_constraint + " Type: " + type + " Context: " + context);
-    axios.post('/adduca', {
-      id : id,
-      unsafe_control_action : unsafe_control_action,
-      safety_constraint : safety_constraint,
-      type : type,
-      controlaction_id : controlaction_id,
-      context : context,
-      rule_id : rule_id
-    })
-    .then(function (response) {
-      $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data));
-      vex.closeAll();
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
+    function checkStates(state){
+      return state.value === "";
+    }
+
+    var states = form.find(".uca-row-"+controlaction_id+" option:selected").toArray();
+    if(states.every(checkStates)){
+      vex.dialog.alert("Select at least one variable state option to edit the unsafe control action");
+    }
+    else{
+      axios.post('/adduca', {
+        id : id,
+        unsafe_control_action : unsafe_control_action,
+        safety_constraint : safety_constraint,
+        type : type,
+        controlaction_id : controlaction_id,
+        context : context,
+        rule_id : rule_id,
+        hazards_ids: hazards_ids
+      })
+      .then(function (response) {
+        $("#uca-" + controlaction_id).find(".container-fluid").append(UCA(response.data, hazards_infos, token));
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+    }
+    
   });
 
-  $('body').on('click', '.edit-form', function(event) {
+  $('.option_text').mousedown(function(e) {
+    e.preventDefault();
+    var originalScrollTop = $(this).parent().scrollTop();
+    $(this).prop('selected', $(this).prop('selected') ? false : true);
+    var self = this;
+    $(this).parent().focus();
+    setTimeout(function() {
+        $(self).parent().scrollTop(originalScrollTop);
+    }, 0);
+    
+    return false;
+  });
+
+  $('body').on('change', '.edit-uca-change', function(event) {
+    var form = $(event.currentTarget).closest(".edit-manual-uca");
+    var controlaction_id = form.find("#controlaction_id").val();
+    var controller_name = form.find("#controller_name").val();
+    var controlaction_name = form.find("#controlaction_name").val();
+    var type = "";
+    $(".edit_type-uca").each(function(index, f){
+      if (index >= 0 && f.id.split("-")[2] == controlaction_id){
+        type = $(f).find("option:selected").val();
+      }
+    });
+    var states = [];
+    var states_name = [];
+    var contador = 0;
+    var variables = form.find(".uca-edit-row-" +  controlaction_id + " option:selected");
+    var i = 0;
+    $('input#sc_flag').val(0);
+    for(i = 0; i < variables.length; i++){
+      if (variables[i].value.split("-")[0] > 0){
+        if($.inArray(variables[i].value.split("-")[0], states) == -1){
+          states.push(variables[i].value.split("-")[0]);
+          states_name.push(variables[i].value.split("-")[1] + " is " + variables[i].text);
+        }
+      }
+    }
+    
+    var unsafe_control_action = "";
+    var safety_constraint = "";
+    if (type.includes("too late") || type.includes("too soon") || type.includes("too early") || type.includes("too long")){
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " " + type.toLowerCase().substring(8) + " when";
+    } else if (type.includes("wrong time") || type.includes("wrong order")){
+      unsafe_control_action = controller_name.toLowerCase() + " provided " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+      safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " in " + type.toLowerCase() + " when";
+    } else{
+      unsafe_control_action = controller_name.toLowerCase() + " " + type.toLowerCase() + " " + controlaction_name.toLowerCase() + " when";
+      if (type.includes("not provided")){
+        safety_constraint = controller_name.toLowerCase() + " must provide " + controlaction_name.toLowerCase() + " when";
+      } else {
+        safety_constraint = controller_name.toLowerCase() + " must not provide " + controlaction_name.toLowerCase() + " when";
+      }
+    }
+    unsafe_control_action = unsafe_control_action[0].toUpperCase() + unsafe_control_action.slice(1);
+    safety_constraint = safety_constraint[0].toUpperCase() + safety_constraint.slice(1);
+    var states_size = states_name.length;
+    states_name.forEach(function(f, index) {
+      if (index != states_size - 1){
+        unsafe_control_action += ", " + f.toLowerCase();
+        safety_constraint += ", " + f.toLowerCase();
+      }
+      else{
+        unsafe_control_action += " and " + f.toLowerCase();
+        safety_constraint += " and " + f.toLowerCase();
+      }
+    })
+    unsafe_control_action = unsafe_control_action.replace("when and", "when");
+    unsafe_control_action = unsafe_control_action.replace("when,", "when");
+    safety_constraint = safety_constraint.replace("when and", "when");
+    safety_constraint = safety_constraint.replace("when,", "when");
+    // if(states_name.length > 0){
+
+    $(".edit-safety-text").val(safety_constraint);
+    $(".edit-unsafe-text").val(unsafe_control_action);
+
+    $(".uca-edition-text").html("Updated unsafe control action:");
+    
+    $(".edit-manual-uca").find("#context").val(states.join(",")); //.val();
+  });
+
+  $('body').on('keypress', '.uca_list_textarea', function(event){
+    if($('#sc_flag').val() == 0){
+      vex.dialog.confirm({
+        unsafeMessage: 'If you check this warning message with "OK" and manually update the text of unsafe control action and save it, it will imply in: <br>' 
+                    + "1. You will not be able to use the Template Instantiation on the Identify Loss Scenarios step; <br>"
+                    + "2. If you change the context of the unsafe control action using the select boxes, the edition made manually in the text will be lost;<br>" 
+                    + "3. To use the Template Instantiation again, update the unsafe control action selecting its context using the select boxes. Make sure that you will not edit the text manually. <br>"
+                    + 'Click "Ok" to continue editing, or "Cancel" to abort.',
+        callback: function(value){
+          if(value){
+            $('input#sc_flag').val(1);
+          }
+        }
+      });
+    }
+    
+  });
+
+  $('body').on('submit', '.edit-form', function(event) {
     event.preventDefault();
     var form = $(event.currentTarget);
     var activity = form.data("edit");
     var controlaction_id = form.find("#controlaction_id").val();
     var safety_constraint_id = form.find("#safety_constraint_id").val();
+    var safety_constraint_type = form.find("#safety_constraint_type").val();
     if (activity === "uca") {
-      $('#unsafe_control_action-'+safety_constraint_id).prop('disabled', false);
-      $('#type-'+safety_constraint_id).attr('class', 'item__input__active').prop('disabled', false);
-      $('#safety_constraint-'+safety_constraint_id).prop('disabled', false);
+
+      axios.post('/scdata', {sc_id: safety_constraint_id})
+      .then(function(response){
+        vex.closeAll();
+        vex.open({
+          unsafeContent: $(".edit-uca-" + controlaction_id).html(),
+          showCloseButton: true,
+          className: "vex-theme-default",
+          afterOpen: function(callback){
+
+            $('.option_text').mousedown(function(e) {
+              e.preventDefault();
+              var originalScrollTop = $(this).parent().scrollTop();
+              $(this).prop('selected', $(this).prop('selected') ? false : true);
+              var self = this;
+              $(this).parent().focus();
+              setTimeout(function() {
+                  $(self).parent().scrollTop(originalScrollTop);
+              }, 0);
+              
+              return false;
+            });
+            
+            var context = response.data.context.split(',');
+
+            //set the context of safety constraint
+            $("select.edit_type-uca option:selected").each(function(){
+              $(this).prop("selected", false);
+            });
+
+            $("select.edit_type-uca option[value='" + response.data.type + "']").prop('selected', true);
+            
+
+            //clear all variables selects before set the safety constraint states of context
+            $('.uca-edit-row-' + controlaction_id + ' option:selected').each(function(){
+              $(this).prop("selected", false);
+            });
+
+            //set variables states of safety constraints
+            context.forEach(function(element){
+              $('.uca-edit-row-' + controlaction_id + ' option[value^="' + element +'"').prop("selected", true);
+            });
+
+            $("input#id_sc_ca_" + controlaction_id).val(safety_constraint_id);
+            $("input#sc_flag").val(response.data.flag);
+            $(".edit-unsafe-text").html(""+response.data.uca);
+            $(".edit-safety-text").html(""+response.data.sc);
+
+            //clear all hazards selecteds in associated hazards select field
+            $('.hazard_column_edit_uca option:selected').each(function(){
+               $(this).prop("selected", false);
+            });
+
+            //set associated hazards of safety constraint
+            var hazards = response.data.hazards;
+            hazards.forEach(function(element){
+              $('.hazard_column_edit_uca option[value="' + element.hazard_id + '"]').prop("selected", true);
+            });
+          }
+        });
+        
+      })
+      .catch(function(error){
+        console.log(error);
+      })
     }
   });
+
+  $('body').on('submit', '.edit-manual-uca', function(event){
+    event.preventDefault();
+    var form = $(event.currentTarget);
+    var controlaction_id = form.find("#controlaction_id").val();
+
+    function checkStates(state){
+      return state.value === "";
+    }
+
+    var states = form.find(".uca-edit-row-"+controlaction_id+" option:selected").toArray();
+    if(states.every(checkStates)){
+      vex.dialog.alert("Select at least one variable state option to edit the unsafe control action");
+    }
+    else{
+      vex.dialog.confirm({
+        message: "Update the unsafe control action implies on refresh the page. All unsaved data will be lost. Are you sure?",
+        callback: function(confirmation){
+          if(confirmation){
+            
+            var safety_constraint_id = form.find("#id_sc_ca_"+controlaction_id).val();
+            var safety_constraint_type = form.find("#edit_type-uca-"+controlaction_id).val();
+            var unsafe_text = form.find(".edit-unsafe-text").val();
+            var constraint_text = form.find(".edit-safety-text").val();
+            var hazards_ids = form.find(".hazard_column_edit_uca").val();
+            var context = form.find("#context").val();
+            var flag = form.find("#sc_flag").val();
+
+            axios.post('/edituca', {
+              id: safety_constraint_id,
+              unsafe_control_action: unsafe_text,
+          
+              safety_constraint: constraint_text,
+              type: safety_constraint_type,
+              context: context,
+              flag: flag,
+              hazards_ids: hazards_ids
+            })
+            .then(function(response){
+              setTimeout(function(){
+                var ca = window.location.search.substr(1).split("=");
+                if (ca.length > 1){
+                  var currentURL = window.location.href.split("?");
+                  window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                }
+                else{
+                  window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                } 
+              }, 2000);
+            })
+            .catch(function(error){
+              console.log(error);
+            })            
+          }
+        }
+      }); 
+    }
+  });
+
+  
 
   //select controller event on step 3
   $("#controller-select").change(function(e){
@@ -1346,13 +1699,12 @@ for (i = 0; i < acc.length; i++) {
           });
           setTimeout(function(){
             var ca = window.location.search.substr(1).split("=");
-            console.log(ca);
             if (ca.length > 1){
               var currentURL = window.location.href.split("?");
-              window.location.href = currentURL[0] + '?ca='+controlaction_id;
+              window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             }
             else{
-              window.location.href += '?ca='+controlaction_id;
+              window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
             } 
           }, 2000);
         }
@@ -1402,6 +1754,9 @@ for (i = 0; i < acc.length; i++) {
           
           var column = "";
           var columns = form.find("#rule_column").val();
+          var hazards = form.find("#hazard_column").val();
+
+          //console.log(hazards);
           for (var i=0; i < columns.length; i++) {
             column += (i < columns.length-1) ? columns[i] + ";" : columns[i];
           }
@@ -1421,55 +1776,56 @@ for (i = 0; i < acc.length; i++) {
             
             rules_variables.push({variable_id: variable_id, state_id: state_id});
           });
-
-          var rule_id;
-
+          
           axios.post('/addrule', {
             rules_variables : rules_variables,
             controlaction_id : controlaction_id,
             column : column
           })
           .then(function (response){
-            rule_id = response.data.rule_id;
+            var rule_id = response.data.rule_id;
+
+            var column_index = -1;
+            columns.forEach(function(column_name) {
+              var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
+              var context = "";
+              variables_array.forEach(function(f, index) {
+                //console.log(f);
+                if (index == 0)
+                  context += f;
+                else if (index < variables_array.length)
+                  context += "," + f;
+              });
+              column_index++;
+              axios.post('/adduca', {
+                unsafe_control_action : sc.unsafe_control_action,
+                safety_constraint : sc.safety_constraint,
+                type : columns[column_index],
+                controlaction_id : controlaction_id,
+                hazards_ids: hazards,
+                rule_id : rule_id,
+                context : context
+              })
+              .then(function(response){
+                setTimeout(function(){
+                  var ca = window.location.search.substr(1).split("=");
+                  if (ca.length > 1){
+                    var currentURL = window.location.href.split("?");
+                    window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                  }
+                  else{
+                    window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
+                  } 
+                }, 2000);
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+            });
           })
           .catch(function (error) {
             console.log(error);
           });
-
-          var column_index = -1;
-          columns.forEach(function(column_name) {
-            var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
-            var context = "";
-            variables_array.forEach(function(f, index) {
-              console.log(f);
-              if (index == 0)
-                context += f;
-              else if (index < variables_array.length)
-                context += "," + f;
-            })
-            column_index++;
-            axios.post('/adduca', {
-              unsafe_control_action : sc.unsafe_control_action,
-              safety_constraint : sc.safety_constraint,
-              type : columns[column_index],
-              controlaction_id : controlaction_id,
-              rule_id : rule_id,
-              context : context
-            })
-            .catch(function (error) {
-              console.log(error);
-            })
-          });
-          setTimeout(function(){
-            var ca = window.location.search.substr(1).split("=");
-            if (ca.length > 1){
-              var currentURL = window.location.href.split("?");
-              window.location.href = currentURL[0] + '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-            }
-            else{
-              window.location.href += '?ca=' + controlaction_id + '&controller=' + $('#controller-select').val();
-            } 
-          }, 2000);
       }
     }  
   });
@@ -1488,50 +1844,89 @@ $("img[id^='cancel-edit-rule']").on('click', function(event) {
 });
   
   //EDIT RULES
-  $('body').on('submit', '.edit-rule-form', function(event){
+$('body').on('submit', '.edit-rule-form', function(event){
 
-    event.preventDefault();
-    var form = $(event.currentTarget);
-    var activity = form.data("edit");
-    
-    if(activity == 'rules'){
-      var rule_id = form.find("#rule_id").val();
-      var controlaction_id = form.find('#controlaction_id').val();
-      console.log($("input[type=image][clicked=true]").val());
-      if($("#rule-" + rule_id + "-" + controlaction_id + "-edition").is(":hidden")){
-        $("#rule-" + rule_id + "-" + controlaction_id + "-edition").show();
-        $("#rule-" + rule_id + "-" + controlaction_id + "-view").hide();
-      }
-      else{
-        
-        //edit rule
-        vex.dialog.confirm({
-          message: 'Editing a rule implies on refresh the page. All unsaved data will be lost.  Are you sure?',
-          callback: function(value){
-            if(value){
-              var controlaction_id = form.find("#controlaction_id").val();
-              var rule_id = form.find("#rule_id").val();
-              var column = "";
-              var columns = form.find("#rule_column_edition").val();
-              for (var i=0; i < columns.length; i++) {
-                column += (i < columns.length-1) ? columns[i] + ";" : columns[i];
-              }
-              var rules_variables = [];
+  event.preventDefault();
+  var form = $(event.currentTarget);
+  var activity = form.data("edit");
+  
+  if(activity == 'rules'){
+    var rule_id = form.find("#rule_id").val();
+    var controlaction_id = form.find('#controlaction_id').val();
+    if($("#rule-" + rule_id + "-" + controlaction_id + "-edition").is(":hidden")){
+      $("#rule-" + rule_id + "-" + controlaction_id + "-edition").show();
+      $("#rule-" + rule_id + "-" + controlaction_id + "-view").hide();
+    }
+    else{
+      //edit rule
+      vex.dialog.confirm({
+        message: 'Editing a rule implies on refresh the page. All unsaved data will be lost.  Are you sure?',
+        callback: function(value){
+          if(value){
+            var controlaction_id = form.find("#controlaction_id").val();
+            var controlaction_name = $("#controlaction_name_"+controlaction_id).val();
+            var controller_name = $("#controller_name_"+controlaction_id).val();
+            var rule_id = form.find("#rule_id").val();
+            var column = "";
+            var columns = form.find("#rule_column_edition").val();
+            var hazards = form.find('#hazard_column_edition').val();
 
-              var variables = form.find('[id^="variable_id_"]').each(function() {
-                var ids = $(this).val().split("-");
-                var variable_id = ids[0];
-                var state_id = ids[1];
-                
-                rules_variables.push({variable_id: variable_id, state_id: state_id});
-              });
+            for (var i=0; i < columns.length; i++) {
+              column += (i < columns.length-1) ? columns[i] + ";" : columns[i];
+            }
+            var variables_array = [];
+            var states_final = [];
+            var rules_variables = [];
 
-              axios.post('/editrule', {
-                  rule_id: rule_id,
-                  rules_variables: rules_variables,
-                  column : column
+            var variables = form.find('[id^="variable_id_"]').each(function() {
+              var ids = $(this).val().split("-");
+              var variable_id = ids[0];
+              var state_id = ids[1];
+              if (state_id > 0)
+                variables_array.push(state_id);
+              var name = $(this).find('option:selected').attr('name');
+              if (name !== "ANY")
+                states_final.push(getVariableName(state_id) + " is " + getStateName(state_id));
+              
+              rules_variables.push({variable_id: variable_id, state_id: state_id});
+            });
+            
+            axios.post('/editrule', {
+                rule_id: rule_id,
+                rules_variables: rules_variables,
+                column : column
+            })
+            .then(function (response){
+              var column_index = -1;
+              columns.forEach(function(column_name) {
+                var sc = generateUCAText(controlaction_id, controller_name, controlaction_name, column_name, states_final);
+                var context = "";
+                variables_array.forEach(function(f, index) {
+                  //console.log(f);
+                  if (index == 0)
+                    context += f;
+                  else if (index < variables_array.length)
+                    context += "," + f;
+                });
+                column_index++;
+                axios.post('/editucaByRule', {
+                  unsafe_control_action : sc.unsafe_control_action,
+                  safety_constraint : sc.safety_constraint,
+                  type : columns[column_index],
+                  controlaction_id: controlaction_id, 
+                  hazards_ids : hazards,
+                  rule_id : rule_id,
+                  context : context
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
               })
-              .then(function (response){
+
+              axios.post('/refreshUcasByRule', {
+                rule_id : rule_id
+              })
+              .then(function(response){
                 setTimeout(function(){
                   var ca = window.location.search.substr(1).split("=");
                   if (ca.length > 1){
@@ -1544,15 +1939,19 @@ $("img[id^='cancel-edit-rule']").on('click', function(event) {
                 }, 2000);
               })
               .catch(function (error) {
-                  console.log(error);
+                console.log(error);
               });
-              
-            }
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+            
           }
-        });
-      }
+        }
+      });
     }
-  });
+  }
+});
 
 
   // DELETE RULES AND UCA/SC

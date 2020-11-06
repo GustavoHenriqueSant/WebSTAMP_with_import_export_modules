@@ -8,7 +8,9 @@ use App\Http\Requests;
 
 use App\Rule;
 
-use App\RulesVariables;
+use App\RulesVariablesStates;
+
+use App\RulesSafetyConstraintsHazards;
 
 use App\SafetyConstraints;
 
@@ -30,7 +32,7 @@ class RuleController extends Controller
 
 		for($i = 0; $i < sizeof($variables); $i++){
 			
-			$rule_variable = new RulesVariables();
+			$rule_variable = new RulesVariablesStates();
 			$rule_variable->rule_id = $rule->id;
 			$rule_variable->variable_id = $variables[$i]['variable_id'];
 			$rule_variable->state_id = $variables[$i]['state_id'];
@@ -50,26 +52,34 @@ class RuleController extends Controller
 		$rule_id = $request->input('rule_id');
 		Rule::where('id', $rule_id)->update(["column" => $request->input('column')]);
 
+
+
 		$variables = $request->input('rules_variables');
+		$hazards = $request->input('hazards_ids');
+		$columns = explode(";", $request->input('column'));
 
 		for($i = 0; $i < sizeof($variables); $i++){
-			RulesVariables::where('rule_id', $rule_id)->where('variable_id', $variables[$i]['variable_id'])->update(["state_id" => $variables[$i]['state_id']]);
+			RulesVariablesStates::where('rule_id', $rule_id)->where('variable_id', $variables[$i]['variable_id'])->update(["state_id" => $variables[$i]['state_id']]);
 		}
 	}
 
 	public function delete(Request $request){
 		Rule::where('id', $request->input('rule_id'))->delete();
-		RulesVariables::where('rule_id', $request->input('rule_id'))->delete();
+		SafetyConstraints::where('rule_id', $request->input('rule_id'))->delete();
+		RulesVariablesStates::where('rule_id', $request->input('rule_id'))->delete();
+		RulesSafetyConstraintsHazards::where('rule_id', $request->input('rule_id'))->delete();
 	}
 
 	public function deleteAll(Request $request){
-		SafetyConstraints::where('controlaction_id', $request->input('controlaction_id'))->delete();
+		foreach(Rule::where('controlaction_id', $request->input('controlaction_id'))->get() as $rule){
 
-		foreach(Rule::where('controlaction_id', $request->input('controlaction_id')) as $rule){
-			RulesVariables::where('rule_id', $rule->id)->delete();
+			RulesVariablesStates::where('rule_id', $rule->id)->delete();
+			SafetyConstraints::where('rule_id', $rule->id)->delete();
+			RulesSafetyConstraintsHazards::where('rule_id', $rule->id)->delete();
+			$rule->delete();
 		}
 
-		Rule::where('controlaction_id', $request->input('controlaction_id'))->delete();
+		//Rule::where('controlaction_id', $request->input('controlaction_id'))->delete();
 	}
 
 }

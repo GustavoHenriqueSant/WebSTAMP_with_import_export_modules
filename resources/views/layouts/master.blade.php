@@ -27,7 +27,12 @@
               </a>
             </div>
             <div class="navbar__item__substep">
-              <a href="/{{$slug}}/stepone#accidents" class="navbar__item__link"> <!-- TROCAR POR LOSSES -->
+              <a href="/{{$slug}}/stepone#assumptions" class="navbar__item__link">
+                Assumptions
+              </a>
+            </div>
+            <div class="navbar__item__substep">
+              <a href="/{{$slug}}/stepone#losses" class="navbar__item__link"> <!-- TROCAR POR LOSSES -->
                 Losses
               </a>
             </div>
@@ -101,7 +106,7 @@
       <div class="navbar__item">
         <div class="navbar__item__content">
           <a href="/#tool" class="navbar__item__link">
-            STPA Tool
+            WebSTAMP
           </a>
         </div>
       </div>

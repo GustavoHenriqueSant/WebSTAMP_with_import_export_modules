@@ -88,13 +88,14 @@ Route::match(array('GET', 'POST'), '{slug}/stepone', ['as' => 'stepone', functio
         $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
         $project_name = App\Project::select("name")->where('URL', $slug)->first()->name;
         $losses = App\Losses::where('project_id', $project_id)->orderBy('id')->get();
+        $hazards = App\Hazards::where('project_id', $project_id)->orderBy('id')->get();
         $belongsToProject = Team::where('project_id', $project_id)->where('user_id', Auth::user()->id)->first() != null;
         $loss_map = mapLoss($losses);
         $hazard_map = mapHazard($project_id);
         $sysconstraints_map = mapConstraints($project_id);
         $goals_map = mapGoals($project_id);
         $assumptions_map = mapAssumptions($project_id);
-        return view('pages.stepone', compact("losses", "project_id", "project_name", "project_type", "slug", "loss_map", "hazard_map", "goals_map", "assumptions_map", "sysconstraints_map"));
+        return view('pages.stepone', compact("losses", "hazards", "project_id", "project_name", "project_type", "slug", "loss_map", "hazard_map", "goals_map", "assumptions_map", "sysconstraints_map"));
     }
 }]);
 
@@ -112,8 +113,9 @@ Route::match(array('GET', 'POST'), '{slug}/stepthree', ['as' => 'stepthree', fun
 		$project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
         $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
         $belongsToProject = Team::where('project_id', $project_id)->where('user_id', Auth::user()->id)->first() != null;
+        $hazard_map = mapHazard($project_id);
         if ($belongsToProject)
-    	   return view('pages.stepthree', compact("project_id", "project_type", "slug"));
+    	   return view('pages.stepthree', compact("project_id", "project_type", "slug", "hazard_map"));
 	}
     else
     	return view('home');
@@ -153,14 +155,17 @@ Route::post('/deleteproject', 'ProjectController@delete');
 Route::post('/addsystemgoal', 'SystemGoalController@add');
 Route::post('/editsystemgoal', 'SystemGoalController@edit');
 Route::post('/deletesystemgoal', 'SystemGoalController@delete');
+Route::post('/textsystemgoal','SystemGoalController@getText');
 
 Route::post('/addassumption','AssumptionsController@add');
 Route::post('/editassumption','AssumptionsController@edit');
 Route::post('/deleteassumption','AssumptionsController@delete');
+Route::post('/textassumption','AssumptionsController@getText');
 
 Route::post('/addloss', 'LossController@add');
 Route::post('/editloss', 'LossController@edit');
 Route::post('/deleteloss', 'LossController@delete');
+Route::post('/textloss','LossController@getText');
 
 Route::post('/addactuator', 'ActuatorController@add');
 Route::post('/editactuator', 'ActuatorController@edit');
@@ -189,6 +194,8 @@ Route::post('/deletecontrolaction', 'ControlActionController@delete');
 Route::post('/addhazard', 'HazardController@add');
 Route::post('/edithazard', 'HazardController@edit');
 Route::post('/deletehazard', 'HazardController@delete');
+Route::post('/texthazard','HazardController@getText');
+Route::post('/deletehazardLossAssociation','HazardController@deleteAssociatedLoss');
 
 Route::post('/addvariable', 'VariableController@add');
 Route::post('/editvariable', 'VariableController@edit');
@@ -197,6 +204,8 @@ Route::post('/deletevariable', 'VariableController@delete');
 Route::post('/addsystemsafetyconstraint', 'SystemSafetyConstraintController@add');
 Route::post('/editsystemsafetyconstraint', 'SystemSafetyConstraintController@edit');
 Route::post('/deletesystemsafetyconstraint', 'SystemSafetyConstraintController@delete');
+Route::post('/textsystemsafetyconstraint','SystemSafetyConstraintController@getText');
+Route::post('/deletesystemSafetyConstraintHazardAssociation','SystemSafetyConstraintController@deleteAssociatedHazard');
 
 Route::post('/addconnections', 'ConnectionController@add');
 Route::post('/deleteconnections', 'ConnectionController@delete');
@@ -206,6 +215,9 @@ Route::post('/deletestate', 'StateController@delete');
 
 Route::post('/adduca', 'SafetyConstraintsController@add');
 Route::post('/edituca', 'SafetyConstraintsController@edit');
+Route::post('/scdata', 'SafetyConstraintsController@getSafetyConstraint');
+Route::post('/editucaByRule', 'SafetyConstraintsController@editByRule');
+Route::post('/refreshUcasByRule' , 'SafetyConstraintsController@refreshUcasWithRules');
 Route::post('/deleteuca', 'SafetyConstraintsController@delete');
 Route::post('/deletealluca', 'SafetyConstraintsController@deleteAll');
 // Route::post('/addsuggesteduca', 'SystemSafetyConstraintController@save');

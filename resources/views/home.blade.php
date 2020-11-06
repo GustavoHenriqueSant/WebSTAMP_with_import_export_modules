@@ -7,12 +7,32 @@
     <h1 style="text-align: center;">About STAMP/STPA</h1>
     <hr/>
     <p>
-        STAMP (Systems-Theoretic Accident Model and Processes) is an accident causation model that is based on systems theory and enables the safety and security analysis in the concept phase. STAMP has two pairs of ideas: hierarchy &amp; emergence and communication &amp; control. STAMP treats accidents and unacceptable losses as a dynamic control problem (vs. a failure problem). It includes entire socio-technical system (not just technical part), accidents, losses and hazards due to components interactions. The result of STAMP modeling is a safety control structure. STAMP/STPA has attracted attention in many areas, especially in avionics, aircraft system design, air traffic control, nuclear power plants, and others.
+        STAMP (Systems-Theoretic Accident Model and Processes) is an accident causation model that is based on systems theory and enables the safety and security analysis in the concept phase. STAMP has two pairs of ideas: (i) hierarchy & emergence and (ii) communication & control. STAMP treats accidents and unacceptable losses as a dynamic control problem (vs. a failure problem). 
     </p>
-    
+
     <p>
-        STPA (System-Theoretic Process Analysis) is an accident analysis technique based on STAMP. STPA consists of two steps. Step 1 identifies potential Unsafe Control Actions (UCA) and Step 2 reveals potential causes of unsafe control and generates safety recommendations. STPA Step 2 provides knowledge to assist the designers in eliminating or mitigating the potential causes of hazards.
+        It includes the entire socio-technical system (not just the technical part), losses, and hazards due to components interactions. The result of STAMP modeling is a safety control structure. STAMP/STPA has attracted attention in many areas, especially in avionics, aircraft system design, air traffic control, nuclear power plants, and others.
     </p>
+
+    <p>
+        STPA (System-Theoretic Process Analysis) is a hazard analysis technique based on STAMP. STPA consists of four steps: (i) Define the purpose of the analysis, (ii) Model the control structure, (iii) Identify unsafe control actions", and (iv) Identify loss scenarios. Each UCA identified must have an associated controller constraint.
+    </p>
+
+    <p> 
+        Defining the purpose of the analysis is required for any hazard analysis technique. In the first step, the analysts define the system goals (such as safety, security, privacy, and others), the properties of the system, and its boundaries. Identify losses, system-level hazards, system-level safety constraints, and refine the hazards are parts of that step.
+     </p>
+
+    <p>
+        The analysts and designers are responsible for model the hierarchical control structure. It has components (such as controllers, actuators, controlled processes, and sensors) and connections (such as control actions, feedback, and communication channel).
+     </p>
+
+    <p>
+        After model the control structure, the analyst must analyze it and identify the unsafe control actions (UCA). A UCA is a control action that will lead to a hazard in a particular context and worst-case environment. Four ways made a control action unsafe. They are: (a) Not providing causes hazard; (b) Providing causes hazard; (c) Providing in the wrong time or order causes hazard; (d) Stopped too soon or applying too long causes hazard.
+     </p>
+
+    <p>
+        The last step provides knowledge to assist the designers in eliminating or mitigating the potential causes of hazards. The loss scenario describes the causal factors that can lead to unsafe control actions and hazards. The analysts must identify (a) Why a UCA occur, and (b) Why a safe control action that was issued was improperly executed or not executed.
+     </p>
 
     <p>
         STAMP/STPA requires critical thinking and experience from analysts. It also requires time and effort for a comprehensive analysis.

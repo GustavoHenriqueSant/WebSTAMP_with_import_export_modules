@@ -3,6 +3,8 @@
 <?php $stepone= ($project_type == "Security" ) ? ['mission-assurance', 'assumptions', 'losses', 'hazards', 'systemsafetyconstraint'] : ['systemgoals', 'assumptions','losses', 'hazards', 'systemsafetyconstraint'];
 ?>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 @section('content')
     @foreach ($stepone as $s)
         <input type="hidden" id="project_id" value="{{$project_id}}">

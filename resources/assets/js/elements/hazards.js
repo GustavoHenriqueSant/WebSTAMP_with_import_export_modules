@@ -22,7 +22,7 @@ function showLosses(){
 	var index = 0;
 	var retorno = losses.map(function(loss) {
 		index++;
-		return `<option value="${loss.id}">[L-${index}] ${loss.name}</option>`;
+		return `<option value="${loss.id}" name="[L-${index}]">[L-${index}] ${loss.name}</option>`;
 	});
 	listLosses.html(retorno);
 }

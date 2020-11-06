@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RulesVariables extends Model
+class RulesVariablesStates extends Model
 {
-	protected $table = "rules_variables";
+	protected $table = "rules_variables_states";
 
 	public function rule(){
 		return $this->belongsTo('App\Rule');

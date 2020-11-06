@@ -10,6 +10,10 @@ use App\Hazards;
 
 use App\LossesHazards;
 
+use App\RulesSafetyConstraintsHazards;
+
+use App\SystemSafetyConstraintHazards;
+
 use Illuminate\Routing\Redirector;
 
 class HazardController extends Controller
@@ -25,33 +29,49 @@ class HazardController extends Controller
 		$hazard->save();
 		
 		$losses = $request->input('losses_associated');
-		$losses_associated_id = array();
 
 		foreach($losses as $loss_id){
 			$loss_associated = new LossesHazards();
-			$loss_associated->losses_id = $loss_id;
-			$loss_associated->hazards_id = $hazard->id;
+			$loss_associated->loss_id = $loss_id;
+			$loss_associated->hazard_id = $hazard->id;
 			$loss_associated->save();
-			array_push($losses_associated_id, $loss_associated->id);
 		}
 		
 		return response()->json([
         	'name' => $hazard->name,
         	'id' => $hazard->id,
         	'losses_associated' => $losses,
-        	'losses_associated_id' => $losses_associated_id,
         	'project_type' => $request->input('project_type')
     	]);
 	}
 
 	public function delete(Request $request){
 		Hazards::destroy($request->input('id'));
+		LossesHazards::where('hazard_id', $request->input('id'))->delete();
+		RulesSafetyConstraintsHazards::where('hazard_id', $request->input('id'))->delete();
+		SystemSafetyConstraintHazards::where('hazard_id', $request->input('id'))->delete();
 	}
 
 	public function edit(Request $request){
 		$hazard = Hazards::find($request->input('id'));
 		$hazard->name = $request->input('name');
 		$hazard->save();
+	}
+
+	public function getText(Request $request){
+		$hazard = Hazards::find($request->input('id'));
+		return response()->json([
+	        	'name' => $hazard->name
+    		]);
+	}
+
+	public function deleteAssociatedLoss(Request $request){
+		LossesHazards::where('hazard_id', $request->input('id_1'))->where('loss_id', $request->input('id_2'))->delete();
+		$count = LossesHazards::where('hazard_id', $request->input('id_1'))->count();
+
+		return response()->json([
+			'count' => $count
+		]);
 	}
 
 }

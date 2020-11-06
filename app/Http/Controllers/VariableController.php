@@ -12,7 +12,7 @@ use App\State;
 
 use App\Rule;
 
-use App\RulesVariables;
+use App\RulesVariablesStates;
 
 use App\Controllers;
 
@@ -48,7 +48,7 @@ class VariableController extends Controller
 		if ($variable->controller_id > 0){
 			foreach(CA::where('controller_id', $variable->controller_id)->get() as $control_action) {
 				foreach(Rule::distinct()->select('id')->where('controlaction_id', $control_action->id)->get() as $rule) {
-					$rule_variable = new RulesVariables();
+					$rule_variable = new RulesVariablesStates();
 					$rule_variable->rule_id = $rule->id;
 					$rule_variable->variable_id = $variable->id;
 					$rule_variable->state_id = 0;
@@ -59,7 +59,7 @@ class VariableController extends Controller
 			foreach(Controllers::where('project_id', $variable->project_id)->get() as $controller) {
 				foreach(CA::where('controller_id', $controller->id)->get() as $control_action) {
 					foreach(Rule::distinct()->select('id')->where('controlaction_id', $control_action->id)->get() as $rule) {
-						$rule_variable = new RulesVariables();
+						$rule_variable = new RulesVariablesStates();
 						$rule_variable->rule_id = $rule->id;
 						$rule_variable->variable_id = $variable->id;
 						$rule_variable->state_id = 0;
@@ -78,7 +78,7 @@ class VariableController extends Controller
 	}
 
 	public function delete(Request $request){
-		RulesVariables::where('variable_id', $request->input('id'))->delete();
+		RulesVariablesStates::where('variable_id', $request->input('id'))->delete();
 		$states = State::where('variable_id', $request->input('id'))->get();
 		foreach($states as $state) {
 			DB::select(DB::raw("UPDATE context_tables SET context = REPLACE(context, ',".$state->id.",', ',') WHERE context like '%,".$state->id.",%'"));
