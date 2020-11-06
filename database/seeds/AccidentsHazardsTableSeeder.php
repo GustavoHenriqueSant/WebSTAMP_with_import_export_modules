@@ -11,19 +11,19 @@ class AccidentsHazardsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('accidents_hazards')->insert([
+        DB::table('losses_hazards')->insert([
             'id' => 1,
-            'accidents_id' => 2,
+            'losses_id' => 2,
             'hazards_id' => 1
         ]);
-        DB::table('accidents_hazards')->insert([
+        DB::table('losses_hazards')->insert([
             'id' => 2,
-            'accidents_id' => 1,
+            'losses_id' => 1,
             'hazards_id' => 2
         ]);
-        DB::table('accidents_hazards')->insert([
+        DB::table('losses_hazards')->insert([
             'id' => 3,
-            'accidents_id' => 3,
+            'losses_id' => 3,
             'hazards_id' => 3
         ]);
     }

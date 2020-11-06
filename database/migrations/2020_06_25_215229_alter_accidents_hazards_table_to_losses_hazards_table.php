@@ -12,11 +12,11 @@ class AlterAccidentsHazardsTableToLossesHazardsTable extends Migration
      */
     public function up()
     {
-        Schema::rename('accidents_hazards', 'losses_hazards');
-
-        Schema::table('losses_hazards', function (Blueprint $table) {
+        Schema::table('accidents_hazards', function (Blueprint $table) {
             $table->renameColumn('accidents_id', 'losses_id');
         });
+
+        Schema::rename('accidents_hazards', 'losses_hazards');
     }
 
     /**

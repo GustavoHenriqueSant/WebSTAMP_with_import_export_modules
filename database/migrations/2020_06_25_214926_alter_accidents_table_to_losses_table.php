@@ -12,7 +12,7 @@ class AlterAccidentsTableToLossesTable extends Migration
      */
     public function up()
     {
-        Schema::rename("accidents", "losses");
+        Schema::rename('accidents', 'losses');
     }
 
     /**

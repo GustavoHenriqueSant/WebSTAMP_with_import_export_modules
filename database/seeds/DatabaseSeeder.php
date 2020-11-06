@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(StatesTableSeeder::class);
         $this->call(ConnectionsTableSeeder::class);
         $this->call(ControlActionsTableSeeder::class);
-        $this->call(RulesTableSeeder::class);
+        // $this->call(RulesTableSeeder::class);
         $this->call(SystemSafetyConstraintTableSeeder::class);
         $this->call(SafetyConstraintsTableSeeder::class);
         $this->call(GuidewordsTableSeeder::class);

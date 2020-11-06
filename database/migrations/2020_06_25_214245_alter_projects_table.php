@@ -25,6 +25,6 @@ class AlterProjectsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('losses');
     }
 }
