@@ -87,9 +87,6 @@
                                         }
                                     ?>
 
-
-                                    <!-- <input id="hazards-associated-with-{{$systemSafetyConstraint->id}}" type="hidden" name="_token" <?php// echo('value="'.$ids.'"')?> > -->
-                                   <!--  <input id="add-hazard-association-{{$systemSafetyConstraint->id}}" value="{{$systemSafetyConstraint->id}}" type="image" src="{{ asset('images/plus.png') }}" width="13" class="navbar__logo add-hazard-association"  style="display: none;"> -->
                                 </div>
                             </li>
                         @endif
