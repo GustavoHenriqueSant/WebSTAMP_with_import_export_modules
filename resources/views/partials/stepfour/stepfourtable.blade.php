@@ -105,7 +105,7 @@
                             <div class="text center">
                                 <form action="/" class="teste-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
                                     @if($safety_constraint->flag == 0)
-                                        <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Checklist Generation</button>
+                                        <button class="font-button"><img src="/images/import.png" class="steptwo-button" width="15"/> Checklist</button>
                                     @endif
                                 </form>
                                 <form action="/testeUCA" class="test-vex" method="POST" data-id="{{$safety_constraint->id}}" style="display: inline-block;" >
