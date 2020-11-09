@@ -4,7 +4,7 @@
 
 @section('content-add')
     <label for="hazard-name" class="add-drop__label">
-        System-level Hazard name
+        System-level Hazard
     </label>
     <textarea id="hazard-name" name="hazard-name" maxlength="500" rows="1" cols="50" name="assumption-name" type="text" class="add-drop__textarea responsive_textarea"  placeholder="Type here (max: 500 characters)"  style="resize: none;" required></textarea>
     <label for="hazard-loss-association" class="add-drop__label">

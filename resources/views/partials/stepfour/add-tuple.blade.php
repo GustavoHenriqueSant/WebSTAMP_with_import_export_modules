@@ -32,16 +32,16 @@
 	        				<textarea class="step2_textarea__modal" name="scenario" id="scenario" placeholder="Add the scenario here"></textarea>
 	        			</div>
                         <div class="text center"><br/>
-                        	<textarea class="step2_textarea__modal" name="associated" id="associated" placeholder="Add the associated causal factors here"></textarea>
+                        	<textarea class="step2_textarea__modal" name="associated" id="associated" placeholder="Add the associated causal factor here"></textarea>
                         </div>
                         <div class="text center"><br/>
-                        	<textarea class="step2_textarea__modal" name="requirement" id="requirement" placeholder="Add the recommendations here"></textarea>
+                        	<textarea class="step2_textarea__modal" name="requirement" id="requirement" placeholder="Add the safety requirement here"></textarea>
                         </div>
 <!--                         <div class="text center"><br/>
                         	<textarea class="step2_textarea__modal" name="role" id="role" placeholder="Add the role here"></textarea>
                         </div> -->
                         <div class="text center"><br/>
-                        	<textarea class="step2_textarea__modal" name="rationale" id="rationale" placeholder="Add the rationales here"></textarea>
+                        	<textarea class="step2_textarea__modal" name="rationale" id="rationale" placeholder="Add the rationale here"></textarea>
                         </div>
 	        		</div>
 	        		<input type="hidden" name="uca" id="uca" value="0">

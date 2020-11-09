@@ -6,8 +6,17 @@ function addLoss(ac) {
 	losses.push(ac);
 }
 
+function editLoss(oldLoss, newLoss) {
+	losses.forEach(function(loss, index){
+		if (losses[index].name === oldLoss){
+			losses[index].name = newLoss;
+		}
+	})
+}
+
 module.exports = {
 	addLoss : addLoss,
+	editLoss : editLoss,
 	init : init,
 	showLosses : showLosses
 }

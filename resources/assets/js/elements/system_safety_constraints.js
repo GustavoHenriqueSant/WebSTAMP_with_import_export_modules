@@ -6,8 +6,17 @@ function addHazard(hazard) {
 	hazards.push(hazard);
 }
 
+function editHazard(oldHazard, newHazard) {
+	hazards.forEach(function(loss, index){
+		if (hazards[index].name === oldHazard){
+			hazards[index].name = newHazard;
+		}
+	})
+}
+
 module.exports = {
 	addHazard : addHazard,
+	editHazard : editHazard,
 	init : init,
 	showHazards : showHazards
 }

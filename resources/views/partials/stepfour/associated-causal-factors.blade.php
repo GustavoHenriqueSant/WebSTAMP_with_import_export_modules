@@ -71,7 +71,7 @@
 
 	<div class="center">
 		@foreach(App\SafetyConstraints::where('id', $uca->id)->get() as $sc)
-			<b>Unsafe Control Action</b>: {{$sc->unsafe_control_action}}
+			<b>Hazardous Control Action</b>: {{$sc->unsafe_control_action}}
 		@endforeach 
 	</div>
 	<div class="center">
@@ -104,7 +104,7 @@
 
 	<div class="center">
 		<select id="show-guidewords-{{$uca_id}}" class="choose-guideword">
-			<option value="right" selected="true">Right side: Unsafe control action provided or safe control action required but not provided</option>
+			<option value="right" selected="true">Right side: Hazardous control action provided or safe control action required but not provided</option>
 			<option value="left">Left side: Safe control action provided but not followed or executed</option>
 		</select>
 	</div>
@@ -117,8 +117,8 @@
 		    		<div class="container-fluid" style="margin-top: 10px">
 		    			<div class="table-row header">
 		    				<div class="text">Scenario</div>
-		    				<div class="text">Associated Causal Factors</div>
-		    				<div class="text">Recommendations</div>
+		    				<div class="text">Associated causal factor</div>
+		    				<div class="text">Safety requirement</div>
 		    				<input type="hidden" id="uca" name="uca" value="{{$uca->id}}"/>
 		    				<!-- <div class="text">Role</div> -->
 		    				<div class="text">Rationale</div>

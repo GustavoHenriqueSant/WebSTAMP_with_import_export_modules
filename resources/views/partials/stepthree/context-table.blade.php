@@ -118,13 +118,13 @@
                     <select class="legend-select" disabled="">
                         <option></option>
                     </select>
-                    <div class="text legend-content"> The Control Action in this context is not Unsafe (it is safe or indifferent)</div>
+                    <div class="text legend-content"> The Control Action in this context is not hazardous (it is safe or indifferent)</div>
                 </div>
                 <div class="table-row">
                     <select class="legend-select" disabled="">
                         <option>Hazardous</option>
                     </select>
-                    <div class="text legend-content"> The Control Action in this context is Unsafe</div>
+                    <div class="text legend-content"> The Control Action in this context is hazardous</div>
                 </div>
                 <div class="table-row">
                     <select class="legend-select-error" disabled="">

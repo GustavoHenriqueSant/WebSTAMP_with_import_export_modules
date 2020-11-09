@@ -15738,8 +15738,17 @@ function addLoss(ac) {
 	losses.push(ac);
 }
 
+function editLoss(oldLoss, newLoss) {
+	losses.forEach(function (loss, index) {
+		if (losses[index].name === oldLoss) {
+			losses[index].name = newLoss;
+		}
+	});
+}
+
 module.exports = {
 	addLoss: addLoss,
+	editLoss: editLoss,
 	init: init,
 	showLosses: showLosses
 };
@@ -15770,8 +15779,17 @@ function addHazard(hazard) {
 	hazards.push(hazard);
 }
 
+function editHazard(oldHazard, newHazard) {
+	hazards.forEach(function (loss, index) {
+		if (hazards[index].name === oldHazard) {
+			hazards[index].name = newHazard;
+		}
+	});
+}
+
 module.exports = {
 	addHazard: addHazard,
+	editHazard: editHazard,
 	init: init,
 	showHazards: showHazards
 };
@@ -15823,6 +15841,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
         id: id,
         name: text
       }).then(function (response) {
+        Hazard.editLoss(oldText, text);
         result = true;
       }).catch(function (error) {
         console.log(error);
@@ -15832,6 +15851,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
         id: id,
         name: text
       }).then(function (response) {
+        SystemSafetyConstraint.editHazard(oldText, text);
         result = true;
       }).catch(function (error) {
         console.log(error);
@@ -16111,6 +16131,10 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   var loss = require('./templates/loss_template');
   var hazard = require('./templates/hazard_template');
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
+
+  // I create that variable to collect the old text (before the editing) of an activity in the "purpose of the analysis"
+  // I need to create it to refresh the "Associated Losses" and "Associated System-level hazards" after an editing.
+  var oldText = "";
 
   // da para apagar depois
 
@@ -16400,7 +16424,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     $('#default-menu-' + activity + '-' + id).hide();
     $('#edition-menu-' + activity + '-' + id).show();
     $('#' + activity + '-description-' + id).attr('class', 'responsive_textarea_active').prop('disabled', false);
-
+    oldText = $('#' + activity + '-description-' + id).val();
     if (activity == "systemsafetyconstraint") {
       $('#add-hazard-association-' + id).show();
     }
@@ -17055,8 +17079,8 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     safety_constraint = safety_constraint.replace("when and", "when");
     safety_constraint = safety_constraint.replace("when,", "when");
     if (states_name.length > 0) {
-      $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/><span class='unsafe-control-name'>" + unsafe_control_action + "</span>.");
-      $(".safety-control").html("<br/><center><b>Associated safety constraint:</b></center><br/><span class='safety-control-name'>" + safety_constraint + "</span>.");
+      $(".unsafe-control").html("<br/><center><b>Potentially hazardous control action:</b></center><br/><span class='unsafe-control-name'>" + unsafe_control_action + "</span>.");
+      $(".safety-control").html("<br/><center><b>Associated safety & security constraint:</b></center><br/><span class='safety-control-name'>" + safety_constraint + "</span>.");
     }
     console.log(controlaction_id);
     $(".adding-manual-uca").find("#context").val(states.join(",")); //.val();

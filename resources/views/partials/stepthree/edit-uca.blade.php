@@ -55,13 +55,13 @@
                     <div class="table-row">
                         <div class="text edit-unsafe-control">
                             <br/>
-                            <center><b class="uca-edition-text">Current unsafe control action:</b></center>
+                            <center><b class="uca-edition-text">Current hazardous control action:</b></center>
                             <textarea  class='uca_list_textarea edit-unsafe-text'></textarea>
                         </div>
                         &nbsp
                         <div class="text edit-safety-control">
                             <br/>
-                            <center><b class="sc-edition-text">Associated safety constraint:</b></center>
+                            <center><b class="sc-edition-text">Associated safety & security constraint:</b></center>
                             <textarea class='uca_list_textarea edit-safety-text'></textarea>
                         </div>
                     </div>

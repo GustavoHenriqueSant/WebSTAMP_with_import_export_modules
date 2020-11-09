@@ -4,7 +4,7 @@
 
 @section('content-add')
     <label for="systemsafetyconstraint-name" class="add-drop__label">
-        System-level Safety Contraint name
+        System-level Safety Contraint
     </label>
     <textarea id="systemsafetyconstraint-name" name="systemsafetyconstraint-name" maxlength="500" rows="1" cols="50" name="assumption-name" type="text" class="add-drop__textarea responsive_textarea"  placeholder="Type here (max: 500 characters)"  style="resize: none;" required></textarea>
     <label for="ssc-hazard-association" class="add-drop__label">

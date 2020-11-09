@@ -25,7 +25,7 @@
                                 <div class="item__title">
                                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                                     <input id="project_id" name="project_id" type="hidden" value="{{$project->id}}">
-                                    <input type="submit" class="add-button" value="Select Project"></input>
+                                    <input type="submit" class="add-button" value="Open project"></input>
                                     <!-- <button>Selecionar este Projeto</button> -->
                                 </div>
                             </form>
@@ -35,7 +35,7 @@
                                     <input id="project_id" name="project_id" type="hidden" value="{{$project->id}}">
                                     <input id="project_name" name="project_name" type="hidden" value="{{$project->name}}">
                                     <input id="project_description" name="project_description" type="hidden" value="{{$project->description}}">
-                                    <input type="submit" class="edit-button" value="Edit Project"></input>
+                                    <input type="submit" class="edit-button" value="Edit project information"></input>
                                     <!-- <button>Editar este Projeto</button> -->
                                 </div>
                             </form>
@@ -43,7 +43,7 @@
                                 <div class="item__title">
                                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                                     <input id="project_id" name="project_id" type="hidden" value="{{$project->id}}">
-                                    <input type="submit" class="delete-button" value="Delete Project"></input>
+                                    <input type="submit" class="delete-button" value="Delete the entire project"></input>
                                     <!-- <button>Deletar este Projeto</button> -->
                                 </div>
                             </form>

@@ -265,6 +265,10 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   var hazard = require('./templates/hazard_template');
   var systemsafetyconstraint = require('./templates/systemsafetyconstraint_template');
 
+  // I create that variable to collect the old text (before the editing) of an activity in the "purpose of the analysis"
+  // I need to create it to refresh the "Associated Losses" and "Associated System-level hazards" after an editing.
+  var oldText = "";
+
   // da para apagar depois
   
   // function getLossesId(myString) {
@@ -561,6 +565,7 @@ function edit_stepone(id, activity, text) {
         name : text
       })
       .then(function (response) {
+        Hazard.editLoss(oldText, text);
         result = true;
       })
       .catch(function (error) {
@@ -572,6 +577,7 @@ function edit_stepone(id, activity, text) {
         name : text
       })
       .then(function (response) {
+        SystemSafetyConstraint.editHazard(oldText, text);
         result = true;
       })
       .catch(function (error) {
@@ -667,7 +673,7 @@ $("body").on('keydown', '.responsive_textarea_active', function(event) {
     $('#default-menu-' + activity + '-' + id).hide();
     $('#edition-menu-' + activity + '-' + id).show();
     $('#'+ activity +'-description-' + id).attr('class', 'responsive_textarea_active').prop('disabled', false);
-
+    oldText = $('#' + activity + '-description-'+id).val();
     if(activity == "systemsafetyconstraint"){
       $('#add-hazard-association-' + id).show();
     }
@@ -1368,8 +1374,8 @@ for (i = 0; i < acc.length; i++) {
     safety_constraint = safety_constraint.replace("when and", "when");
     safety_constraint = safety_constraint.replace("when,", "when");
     if(states_name.length > 0){
-      $(".unsafe-control").html("<br/><center><b>Potentially unsafe control action:</b></center><br/><span class='unsafe-control-name'>" + unsafe_control_action + "</span>.");
-      $(".safety-control").html("<br/><center><b>Associated safety constraint:</b></center><br/><span class='safety-control-name'>" + safety_constraint + "</span>.");
+      $(".unsafe-control").html("<br/><center><b>Potentially hazardous control action:</b></center><br/><span class='unsafe-control-name'>" + unsafe_control_action + "</span>.");
+      $(".safety-control").html("<br/><center><b>Associated safety & security constraint:</b></center><br/><span class='safety-control-name'>" + safety_constraint + "</span>.");
     }
     console.log(controlaction_id);
     $(".adding-manual-uca").find("#context").val(states.join(",")); //.val();
