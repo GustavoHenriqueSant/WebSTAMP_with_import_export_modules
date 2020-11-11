@@ -242,3 +242,7 @@ Route::post('/generateUCA', 'ContextTableController@generateUCA');
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+
+Route::get('/tutorial', function () {
+    return response()->file('files/WebSTAMP Full Tutorial.pdf');
+});

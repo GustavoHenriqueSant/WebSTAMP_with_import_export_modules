@@ -73,7 +73,7 @@
         The analyst can choose existing scenarios and create new ones. This feature enables a more systematic and comprehensive analysis.
     </p>
     <p>
-        Want to know how to use WebSTAMP? Click <a href="{{ asset('files/WebSTAMP FUll Tutorial.pdf') }}">here</a> to download the PDF tutorial.
+        Want to know how to use WebSTAMP? Click <a href="/tutorial">here</a> to download the PDF tutorial.
     </p>
 </div>
 <br/>
