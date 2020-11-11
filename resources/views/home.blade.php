@@ -72,6 +72,9 @@
         The second approach provides a list of generic scenarios, associated causal factors, requirements and rationale based on the type of unsafe control action. 
         The analyst can choose existing scenarios and create new ones. This feature enables a more systematic and comprehensive analysis.
     </p>
+    <p>
+        Want to know how to use WebSTAMP? Click <a href="{{ asset('files/WebSTAMP FUll Tutorial.pdf') }}">here</a> to download the PDF tutorial.
+    </p>
 </div>
 <br/>
 <div class="login" id="authors" style="width: 60%; margin: auto; padding: 10px;">
@@ -90,8 +93,8 @@
         The project is a collaborative effort of many voluntary contributors. They include:
     </p>
     <ul>
+        <li><p>Celso Massaki Hirata (ITA) (Project Coordinator, e-mails: hirata@ita.br  hiratacm@gmail.com)</p></li>
         <li><p>Fellipe Guilherme Rey de Souza (ITA)</p></li>
-        <li><p>Celso Massaki Hirata (ITA)</p></li>
         <li><p>Rodrigo Martins Pagliares (UNIFAL-MG)</p></li>
         <li><p>Juliana de Melo Bezerra (ITA)</p></li>
         <li><p>Filipe Parisoto Ribeiro (UNIFAL-MG)</p></li>

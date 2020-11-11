@@ -46,7 +46,7 @@
                     <div class="table-row header">
                         <div class="text center">Scenario</div>
                         <div class="text center">Associated causal factor</div>
-                        <div class="text center">Safety requirement</div>
+                        <div class="text center">Recommendation</div>
                         <!-- <div class="text center">Allocated to</div> -->
                         <div class="text center">Rationale</div>
                         <div class="content-uca"><!-- Edit/Delete --></div>

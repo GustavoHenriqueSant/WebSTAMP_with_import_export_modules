@@ -35,7 +35,7 @@
                         	<textarea class="step2_textarea__modal" name="associated" id="associated" placeholder="Add the associated causal factor here"></textarea>
                         </div>
                         <div class="text center"><br/>
-                        	<textarea class="step2_textarea__modal" name="requirement" id="requirement" placeholder="Add the safety requirement here"></textarea>
+                        	<textarea class="step2_textarea__modal" name="requirement" id="requirement" placeholder="Add the recommendation here"></textarea>
                         </div>
 <!--                         <div class="text center"><br/>
                         	<textarea class="step2_textarea__modal" name="role" id="role" placeholder="Add the role here"></textarea>

@@ -118,7 +118,7 @@
 		    			<div class="table-row header">
 		    				<div class="text">Scenario</div>
 		    				<div class="text">Associated causal factor</div>
-		    				<div class="text">Safety requirement</div>
+		    				<div class="text">Recommendation</div>
 		    				<input type="hidden" id="uca" name="uca" value="{{$uca->id}}"/>
 		    				<!-- <div class="text">Role</div> -->
 		    				<div class="text">Rationale</div>

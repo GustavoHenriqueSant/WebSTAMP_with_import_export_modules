@@ -16,6 +16,7 @@ elixir(function(mix) {
     mix.sass('style.scss', './public/css/style.css');
     mix.browserify('index.js', './public/js/app.js');
     mix.copy('./resources/assets/images', './public/images');
+    mix.copy('./resources/assets/files', './public/files');
     /*mix.scripts([
     	'./public/js/app.js',
         './node_modules/jquery/dist/jquery.min.js',
