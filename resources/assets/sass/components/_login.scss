@@ -40,7 +40,7 @@
 		color: white; 
 		border: 3px solid #2c3e50;
 		padding: 5px;
-		width: 30%;
+		width: 35%;
 		margin: auto;
 	}
 
@@ -52,6 +52,21 @@
 		text-align: center;
 		font-family: serif;
 	}
+
+
+.alert {
+	padding: .75rem 1.25rem;
+   	margin-bottom: 1rem;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+    border-color: #d0e9c6;
+    color: #3c763d;
+}
+
 
 .login-input {
     width: 100%;

@@ -64,7 +64,7 @@
 
         <div class="verify-credentials">
             <button type="submit">
-                Login
+                Register
             </button>
         </div>
     </form>

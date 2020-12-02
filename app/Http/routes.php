@@ -14,7 +14,7 @@ use App\Team;
 */
 
 // Route::get('/fundamentals', ['as' => 'fundamentals', function () {
-// 	$project_id = 1;
+//  $project_id = 1;
 //     $losses = App\Losses::where('project_id', $project_id)->get();
 //     return view('pages.home', compact("losses", "project_id"));
 // }]);
@@ -79,7 +79,7 @@ function mapConstraints($project_id){
 }
 
 Route::get('/', ['as' => 'home', function () {
-	return view('home');
+    return view('home');
 }]);
 
 Route::match(array('GET', 'POST'), '{slug}/stepone', ['as' => 'stepone', function ($slug) {
@@ -109,20 +109,20 @@ Route::match(array('GET', 'POST'), '{slug}/steptwo', ['as' => 'steptwo', functio
 }]);
 
 Route::match(array('GET', 'POST'), '{slug}/stepthree', ['as' => 'stepthree', function ($slug) {
-	if (Auth::check()) {
-		$project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
+    if (Auth::check()) {
+        $project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
         $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
         $belongsToProject = Team::where('project_id', $project_id)->where('user_id', Auth::user()->id)->first() != null;
         $hazard_map = mapHazard($project_id);
         if ($belongsToProject)
-    	   return view('pages.stepthree', compact("project_id", "project_type", "slug", "hazard_map"));
-	}
+           return view('pages.stepthree', compact("project_id", "project_type", "slug", "hazard_map"));
+    }
     else
-    	return view('home');
+        return view('home');
 }]);
 
 Route::match(array('GET', 'POST'), '{slug}/stepfour', ['as' => 'stepfour', function ($slug) {
-	if (Auth::check()) {
+    if (Auth::check()) {
         $project_id = App\Project::select("id")->where('URL', $slug)->first()->id;
         $project_type = App\Project::select("type")->where('URL', $slug)->first()->type;
         $belongsToProject = Team::where('project_id', $project_id)->where('user_id', Auth::user()->id)->first() != null;
