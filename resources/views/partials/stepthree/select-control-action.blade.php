@@ -24,6 +24,8 @@
             </select>     
             @endforeach
         </div>
+        <div style="text-align: center; margin-top: 20px; display: none;" id="load-step3-content">
+         <button style={position: absolute;} id="load-button">Load</button>
+        </div>
     </div>
-
 </div>

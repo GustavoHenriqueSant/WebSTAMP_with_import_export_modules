@@ -1650,6 +1650,20 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 
+  // UPDATE 15/02/21
+  $('#load-button').on('click', function(event) {
+    let controller = $("#controller-select").val();
+    let ca = $("#control-actions-select").val();
+    vex.dialog.confirm({
+      message: 'The page will reload and all unsaved changes will be lost. Proceed?',
+      callback: function (value) {
+        if (value) {
+          window.location.replace(location.protocol + '//' + location.host + location.pathname + "?ca=" + ca + "&controller=" + controller);
+        }
+      }
+    });
+  });
+
   
 
   //select controller event on step 3
@@ -1663,6 +1677,7 @@ for (i = 0; i < acc.length; i++) {
     $('select[name=control-actions-of-controller-' + controllerSelected_id+']').show();
 
     $('select[name=control-actions-of-controller-' + controllerSelected_id+']').change(function(e) {
+        $("#load-step3-content").show();
         // Hide all elements of all control actions
         $('.hide-control-actions').hide();
         // Shows the content of selected control action
