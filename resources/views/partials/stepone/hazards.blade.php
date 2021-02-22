@@ -59,38 +59,36 @@ Definition of System: A system is a set of components that act together as a who
                                 </div> 
                             </div>
                         </li>
-                        @if(App\LossesHazards::where('hazard_id', $hazard->id)->count() >= 1)
-                            <li class="step1_itens">
-                                <div id="hazard_{{$hazard->id}}_losses" style="margin: 0 0 15px 0;">
-                                    <?php $associated_losses = array(); ?>
-                                    @foreach(App\LossesHazards::where('hazard_id', $hazard->id)->get() as $losseshazards)
-                                        <?php array_push($associated_losses, $losseshazards->loss_id); ?>
+                        <li class="step1_itens">
+                            <div id="hazard_loss_association-{{$hazard->id}}" hidden="true">
+                                <label id="label_hazard-{{$hazard->id}}" class="hidden">H-{{$hazard_map[$hazard->id]}}:</label>
+                                <select id="hazard_loss-{{$hazard->id}}" name="hazard_loss" class="select_from_form_ssc" multiple required title="" size="3">     
+                                </select>
+                            </div>
+                            <div id="hazard_{{$hazard->id}}_losses" style="margin: 0 0 15px 0;">
+                                <?php $associated_losses = array(); ?>
+                                @foreach(App\LossesHazards::where('hazard_id', $hazard->id)->get() as $losseshazards)
+                                    <?php array_push($associated_losses, $losseshazards->loss_id); ?>
 
-                                        <a class="hazard_loss_association" id="hazard_loss_{{$losseshazards->hazard_id}}_{{$losseshazards->loss_id}}">
-                                            @if(App\LossesHazards::where('hazard_id', $hazard->id)->count() > 1)
-                                                <span class="delete_step1_association  delete_hazard_loss_assocation_{{$losseshazards->hazard_id}}" alt="hazardLossAssociation" name="ids-{{$losseshazards->hazard_id}}-{{$losseshazards->loss_id}}">×</span>
-                                            @else
-                                                <span style="display: none;" class="delete_step1_association  delete_hazard_loss_assocation_{{$losseshazards->hazard_id}}" alt="hazardLossAssociation" name="ids-{{$losseshazards->hazard_id}}-{{$losseshazards->loss_id}}">×</span>
-                                            @endif
-                                            [L-{{$loss_map[$losseshazards->loss_id]}}]</a>&nbsp
-                                    @endforeach
+                                    <a class="hazard_loss_association" id="hazard_loss_{{$losseshazards->hazard_id}}_{{$losseshazards->loss_id}}">
+                                        [L-{{$loss_map[$losseshazards->loss_id]}}]</a>&nbsp
+                                @endforeach
 
-                                     <?php
-                                        $ids = ""; 
-                                        foreach ($associated_losses as $index => $id) {
-                                            if($index != count($associated_losses) - 1)
-                                                $ids .= $id.",";
-                                            else
-                                                $ids .= $id;
-                                        }
-                                    ?>
+                                 <?php
+                                    $ids = ""; 
+                                    foreach ($associated_losses as $index => $id) {
+                                        if($index != count($associated_losses) - 1)
+                                            $ids .= $id.",";
+                                        else
+                                            $ids .= $id;
+                                    }
+                                ?>
+                   
+                            </div>
 
+                            <input hidden id="hazard_{{$losseshazards->hazard_id}}_losses_associated" value= <?php echo($ids); ?>>
 
-                                    <!-- <input id="losses-associated-with-{{$hazard->id}}" type="hidden" name="_token" <?php //echo('value="'.$ids.'"')?> > -->
-                                   <!--  <input id="add-loss-association-{{$hazard->id}}" value="{{$hazard->id}}" type="image" src="{{ asset('images/plus.png') }}" width="13" class="navbar__logo add-loss-association"  style="display: none;"> -->
-                                </div>
-                             </li>
-                        @endif
+                         </li>
                      </ul>
                 </div> 
             </li>

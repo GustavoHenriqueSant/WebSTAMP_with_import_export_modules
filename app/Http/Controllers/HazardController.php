@@ -56,6 +56,15 @@ class HazardController extends Controller
 		$hazard = Hazards::find($request->input('id'));
 		$hazard->name = $request->input('name');
 		$hazard->save();
+		$losses_ids = $request->input('losses_ids');
+		LossesHazards::where('hazard_id',$request->input('id'))->delete();
+
+		foreach ($losses_ids as $loss_id) {
+			$losses_hazards = new LossesHazards();
+			$losses_hazards->hazard_id = $request->input('id');
+			$losses_hazards->loss_id = $loss_id;
+			$losses_hazards->save();
+		}
 	}
 
 	public function getText(Request $request){
@@ -63,15 +72,6 @@ class HazardController extends Controller
 		return response()->json([
 	        	'name' => $hazard->name
     		]);
-	}
-
-	public function deleteAssociatedLoss(Request $request){
-		LossesHazards::where('hazard_id', $request->input('id_1'))->where('loss_id', $request->input('id_2'))->delete();
-		$count = LossesHazards::where('hazard_id', $request->input('id_1'))->count();
-
-		return response()->json([
-			'count' => $count
-		]);
 	}
 
 }

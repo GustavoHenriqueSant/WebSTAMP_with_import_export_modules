@@ -4,10 +4,7 @@ module.exports = function(context, exihibition_id, hazards, hazards_map) {
     var list_of_hazards = "";
 
     hazards.forEach(function(f, index){
-        if(hazards.length > 1)
-            list_of_hazards += `<a class="ssc_hazard_association" id="ssc_hazard_${context.id}_${f}"><span class="delete_step1_association delete_ssc_hazard_association_${context.id}" alt="systemSafetyConstraintHazardAssociation" name="ids-${context.id}-${f}">×</span> ${hazards_map[f]}</a>&nbsp&nbsp`;
-        else
-            list_of_hazards += `<a class="ssc_hazard_association" id="ssc_hazard_${context.id}_${f}"><span style="display:none;" class="delete_step1_association delete_ssc_hazard_association_${context.id}" alt="systemSafetyConstraintHazardAssociation" name="ids-${context.id}-${f}">×</span> ${hazards_map[f]}</a>&nbsp&nbsp`;
+         list_of_hazards += `<a class="ssc_hazard_association" id="ssc_hazard_${context.id}_${f}">${hazards_map[f]}</a>&nbsp&nbsp`;
     });
 
     return `
@@ -58,14 +55,15 @@ module.exports = function(context, exihibition_id, hazards, hazards_map) {
                         </li>
 
                         <li class="step1_itens">
-
-                            <div id="ssc_${context.id}_hazards"style="margin: 0 0 15px 0;">
-                             
-                                ${list_of_hazards}
-
-                                <!-- <input id="hazards-associated-with-" type="hidden" name="_token" value="${hazards}" > --!>
-                                <!-- <input id="add-hazard-association-${context.id}" value="${context.id}" type="image" src="/images/plus.png" alt="Add State" width="13" class="navbar__logo add-hazard-association"  style="display: none;"> --!>
+                            <div id="ssc_hazard_association-${context.id}" hidden="true">
+                                    <label id="label_systemsafetyconstraint-${context.id}" class="hidden">SSC-${exihibition_id}:</label>
+                                    <select id="ssc_hazard-${context.id}" name="ssc_hazard" class="select_from_form_ssc" multiple required title="" size="3">     
+                                    </select>
                             </div>
+                            <div id="ssc_${context.id}_hazards"style="margin: 0 0 15px 0;">   
+                                ${list_of_hazards}
+                            </div>
+                            <input hidden id="ssc_${context.id}_hazards_associated" value="${hazards}">
                         </li>
                     </ul>
 

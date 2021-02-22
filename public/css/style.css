@@ -209,8 +209,8 @@ div.panel.show {
 .responsive_textarea {
   background: white;
   border: 0;
-  min-width: 100%;
-  width: 100%;
+  min-width: 80%;
+  width: 80%;
   font-size: 1rem;
   color: black;
   resize: none;
@@ -219,7 +219,7 @@ div.panel.show {
   vertical-align: top;
   font-family: helvetica; }
   .responsive_textarea_active {
-    width: 100%;
+    width: 80%;
     vertical-align: top;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -231,7 +231,16 @@ div.panel.show {
     font-family: helvetica; }
 
 label {
-  font-weight: bold; }
+  font-weight: bold;
+  vertical-align: top; }
+
+.select_from_form_ssc {
+  width: 68%;
+  overflow: auto;
+  max-height: 75px; }
+
+.hidden {
+  visibility: hidden; }
 
 html, body {
   height: 100%;

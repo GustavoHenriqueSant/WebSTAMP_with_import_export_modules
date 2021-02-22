@@ -1,8 +1,8 @@
 .responsive_textarea{
 	background: white;
 	border: 0;
-	min-width: 100%;
-	width: 100%;
+	min-width: 80%;
+	width: 80%;
 	font-size: 1rem;
 	color: black;
 	resize: none;
@@ -11,7 +11,7 @@
 	vertical-align: top;
 	font-family: helvetica;
 	&_active{
-		width: 100%;
+		width: 80%;
 		vertical-align: top;
 		border: 1px solid #ccc;
 		border-radius: 4px;
@@ -26,4 +26,15 @@
 
 label{
 	font-weight: bold;
+	vertical-align: top;
+}
+
+.select_from_form_ssc{
+	width: 68%;
+	overflow: auto;
+	max-height: 75px;
+}
+
+.hidden{
+	visibility: hidden;
 }

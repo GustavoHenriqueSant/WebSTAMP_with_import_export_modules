@@ -415,7 +415,6 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
           hazards_map[aux[i].value] = aux[i].attributes[1].nodeValue;
         }
 
-        console.log(hazards_map);
         axios.post('/addsystemsafetyconstraint', {
           name : name,
           id : id,
@@ -572,17 +571,32 @@ function edit_stepone(id, activity, text) {
         console.log(error);
       })
   } else if (activity == "hazard") {
-    axios.post('/edithazard', {
-        id : id,
-        name : text
+    var losses_ids = $('#hazard_loss-' + id).val();
+    if(losses_ids == null){
+      vex.dialog.alert('At least one loss must be selected');
+    }else{
+      var losses_map = [];
+      $('#hazard_loss-' + id + ' option:selected').each(function(index,value){
+        losses_map[value.value] = $(value).attr('name');
       })
-      .then(function (response) {
-        SystemSafetyConstraint.editHazard(oldText, text);
-        result = true;
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
+      axios.post('/edithazard', {
+          id : id,
+          name : text,
+          losses_ids : losses_ids
+        })
+        .then(function (response) {
+          result = true;
+          var list_of_losses = "";
+          $("#hazard_" + id +"_losses_associated").val(losses_ids);
+          losses_ids.forEach(function(f, index){
+            list_of_losses += `<a class="hazard_loss_association" id="hazard_loss_${id}_${f}">${losses_map[f]}</a>&nbsp&nbsp`;
+          });
+          $('#hazard_'+ id +'_losses').html(list_of_losses);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
   } else if (activity == "systemgoal") {
     axios.post('/editsystemgoal', {
         id : id,
@@ -606,16 +620,32 @@ function edit_stepone(id, activity, text) {
         console.log(error);
       })   
   } else if (activity == "systemsafetyconstraint") {
-    axios.post('/editsystemsafetyconstraint', {
-        id : id,
-        name : text
+    var hazards_ids = $('#ssc_hazard-' + id).val();
+    if(hazards_ids == null){
+      vex.dialog.alert('At least one hazard must be selected');
+    }else{
+      var hazards_map = [];
+      $('#ssc_hazard-' + id + ' option:selected').each(function(index,value){
+        hazards_map[value.value] = $(value).attr('name');
       })
-      .then(function (response) {
-        result = true;
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
+      axios.post('/editsystemsafetyconstraint', {
+          id : id,
+          name : text,
+          hazards_ids : hazards_ids
+        })
+        .then(function (response) {
+          result = true;
+          var list_of_hazards = "";
+          $("#ssc_" + id +"_hazards_associated").val(hazards_ids);
+          hazards_ids.forEach(function(f, index){
+            list_of_hazards += `<a class="ssc_hazard_association" id="ssc_hazard_${id}_${f}">${hazards_map[f]}</a>&nbsp&nbsp`;
+          });
+          $('#ssc_'+ id +'_hazards').html(list_of_hazards);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
   }
 
   return result;
@@ -675,7 +705,15 @@ $("body").on('keydown', '.responsive_textarea_active', function(event) {
     $('#'+ activity +'-description-' + id).attr('class', 'responsive_textarea_active').prop('disabled', false);
     oldText = $('#' + activity + '-description-'+id).val();
     if(activity == "systemsafetyconstraint"){
-      $('#add-hazard-association-' + id).show();
+      $('#ssc_hazard_association-' + id).show();
+      $('#ssc_' + id + '_hazards').hide();
+      var ids = $("#ssc_" + id +"_hazards_associated").val();
+      SystemSafetyConstraint.showAssociatedHazards(ids ,id);
+    }else if(activity == "hazard"){
+      $('#hazard_loss_association-' + id).show();
+      $('#hazard_' + id + '_losses').hide();
+      var ids = $("#hazard_" + id +"_losses_associated").val();
+      Hazard.showAssociatedLosses(ids ,id);
     }
   });
 
@@ -684,7 +722,11 @@ $("body").on('keydown', '.responsive_textarea_active', function(event) {
     var activity = $(this).attr('alt').split('-')[1];
     cancel_edit(id, activity);
     if(activity == "systemsafetyconstraint"){
-      $('#add-hazard-association-' + id).hide();
+      $('#ssc_hazard_association-' + id).hide();
+      $('#ssc_' + id + '_hazards').show();
+    }else if(activity == "hazard"){
+      $('#hazard_loss_association-' + id).hide();
+      $('#hazard_' + id + '_losses').show();
     }
   });
 
@@ -699,46 +741,15 @@ $("body").on('keydown', '.responsive_textarea_active', function(event) {
       $('#default-menu-' + activity + '-' + id).show();
       $('#edition-menu-' + activity + '-' + id).hide();
       $('#'+ activity +'-description-' + id).attr('class', 'responsive_textarea').prop('disabled', true);
-    }
-    
-  });
-
-  $('body').on('click', '.add-hazard-association', function(event){
-    
-  });
-
-  $('body').on('click', '.delete_step1_association', function(event){
-    var item = $(this);
-    vex.dialog.confirm({
-      message: 'Are you sure you want to delete this item?',
-      callback: function (value) {
-        if (value) {
-          var ids = item.attr("name").split('-');
-          var activity = item.attr("alt");
-          axios.post('/delete' + activity, {
-            id_1: ids[1], //ssc id for ssc->hazard association //hazard id for hazard->loss association
-            id_2: ids[2]  //hazard id for ssc->hazard association //loss id for hazard->loss association
-          }).then(function(response){
-            if(activity == "systemSafetyConstraintHazardAssociation"){
-              $("#ssc_hazard_" + ids[1] + "_" + ids[2]).remove();
-
-              if(response.data.count <= 1)
-                $('.delete_ssc_hazard_association_' + ids[1]).hide();
-            }
-            else{
-              $("#hazard_loss_" + ids[1] + "_" + ids[2]).remove();
-
-              if(response.data.count <= 1)
-                $('.delete_hazard_loss_assocation_' + ids[1]).hide();
-            }
-          }).catch(function (error) {
-            console.log(error);
-          });
-        }
+      if(activity == "systemsafetyconstraint"){
+        $('#ssc_hazard_association-' + id).hide();
+        $('#ssc_' + id + '_hazards').show();
+      }else if(activity == "hazard"){
+        $('#hazard_loss_association-' + id).hide();
+        $('#hazard_' + id + '_losses').show();
       }
-    });
+    }
   });
-
 
   $('.item__input').on('keyup', function(event) {
     event.currentTarget.size = event.currentTarget.value.length;
@@ -755,30 +766,6 @@ $("body").on('keydown', '.responsive_textarea_active', function(event) {
   });
 
   // DELETE BLUE ITEM -> LOSS(HAZARD) AND VARIABLE(STATE))
-
-  $('body').on('click', '.item__delete__box', function(event) {
-    var id = $(event.currentTarget).data('index');
-    var type = $(event.currentTarget).data('type');
-    vex.dialog.confirm({
-      message: 'Are you sure you want to delete this item?',
-      callback: function (value) {
-        if (value) {
-          if (type === 'hazard'){
-            axios.post('/deletelossassociated', {
-                id : id,
-              })
-              .then(function (response) {
-                $("#loss-associated-" + id).remove();
-              })
-              .catch(function (error) {
-                console.log(error);
-              })
-              return false;
-          }
-        }
-      }
-    });
-  });
 
   $('body').on('click', '.accordion', function (event){
     var accordion = $(event.currentTarget);

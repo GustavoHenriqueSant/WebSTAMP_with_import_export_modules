@@ -47,6 +47,15 @@ class SystemSafetyConstraintController extends Controller
 		$sys_safety_contraint = SystemSafetyConstraints::find($request->input('id'));
 		$sys_safety_contraint->name = $request->input('name');
 		$sys_safety_contraint->save();
+		$hazards_ids = $request->input('hazards_ids');
+		SystemSafetyConstraintHazards::where('ssc_id',$request->input('id'))->delete();
+
+		foreach ($hazards_ids as $hazard_id) {
+			$sys_safety_contraint_hazards = new SystemSafetyConstraintHazards();
+			$sys_safety_contraint_hazards->ssc_id = $request->input('id');
+			$sys_safety_contraint_hazards->hazard_id = $hazard_id;
+			$sys_safety_contraint_hazards->save();
+		}
 	}
 
 	public function getText(Request $request){
@@ -54,15 +63,6 @@ class SystemSafetyConstraintController extends Controller
 		return response()->json([
 	        	'name' => $ssc->name
     		]);
-	}
-
-	public function deleteAssociatedHazard(Request $request){
-		SystemSafetyConstraintHazards::where('ssc_id', $request->input('id_1'))->where('hazard_id', $request->input('id_2'))->delete();
-		$count = SystemSafetyConstraintHazards::where('ssc_id', $request->input('id_1'))->count();
-		
-		return response()->json([
-			'count' => $count
-		]);
 	}
 
 }

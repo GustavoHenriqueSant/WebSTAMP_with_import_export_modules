@@ -4,10 +4,7 @@ module.exports = function(context, exihibition_id, losses, losses_map) {
     var list_of_losses = "";
 
     losses.forEach(function(f, index){
-        if(losses.length > 1)
-            list_of_losses += `<a class="hazard_loss_association" id="hazard_loss_${context.id}_${f}"><span class="delete_step1_association delete_hazard_loss_assocation_${context.id}" alt="hazardLossAssociation" name="ids-${context.id}-${f}">×</span> ${losses_map[f]}</a>&nbsp&nbsp`;
-        else
-            list_of_losses += `<a class="hazard_loss_association" id="hazard_loss_${context.id}_${f}"><span style="display: none;" class="delete_step1_association delete_hazard_loss_assocation_${context.id}" alt="hazardLossAssociation" name="ids-${context.id}-${f}">×</span> ${losses_map[f]}</a>&nbsp&nbsp`;
+        list_of_losses += `<a class="hazard_loss_association" id="hazard_loss_${context.id}_${f}">${losses_map[f]}</a>&nbsp&nbsp`;
     });
 
     return `
@@ -59,14 +56,18 @@ module.exports = function(context, exihibition_id, losses, losses_map) {
                             </div>
                         </li>
                         <li class="step1_itens">
-
-                            <div id="hazard_${context.id}_losses"style="margin: 0 0 15px 0;">
-                                
-                                ${list_of_losses}
-
-                                <!-- <input id="losses-associated-with-${context.id}" type="hidden" name="_token" value="${losses}" > --!>
-                                <!--  <input id="add-loss-association-${context.id}" value="${context.id}" type="image" src="images/plus.png" width="13" class="navbar__logo add-loss-association"  style="display: none;"> -->
+                            <div id="hazard_loss_association-${context.id}" hidden="true">
+                                <label id="label_hazard-${context.id}" class="hidden">H-${exihibition_id}:</label>
+                                <select id="hazard_loss-${context.id}" name="hazard_loss" class="select_from_form_ssc" multiple required title="" size="3">     
+                                </select>
                             </div>
+
+                            <div id="hazard_${context.id}_losses"style="margin: 0 0 15px 0;">    
+                                ${list_of_losses}
+                            </div>
+
+                            <input hidden id="hazard_${context.id}_losses_associated" value="${losses}">
+
                         </li>
                     </ul>
                 </div>

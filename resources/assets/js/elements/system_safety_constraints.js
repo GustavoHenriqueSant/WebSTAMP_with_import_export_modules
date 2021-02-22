@@ -18,7 +18,8 @@ module.exports = {
 	addHazard : addHazard,
 	editHazard : editHazard,
 	init : init,
-	showHazards : showHazards
+	showHazards : showHazards,
+	showAssociatedHazards : showAssociatedHazards
 }
 
 function init(){
@@ -32,6 +33,21 @@ function showHazards(){
 	var retorno = hazards.map(function(hazard) {
 		index++;
 		return `<option value="${hazard.id}" name="[H-${index}]">[H-${index}] ${hazard.name}</option>`;
+	});
+	listHazards.html(retorno);
+}
+
+function showAssociatedHazards(hazardsIds, sscId){
+	var ids = JSON.parse("[" + hazardsIds + "]");
+	var listHazards = $("#ssc_hazard-" + sscId);
+	var project_type = $("#project_type").val();
+	var index = 0;
+	var retorno = hazards.map(function(hazard) {
+		index++;
+		if(ids.includes(hazard.id)){
+			return `<option class="option_text" value="${hazard.id}" name="[H-${index}]" selected ="true">[H-${index}] ${hazard.name} </option>`;
+		}
+		return `<option class="option_text" value="${hazard.id}" name="[H-${index}]">[H-${index}] ${hazard.name}</option>`;
 	});
 	listHazards.html(retorno);
 }

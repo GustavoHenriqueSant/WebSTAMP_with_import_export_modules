@@ -15750,7 +15750,8 @@ module.exports = {
 	addLoss: addLoss,
 	editLoss: editLoss,
 	init: init,
-	showLosses: showLosses
+	showLosses: showLosses,
+	showAssociatedLosses: showAssociatedLosses
 };
 
 function init() {
@@ -15764,6 +15765,21 @@ function showLosses() {
 	var retorno = losses.map(function (loss) {
 		index++;
 		return "<option value=\"" + loss.id + "\" name=\"[L-" + index + "]\">[L-" + index + "] " + loss.name + "</option>";
+	});
+	listLosses.html(retorno);
+}
+
+function showAssociatedLosses(lossesIds, hazardId) {
+	var ids = JSON.parse("[" + lossesIds + "]");
+	var listLosses = $("#hazard_loss-" + hazardId);
+	var project_type = $("#project_type").val();
+	var index = 0;
+	var retorno = losses.map(function (loss) {
+		index++;
+		if (ids.includes(loss.id)) {
+			return "<option class=\"option_text\" value=\"" + loss.id + "\" name=\"[L-" + index + "]\" selected =\"true\">[L-" + index + "] " + loss.name + " </option>";
+		}
+		return "<option class=\"option_text\" value=\"" + loss.id + "\" name=\"[L-" + index + "]\">[L-" + index + "] " + loss.name + "</option>";
 	});
 	listLosses.html(retorno);
 }
@@ -15791,7 +15807,8 @@ module.exports = {
 	addHazard: addHazard,
 	editHazard: editHazard,
 	init: init,
-	showHazards: showHazards
+	showHazards: showHazards,
+	showAssociatedHazards: showAssociatedHazards
 };
 
 function init() {
@@ -15805,6 +15822,21 @@ function showHazards() {
 	var retorno = hazards.map(function (hazard) {
 		index++;
 		return "<option value=\"" + hazard.id + "\" name=\"[H-" + index + "]\">[H-" + index + "] " + hazard.name + "</option>";
+	});
+	listHazards.html(retorno);
+}
+
+function showAssociatedHazards(hazardsIds, sscId) {
+	var ids = JSON.parse("[" + hazardsIds + "]");
+	var listHazards = $("#ssc_hazard-" + sscId);
+	var project_type = $("#project_type").val();
+	var index = 0;
+	var retorno = hazards.map(function (hazard) {
+		index++;
+		if (ids.includes(hazard.id)) {
+			return "<option class=\"option_text\" value=\"" + hazard.id + "\" name=\"[H-" + index + "]\" selected =\"true\">[H-" + index + "] " + hazard.name + " </option>";
+		}
+		return "<option class=\"option_text\" value=\"" + hazard.id + "\" name=\"[H-" + index + "]\">[H-" + index + "] " + hazard.name + "</option>";
 	});
 	listHazards.html(retorno);
 }
@@ -15847,15 +15879,30 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
         console.log(error);
       });
     } else if (activity == "hazard") {
-      axios.post('/edithazard', {
-        id: id,
-        name: text
-      }).then(function (response) {
-        SystemSafetyConstraint.editHazard(oldText, text);
-        result = true;
-      }).catch(function (error) {
-        console.log(error);
-      });
+      var losses_ids = $('#hazard_loss-' + id).val();
+      if (losses_ids == null) {
+        vex.dialog.alert('At least one loss must be selected');
+      } else {
+        var losses_map = [];
+        $('#hazard_loss-' + id + ' option:selected').each(function (index, value) {
+          losses_map[value.value] = $(value).attr('name');
+        });
+        axios.post('/edithazard', {
+          id: id,
+          name: text,
+          losses_ids: losses_ids
+        }).then(function (response) {
+          result = true;
+          var list_of_losses = "";
+          $("#hazard_" + id + "_losses_associated").val(losses_ids);
+          losses_ids.forEach(function (f, index) {
+            list_of_losses += '<a class="hazard_loss_association" id="hazard_loss_' + id + '_' + f + '">' + losses_map[f] + '</a>&nbsp&nbsp';
+          });
+          $('#hazard_' + id + '_losses').html(list_of_losses);
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
     } else if (activity == "systemgoal") {
       axios.post('/editsystemgoal', {
         id: id,
@@ -15875,14 +15922,30 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
         console.log(error);
       });
     } else if (activity == "systemsafetyconstraint") {
-      axios.post('/editsystemsafetyconstraint', {
-        id: id,
-        name: text
-      }).then(function (response) {
-        result = true;
-      }).catch(function (error) {
-        console.log(error);
-      });
+      var hazards_ids = $('#ssc_hazard-' + id).val();
+      if (hazards_ids == null) {
+        vex.dialog.alert('At least one hazard must be selected');
+      } else {
+        var hazards_map = [];
+        $('#ssc_hazard-' + id + ' option:selected').each(function (index, value) {
+          hazards_map[value.value] = $(value).attr('name');
+        });
+        axios.post('/editsystemsafetyconstraint', {
+          id: id,
+          name: text,
+          hazards_ids: hazards_ids
+        }).then(function (response) {
+          result = true;
+          var list_of_hazards = "";
+          $("#ssc_" + id + "_hazards_associated").val(hazards_ids);
+          hazards_ids.forEach(function (f, index) {
+            list_of_hazards += '<a class="ssc_hazard_association" id="ssc_hazard_' + id + '_' + f + '">' + hazards_map[f] + '</a>&nbsp&nbsp';
+          });
+          $('#ssc_' + id + '_hazards').html(list_of_hazards);
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
     }
 
     return result;
@@ -16273,7 +16336,6 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
                 hazards_map[aux[i].value] = aux[i].attributes[1].nodeValue;
               }
 
-              console.log(hazards_map);
               axios.post('/addsystemsafetyconstraint', {
                 name: name,
                 id: id,
@@ -16426,7 +16488,15 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     $('#' + activity + '-description-' + id).attr('class', 'responsive_textarea_active').prop('disabled', false);
     oldText = $('#' + activity + '-description-' + id).val();
     if (activity == "systemsafetyconstraint") {
-      $('#add-hazard-association-' + id).show();
+      $('#ssc_hazard_association-' + id).show();
+      $('#ssc_' + id + '_hazards').hide();
+      var ids = $("#ssc_" + id + "_hazards_associated").val();
+      SystemSafetyConstraint.showAssociatedHazards(ids, id);
+    } else if (activity == "hazard") {
+      $('#hazard_loss_association-' + id).show();
+      $('#hazard_' + id + '_losses').hide();
+      var ids = $("#hazard_" + id + "_losses_associated").val();
+      Hazard.showAssociatedLosses(ids, id);
     }
   });
 
@@ -16435,7 +16505,11 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
     var activity = $(this).attr('alt').split('-')[1];
     cancel_edit(id, activity);
     if (activity == "systemsafetyconstraint") {
-      $('#add-hazard-association-' + id).hide();
+      $('#ssc_hazard_association-' + id).hide();
+      $('#ssc_' + id + '_hazards').show();
+    } else if (activity == "hazard") {
+      $('#hazard_loss_association-' + id).hide();
+      $('#hazard_' + id + '_losses').show();
     }
   });
 
@@ -16450,38 +16524,14 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
       $('#default-menu-' + activity + '-' + id).show();
       $('#edition-menu-' + activity + '-' + id).hide();
       $('#' + activity + '-description-' + id).attr('class', 'responsive_textarea').prop('disabled', true);
-    }
-  });
-
-  $('body').on('click', '.add-hazard-association', function (event) {});
-
-  $('body').on('click', '.delete_step1_association', function (event) {
-    var item = $(this);
-    vex.dialog.confirm({
-      message: 'Are you sure you want to delete this item?',
-      callback: function callback(value) {
-        if (value) {
-          var ids = item.attr("name").split('-');
-          var activity = item.attr("alt");
-          axios.post('/delete' + activity, {
-            id_1: ids[1], //ssc id for ssc->hazard association //hazard id for hazard->loss association
-            id_2: ids[2] //hazard id for ssc->hazard association //loss id for hazard->loss association
-          }).then(function (response) {
-            if (activity == "systemSafetyConstraintHazardAssociation") {
-              $("#ssc_hazard_" + ids[1] + "_" + ids[2]).remove();
-
-              if (response.data.count <= 1) $('.delete_ssc_hazard_association_' + ids[1]).hide();
-            } else {
-              $("#hazard_loss_" + ids[1] + "_" + ids[2]).remove();
-
-              if (response.data.count <= 1) $('.delete_hazard_loss_assocation_' + ids[1]).hide();
-            }
-          }).catch(function (error) {
-            console.log(error);
-          });
-        }
+      if (activity == "systemsafetyconstraint") {
+        $('#ssc_hazard_association-' + id).hide();
+        $('#ssc_' + id + '_hazards').show();
+      } else if (activity == "hazard") {
+        $('#hazard_loss_association-' + id).hide();
+        $('#hazard_' + id + '_losses').show();
       }
-    });
+    }
   });
 
   $('.item__input').on('keyup', function (event) {
@@ -16499,28 +16549,6 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   });
 
   // DELETE BLUE ITEM -> LOSS(HAZARD) AND VARIABLE(STATE))
-
-  $('body').on('click', '.item__delete__box', function (event) {
-    var id = $(event.currentTarget).data('index');
-    var type = $(event.currentTarget).data('type');
-    vex.dialog.confirm({
-      message: 'Are you sure you want to delete this item?',
-      callback: function callback(value) {
-        if (value) {
-          if (type === 'hazard') {
-            axios.post('/deletelossassociated', {
-              id: id
-            }).then(function (response) {
-              $("#loss-associated-" + id).remove();
-            }).catch(function (error) {
-              console.log(error);
-            });
-            return false;
-          }
-        }
-      }
-    });
-  });
 
   $('body').on('click', '.accordion', function (event) {
     var accordion = $(event.currentTarget);
@@ -18768,10 +18796,10 @@ module.exports = function (context, exihibition_id, losses, losses_map) {
     var list_of_losses = "";
 
     losses.forEach(function (f, index) {
-        if (losses.length > 1) list_of_losses += "<a class=\"hazard_loss_association\" id=\"hazard_loss_" + context.id + "_" + f + "\"><span class=\"delete_step1_association delete_hazard_loss_assocation_" + context.id + "\" alt=\"hazardLossAssociation\" name=\"ids-" + context.id + "-" + f + "\">\xD7</span> " + losses_map[f] + "</a>&nbsp&nbsp";else list_of_losses += "<a class=\"hazard_loss_association\" id=\"hazard_loss_" + context.id + "_" + f + "\"><span style=\"display: none;\" class=\"delete_step1_association delete_hazard_loss_assocation_" + context.id + "\" alt=\"hazardLossAssociation\" name=\"ids-" + context.id + "-" + f + "\">\xD7</span> " + losses_map[f] + "</a>&nbsp&nbsp";
+        list_of_losses += "<a class=\"hazard_loss_association\" id=\"hazard_loss_" + context.id + "_" + f + "\">" + losses_map[f] + "</a>&nbsp&nbsp";
     });
 
-    return "\n            <li class=\"item\" id=\"hazard-" + context.id + "\">\n\n                <div class=\"item__list\">\n\n                    <ul class=\"substep__itens\">\n                        <li class=\"step1_itens\">\n\n                            <div class=\"item__title__textarea\">\n                                <label for=\"hazard-description-" + context.id + "\">H-" + exihibition_id + ":</label>\n                                <textarea maxlength=\"500\" class=\"responsive_textarea\" rows=\"1\" id=\"hazard-description-" + context.id + "\" disabled>" + context.name + "</textarea>\n                            </div>\n\n                            <div class=\"item__actions\">\n\n                                <div id=\"default-menu-hazard-" + context.id + "\">\n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"edit-hazard-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/edit.ico\" alt=\"Edit-hazard\" width=\"20\" class=\"navbar__logo edit-btn\">\n                                    </div>\n                                     \n\n                                    <form action =\"/deletehazard\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"hazard\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                </div>\n\n                                <div id=\"edition-menu-hazard-" + context.id + "\" style=\"display: none;\">\n                                     <form action =\"/edithazard\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"hazard\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" id=\"save-hazard-" + context.id + "\" src=\"/images/save.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                    \n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"cancel-edit-hazard-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/delete.ico\" alt=\"Cancel-hazard\" width=\"20\" class=\"navbar__logo cancel-edit-btn\">\n                                    </div>\n                                     \n                                </div> \n                            </div>\n                        </li>\n                        <li class=\"step1_itens\">\n\n                            <div id=\"hazard_" + context.id + "_losses\"style=\"margin: 0 0 15px 0;\">\n                                \n                                " + list_of_losses + "\n\n                                <!-- <input id=\"losses-associated-with-" + context.id + "\" type=\"hidden\" name=\"_token\" value=\"" + losses + "\" > --!>\n                                <!--  <input id=\"add-loss-association-" + context.id + "\" value=\"" + context.id + "\" type=\"image\" src=\"images/plus.png\" width=\"13\" class=\"navbar__logo add-loss-association\"  style=\"display: none;\"> -->\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n            </li>";
+    return "\n            <li class=\"item\" id=\"hazard-" + context.id + "\">\n\n                <div class=\"item__list\">\n\n                    <ul class=\"substep__itens\">\n                        <li class=\"step1_itens\">\n\n                            <div class=\"item__title__textarea\">\n                                <label for=\"hazard-description-" + context.id + "\">H-" + exihibition_id + ":</label>\n                                <textarea maxlength=\"500\" class=\"responsive_textarea\" rows=\"1\" id=\"hazard-description-" + context.id + "\" disabled>" + context.name + "</textarea>\n                            </div>\n\n                            <div class=\"item__actions\">\n\n                                <div id=\"default-menu-hazard-" + context.id + "\">\n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"edit-hazard-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/edit.ico\" alt=\"Edit-hazard\" width=\"20\" class=\"navbar__logo edit-btn\">\n                                    </div>\n                                     \n\n                                    <form action =\"/deletehazard\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"hazard\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                </div>\n\n                                <div id=\"edition-menu-hazard-" + context.id + "\" style=\"display: none;\">\n                                     <form action =\"/edithazard\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"hazard\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"hazard_id\" name=\"hazard_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" id=\"save-hazard-" + context.id + "\" src=\"/images/save.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                    \n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"cancel-edit-hazard-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/delete.ico\" alt=\"Cancel-hazard\" width=\"20\" class=\"navbar__logo cancel-edit-btn\">\n                                    </div>\n                                     \n                                </div> \n                            </div>\n                        </li>\n                        <li class=\"step1_itens\">\n                            <div id=\"hazard_loss_association-" + context.id + "\" hidden=\"true\">\n                                <label id=\"label_hazard-" + context.id + "\" class=\"hidden\">H-" + exihibition_id + ":</label>\n                                <select id=\"hazard_loss-" + context.id + "\" name=\"hazard_loss\" class=\"select_from_form_ssc\" multiple required title=\"\" size=\"3\">     \n                                </select>\n                            </div>\n\n                            <div id=\"hazard_" + context.id + "_losses\"style=\"margin: 0 0 15px 0;\">    \n                                " + list_of_losses + "\n                            </div>\n\n                            <input hidden id=\"hazard_" + context.id + "_losses_associated\" value=\"" + losses + "\">\n\n                        </li>\n                    </ul>\n                </div>\n            </li>";
 };
 
 },{}],50:[function(require,module,exports){
@@ -18815,10 +18843,10 @@ module.exports = function (context, exihibition_id, hazards, hazards_map) {
     var list_of_hazards = "";
 
     hazards.forEach(function (f, index) {
-        if (hazards.length > 1) list_of_hazards += "<a class=\"ssc_hazard_association\" id=\"ssc_hazard_" + context.id + "_" + f + "\"><span class=\"delete_step1_association delete_ssc_hazard_association_" + context.id + "\" alt=\"systemSafetyConstraintHazardAssociation\" name=\"ids-" + context.id + "-" + f + "\">\xD7</span> " + hazards_map[f] + "</a>&nbsp&nbsp";else list_of_hazards += "<a class=\"ssc_hazard_association\" id=\"ssc_hazard_" + context.id + "_" + f + "\"><span style=\"display:none;\" class=\"delete_step1_association delete_ssc_hazard_association_" + context.id + "\" alt=\"systemSafetyConstraintHazardAssociation\" name=\"ids-" + context.id + "-" + f + "\">\xD7</span> " + hazards_map[f] + "</a>&nbsp&nbsp";
+        list_of_hazards += "<a class=\"ssc_hazard_association\" id=\"ssc_hazard_" + context.id + "_" + f + "\">" + hazards_map[f] + "</a>&nbsp&nbsp";
     });
 
-    return "\n            <li class=\"item\" id=\"systemsafetyconstraint-" + context.id + "\">\n\n                <div class=\"item__list\">\n                    <ul class=\"substep__itens\">\n                        <li class=\"step1_itens\">\n                             <div class=\"item__title__textarea\">\n                                <label for=\"systemsafetyconstraint-description-" + context.id + "\">SSC-" + exihibition_id + ":</label>\n                                <textarea maxlength=\"500\" class=\"responsive_textarea\" rows=\"1\" id=\"systemsafetyconstraint-description-" + context.id + "\" disabled>" + context.name + "</textarea>\n                            </div>\n\n                            <div class=\"item__actions\">\n\n                                <div id=\"default-menu-systemsafetyconstraint-" + context.id + "\">\n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"edit-systemsafetyconstraint-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/edit.ico\" alt=\"Edit-systemsafetyconstraint\" width=\"20\" class=\"navbar__logo edit-btn\">\n                                    </div>\n                                     \n\n                                    <form action =\"/deletesystemsafetyconstraint\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"systemsafetyconstraint\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                </div>\n\n                                <div id=\"edition-menu-systemsafetyconstraint-" + context.id + "\" style=\"display: none;\">\n                                     <form action =\"/editsystemsafetyconstraint\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"systemsafetyconstraint\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" id=\"save-systemsafetyconstraint-" + context.id + "\" src=\"/images/save.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                    \n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"cancel-edit-systemsafetyconstraint-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/delete.ico\" alt=\"Cancel-systemsafetyconstraint\" width=\"20\" class=\"navbar__logo cancel-edit-btn\">\n                                    </div>\n                                     \n                                </div> \n                            </div>\n                        </li>\n\n                        <li class=\"step1_itens\">\n\n                            <div id=\"ssc_" + context.id + "_hazards\"style=\"margin: 0 0 15px 0;\">\n                             \n                                " + list_of_hazards + "\n\n                                <!-- <input id=\"hazards-associated-with-\" type=\"hidden\" name=\"_token\" value=\"" + hazards + "\" > --!>\n                                <!-- <input id=\"add-hazard-association-" + context.id + "\" value=\"" + context.id + "\" type=\"image\" src=\"/images/plus.png\" alt=\"Add State\" width=\"13\" class=\"navbar__logo add-hazard-association\"  style=\"display: none;\"> --!>\n                            </div>\n                        </li>\n                    </ul>\n\n                </div>\n            </li>";
+    return "\n            <li class=\"item\" id=\"systemsafetyconstraint-" + context.id + "\">\n\n                <div class=\"item__list\">\n                    <ul class=\"substep__itens\">\n                        <li class=\"step1_itens\">\n                             <div class=\"item__title__textarea\">\n                                <label for=\"systemsafetyconstraint-description-" + context.id + "\">SSC-" + exihibition_id + ":</label>\n                                <textarea maxlength=\"500\" class=\"responsive_textarea\" rows=\"1\" id=\"systemsafetyconstraint-description-" + context.id + "\" disabled>" + context.name + "</textarea>\n                            </div>\n\n                            <div class=\"item__actions\">\n\n                                <div id=\"default-menu-systemsafetyconstraint-" + context.id + "\">\n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"edit-systemsafetyconstraint-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/edit.ico\" alt=\"Edit-systemsafetyconstraint\" width=\"20\" class=\"navbar__logo edit-btn\">\n                                    </div>\n                                     \n\n                                    <form action =\"/deletesystemsafetyconstraint\" method=\"POST\" class=\"delete-form ajaxform\" data-delete=\"systemsafetyconstraint\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" src=\"/images/trash.png\" alt=\"Delete\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                </div>\n\n                                <div id=\"edition-menu-systemsafetyconstraint-" + context.id + "\" style=\"display: none;\">\n                                     <form action =\"/editsystemsafetyconstraint\" method=\"POST\" class=\"edit-form ajaxform\" data-edit=\"systemsafetyconstraint\">\n                                        <div class=\"item__title\">\n                                            <input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">\n                                            <input id=\"project_id\" name=\"project_id\" type=\"hidden\" value=\"1\">\n                                            <input id=\"systemsafetyconstraint_id\" name=\"systemsafetyconstraint_id\" type=\"hidden\" value=\"" + context.id + "\">\n                                            <input type=\"image\" id=\"save-systemsafetyconstraint-" + context.id + "\" src=\"/images/save.ico\" alt=\"Edit\" width=\"20\" class=\"navbar__logo\">\n                                        </div>\n                                    </form>\n                                    \n                                    <div class=\"item__title\">\n                                        <input type=\"image\" id=\"cancel-edit-systemsafetyconstraint-" + context.id + "\" name=\"" + context.id + "\" src=\"/images/delete.ico\" alt=\"Cancel-systemsafetyconstraint\" width=\"20\" class=\"navbar__logo cancel-edit-btn\">\n                                    </div>\n                                     \n                                </div> \n                            </div>\n                        </li>\n\n                        <li class=\"step1_itens\">\n                            <div id=\"ssc_hazard_association-" + context.id + "\" hidden=\"true\">\n                                    <label id=\"label_systemsafetyconstraint-" + context.id + "\" class=\"hidden\">SSC-" + exihibition_id + ":</label>\n                                    <select id=\"ssc_hazard-" + context.id + "\" name=\"ssc_hazard\" class=\"select_from_form_ssc\" multiple required title=\"\" size=\"3\">     \n                                    </select>\n                            </div>\n                            <div id=\"ssc_" + context.id + "_hazards\"style=\"margin: 0 0 15px 0;\">   \n                                " + list_of_hazards + "\n                            </div>\n                            <input hidden id=\"ssc_" + context.id + "_hazards_associated\" value=\"" + hazards + "\">\n                        </li>\n                    </ul>\n\n                </div>\n            </li>";
 };
 
 },{}],55:[function(require,module,exports){

@@ -21,8 +21,9 @@
                         <li class="step1_itens">
 
                              <div class="item__title__textarea">
-                                <label for="systemsafetyconstraint-description-{{$systemSafetyConstraint->id}}">SSC-{{$sysconstraints_map[$systemSafetyConstraint->id]}}:</label>
+                                <label id="label_systemsafetyconstraint-{{$systemSafetyConstraint->id}}" for="systemsafetyconstraint-description-{{$systemSafetyConstraint->id}}">SSC-{{$sysconstraints_map[$systemSafetyConstraint->id]}}:</label>
                                 <textarea maxlength="500" class="responsive_textarea" rows="1" id="systemsafetyconstraint-description-{{$systemSafetyConstraint->id}}" disabled>{{$systemSafetyConstraint->name}}</textarea>
+
                             </div>
 
                             <div class="item__actions">
@@ -60,36 +61,34 @@
                                 </div> 
                             </div>
                          </li>
-                        @if(App\SystemSafetyConstraintHazards::where('ssc_id', $systemSafetyConstraint->id)->count() >= 1)
-                            <li class="step1_itens">
+                        <li class="step1_itens">
+                            <div id="ssc_hazard_association-{{$systemSafetyConstraint->id}}" hidden="true">
+                                <label id="label_systemsafetyconstraint-{{$systemSafetyConstraint->id}}" class="hidden">SSC-{{$sysconstraints_map[$systemSafetyConstraint->id]}}:</label>
+                                <select id="ssc_hazard-{{$systemSafetyConstraint->id}}" name="ssc_hazard" class="select_from_form_ssc" multiple required title="" size="3">     
+                                </select>
+                            </div>
+                            <div id="ssc_{{$systemSafetyConstraint->id}}_hazards"style="margin: 0 0 15px 0;">
+                                <?php $associated_hazards = array(); ?>
+                                @foreach(App\SystemSafetyConstraintHazards::where('ssc_id', $systemSafetyConstraint->id)->get() as $ssc_hazard)
+                                    <?php array_push($associated_hazards, $ssc_hazard->hazard_id); ?>
+                                    <a class="ssc_hazard_association" id="ssc_hazard_{{$ssc_hazard->ssc_id}}_{{$ssc_hazard->hazard_id}}">
+                                    [H-{{$hazard_map[$ssc_hazard->hazard_id]}}]</a>&nbsp
+                                @endforeach
 
-                                <div id="ssc_{{$systemSafetyConstraint->id}}_hazards"style="margin: 0 0 15px 0;">
-                                    <?php $associated_hazards = array(); ?>
-                                    @foreach(App\SystemSafetyConstraintHazards::where('ssc_id', $systemSafetyConstraint->id)->get() as $ssc_hazard)
-                                        <?php array_push($associated_hazards, $ssc_hazard->hazard_id); ?>
+                                 <?php
+                                    $ids = ""; 
+                                    foreach ($associated_hazards as $index => $id) {
+                                        if($index  != count($associated_hazards) - 1)
+                                            $ids .= $id.",";
+                                        else
+                                            $ids .= $id;
+                                    }
+                                ?>
+                            </div>
 
-                                        <a class="ssc_hazard_association" id="ssc_hazard_{{$ssc_hazard->ssc_id}}_{{$ssc_hazard->hazard_id}}">
-                                            @if(App\SystemSafetyConstraintHazards::where('ssc_id', $systemSafetyConstraint->id)->count() > 1)
-                                                <span class="delete_step1_association delete_ssc_hazard_association_{{$ssc_hazard->ssc_id}}" alt="systemSafetyConstraintHazardAssociation" name="ids-{{$ssc_hazard->ssc_id}}-{{$ssc_hazard->hazard_id}}">×</span>
-                                            @else
-                                                 <span style="display: none;" class="delete_step1_association delete_ssc_hazard_association_{{$ssc_hazard->ssc_id}}" alt="systemSafetyConstraintHazardAssociation" name="ids-{{$ssc_hazard->ssc_id}}-{{$ssc_hazard->hazard_id}}">×</span>
-                                            @endif
-                                            [H-{{$hazard_map[$ssc_hazard->hazard_id]}}]</a>&nbsp
-                                    @endforeach
+                            <input hidden id="ssc_{{$ssc_hazard->ssc_id}}_hazards_associated" value= <?php echo($ids); ?>>
 
-                                     <?php
-                                        $ids = ""; 
-                                        foreach ($associated_hazards as $index => $id) {
-                                            if($index  != count($associated_hazards) - 1)
-                                                $ids .= $id.",";
-                                            else
-                                                $ids .= $id;
-                                        }
-                                    ?>
-
-                                </div>
-                            </li>
-                        @endif
+                        </li>
                      </ul>
                 </div>
             </li>
