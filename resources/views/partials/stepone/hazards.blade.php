@@ -86,7 +86,7 @@ Definition of System: A system is a set of components that act together as a who
                    
                             </div>
 
-                            <input hidden id="hazard_{{$losseshazards->hazard_id}}_losses_associated" value= <?php echo($ids); ?>>
+                            <input hidden id="hazard_{{$hazard->id}}_losses_associated" value= <?php echo($ids); ?>>
 
                          </li>
                      </ul>

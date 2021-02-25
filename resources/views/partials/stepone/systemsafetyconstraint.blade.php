@@ -86,7 +86,7 @@
                                 ?>
                             </div>
 
-                            <input hidden id="ssc_{{$ssc_hazard->ssc_id}}_hazards_associated" value= <?php echo($ids); ?>>
+                            <input hidden id="ssc_{{$systemSafetyConstraint->id}}_hazards_associated" value= <?php echo($ids); ?>>
 
                         </li>
                      </ul>
