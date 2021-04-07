@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SystemSafetyConstraintHazards extends Model
 {
-	protected $table = 'systemSafetyConstraint_hazards';
+	protected $table = 'systemsafetyconstraint_hazards';
 
 	function systemSafetyConstraint(){
 		return $this->belongsTo('App\systemSafetyConstraint');
