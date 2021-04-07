@@ -2,6 +2,7 @@
     // Getting all variables
     // $variables = App\Variable::where('project_id', $project_id)->where('controller_id', $ca->controller->id)->orWhere('controller_id', 0)->orderBy('id')->get();
     $variables = App\Variable::where('project_id', $project_id)->whereIn('controller_id', [0, $ca->controller->id])->orderBy('id')->get();
+    $variables = is_iterable($variables) ? $variables : [$variables];
     // Getting all States
     $states = [];
     //Selecting the divisor
@@ -54,6 +55,9 @@
      * Ex: Variable 1 (State 1, State 2) and Variable 2 (State 3 and State 4)
      * Number of total loops: (2 states of Variable 1 x 2 states of variable 2 = 4 rows)
      */
+
+    $combination_array = [];
+
     for ($i = 0; $i < count($allStates); $i++) {
         $number_of_states[$i] = count($allStates[$i]);
         $combination_array[$i] = 0;
@@ -69,6 +73,7 @@
 
     // Select all rules associated with the selected control action
     $rules = App\Rule::where('controlaction_id', $ca->id)->get();
+    $rules = is_iterable($rules) ? $rules : [$rules];
 
     // Array to store the rules and the variables states of the rules
     $rules_variables_states = [];
@@ -314,7 +319,7 @@
                                     "Applied too long" =>  ""
                                 );
                                 foreach ($rule as $key => $r) {
-                                    if ($r == "true" && count($r) > 0) {
+                                    if ($r == "true") {
                                         $thereAreRule = "true";
                                         $columns_that_rule_can_be_applied = explode(";", $columns[$key]);
                                         //print_r($columns_that_rule_can_be_applied);
@@ -333,6 +338,9 @@
                                     }
                                 }                       
                                 $context_table = DB::select('SELECT * FROM context_tables WHERE controlaction_id = ? and ? like concat("%",context,"%") ORDER BY context', [$ca->id, $array_for_compare]);
+
+                                $context_table = is_iterable($context_table) ? $context_table : [$context_table];
+
                                 $context_table = (count($context_table) > 0) ? $context_table[0] : "";
 
                             ?>
