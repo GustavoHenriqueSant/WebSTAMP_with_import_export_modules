@@ -16,8 +16,8 @@
 			$controller = App\Controllers::where('id', $controller_id)->first();
 			$ca = App\ControlAction::where('id', $ca_id)->first();
 		} else {
-			$controller = App\Controllers::where('project_id', $project_id)->first();
-			$ca = App\ControlAction::where('controller_id', $controller->id)->first();
+			$controller = 0;
+			$ca = null;
 		}
 	?>
 
