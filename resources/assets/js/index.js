@@ -585,6 +585,7 @@ function edit_stepone(id, activity, text) {
           losses_ids : losses_ids
         })
         .then(function (response) {
+          SystemSafetyConstraint.editHazard(oldText, text);
           result = true;
           var list_of_losses = "";
           $("#hazard_" + id +"_losses_associated").val(losses_ids);

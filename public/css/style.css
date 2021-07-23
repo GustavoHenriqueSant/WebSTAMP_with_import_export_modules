@@ -816,7 +816,7 @@ textarea.mission-assurance {
       margin-top: -5px; }
 
 .add-drop__content, .add-drop__buttons {
-  width: 100%;
+  width: 500px;
   padding: 7px; }
   .add-drop__content:after, .add-drop__buttons:after {
     content: "";
