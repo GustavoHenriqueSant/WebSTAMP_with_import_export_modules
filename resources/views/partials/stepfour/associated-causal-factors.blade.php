@@ -15,14 +15,12 @@
 		$actuator = $actuator[0]->input_component_id;
 		$actuator = App\Actuators::find($actuator);
 	}
-		
-	if ($isActuator > 0) {
-		$controlled_process = App\Connections::where('output_component_id', $actuator->id)->where('type_input', 'controlled_process')->get();
-	} else {
-		$controlled_process = App\Connections::where('output_component_id', $unsafe->controlaction->controller->id)->where('type_input', 'controlled_process')->get();
+	
+	$isControlledProcess = App\ControlledProcess::where("project_id", $project_id)->count();
+	if ($isControlledProcess > 0) {
+		$controlled_process = App\ControlledProcess::where("project_id", $project_id)->get();
+		$controlled_process = $controlled_process[0];
 	}
-	$controlled_process = $controlled_process[0]->input_component_id;
-	$controlled_process = App\ControlledProcess::find($controlled_process);
 
 	$isSensor = App\Connections::where('output_component_id', $controlled_process->id)->where('type_input', 'sensor')->count();
 	if($isSensor){
