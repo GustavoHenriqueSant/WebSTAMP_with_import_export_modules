@@ -15746,9 +15746,19 @@ function editLoss(oldLoss, newLoss) {
 	});
 }
 
+function removeLoss(id) {
+	var _losses = losses.filter(function (loss) {
+		if (loss.id != id) {
+			return loss;
+		}
+	});
+	losses = _losses;
+}
+
 module.exports = {
 	addLoss: addLoss,
 	editLoss: editLoss,
+	removeLoss: removeLoss,
 	init: init,
 	showLosses: showLosses,
 	showAssociatedLosses: showAssociatedLosses
@@ -15803,9 +15813,19 @@ function editHazard(oldHazard, newHazard) {
 	});
 }
 
+function removeHazard(id) {
+	var _hazards = hazards.filter(function (hazard) {
+		if (hazard.id != id) {
+			return hazard;
+		}
+	});
+	hazards = _hazards;
+}
+
 module.exports = {
 	addHazard: addHazard,
 	editHazard: editHazard,
+	removeHazard: removeHazard,
 	init: init,
 	showHazards: showHazards,
 	showAssociatedHazards: showAssociatedHazards
@@ -16372,6 +16392,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
             axios.post('/deleteloss', {
               id: id
             }).then(function (response) {
+              Hazard.removeLoss(id);
               $("a[id^='hazard_loss_'][id$='" + id + "'").remove();
               $("#loss-" + id).remove();
             }).catch(function (error) {
@@ -16403,6 +16424,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
             axios.post('/deletehazard', {
               id: id
             }).then(function (response) {
+              SystemSafetyConstraint.removeHazard(id);
               $("a[id^='ssc_hazard_'][id$='" + id + "'").remove();
               $("#hazard-" + id).remove();
             }).catch(function (error) {

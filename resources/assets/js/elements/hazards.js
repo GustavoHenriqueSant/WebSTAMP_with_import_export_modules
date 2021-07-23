@@ -14,9 +14,19 @@ function editLoss(oldLoss, newLoss) {
 	})
 }
 
+function removeLoss(id) {
+	const _losses = losses.filter(loss => {
+		if (loss.id != id) {
+			return loss;
+		}
+	});
+	losses = _losses;
+}
+
 module.exports = {
 	addLoss : addLoss,
 	editLoss : editLoss,
+	removeLoss,
 	init : init,
 	showLosses : showLosses,
 	showAssociatedLosses : showAssociatedLosses

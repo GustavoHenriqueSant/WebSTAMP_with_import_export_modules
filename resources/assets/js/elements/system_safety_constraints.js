@@ -14,9 +14,19 @@ function editHazard(oldHazard, newHazard) {
 	})
 }
 
+function removeHazard(id) {
+	const _hazards = hazards.filter(hazard => {
+		if (hazard.id != id) {
+			return hazard;
+		}
+	});
+	hazards = _hazards;
+}
+
 module.exports = {
 	addHazard : addHazard,
 	editHazard : editHazard,
+	removeHazard,
 	init : init,
 	showHazards : showHazards,
 	showAssociatedHazards : showAssociatedHazards

@@ -456,6 +456,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
                 id : id,
               })
               .then(function (response) {
+                Hazard.removeLoss(id);
                 $("a[id^='hazard_loss_'][id$='" + id +"'").remove();
                 $("#loss-" + id).remove();
               })
@@ -493,6 +494,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
                 id : id,
               })
               .then(function (response) {
+                SystemSafetyConstraint.removeHazard(id);
                 $("a[id^='ssc_hazard_'][id$='" + id +"'").remove();
                 $("#hazard-" + id).remove();
               })
