@@ -21,7 +21,8 @@
 		}
 	?>
 
-	@if(isset($ca))
+	<!-- Avoid error when the first controller does not have any control actions -->
+	@if($ca !== null)
 	<div id="control-action-{{$ca->id}}" class="hide-control-actions" name="control-action-{{$ca->id}}" hidden="true" style="display:none;" >
 
 		<div class="substep substep--addrule" id="addrule">
