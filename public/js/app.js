@@ -17404,7 +17404,7 @@ if (actualPage.includes('stepone') || actualPage.includes('projects')) {
   // UPDATE 15/02/21
   $('#load-button').on('click', function (event) {
     var controller = $("#controller-select").val();
-    var ca = $("#control-actions-select").val();
+    var ca = $('select[name="control-actions-of-controller-' + controller + '"]').val();
     vex.dialog.confirm({
       message: 'The page will reload and all unsaved changes will be lost. Proceed?',
       callback: function callback(value) {

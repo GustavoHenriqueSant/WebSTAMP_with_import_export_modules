@@ -1656,7 +1656,7 @@ for (i = 0; i < acc.length; i++) {
   // UPDATE 15/02/21
   $('#load-button').on('click', function(event) {
     let controller = $("#controller-select").val();
-    let ca = $("#control-actions-select").val();
+    let ca = $(`select[name="control-actions-of-controller-${controller}"]`).val();
     vex.dialog.confirm({
       message: 'The page will reload and all unsaved changes will be lost. Proceed?',
       callback: function (value) {
