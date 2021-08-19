@@ -12,11 +12,19 @@ class Rule extends Model
 		return $this->belongsTo(ControlAction::class);
 	}
 
+	public function safetyConstraints(){
+		return $this->hasOne(SafetyConstraints::class);
+	}
+
 	public function variables(){
 		return $this->hasMany('App\RulesVariablesStates');
 	}
 
 	public function hazards(){
 		return $this->hasMany('App\RulesSafetyConstraintsHazards');
+	}
+
+	public function variableState(){
+		return $this->hasOne(RulesVariablesStates::class, "rule_id");
 	}
 }
