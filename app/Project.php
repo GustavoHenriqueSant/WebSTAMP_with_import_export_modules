@@ -14,10 +14,6 @@ class Project extends Model
         return $this->hasMany(Assumptions::class);
     }
 
-    public function components(){
-        return $this->hasMany(Components::class);
-    }
-
     public function controlledProcess(){
         return $this->hasOne(ControlledProcess::class);
     }

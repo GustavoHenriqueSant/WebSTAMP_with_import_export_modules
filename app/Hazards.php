@@ -9,12 +9,12 @@ class Hazards extends Model
 
 	protected $table = 'hazards';
 
-    	public function project(){
+    public function project(){
 		return $this->belongsTo(Projects::class);
 	}
 
 	public function losseshazards(){
-		return $this->hasMany(LossesHazards::class);
+		return $this->hasMany(LossesHazards::class, "hazard_id");
 	}
 
 }
