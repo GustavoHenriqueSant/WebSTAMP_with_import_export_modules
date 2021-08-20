@@ -29,6 +29,14 @@
                                     <!-- <button>Selecionar este Projeto</button> -->
                                 </div>
                             </form>
+                            <form action="/exportproject" method="POST">
+                                <div class="item__title">
+                                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                    <input id="project_id" name="project_id" type="hidden" value="{{$project->id}}">
+                                     <input type="submit" class="add-button" value="Export project"></input>
+                                     <!-- div para botão de exportar projeto -->
+                                </div>
+                            </form>
                             <form action ="/editproject" method="POST" class="editing-form ajaxform">
                                 <div class="item__title">
                                     <input type="hidden" name="_token" value="{{csrf_token()}}">
