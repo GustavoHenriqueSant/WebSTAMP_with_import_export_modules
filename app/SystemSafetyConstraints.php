@@ -9,11 +9,11 @@ class SystemSafetyConstraints extends Model
 
 	protected $table = 'system_safety_constraint';
 
-    	public function project(){
+    public function project(){
 		return $this->belongsTo(Projects::class);
 	}
 
 	public function hazards(){
-		return $this->belongsTo('App\SystemSafetyConstraintHazards');
+		return $this->hasMany('App\SystemSafetyConstraintHazards', "ssc_id");
 	}
 }
