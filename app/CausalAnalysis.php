@@ -13,6 +13,10 @@ class CausalAnalysis extends Model
 		return $this->belongsTo(Guidewords::class);
 	}
 
+	public function safetyConstraints(){
+		return $this->belongsTo(SafetyConstraints::class);
+	}
+
 	/*teste*/
 
 }
