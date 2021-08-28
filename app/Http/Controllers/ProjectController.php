@@ -43,15 +43,25 @@ class ProjectController extends Controller
 
 	public function export(Request $request){
 		$project = Project::where('id',  $request->get('project_id'))->
-							with("actuators", "assumptions", "connection", "controlledProcess", "controllers",
+							with("actuators", "assumptions", "controlledProcess", "controllers",
 								"controllers.controlaction", "controllers.controlaction.rules", "controllers.controlaction.rules.variableState",
 								"controllers.controlaction.contextTable",
 								"controllers.controlaction.safetyConstraint", "controllers.controlaction.safetyConstraint.causalAnalysis",
 								"controllers.controlaction.safetyConstraint.rulesSafetyConstraintsHazards", "controllers.variables",
 								"controllers.variables.state", "hazards", "hazards.losseshazards",
-								"losses", "missions", "sensor", "systemGoals", "ssc", "ssc.hazards")->first();
+								"losses", "missions", "sensor", "systemGoals", "ssc", "ssc.systemSafetyConstraintHazards")->first();
+
+		//$json = json_encode($project);
+		//return response()->stream(function($json){
+		//	echo $json;
+		//});
+
+		response()->streamDownload();
+
 
 		return json_encode($project);
+
+		//return readfile(json_encode($nomeArquivo));
 	}
 
 	public function delete(Request $request){

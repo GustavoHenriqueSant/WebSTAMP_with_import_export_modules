@@ -16,4 +16,8 @@ class SystemSafetyConstraints extends Model
 	public function hazards(){
 		return $this->hasMany('App\SystemSafetyConstraintHazards', "ssc_id");
 	}
+
+	public function systemSafetyConstraintHazards(){
+		return $this->hasMany('App\SystemSafetyConstraintHazards', "ssc_id");
+	}
 }

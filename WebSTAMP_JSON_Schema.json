@@ -1,0 +1,1296 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "required": [
+        "id",
+        "name",
+        "description",
+        "URL",
+        "type"
+    ],
+    "properties": {
+        "id": {
+            "$id": "#/properties/id",
+            "type": "integer",
+            "description": "Project instance primary key",
+            "maximum": 999999999
+        },
+        "name": {
+            "$id": "#/properties/name",
+            "type": "string",
+            "description": "Hazard analysis name.",
+            "maxLength": 255
+        },
+        "description": {
+            "$id": "#/properties/description",
+            "type": "string",
+            "description": "Description of the system to be analyzed."
+        },
+        "created_at": {
+            "$id": "#/properties/created_at",
+            "type": ["string", null],
+            "description": "Hazard analysis creation date.",
+            "default": null
+        },
+        "updated_at": {
+            "$id": "#/properties/updated_at",
+            "type": ["string", null],
+            "description": "Date of last update of hazard analysis.",
+            "default": null
+        },
+        "URL": {
+            "$id": "#/properties/URL",
+            "type": "string",
+            "description": "Hazard analysis unique URL.",
+        },
+        "type": {
+            "$id": "#/properties/type",
+            "type": "string",
+            "description": "hazard analysis type.",
+            "enum": ["Safety", "Safety and Security"]
+        },
+        "actuators": {
+            "$id": "#/properties/actuators",
+            "type": "array",
+            "description": "hazard analysis actuator.",
+            "default": [],
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/actuators/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/actuators/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name",
+                            "project_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/actuators/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "Actuator primary key.",
+                                "maximum": 999999999
+                            },
+                            "name": {
+                                "$id": "#/properties/actuators/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "description": "Actuator name.",
+                                "maxLength": 255
+                            },
+                            "project_id": {
+                                "$id": "#/properties/actuators/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "description": "Foreign key referring to hazard analysis.",
+                                "maximum": 999999999
+                            },
+                            "created_at": {
+                                "$id": "#/properties/actuators/items/anyOf/0/properties/created_at",
+                                "type": ["string",  null],
+                                "description": "Actuator creation date.",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/actuators/items/anyOf/0/properties/updated_at",
+                                "type": ["string",  null],
+                                "description": "Date of last actuator update.",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "assumptions": {
+            "$id": "#/properties/assumptions",
+            "type": "array",
+            "description": "Assumptions about the system to be analyzed.",
+            "default": [],
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/assumptions/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/assumptions/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name",
+                            "description",
+                            "project_id",
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/assumptions/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "Assumption primary key.",
+                                "maximum": 999999999
+                            },
+                            "name": {
+                                "$id": "#/properties/assumptions/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "description": "Assumption name.",
+                                "maxLength": 500
+                            },
+                            "description": {
+                                "$id": "#/properties/assumptions/items/anyOf/0/properties/description",
+                                "type": "string",
+                                "description": "Description of assumption."
+                            },
+                            "project_id": {
+                                "$id": "#/properties/assumptions/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "description": "Foreign key referring to the hazard analysis to which the assumption belongs."
+                            },
+                            "created_at": {
+                                "$id": "#/properties/assumptions/items/anyOf/0/properties/created_at",
+                                "type": ["string", null],
+                                "description": "Assumption creation date.",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/assumptions/items/anyOf/0/properties/updated_at",
+                                "type": ["string", null],
+                                "description": "Date of last update of assumption.",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "components": {
+            "$id": "#/properties/components",
+            "type": "array",
+            "description": "System components to be analyzed.",
+            "default": [],
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/components/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/components/items/anyOf/0",
+                        "type": "object",
+                        "required":[
+                            "id",
+                            "name",
+                            "type",
+                            "project_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/components/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "Component primary key.",
+                                "maximum": 999999999
+                            },
+                            "name": {
+                                "$id": "#/properties/components/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "description": "Component name",
+                                "maxLength": 255
+                            },
+                            "type": {
+                                "$id": "#/properties/components/items/anyOf/0/properties/type",
+                                "type": "string",
+                                "description": "Component type",
+                                "enum": ["Actuator", "ControlledProcess", "Controller", "Sensor"]
+                            },
+                            "project_id": {
+                                "$id": "#/properties/components/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "description": "Foreign key referring to hazard analysis to which the component belongs.",
+                                "maximum": 999999999
+                            },
+                            "created_at": {
+                                "$id": "#/properties/components/items/anyOf/0/properties/created_at",
+                                "type": ["string", null],
+                                "description": "Component creation date.",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/components/items/anyOf/0/properties/updated_at",
+                                "type": ["string", null],
+                                "description": "Date of last update of component.",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "controlled_process": {
+            "$id": "#/properties/controlled_process",
+            "type": "object",
+            "description": "Components that will be controlled in the system.",
+            "default": {},
+            "required": [
+                "id",
+                "name",
+                "project_id"
+            ],
+            "properties": {
+                "id": {
+                    "$id": "#/properties/controlled_process/properties/id",
+                    "type": "integer",
+                    "description": "Controlled process primary key.",
+                    "maximum": 999999999
+                },
+                "name": {
+                    "$id": "#/properties/controlled_process/properties/name",
+                    "type": "string",
+                    "description": "Controlled process name.",
+                    "maxLength": 255
+                },
+                "project_id": {
+                    "$id": "#/properties/controlled_process/properties/project_id",
+                    "type": "integer",
+                    "description": "Foreign key referring to hazard analysis to which the controlled process belongs.",
+                    "maximum": 999999999
+                },
+                "created_at": {
+                    "$id": "#/properties/controlled_process/properties/created_at",
+                    "type": ["string", null],
+                    "description": "Controlled process creation date.",
+                    "default": null
+                },
+                "updated_at": {
+                    "$id": "#/properties/controlled_process/properties/updated_at",
+                    "type": ["string", null],
+                    "description": "Date of last controlled process update.",
+                    "default": null
+                }
+            },
+            "additionalProperties": false
+        },
+        "controllers": {
+            "$id": "#/properties/controllers",
+            "type": "array",
+            "description": "Component responsible for controlling the controlled process in the system.",
+            "default": [],
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/controllers/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/controllers/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name",
+                            "project_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/controllers/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "Controller primary key.",
+                                "maximum": 999999999
+                            },
+                            "name": {
+                                "$id": "#/properties/controllers/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "description": "Controller name.",
+                                "maxLength": 255
+                            },
+                            "type": {
+                                "$id": "#/properties/controllers/items/anyOf/0/properties/type",
+                                "type": "string",
+                                "description": "Controller type.",
+                                "default": "",
+                                "maxLength": 255
+                            },
+                            "project_id": {
+                                "$id": "#/properties/controllers/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "description": "Foreign key referring to hazard analysis to which the controller belongs.",
+                                "maximum": 999999999
+                            },
+                            "created_at": {
+                                "$id": "#/properties/controllers/items/anyOf/0/properties/created_at",
+                                "type": ["string", null],
+                                "description": "Controller creation date.",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/controllers/items/anyOf/0/properties/updated_at",
+                                "type": "string",
+                                "description": "Last update date of controller.",
+                                "default": null
+                            },
+                            "controlaction": {
+                                "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction",
+                                "type": "array",
+                                "description": "Actions the controller can take.",
+                                "default": [],
+                                "additionalItems": false,
+                                "items": {
+                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items",
+                                    "anyOf": [
+                                        {
+                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0",
+                                            "type": "object",
+                                            "required": [
+                                                "id",
+                                                "name",
+                                                "description",
+                                                "controller_id",
+                                                "rules"
+                                            ],
+                                            "properties": {
+                                                "id": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/id",
+                                                    "type": "integer",
+                                                    "description": "Control Action primary key.",
+                                                    "maximum": 999999999
+                                                },
+                                                "name": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/name",
+                                                    "type": "string",
+                                                    "description": "Control Action name.",
+                                                    "maxLength": 255
+                                                },
+                                                "description": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/description",
+                                                    "type": "string",
+                                                    "description": "Control Action description."
+                                                },
+                                                "controller_id": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/controller_id",
+                                                    "type": "integer",
+                                                    "description": "Foreign key referring to the controller that the control action belongs to.",
+                                                    "maximum": 999999999
+                                                },
+                                                "created_at": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/created_at",
+                                                    "type": ["string", null],
+                                                    "description": "Control Action create date.",
+                                                    "default": null
+                                                },
+                                                "updated_at": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/updated_at",
+                                                    "type": ["string", null],
+                                                    "description": "Last update date of Creation Action.",
+                                                    "default": null
+                                                },
+                                                "rules": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules",
+                                                    "type": "array",
+                                                    "description": "Control Actions Rules.",
+                                                    "default": [],
+                                                    "additionalItems": false,
+                                                    "items": {
+                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items",
+                                                        "anyOf": [
+                                                            {
+                                                                "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0",
+                                                                "type": "object",
+                                                                "required": [
+                                                                    "id",
+                                                                    "controlaction_id",
+                                                                    "column"
+                                                                ],
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/id",
+                                                                        "type": "integer",
+                                                                        "description": "Rule primary key.",
+                                                                        "maximum": 999999999
+                                                                    },
+                                                                    "controlaction_id": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/controlaction_id",
+                                                                        "type": "integer",
+                                                                        "description": "Foreign key referring to the control action the rule belongs to.",
+                                                                        "maximum": 999999999
+                                                                    },
+                                                                    "column": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/column",
+                                                                        "type": "string",
+                                                                        "description": "",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "created_at": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/created_at",
+                                                                        "type": ["string", null],
+                                                                        "description": "Rule create date.",
+                                                                        "default": null
+                                                                    },
+                                                                    "updated_at": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/updated_at",
+                                                                        "type": ["string", null],
+                                                                        "description": "Last update date of rules",
+                                                                        "default": null
+                                                                    },
+                                                                    "variable_state": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/variable_state",
+                                                                        "type": "array",
+                                                                        "description": "define which variable and its value the rule is associated with",
+                                                                        "default": [],
+                                                                        "additionalItems": false,
+                                                                        "items": {
+                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/variable_state/items",
+                                                                            "anyOf": [
+                                                                                {
+                                                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/variable_state/items/anyOf/0",
+                                                                                    "type": "object",
+                                                                                    "required": [
+                                                                                        "rule_id",
+                                                                                        "variable_id",
+                                                                                        "state_id"
+                                                                                    ],
+                                                                                    "properties":{
+                                                                                        "rule_id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/variable_state/items/anyOf/0/properties/rule_id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "variable_id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/variable_state/items/anyOf/0/properties/variable_id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "state_id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/variable_state/items/anyOf/0/properties/state_id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "created_at": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/variable_state/items/anyOf/0/properties/created_at",
+                                                                                            "type": ["string", null],
+                                                                                            "description": "Create date.",
+                                                                                            "default": null
+                                                                                        },
+                                                                                        "updated_at": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/rules/items/anyOf/0/properties/variable_state/items/anyOf/0/properties/updated_at",
+                                                                                            "type": ["string", null],
+                                                                                            "description": "Last update date.",
+                                                                                            "default": null
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "additionalProperties": false
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "context_table":{
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table",
+                                                    "type": "array",
+                                                    "description": "Context table generated for control action.",
+                                                    "default": [],
+                                                    "additionalItems": false,
+                                                    "items":{
+                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items",
+                                                        "anyOf": [
+                                                            {
+                                                                "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0",
+                                                                "type": "object",
+                                                                "required": [
+                                                                    "id",
+                                                                    "controlaction_id",
+                                                                    "context",
+                                                                    "ca_provided",
+                                                                    "ca_not_provided",
+                                                                    "wrong_time_order",
+                                                                    "ca_too_early",
+                                                                    "ca_too_late",
+                                                                    "ca_too_soon",
+                                                                    "ca_too_long"
+                                                                ],
+                                                                "properties":{
+                                                                    "id": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/id",
+                                                                        "type": "integer",
+                                                                        "description": "Context Table primary key.",
+                                                                        "maximum": 999999999
+                                                                    },
+                                                                    "cotrolaction_id":{
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/controlaction_id",
+                                                                        "type": "integer",
+                                                                        "description": "foreign key referring to the control action that the context table belongs to.",
+                                                                        "maximum": 999999999
+                                                                    },
+                                                                    "context":{
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/context",
+                                                                        "type": "string",
+                                                                        "description": "Context of the control action that context table belongs to.",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "ca_provided": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/ca_provided",
+                                                                        "type": "string",
+                                                                        "description": "If providing the studied control action cause hazardous",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "ca_not_provided": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/ca_not_provided",
+                                                                        "type": "string",
+                                                                        "description": "If not providing the studied control action cause hazardous.",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "wrong_time_order": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/wrong_time_order",
+                                                                        "type": "string",
+                                                                        "description": "If providing the studied control action out of order causes hazardous.",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "ca_too_early": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/ca_too_early",
+                                                                        "type": "string",
+                                                                        "description": "If it provides the studied control action early, it causes hazardous.",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "ca_too_late": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/ca_too_late",
+                                                                        "type": "string",
+                                                                        "description": "if you provide the studied control action late, cause hazardous.",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "ca_too_soon": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/ca_too_soon",
+                                                                        "type": "string",
+                                                                        "description": "If it provides the studied control action for a short time, it causes hazardous.",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "ca_too_long": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/ca_too_long",
+                                                                        "type": "string",
+                                                                        "description": "If it provides the control action studied for a long time, it causes hazardous.",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "created_at": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/created_at",
+                                                                        "type": ["string", null],
+                                                                        "description": "Context table create date.",
+                                                                        "default": null
+                                                                    },
+                                                                    "updated_at": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/context_table/items/anyOf/0/properties/updated_at",
+                                                                        "type": ["string", null],
+                                                                        "description": "Last update date of context table.",
+                                                                        "default": null
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+
+                                                },
+                                                "safety_constraint": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint",
+                                                    "type": "array",
+                                                    "description": "safety restriction to avoid possible unsafe control action",
+                                                    "default": [],
+                                                    "additionalItems": false,
+                                                    "items": {
+                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items",
+                                                        "anyOf"[
+                                                            {
+                                                                "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0",
+                                                                "type": "object",
+                                                                "required":[
+                                                                    "id",
+                                                                    "unsafe_control_action",
+                                                                    "safety_constraint",
+                                                                    "type",
+                                                                    "context",
+                                                                    "controlaction_id",
+                                                                    "rule_id",
+                                                                    "flag"
+                                                                ],
+                                                                "properties":{
+                                                                    "id":{
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/id",
+                                                                        "type": "integer",
+                                                                        "description": "Safety constraint primary key.",
+                                                                        "maximum": 999999999
+                                                                    },
+                                                                    "unsafe_control_action": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/unsafe_control_action",
+                                                                        "type": "string",
+                                                                        "description": "context where control action is dangerous."
+                                                                    },
+                                                                    "safety_constraint": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/safety_constraint",
+                                                                        "type": "string",
+                                                                        "description": "security measure to avoid unsafe control action."
+                                                                    },
+                                                                    "type": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/type",
+                                                                        "type": "string",
+                                                                        "description": "Safety constraint type."
+                                                                    },
+                                                                    "context": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/context",
+                                                                        "type": "string",
+                                                                        "description": "Context of safety constraint."
+                                                                    },
+                                                                    "controlaction_id": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/controlaction_id",
+                                                                        "type": "integer",
+                                                                        "description": "foreign key referring to the control action to which the safety constraint belongs.",
+                                                                        "maximum": 999999999
+                                                                    },
+                                                                    "rule_id": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule",
+                                                                        "type": "integer",
+                                                                        "description": "Foreign key referring to the rule to which the safety constraint belongs.",
+                                                                        "maximum": 999999999
+                                                                    },
+                                                                    "flag": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/flag",
+                                                                        "type": "integer",
+                                                                        "maximum": 999999999999
+                                                                    },
+                                                                    "created_at": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/created_at",
+                                                                        "type": ["string", null],
+                                                                        "description": "Safety constraint create date.",
+                                                                        "default": null
+                                                                    },
+                                                                    "updated_at": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/updated_at",
+                                                                        "type": ["string", null],
+                                                                        "description": "Last update date of safety constraint.",
+                                                                        "default": null
+                                                                    },
+                                                                    "causal_analysis": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis",
+                                                                        "type": "array",
+                                                                        "description": "Step two STPA.",
+                                                                        "default": [],
+                                                                        "additionalItems": false,
+                                                                        "items": {
+                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items",
+                                                                            "anyOf": [
+                                                                                {
+                                                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0",
+                                                                                    "type": "object",
+                                                                                    "required"[
+                                                                                        "id",
+                                                                                        "scenario",
+                                                                                        "associated_causal_factor",
+                                                                                        "requirement",
+                                                                                        "role",
+                                                                                        "rationale",
+                                                                                        "guideword_id",
+                                                                                        "safety_constraint_id"
+                                                                                    ],
+                                                                                    "properties":{
+                                                                                        "id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "scenario": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/scenario",
+                                                                                            "type": "string"
+                                                                                        },
+                                                                                        "associated_causal_factor": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/associated_causal_factor",
+                                                                                            "type": "string"
+                                                                                        },
+                                                                                        "requirement": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/requirement",
+                                                                                            "type": "string"
+                                                                                        },
+                                                                                        "role": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/role",
+                                                                                            "type": "string"
+                                                                                        },
+                                                                                        "rationale": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/rationale",
+                                                                                            "type": "string"
+                                                                                        },
+                                                                                        "guideword_id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/guideword_id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "safety_constraint_id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/safety_constraint_id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "created_at": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/created_at",
+                                                                                            "type": ["string", null],
+                                                                                            "description": "Causal analysis create date.",
+                                                                                            "default": null
+                                                                                        },
+                                                                                        "updated_at": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/causal_analysis/items/anyOf/0/properties/updated_at",
+                                                                                            "type": ["string", null],
+                                                                                            "description": "Last update date of causal analysis.",
+                                                                                            "default": null
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    },
+                                                                    "rule_safety_constraints_hazards":{
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule_safety_constraints_hazards",
+                                                                        "type": "array",
+                                                                        "description": "defines which rules and hazards involved with the safety constraint.",
+                                                                        "default": [],
+                                                                        "additionalItems": false,
+                                                                        "items": {
+                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule_safety_constraints_hazards/items",
+                                                                            "anyOf": [
+                                                                                {
+                                                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule_safety_constraints_hazards/items/anyOf/0",
+                                                                                    "type": "object",
+                                                                                    "required": [
+                                                                                        "rule_id",
+                                                                                        "sc_id",
+                                                                                        "hazards_id"
+                                                                                    ],
+                                                                                    "properties":{
+                                                                                        "id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule_safety_constraints_hazards/items/anyOf/0/properties/id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "rule_id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule_safety_constraints_hazards/items/anyOf/0/properties/rule_id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "sc_id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule_safety_constraints_hazards/items/anyOf/0/properties/sc_id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "hazards_id": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule_safety_constraints_hazards/items/anyOf/0/properties/hazards_id",
+                                                                                            "type": "integer",
+                                                                                            "maximum": 999999999
+                                                                                        },
+                                                                                        "created_at": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule_safety_constraints_hazards/items/anyOf/0/properties/created_at",
+                                                                                            "type": ["string", null],
+                                                                                            "description": "Create date.",
+                                                                                            "default": null
+                                                                                        },
+                                                                                        "updated_at": {
+                                                                                            "$id": "#/properties/controllers/items/anyOf/0/properties/controlaction/items/anyOf/0/properties/safety_constraint/items/anyOf/0/properties/rule_safety_constraints_hazards/items/anyOf/0/properties/updated_at",
+                                                                                            "type": ["string", null],
+                                                                                            "description": "Last update date.",
+                                                                                            "default": null
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        }
+                                    ]
+                                }
+                            },
+                            "variables": {
+                                "$id": "#/properties/controllers/items/anyOf/0/properties/variables",
+                                "type": "array",
+                                "description": "Variables related to controllers.",
+                                "default": [],
+                                "additionalItems": false,
+                                "items": {
+                                    "$id": "#/properties/variables/items",
+                                    "anyOf": [
+                                        {
+                                            "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0",
+                                            "type": "object",
+                                            "required": [
+                                                "id",
+                                                "name",
+                                                "project_id",
+                                                "controller_id",
+                                                "state"
+                                            ],
+                                            "properties": {
+                                                "id": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/id",
+                                                    "type": "integer",
+                                                    "description": "Variable primary key.",
+                                                    "maximum": 999999999
+                                                },
+                                                "name": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/name",
+                                                    "type": "string",
+                                                    "description": "Variable name.",
+                                                    "maxLength": 255
+                                                },
+                                                "project_id": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/project_id",
+                                                    "type": "integer",
+                                                    "description": "Foreign key referring to the project which variables belong.",
+                                                    "maximum": 999999999
+                                                },
+                                                "controller_id": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/controller_id",
+                                                    "type": "integer",
+                                                    "description": "Foreign key referring to the conroller that has the variable.",
+                                                    "maximum": 999999999
+                                                },
+                                                "created_at": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/created_at",
+                                                    "type": ["string", null],
+                                                    "description": "Variable create date.",
+                                                    "default": null
+                                                },
+                                                "updated_at": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/updated_at",
+                                                    "type": ["string", null],
+                                                    "description": "Last update date of variable.",
+                                                    "default": null
+                                                },
+                                                "state": {
+                                                    "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/state",
+                                                    "type": "array",
+                                                    "description": "Values that variables can represent.",
+                                                    "minItems": 2,
+                                                    "additionalItems": false,
+                                                    "items": {
+                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/state/items",
+                                                        "anyOf": [
+                                                            {
+                                                                "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/state/items/anyOf/0",
+                                                                "type": "object",
+                                                                "required": [
+                                                                    "id",
+                                                                    "name",
+                                                                    "variable_id"
+                                                                ],
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/state/items/anyOf/0/properties/id",
+                                                                        "type": "integer",
+                                                                        "description": "State primary key.",
+                                                                        "maximum": 999999999
+                                                                    },
+                                                                    "name": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/state/items/anyOf/0/properties/name",
+                                                                        "type": "string",
+                                                                        "description": "State name.",
+                                                                        "maxLength": 255
+                                                                    },
+                                                                    "variable_id": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/state/items/anyOf/0/properties/variable_id",
+                                                                        "type": "integer",
+                                                                        "description": "Foreign key referring to the variable that has the state",
+                                                                        "maximum": 999999999
+                                                                    },
+                                                                    "created_at": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/state/items/anyOf/0/properties/created_at",
+                                                                        "type": ["string", null],
+                                                                        "description": "State create date.",
+                                                                        "default": null
+                                                                    },
+                                                                    "updated_at": {
+                                                                        "$id": "#/properties/controllers/items/anyOf/0/properties/variables/items/anyOf/0/properties/state/items/anyOf/0/properties/updated_at",
+                                                                        "type": ["string", null],
+                                                                        "description": "Last update date of state.",
+                                                                        "default": null
+                                                                    }
+                                                                },
+                                                                "additionalProperties": false
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "hazards": {
+            "$id": "#/properties/hazards",
+            "type": "array",
+            "description": "Possible system hazards.",
+            "default": [],
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/hazards/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/hazards/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name",
+                            "description",
+                            "project_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/hazards/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "Hazard primary key.",
+                                "maximum": 999999999
+                            },
+                            "name": {
+                                "$id": "#/properties/hazards/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "description": "Hazard name.",
+                                "maxLength": 500
+                            },
+                            "description": {
+                                "$id": "#/properties/hazards/items/anyOf/0/properties/description",
+                                "type": "string",
+                                "description": "Hazard description."
+                            },
+                            "project_id": {
+                                "$id": "#/properties/hazards/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "description": "Foreign key referring to the project that hazard belongs to.",
+                                "maximum": 999999999
+                            },
+                            "created_at": {
+                                "$id": "#/properties/hazards/items/anyOf/0/properties/created_at",
+                                "type": ["string", null],
+                                "description": "Hazard create date.",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/hazards/items/anyOf/0/properties/updated_at",
+                                "type": ["string", null],
+                                "description": "Last update date of Hazard.",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "losses": {
+            "$id": "#/properties/losses",
+            "type": "array",
+            "description": "Losses that the analyzed system may have.",
+            "default": [],
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/losses/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/losses/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name",
+                            "description",
+                            "project_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/losses/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "Loss primary key.",
+                                "maximum": 999999999
+                            },
+                            "name": {
+                                "$id": "#/properties/losses/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "description": "Loss name.",
+                                "maxLength": 500
+                            },
+                            "description": {
+                                "$id": "#/properties/losses/items/anyOf/0/properties/description",
+                                "type": "string",
+                                "description": "Loss description."
+                            },
+                            "project_id": {
+                                "$id": "#/properties/losses/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "description": "Foreign key referring to the project the loss belongs to.",
+                                "maximum": 999999999
+                            },
+                            "created_at": {
+                                "$id": "#/properties/losses/items/anyOf/0/properties/created_at",
+                                "type": ["string", null],
+                                "description": "Loss create date.",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/losses/items/anyOf/0/properties/updated_at",
+                                "type": ["string", null],
+                                "description": "Last update date of loss.",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "missions": {
+            "$id": "#/properties/missions",
+            "type": "array",
+            "description": "Analysis missions.",
+            "default": [],
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/missions/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/missions/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "purpose",
+                            "method",
+                            "goals",
+                            "project_id",
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/missions/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "Mission primary key",
+                                "maximum": 999999999
+                            },
+                            "purpose": {
+                                "$id": "#/properties/missions/items/anyOf/0/properties/purpose",
+                                "type": "string",
+                                "description": "Mission purpose."
+                            },
+                            "method": {
+                                "$id": "#/properties/missions/items/anyOf/0/properties/method",
+                                "type": "string",
+                                "description": "Mission methods"
+                            },
+                            "goals": {
+                                "$id": "#/properties/missions/items/anyOf/0/properties/goals",
+                                "type": "string",
+                                "description": "Mission goal"
+                            },
+                            "project_id": {
+                                "$id": "#/properties/missions/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "description": "Foreign key referring to the project the mission belongs to",
+                                "maximum": 999999999
+                            },
+                            "created_at": {
+                                "$id": "#/properties/missions/items/anyOf/0/properties/created_at",
+                                "type": ["string", null],
+                                "description": "Mission create date",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/missions/items/anyOf/0/properties/update",
+                                "type": ["string", null],
+                                "description": "Last update date of mission",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "sensor": {
+            "$id": "#/properties/sensor",
+            "type": "array",
+            "description": "Sensors present in the system.",
+            "default": [],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/sensor/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/sensor/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name",
+                            "project_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/sensor/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "Sensor primary key.",
+                                "maximum": 999999999
+                            },
+                            "name": {
+                                "$id": "#/properties/sensor/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "description": "Sensor name.",
+                                "maxLength": 255
+                            },
+                            "project_id": {
+                                "$id": "#/properties/sensor/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "description": "Foreign key referring to the project the sensor belongs to.",
+                                "maximum": 999999999
+                            },
+                            "created_at": {
+                                "$id": "#/properties/sensor/items/anyOf/0/properties/created_at",
+                                "type": ["string", null],
+                                "description": "Sensor create date.",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/sensor/items/anyOf/0/properties/updated_at",
+                                "type": ["string", null],
+                                "description": "Last update date of sensor.",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "system_goals": {
+            "$id": "#/properties/system_goals",
+            "type": "array",
+            "description": "Objectives of hazard analysis.",
+            "default": [],
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/system_goals/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/system_goals/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name",
+                            "description",
+                            "project_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/system_goals/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "System goal primary key.",
+                                "maximum": 99999999
+                            },
+                            "name": {
+                                "$id": "#/properties/system_goals/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "description": "Objective name.",
+                                "maxLength": 500
+                            },
+                            "description": {
+                                "$id": "#/properties/system_goals/items/anyOf/0/properties/description",
+                                "type": "string",
+                                "description": "Objective description.",
+                                "default": ""
+                            },
+                            "project_id": {
+                                "$id": "#/properties/system_goals/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "description": "Foreign key referring to the project the objective belongs to.",
+                                "maximum": 999999999
+                            },
+                            "created_at": {
+                                "$id": "#/properties/system_goals/items/anyOf/0/properties/created_at",
+                                "type": ["string", null],
+                                "description": "System goal create date.",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/system_goals/items/anyOf/0/properties/updated_at",
+                                "type": ["string", null],
+                                "description": "Las update date of objective.",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "ssc": {
+            "$id": "#/properties/ssc",
+            "type": "array",
+            "description": "System Safety Constraints.",
+            "default": [],
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/ssc/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/ssc/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name",
+                            "description",
+                            "project_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/ssc/items/anyOf/0/properties/id",
+                                "type": "integer",
+                                "description": "System Safety Constraints primary key.",
+                                "maximum": 999999999
+                            },
+                            "name": {
+                                "$id": "#/properties/ssc/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "description": "System Safety Constraints name.",
+                                "maxLength": 500
+                            },
+                            "description": {
+                                "$id": "#/properties/ssc/items/anyOf/0/properties/description",
+                                "type": "string",
+                                "description": "System Safety Constraints description.",
+                                "default": ""
+                            },
+                            "project_id": {
+                                "$id": "#/properties/ssc/items/anyOf/0/properties/project_id",
+                                "type": "integer",
+                                "title": "The project_id schema",
+                                "description": "Foreign key referring to the project that System Safety Constraints belongs to.",
+                                "maximum": 99999999
+                            },
+                            "created_at": {
+                                "$id": "#/properties/ssc/items/anyOf/0/properties/created_at",
+                                "type": ["string", null],
+                                "description": "System Safety Constraints create date.",
+                                "default": null
+                            },
+                            "updated_at": {
+                                "$id": "#/properties/ssc/items/anyOf/0/properties/updated_at",
+                                "type": ["string", null],
+                                "description": "Last update date of System Safety Constraints.",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        }
+    },
+    "additionalProperties": false
+}

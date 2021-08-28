@@ -1424,3 +1424,8 @@ body.vex-open {
   top: 0; }
 
 /*# sourceMappingURL=style.css.map */
+
+/* Botão de importar projetos */
+button #button-import{
+    outline: none;
+}
