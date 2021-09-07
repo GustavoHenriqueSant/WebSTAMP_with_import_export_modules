@@ -1,11 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\app",
-    "\\app\\Http",
-    "\\app\\Http\\Controllers",
-    "\\database",
-    "\\database\\migrations"
+    "\\resources",
+    "\\resources\\views",
+    "\\resources\\views\\pages"
   ],
   "PreviewInSolutionExplorer": false
 }

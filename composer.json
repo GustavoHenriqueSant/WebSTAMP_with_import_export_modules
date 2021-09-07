@@ -5,11 +5,12 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.4.15",
+        "php": "^7.4",
         "laravel/framework": "5.2.*",
         "barryvdh/laravel-debugbar": "~2.4",
         "doctrine/dbal": "^2.5",
-        "guzzlehttp/guzzle": "~5.3|~6.0"
+        "guzzlehttp/guzzle": "~5.3|~6.0",
+        "justinrainbow/json-schema": "^5.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

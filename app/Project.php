@@ -10,6 +10,10 @@ class Project extends Model
         return $this->hasMany(Actuators::class);
     }
 
+    public function variables(){
+        return $this->hasMany(Variable::class);
+    }
+
     public function assumptions(){
         return $this->hasMany(Assumptions::class);
     }

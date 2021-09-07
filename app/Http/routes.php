@@ -148,6 +148,7 @@ Route::get('/projects', ['as' => 'projects', function () {
 
 Route::post('/getteam', 'TeamController@get');
 
+Route::post('/importproject', 'ProjectController@import');
 Route::post('/addproject', 'ProjectController@add');
 Route::post('/exportproject', 'ProjectController@export');
 Route::post('/editproject', 'ProjectController@edit');

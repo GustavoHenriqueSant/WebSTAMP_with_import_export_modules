@@ -10,10 +10,10 @@
     <div class="substep__add" id="add-new-project">
         +
     </div>
-    <form action="" method="POST">
-        <div>
-            <button type="submit" id="button-import"> <span class="material-icons">inputs</span></button>
-        </div>
+    <form action="/importproject" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="file" id="import" name="import">
+        <button type="submit">Enviar</button>
     </form>
 
 
