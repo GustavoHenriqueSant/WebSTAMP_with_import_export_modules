@@ -211,4 +211,9 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
+	/*
+ * Package Service Providers...
+ */
+Mtownsend\ResponseXml\Providers\ResponseXmlServiceProvider::class,
+
 ];

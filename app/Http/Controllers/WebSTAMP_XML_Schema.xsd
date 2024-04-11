@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:group name="dates_instance">
+		<xs:sequence>
+			<xs:element name="created_at">
+				<xs:simpleType> 
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]"/> 
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+
+			<xs:element name="updated_at">
+				<xs:simpleType> 
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]"/> 
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:group>
+
+	<xs:simpleType name="id_integer_restriction">
+		<xs:restriction base="xs:integer">
+			<xs:maxInclusive value="999999999"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="string_restriction">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:group name="identifiers">
+		<xs:sequence>
+			<xs:element name="id" type="id_integer_restriction"/> 
+			<xs:element name="name" type="string_restriction"/>
+		</xs:sequence>
+	</xs:group>
+	
+	<xs:element name="project">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:group ref="identifiers"/>
+				<xs:element name="description" type="xs:string"/>
+				<xs:group ref="dates_instance"/>
+
+				<xs:element name="URL">
+					<xs:simpleType> 
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="255"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+
+				<xs:element name="type">
+					<xs:simpleType> 
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="Safety"/>
+							<xs:enumeration value="Safety and Security"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+
+				<xs:element name="actuators">
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="actuator" minOccurs="0"  maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:group ref="identifiers"/>
+										<xs:element name="project_id" type="id_integer_restriction"/>
+										<xs:group ref="dates_instance"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="assumptions">
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="assumption" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:group ref="identifiers"/>
+										<xs:element name="description" type="xs:string"/>
+										<xs:element name="project_id" type="id_integer_restriction"/>
+										<xs:group ref="dates_instance"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="controlled_process">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:group ref="identifiers" minOccurs="0"/>
+							<xs:element name="project_id" type="id_integer_restriction" minOccurs="0"/>
+							<xs:group ref="dates_instance" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="controllers">
+					<xs:complexType>
+						<xs:sequence>
+								
+							<xs:element name="controller" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:group ref="identifiers"/>
+										<xs:element name="type" type="string_restriction"/>
+										<xs:element name="project_id" type="id_integer_restriction"/>
+										<xs:group ref="dates_instance"/>
+										
+										<xs:element name="controlactions">
+											<xs:complexType>
+												<xs:sequence>
+													
+													<xs:element name="controlaction" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:group ref="identifiers"/>
+																<xs:element name="description" type="string_restriction"/>
+																<xs:element name="controller_id" type="id_integer_restriction"/>
+																<xs:group ref="dates_instance"/>
+
+																<xs:element name="rules">
+																	<xs:complexType>
+																		<xs:sequence>
+																			
+																			<xs:element name="rule" minOccurs="0" maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="id" type="id_integer_restriction"/>
+																						<xs:element name="controlaction_id" type="id_integer_restriction"/>
+																						<xs:element name="column" type="string_restriction"/>
+																						<xs:group ref="dates_instance"/>
+
+																						<xs:element name="variable_state_relations">
+																							<xs:complexType>
+																								<xs:sequence>
+																									<xs:element name="rule_id" type="id_integer_restriction"/>
+																									<xs:element name="variable_id" type="id_integer_restriction"/>
+																									<xs:element name="state_id" type="id_integer_restriction"/>
+																									<xs:group ref="dates_instance"/>
+
+																								</xs:sequence>
+																							</xs:complexType>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+
+																<xs:element name="context_tables">
+																	<xs:complexType>
+																		<xs:sequence>
+																			
+																			<xs:element name="context_table" minOccurs="0" maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="id" type="id_integer_restriction"/>
+																						<xs:element name="controlaction_id" type="id_integer_restriction"/>
+																						<xs:element name="context" type="string_restriction"/>
+																						<xs:element name="ca_provided" type="string_restriction"/>
+																						<xs:element name="ca_not_provided" type="string_restriction"/>
+																						<xs:element name="wrong_time_order" type="string_restriction"/>
+																						<xs:element name="ca_too_early" type="string_restriction"/>
+																						<xs:element name="ca_too_late" type="string_restriction"/>
+																						<xs:element name="ca_too_soon" type="string_restriction"/>
+																						<xs:element name="ca_too_long" type="string_restriction"/>
+																						<xs:group ref="dates_instance"/>
+
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+
+																<xs:element name="safety_constraints">
+																	<xs:complexType>
+																		<xs:sequence>
+																			
+																			<xs:element name="safety_constraint" minOccurs="0" maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="id" type="id_integer_restriction"/>
+																						<xs:element name="unsafe_control_action" type="xs:string"/>
+																						<xs:element name="safety_constraint" type="xs:string"/>
+																						<xs:element name="type" type="xs:string"/>
+																						<xs:element name="context" type="xs:string"/>
+																						<xs:element name="controlaction_id" type="id_integer_restriction"/>
+																						<xs:element name="rule_id" type="id_integer_restriction"/>
+																						<xs:group ref="dates_instance"/>
+
+																						<xs:element name="flag">
+																							<xs:simpleType>
+																								<xs:restriction base="xs:integer">
+																									<xs:maxInclusive value="9999999999"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+
+																						<xs:element name="causal_analysis">
+																							<xs:complexType>
+																								<xs:sequence>
+																								
+																									<xs:element name="causal_analysis_" minOccurs="0" maxOccurs="unbounded">
+																										<xs:complexType>
+																											<xs:sequence>
+																												<xs:element name="id" type="id_integer_restriction"/>
+																												<xs:element name="scenario" type="xs:string"/>
+																												<xs:element name="associated_causal_factor" type="xs:string"/>
+																												<xs:element name="requirement" type="xs:string"/>
+																												<xs:element name="role" type="xs:string"/>
+																												<xs:element name="rationale" type="xs:string"/>
+																												<xs:element name="guideword_id" type="id_integer_restriction"/>
+																												<xs:element name="safety_constraint_id" type="id_integer_restriction"/>
+																												<xs:group ref="dates_instance"/>
+																											</xs:sequence>
+																										</xs:complexType>
+																									</xs:element>
+
+																								</xs:sequence>
+																							</xs:complexType>
+																						</xs:element>
+
+																						<xs:element name="rules_safety_constraints_hazards_relations">
+																							<xs:complexType>
+																								<xs:sequence>
+																									
+																									<xs:element name="rules_safety_constraints_hazards_relation" minOccurs="0" maxOccurs="unbounded">
+																										<xs:complexType>
+																											<xs:sequence>
+																												<xs:element name="rule_id" type="id_integer_restriction"/>
+																												<xs:element name="sc_id" type="id_integer_restriction"/>
+																												<xs:element name="hazard_id" type="id_integer_restriction"/>
+																												<xs:group ref="dates_instance"/>
+																											</xs:sequence>
+																										</xs:complexType>
+																									</xs:element>
+
+																								</xs:sequence>
+																							</xs:complexType>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+
+										<xs:element name="variables">
+											<xs:complexType>
+												<xs:sequence>
+													
+													<xs:element name="variable" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:group ref="identifiers"/>
+																<xs:element name="project_id" type="id_integer_restriction"/>
+																<xs:element name="controller_id" type="id_integer_restriction"/>
+																<xs:group ref="dates_instance"/>
+
+																<xs:element name="states">
+																	<xs:complexType>
+																		<xs:sequence>
+																		
+																			<xs:element name="state" minOccurs="0" maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:group ref="identifiers"/>
+																						<xs:element name="variable_id" type="id_integer_restriction"/>
+																						<xs:group ref="dates_instance"/>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element name="hazards">
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="hazard" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:group ref="identifiers"/>
+										<xs:element name="description" type="xs:string"/>
+										<xs:element name="project_id" type="id_integer_restriction"/>
+										<xs:group ref="dates_instance"/>
+
+										<xs:element name="losseshazards_relations">
+											<xs:complexType>
+												<xs:sequence>
+													
+													<xs:element name="losseshazards_relation" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="id" type="id_integer_restriction"/>
+																<xs:element name="loss_id" type="id_integer_restriction"/>
+																<xs:element name="hazard_id" type="id_integer_restriction"/>
+																<xs:group ref="dates_instance"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="losses">
+					<xs:complexType>
+						<xs:sequence>
+							
+							<xs:element name="loss" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:group ref="identifiers"/>
+										<xs:element name="description" type="xs:string"/>
+										<xs:element name="project_id" type="id_integer_restriction"/>
+										<xs:group ref="dates_instance"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="missions">
+					<xs:complexType>
+						<xs:sequence>
+							
+							<xs:element name="mission" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="id" type="id_integer_restriction"/>
+										<xs:element name="purpose" type="xs:string"/>
+										<xs:element name="method" type="xs:string"/>
+										<xs:element name="goals" type="xs:string"/>
+										<xs:element name="project_id" type="id_integer_restriction"/>
+										<xs:group ref="dates_instance"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="sensors">
+					<xs:complexType>
+						<xs:sequence>
+							
+							<xs:element name="sensor" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:group ref="identifiers"/>
+										<xs:element name="project_id" type="id_integer_restriction"/>
+										<xs:group ref="dates_instance"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="system_goals">
+					<xs:complexType>
+						<xs:sequence>
+							
+							<xs:element name="system_goal" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:group ref="identifiers"/>
+										<xs:element name="description" type="xs:string"/>
+										<xs:element name="project_id" type="id_integer_restriction"/>
+										<xs:group ref="dates_instance"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="system_safety_constraints">
+					<xs:complexType>
+						<xs:sequence>
+							
+							<xs:element name="system_safety_constraint" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:group ref="identifiers"/>
+										<xs:element name="description" type="xs:string"/>
+										<xs:element name="project_id" type="id_integer_restriction"/>
+										<xs:group ref="dates_instance"/>
+										
+										<xs:element name="system_safety_constraint_hazards_relations">
+											<xs:complexType>
+												<xs:sequence>
+
+													<xs:element name="system_safety_constraint_hazards_relation" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="ssc_id" type="id_integer_restriction"/>
+																<xs:element name="hazard_id" type="id_integer_restriction"/>
+																<xs:group ref="dates_instance"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="connections">
+					<xs:complexType>
+						<xs:sequence>
+							
+							<xs:element name="connection" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="id" type="id_integer_restriction"/>
+										<xs:element name="output_component_id" type="id_integer_restriction"/>
+										<xs:element name="type_output" type="string_restriction"/>
+										<xs:element name="input_component_id" type="id_integer_restriction"/>
+										<xs:element name="type_input" type="string_restriction"/>
+										<xs:group ref="dates_instance"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

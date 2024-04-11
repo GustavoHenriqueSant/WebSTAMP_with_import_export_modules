@@ -24,7 +24,7 @@ class Rule extends Model
 		return $this->hasMany('App\RulesSafetyConstraintsHazards');
 	}
 
-	public function variableState(){
+	public function variableStateRelations(){
 		return $this->hasOne(RulesVariablesStates::class, "rule_id");
 	}
 }

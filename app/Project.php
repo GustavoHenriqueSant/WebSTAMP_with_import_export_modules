@@ -38,7 +38,7 @@ class Project extends Model
         return $this->hasMany(Mission::class);
     }
 
-    public function sensor(){
+    public function sensors(){
         return $this->hasMany(Sensors::class);
     }
 
@@ -46,7 +46,7 @@ class Project extends Model
         return $this->hasMany(SystemGoals::class);
     }
 
-    public function ssc(){
+    public function systemSafetyConstraints(){
         return $this->hasMany(SystemSafetyConstraints::class);
     }
 }

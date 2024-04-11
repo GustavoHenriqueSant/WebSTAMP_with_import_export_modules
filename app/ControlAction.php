@@ -14,11 +14,11 @@ class ControlAction extends Model
 		return $this->hasMany(Rule::class, "controlaction_id");
 	}
 
-	public function contextTable(){
+	public function contextTables(){
 		return $this->hasMany(ContextTable::class, "controlaction_id");
 	}
 
-	public function safetyConstraint(){
+	public function safetyConstraints(){
 		return $this->hasMany(SafetyConstraints::class, "controlaction_id");
 	}
 }

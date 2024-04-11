@@ -1,9 +1,15 @@
 {
   "ExpandedNodes": [
     "",
+    "\\public",
+    "\\public\\images",
+    "\\public\\js",
     "\\resources",
     "\\resources\\views",
-    "\\resources\\views\\pages"
+    "\\resources\\views\\pages",
+    "\\resources\\views\\partials",
+    "\\resources\\views\\partials\\stepone",
+    "\\resources\\views\\partials\\stepthree"
   ],
   "PreviewInSolutionExplorer": false
 }

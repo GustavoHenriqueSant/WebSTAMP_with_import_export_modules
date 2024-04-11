@@ -1,0 +1,2446 @@
+<?xml version="1.0"?>
+<project>
+  <id>1</id>
+  <name>Train Door System</name>
+  <description/>
+  <created_at>2021-08-19 01:26:21</created_at>
+  <updated_at>2021-08-19 01:26:21</updated_at>
+  <URL>train-door-system-1</URL>
+  <type>Safety</type>
+  <actuators>
+    <actuator>
+      <id>1</id>
+      <name>Train Door Actuator</name>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:27:12</created_at>
+      <updated_at>2021-08-21 17:27:12</updated_at>
+    </actuator>
+  </actuators>
+  <assumptions>
+    <assumption>
+      <id>1</id>
+      <name>The Train door controller is reliable.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:18:45</created_at>
+      <updated_at>2021-08-21 17:18:45</updated_at>
+    </assumption>
+    <assumption>
+      <id>2</id>
+      <name>The Train actuator is reliable.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:19:13</created_at>
+      <updated_at>2021-08-21 17:19:13</updated_at>
+    </assumption>
+    <assumption>
+      <id>3</id>
+      <name>The Train door is reliable.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:19:24</created_at>
+      <updated_at>2021-08-21 17:19:24</updated_at>
+    </assumption>
+    <assumption>
+      <id>4</id>
+      <name>The connection between Train door controller and Train actuator is reliable</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:19:34</created_at>
+      <updated_at>2021-08-21 17:19:34</updated_at>
+    </assumption>
+    <assumption>
+      <id>5</id>
+      <name>The connection between Train actuator and Train door is reliable.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:19:41</created_at>
+      <updated_at>2021-08-21 17:19:41</updated_at>
+    </assumption>
+  </assumptions>
+  <controlled_process>
+    <id>1</id>
+    <name>Train Door</name>
+    <project_id>1</project_id>
+    <created_at>2021-08-21 17:27:33</created_at>
+    <updated_at>2021-08-21 17:27:33</updated_at>
+  </controlled_process>
+  <controllers>
+    <controller>
+      <id>1</id>
+      <name>Train Door Controller</name>
+      <type/>
+      <project_id>1</project_id>
+      <created_at>2021-08-19 01:26:36</created_at>
+      <updated_at>2021-08-19 01:26:36</updated_at>
+      <controlactions>
+        <controlaction>
+          <id>1</id>
+          <name>Open door command</name>
+          <description>Description</description>
+          <controller_id>1</controller_id>
+          <created_at>2021-08-19 01:27:29</created_at>
+          <updated_at>2021-08-19 01:27:29</updated_at>
+          <rules>
+            <rule>
+              <id>1</id>
+              <controlaction_id>1</controlaction_id>
+              <column>Provided;Provided too early</column>
+              <created_at>2021-08-21 17:34:26</created_at>
+              <updated_at>2021-08-21 17:34:26</updated_at>
+              <variable_state_relations>
+                <rule_id>1</rule_id>
+                <variable_id>1</variable_id>
+                <state_id>2</state_id>
+                <created_at>2021-08-21 17:34:26</created_at>
+                <updated_at>2021-08-21 17:34:26</updated_at>
+              </variable_state_relations>
+            </rule>
+          </rules>
+          <context_tables>
+            <context_table>
+              <id>199</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,7,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:12</created_at>
+              <updated_at>2021-08-21 19:06:12</updated_at>
+            </context_table>
+            <context_table>
+              <id>200</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,7,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:12</created_at>
+              <updated_at>2021-08-21 19:06:12</updated_at>
+            </context_table>
+            <context_table>
+              <id>201</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,7,19,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:12</created_at>
+              <updated_at>2021-08-21 19:06:12</updated_at>
+            </context_table>
+            <context_table>
+              <id>202</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,7,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>203</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,7,20,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>204</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,7,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>205</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,8,15,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>206</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,8,16,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>207</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,8,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>208</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,8,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>209</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,8,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>210</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,8,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>211</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,8,20,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:13</created_at>
+              <updated_at>2021-08-21 19:06:13</updated_at>
+            </context_table>
+            <context_table>
+              <id>212</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,5,8,19,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:14</created_at>
+              <updated_at>2021-08-21 19:06:14</updated_at>
+            </context_table>
+            <context_table>
+              <id>213</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,7,15,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:14</created_at>
+              <updated_at>2021-08-21 19:06:14</updated_at>
+            </context_table>
+            <context_table>
+              <id>214</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,7,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:14</created_at>
+              <updated_at>2021-08-21 19:06:14</updated_at>
+            </context_table>
+            <context_table>
+              <id>215</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,7,19,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:14</created_at>
+              <updated_at>2021-08-21 19:06:14</updated_at>
+            </context_table>
+            <context_table>
+              <id>216</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,7,16,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:14</created_at>
+              <updated_at>2021-08-21 19:06:14</updated_at>
+            </context_table>
+            <context_table>
+              <id>217</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,7,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:14</created_at>
+              <updated_at>2021-08-21 19:06:14</updated_at>
+            </context_table>
+            <context_table>
+              <id>218</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,7,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:14</created_at>
+              <updated_at>2021-08-21 19:06:14</updated_at>
+            </context_table>
+            <context_table>
+              <id>219</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,7,20,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:14</created_at>
+              <updated_at>2021-08-21 19:06:14</updated_at>
+            </context_table>
+            <context_table>
+              <id>220</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,8,15,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>221</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,8,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>222</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,7,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>223</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,8,16,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>224</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,8,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>225</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,8,19,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>226</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,8,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>227</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,8,20,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>228</id>
+              <controlaction_id>1</controlaction_id>
+              <context>1,6,8,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>229</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,7,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:15</created_at>
+              <updated_at>2021-08-21 19:06:15</updated_at>
+            </context_table>
+            <context_table>
+              <id>230</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,7,15,18</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>231</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,7,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>232</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,7,16,18</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>233</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,7,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>234</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,7,19,18</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>235</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,7,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>236</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,7,20,18</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>237</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,8,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>238</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,8,15,18</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>239</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,8,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:16</created_at>
+              <updated_at>2021-08-21 19:06:16</updated_at>
+            </context_table>
+            <context_table>
+              <id>240</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,8,16,18</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>241</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,8,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>242</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,8,19,18</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>243</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,8,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>244</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,5,8,20,18</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>true</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>245</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,7,15,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>246</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,7,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>247</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,7,16,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>248</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,7,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>249</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,7,19,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>250</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,7,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:17</created_at>
+              <updated_at>2021-08-21 19:06:17</updated_at>
+            </context_table>
+            <context_table>
+              <id>251</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,7,20,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+            <context_table>
+              <id>252</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,7,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+            <context_table>
+              <id>253</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,8,15,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+            <context_table>
+              <id>254</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,8,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+            <context_table>
+              <id>255</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,8,16,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+            <context_table>
+              <id>256</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,8,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+            <context_table>
+              <id>257</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,8,19,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+            <context_table>
+              <id>258</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,8,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+            <context_table>
+              <id>259</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,8,20,17</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+            <context_table>
+              <id>260</id>
+              <controlaction_id>1</controlaction_id>
+              <context>2,6,8,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>false</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-21 19:06:18</created_at>
+              <updated_at>2021-08-21 19:06:18</updated_at>
+            </context_table>
+          </context_tables>
+          <safety_constraints>
+            <safety_constraint>
+              <id>1</id>
+              <unsafe_control_action>Train door controller provided open door command when train position is not aligned at platform and train motion is in movement</unsafe_control_action>
+              <safety_constraint>Train door controller must not provide open door command when train position is not aligned at platform and train motion is in movement</safety_constraint>
+              <type>Provided</type>
+              <context>2,5</context>
+              <controlaction_id>1</controlaction_id>
+              <rule_id>1</rule_id>
+              <created_at>2021-08-21 17:34:28</created_at>
+              <updated_at>2021-08-21 17:34:28</updated_at>
+              <flag>0</flag>
+              <causal_analysis/>
+              <rules_safety_constraints_hazards_relations>
+                <rules_safety_constraints_hazards_relation>
+                  <rule_id>1</rule_id>
+                  <sc_id>1</sc_id>
+                  <hazard_id>2</hazard_id>
+                  <created_at>2021-08-21 17:34:28</created_at>
+                  <updated_at>2021-08-21 17:34:28</updated_at>
+                </rules_safety_constraints_hazards_relation>
+              </rules_safety_constraints_hazards_relations>
+            </safety_constraint>
+            <safety_constraint>
+              <id>2</id>
+              <unsafe_control_action>Train door controller provided open door command  too early when train position is not aligned at platform and train motion is in movement</unsafe_control_action>
+              <safety_constraint>Train door controller must not provide open door command  too early when train position is not aligned at platform and train motion is in movement</safety_constraint>
+              <type>Provided too early</type>
+              <context>2,5</context>
+              <controlaction_id>1</controlaction_id>
+              <rule_id>1</rule_id>
+              <created_at>2021-08-21 17:34:28</created_at>
+              <updated_at>2021-08-21 17:34:28</updated_at>
+              <flag>0</flag>
+              <causal_analysis/>
+              <rules_safety_constraints_hazards_relations>
+                <rules_safety_constraints_hazards_relation>
+                  <rule_id>1</rule_id>
+                  <sc_id>2</sc_id>
+                  <hazard_id>2</hazard_id>
+                  <created_at>2021-08-21 17:34:28</created_at>
+                  <updated_at>2021-08-21 17:34:28</updated_at>
+                </rules_safety_constraints_hazards_relation>
+              </rules_safety_constraints_hazards_relations>
+            </safety_constraint>
+          </safety_constraints>
+        </controlaction>
+        <controlaction>
+          <id>3</id>
+          <name>Close door command</name>
+          <description>Description</description>
+          <controller_id>1</controller_id>
+          <created_at>2021-08-21 17:23:33</created_at>
+          <updated_at>2021-08-21 17:23:33</updated_at>
+          <rules>
+            <rule>
+              <id>2</id>
+              <controlaction_id>3</controlaction_id>
+              <column>Provided</column>
+              <created_at>2021-08-23 18:38:18</created_at>
+              <updated_at>2021-08-23 18:38:18</updated_at>
+              <variable_state_relations>
+                <rule_id>2</rule_id>
+                <variable_id>1</variable_id>
+                <state_id>0</state_id>
+                <created_at>2021-08-23 18:38:18</created_at>
+                <updated_at>2021-08-23 18:38:18</updated_at>
+              </variable_state_relations>
+            </rule>
+          </rules>
+          <context_tables>
+            <context_table>
+              <id>261</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,7,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:48</created_at>
+              <updated_at>2021-08-23 18:43:48</updated_at>
+            </context_table>
+            <context_table>
+              <id>262</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,7,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:48</created_at>
+              <updated_at>2021-08-23 18:43:48</updated_at>
+            </context_table>
+            <context_table>
+              <id>263</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,7,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:49</created_at>
+              <updated_at>2021-08-23 18:43:49</updated_at>
+            </context_table>
+            <context_table>
+              <id>264</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,7,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:49</created_at>
+              <updated_at>2021-08-23 18:43:49</updated_at>
+            </context_table>
+            <context_table>
+              <id>265</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,7,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:49</created_at>
+              <updated_at>2021-08-23 18:43:49</updated_at>
+            </context_table>
+            <context_table>
+              <id>266</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,7,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:49</created_at>
+              <updated_at>2021-08-23 18:43:49</updated_at>
+            </context_table>
+            <context_table>
+              <id>267</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,7,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:49</created_at>
+              <updated_at>2021-08-23 18:43:49</updated_at>
+            </context_table>
+            <context_table>
+              <id>268</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,7,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:49</created_at>
+              <updated_at>2021-08-23 18:43:49</updated_at>
+            </context_table>
+            <context_table>
+              <id>269</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,8,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:49</created_at>
+              <updated_at>2021-08-23 18:43:49</updated_at>
+            </context_table>
+            <context_table>
+              <id>270</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,8,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>271</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,8,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>272</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,8,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>273</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,8,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>274</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,8,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>275</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,8,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>276</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,5,8,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>277</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,7,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>278</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,7,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>279</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,7,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:50</created_at>
+              <updated_at>2021-08-23 18:43:50</updated_at>
+            </context_table>
+            <context_table>
+              <id>280</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,7,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:51</created_at>
+              <updated_at>2021-08-23 18:43:51</updated_at>
+            </context_table>
+            <context_table>
+              <id>281</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,7,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:51</created_at>
+              <updated_at>2021-08-23 18:43:51</updated_at>
+            </context_table>
+            <context_table>
+              <id>282</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,7,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:51</created_at>
+              <updated_at>2021-08-23 18:43:51</updated_at>
+            </context_table>
+            <context_table>
+              <id>283</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,7,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:51</created_at>
+              <updated_at>2021-08-23 18:43:51</updated_at>
+            </context_table>
+            <context_table>
+              <id>284</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,7,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:51</created_at>
+              <updated_at>2021-08-23 18:43:51</updated_at>
+            </context_table>
+            <context_table>
+              <id>285</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,8,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:51</created_at>
+              <updated_at>2021-08-23 18:43:51</updated_at>
+            </context_table>
+            <context_table>
+              <id>286</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,8,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:51</created_at>
+              <updated_at>2021-08-23 18:43:51</updated_at>
+            </context_table>
+            <context_table>
+              <id>287</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,8,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:51</created_at>
+              <updated_at>2021-08-23 18:43:51</updated_at>
+            </context_table>
+            <context_table>
+              <id>288</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,8,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:51</created_at>
+              <updated_at>2021-08-23 18:43:51</updated_at>
+            </context_table>
+            <context_table>
+              <id>289</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,8,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>290</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,8,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>291</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,8,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>292</id>
+              <controlaction_id>3</controlaction_id>
+              <context>1,6,8,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>293</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,7,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>294</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,7,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>295</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,7,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>296</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,7,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>297</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,7,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>298</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,7,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:52</created_at>
+              <updated_at>2021-08-23 18:43:52</updated_at>
+            </context_table>
+            <context_table>
+              <id>299</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,7,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>300</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,7,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>301</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,8,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>302</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,8,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>303</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,8,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>304</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,8,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>305</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,8,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>306</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,8,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>307</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,8,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>308</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,5,8,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>309</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,7,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:53</created_at>
+              <updated_at>2021-08-23 18:43:53</updated_at>
+            </context_table>
+            <context_table>
+              <id>310</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,7,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:54</created_at>
+              <updated_at>2021-08-23 18:43:54</updated_at>
+            </context_table>
+            <context_table>
+              <id>311</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,7,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:54</created_at>
+              <updated_at>2021-08-23 18:43:54</updated_at>
+            </context_table>
+            <context_table>
+              <id>312</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,7,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:54</created_at>
+              <updated_at>2021-08-23 18:43:54</updated_at>
+            </context_table>
+            <context_table>
+              <id>313</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,7,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:54</created_at>
+              <updated_at>2021-08-23 18:43:54</updated_at>
+            </context_table>
+            <context_table>
+              <id>314</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,7,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:54</created_at>
+              <updated_at>2021-08-23 18:43:54</updated_at>
+            </context_table>
+            <context_table>
+              <id>315</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,7,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:54</created_at>
+              <updated_at>2021-08-23 18:43:54</updated_at>
+            </context_table>
+            <context_table>
+              <id>316</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,7,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:54</created_at>
+              <updated_at>2021-08-23 18:43:54</updated_at>
+            </context_table>
+            <context_table>
+              <id>317</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,8,15,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:54</created_at>
+              <updated_at>2021-08-23 18:43:54</updated_at>
+            </context_table>
+            <context_table>
+              <id>318</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,8,15,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:54</created_at>
+              <updated_at>2021-08-23 18:43:54</updated_at>
+            </context_table>
+            <context_table>
+              <id>319</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,8,16,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:55</created_at>
+              <updated_at>2021-08-23 18:43:55</updated_at>
+            </context_table>
+            <context_table>
+              <id>320</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,8,19,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:55</created_at>
+              <updated_at>2021-08-23 18:43:55</updated_at>
+            </context_table>
+            <context_table>
+              <id>321</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,8,20,17</context>
+              <ca_provided>true</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:55</created_at>
+              <updated_at>2021-08-23 18:43:55</updated_at>
+            </context_table>
+            <context_table>
+              <id>322</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,8,16,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:55</created_at>
+              <updated_at>2021-08-23 18:43:55</updated_at>
+            </context_table>
+            <context_table>
+              <id>323</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,8,19,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:55</created_at>
+              <updated_at>2021-08-23 18:43:55</updated_at>
+            </context_table>
+            <context_table>
+              <id>324</id>
+              <controlaction_id>3</controlaction_id>
+              <context>2,6,8,20,18</context>
+              <ca_provided>null</ca_provided>
+              <ca_not_provided>null</ca_not_provided>
+              <wrong_time_order>null</wrong_time_order>
+              <ca_too_early>null</ca_too_early>
+              <ca_too_late>null</ca_too_late>
+              <ca_too_soon>null</ca_too_soon>
+              <ca_too_long>null</ca_too_long>
+              <created_at>2021-08-23 18:43:55</created_at>
+              <updated_at>2021-08-23 18:43:55</updated_at>
+            </context_table>
+          </context_tables>
+          <safety_constraints>
+            <safety_constraint>
+              <id>3</id>
+              <unsafe_control_action>Train door controller provided close door command when door situation is person or object in doorway</unsafe_control_action>
+              <safety_constraint>Train door controller must not provide close door command when door situation is person or object in doorway</safety_constraint>
+              <type>Provided</type>
+              <context>17</context>
+              <controlaction_id>3</controlaction_id>
+              <rule_id>2</rule_id>
+              <created_at>2021-08-23 18:38:19</created_at>
+              <updated_at>2021-08-23 18:38:19</updated_at>
+              <flag>0</flag>
+              <causal_analysis>
+                <causal_analysis_>
+                  <id>19</id>
+                  <scenario>Train door acutuator cannot act in Train Door ot complete the execution of the Control Action </scenario>
+                  <associated_causal_factor>Failure in the Train Door Actuator</associated_causal_factor>
+                  <requirement>Tge Train Door Actuator must be mantained periodically</requirement>
+                  <role/>
+                  <rationale>Reliability analysis cas minimize the failures </rationale>
+                  <guideword_id>0</guideword_id>
+                  <safety_constraint_id>3</safety_constraint_id>
+                  <created_at>2021-08-23 18:47:16</created_at>
+                  <updated_at>2021-08-23 18:47:16</updated_at>
+                </causal_analysis_>
+                <causal_analysis_>
+                  <id>20</id>
+                  <scenario>Train door Actuator performs a non issued- control action</scenario>
+                  <associated_causal_factor>Failure in the train door Actuator </associated_causal_factor>
+                  <requirement>The train door actuator must be maintaned periodically</requirement>
+                  <role/>
+                  <rationale>Relialibility analysis can minimize the failures </rationale>
+                  <guideword_id>0</guideword_id>
+                  <safety_constraint_id>3</safety_constraint_id>
+                  <created_at>2021-08-23 18:48:57</created_at>
+                  <updated_at>2021-08-23 18:48:57</updated_at>
+                </causal_analysis_>
+                <causal_analysis_>
+                  <id>21</id>
+                  <scenario>The system components do not poerform their functions </scenario>
+                  <associated_causal_factor>Failure in one or more components of the system </associated_causal_factor>
+                  <requirement>Ongoing STPA analysis must be done in order to cover each change is the system </requirement>
+                  <role/>
+                  <rationale>Reliability analysis can be done for samll components introduced in the system. Complex components must have their own STPA analysis.</rationale>
+                  <guideword_id>0</guideword_id>
+                  <safety_constraint_id>3</safety_constraint_id>
+                  <created_at>2021-08-23 18:51:33</created_at>
+                  <updated_at>2021-08-23 18:51:33</updated_at>
+                </causal_analysis_>
+              </causal_analysis>
+              <rules_safety_constraints_hazards_relations>
+                <rules_safety_constraints_hazards_relation>
+                  <rule_id>2</rule_id>
+                  <sc_id>3</sc_id>
+                  <hazard_id>1</hazard_id>
+                  <created_at>2021-08-23 18:38:19</created_at>
+                  <updated_at>2021-08-23 18:38:19</updated_at>
+                </rules_safety_constraints_hazards_relation>
+              </rules_safety_constraints_hazards_relations>
+            </safety_constraint>
+          </safety_constraints>
+        </controlaction>
+      </controlactions>
+      <variables>
+        <variable>
+          <id>1</id>
+          <name>Train Position</name>
+          <project_id>1</project_id>
+          <controller_id>1</controller_id>
+          <created_at>2021-08-19 01:27:45</created_at>
+          <updated_at>2021-08-19 01:27:45</updated_at>
+          <states>
+            <state>
+              <id>1</id>
+              <name>Aligned at platform</name>
+              <variable_id>1</variable_id>
+              <created_at>2021-08-19 01:27:45</created_at>
+              <updated_at>2021-08-19 01:27:45</updated_at>
+            </state>
+            <state>
+              <id>2</id>
+              <name>Not aligned at platform</name>
+              <variable_id>1</variable_id>
+              <created_at>2021-08-19 01:27:45</created_at>
+              <updated_at>2021-08-19 01:27:45</updated_at>
+            </state>
+          </states>
+        </variable>
+        <variable>
+          <id>3</id>
+          <name>Train Motion</name>
+          <project_id>1</project_id>
+          <controller_id>1</controller_id>
+          <created_at>2021-08-21 17:23:57</created_at>
+          <updated_at>2021-08-21 17:23:57</updated_at>
+          <states>
+            <state>
+              <id>5</id>
+              <name>In Movement</name>
+              <variable_id>3</variable_id>
+              <created_at>2021-08-21 17:23:58</created_at>
+              <updated_at>2021-08-21 17:23:58</updated_at>
+            </state>
+            <state>
+              <id>6</id>
+              <name>Stopped</name>
+              <variable_id>3</variable_id>
+              <created_at>2021-08-21 17:23:58</created_at>
+              <updated_at>2021-08-21 17:23:58</updated_at>
+            </state>
+          </states>
+        </variable>
+        <variable>
+          <id>4</id>
+          <name>Emergency</name>
+          <project_id>1</project_id>
+          <controller_id>1</controller_id>
+          <created_at>2021-08-21 17:24:27</created_at>
+          <updated_at>2021-08-21 17:24:27</updated_at>
+          <states>
+            <state>
+              <id>7</id>
+              <name>Evacuation Required</name>
+              <variable_id>4</variable_id>
+              <created_at>2021-08-21 17:24:27</created_at>
+              <updated_at>2021-08-21 17:24:27</updated_at>
+            </state>
+            <state>
+              <id>8</id>
+              <name>No Emergency</name>
+              <variable_id>4</variable_id>
+              <created_at>2021-08-21 17:24:28</created_at>
+              <updated_at>2021-08-21 17:24:28</updated_at>
+            </state>
+          </states>
+        </variable>
+        <variable>
+          <id>7</id>
+          <name>Door Position</name>
+          <project_id>1</project_id>
+          <controller_id>0</controller_id>
+          <created_at>2021-08-21 17:29:48</created_at>
+          <updated_at>2021-08-21 17:29:48</updated_at>
+          <states>
+            <state>
+              <id>15</id>
+              <name>Fully Open</name>
+              <variable_id>7</variable_id>
+              <created_at>2021-08-21 17:29:48</created_at>
+              <updated_at>2021-08-21 17:29:48</updated_at>
+            </state>
+            <state>
+              <id>16</id>
+              <name>Partially Open</name>
+              <variable_id>7</variable_id>
+              <created_at>2021-08-21 17:29:48</created_at>
+              <updated_at>2021-08-21 17:29:48</updated_at>
+            </state>
+            <state>
+              <id>19</id>
+              <name>Fully Closed</name>
+              <variable_id>7</variable_id>
+              <created_at>2021-08-21 17:31:22</created_at>
+              <updated_at>2021-08-21 17:31:22</updated_at>
+            </state>
+            <state>
+              <id>20</id>
+              <name>Partially Closed</name>
+              <variable_id>7</variable_id>
+              <created_at>2021-08-21 17:31:33</created_at>
+              <updated_at>2021-08-21 17:31:33</updated_at>
+            </state>
+          </states>
+        </variable>
+        <variable>
+          <id>8</id>
+          <name>Door situation</name>
+          <project_id>1</project_id>
+          <controller_id>0</controller_id>
+          <created_at>2021-08-21 17:30:34</created_at>
+          <updated_at>2021-08-21 17:30:34</updated_at>
+          <states>
+            <state>
+              <id>17</id>
+              <name>Person or object in doorway</name>
+              <variable_id>8</variable_id>
+              <created_at>2021-08-21 17:30:34</created_at>
+              <updated_at>2021-08-21 17:30:34</updated_at>
+            </state>
+            <state>
+              <id>18</id>
+              <name>Nothing in doorway</name>
+              <variable_id>8</variable_id>
+              <created_at>2021-08-21 17:30:35</created_at>
+              <updated_at>2021-08-21 17:30:35</updated_at>
+            </state>
+          </states>
+        </variable>
+      </variables>
+    </controller>
+  </controllers>
+  <hazards>
+    <hazard>
+      <id>1</id>
+      <name>Door close on a person in the doorway.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:20:34</created_at>
+      <updated_at>2021-08-21 17:20:34</updated_at>
+      <losseshazards_relations>
+        <losseshazards_relation>
+          <id>1</id>
+          <loss_id>2</loss_id>
+          <hazard_id>1</hazard_id>
+          <created_at>2021-08-21 17:20:34</created_at>
+          <updated_at>2021-08-21 17:20:34</updated_at>
+        </losseshazards_relation>
+      </losseshazards_relations>
+    </hazard>
+    <hazard>
+      <id>2</id>
+      <name>Door open when the train is moving or not in a station.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:20:49</created_at>
+      <updated_at>2021-08-21 17:20:49</updated_at>
+      <losseshazards_relations>
+        <losseshazards_relation>
+          <id>2</id>
+          <loss_id>1</loss_id>
+          <hazard_id>2</hazard_id>
+          <created_at>2021-08-21 17:20:49</created_at>
+          <updated_at>2021-08-21 17:20:49</updated_at>
+        </losseshazards_relation>
+      </losseshazards_relations>
+    </hazard>
+    <hazard>
+      <id>3</id>
+      <name>Passengers/staff are unable to exit during an emergency.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:21:06</created_at>
+      <updated_at>2021-08-21 17:21:06</updated_at>
+      <losseshazards_relations>
+        <losseshazards_relation>
+          <id>3</id>
+          <loss_id>3</loss_id>
+          <hazard_id>3</hazard_id>
+          <created_at>2021-08-21 17:21:07</created_at>
+          <updated_at>2021-08-21 17:21:07</updated_at>
+        </losseshazards_relation>
+      </losseshazards_relations>
+    </hazard>
+  </hazards>
+  <losses>
+    <loss>
+      <id>1</id>
+      <name>Injury to a person by falling out of the train.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:19:54</created_at>
+      <updated_at>2021-08-21 17:19:54</updated_at>
+    </loss>
+    <loss>
+      <id>2</id>
+      <name>Being hit by a closing door.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:20:03</created_at>
+      <updated_at>2021-08-21 17:20:03</updated_at>
+    </loss>
+    <loss>
+      <id>3</id>
+      <name>Being trapped inside a train during an emergency.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:20:14</created_at>
+      <updated_at>2021-08-21 17:20:14</updated_at>
+    </loss>
+  </losses>
+  <missions/>
+  <sensors>
+    <sensor>
+      <id>1</id>
+      <name>Train Door Sensor</name>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:27:47</created_at>
+      <updated_at>2021-08-21 17:27:47</updated_at>
+    </sensor>
+  </sensors>
+  <system_goals>
+    <system_goal>
+      <id>1</id>
+      <name>Provide an easy way to control the door.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:17:49</created_at>
+      <updated_at>2021-08-21 17:17:49</updated_at>
+    </system_goal>
+    <system_goal>
+      <id>2</id>
+      <name>Ensure the safety of passengers in boarding and landing at stations.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:17:59</created_at>
+      <updated_at>2021-08-21 17:17:59</updated_at>
+    </system_goal>
+    <system_goal>
+      <id>3</id>
+      <name>Avoid any type of injury to passengers.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:18:16</created_at>
+      <updated_at>2021-08-21 17:18:16</updated_at>
+    </system_goal>
+    <system_goal>
+      <id>4</id>
+      <name>Make a safe trip between stations.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:18:29</created_at>
+      <updated_at>2021-08-21 17:18:29</updated_at>
+    </system_goal>
+  </system_goals>
+  <system_safety_constraints>
+    <system_safety_constraint>
+      <id>1</id>
+      <name>Door must not be opened when train is in motion.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:21:30</created_at>
+      <updated_at>2021-08-21 17:21:30</updated_at>
+      <system_safety_constraint_hazards_relations>
+        <system_safety_constraint_hazards_relation>
+          <ssc_id>1</ssc_id>
+          <hazard_id>1</hazard_id>
+          <created_at>2021-08-21 17:21:30</created_at>
+          <updated_at>2021-08-21 17:21:30</updated_at>
+        </system_safety_constraint_hazards_relation>
+        <system_safety_constraint_hazards_relation>
+          <ssc_id>1</ssc_id>
+          <hazard_id>2</hazard_id>
+          <created_at>2021-08-21 17:21:30</created_at>
+          <updated_at>2021-08-21 17:21:30</updated_at>
+        </system_safety_constraint_hazards_relation>
+        <system_safety_constraint_hazards_relation>
+          <ssc_id>1</ssc_id>
+          <hazard_id>3</hazard_id>
+          <created_at>2021-08-21 17:21:31</created_at>
+          <updated_at>2021-08-21 17:21:31</updated_at>
+        </system_safety_constraint_hazards_relation>
+      </system_safety_constraint_hazards_relations>
+    </system_safety_constraint>
+    <system_safety_constraint>
+      <id>2</id>
+      <name>When in Emergency situation, door must be opened.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:21:46</created_at>
+      <updated_at>2021-08-21 17:21:46</updated_at>
+      <system_safety_constraint_hazards_relations>
+        <system_safety_constraint_hazards_relation>
+          <ssc_id>2</ssc_id>
+          <hazard_id>3</hazard_id>
+          <created_at>2021-08-21 17:21:46</created_at>
+          <updated_at>2021-08-21 17:21:46</updated_at>
+        </system_safety_constraint_hazards_relation>
+      </system_safety_constraint_hazards_relations>
+    </system_safety_constraint>
+    <system_safety_constraint>
+      <id>3</id>
+      <name>Door must not be closed when exist a person or object in the doorway.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:22:05</created_at>
+      <updated_at>2021-08-21 17:22:05</updated_at>
+      <system_safety_constraint_hazards_relations>
+        <system_safety_constraint_hazards_relation>
+          <ssc_id>3</ssc_id>
+          <hazard_id>1</hazard_id>
+          <created_at>2021-08-21 17:22:06</created_at>
+          <updated_at>2021-08-21 17:22:06</updated_at>
+        </system_safety_constraint_hazards_relation>
+      </system_safety_constraint_hazards_relations>
+    </system_safety_constraint>
+    <system_safety_constraint>
+      <id>4</id>
+      <name>Door must not close on a person or object in the doorway.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:22:20</created_at>
+      <updated_at>2021-08-21 17:22:20</updated_at>
+      <system_safety_constraint_hazards_relations>
+        <system_safety_constraint_hazards_relation>
+          <ssc_id>4</ssc_id>
+          <hazard_id>1</hazard_id>
+          <created_at>2021-08-21 17:22:20</created_at>
+          <updated_at>2021-08-21 17:22:20</updated_at>
+        </system_safety_constraint_hazards_relation>
+      </system_safety_constraint_hazards_relations>
+    </system_safety_constraint>
+    <system_safety_constraint>
+      <id>5</id>
+      <name>Door must not open when the train is moving or not in a station.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:22:39</created_at>
+      <updated_at>2021-08-21 17:22:39</updated_at>
+      <system_safety_constraint_hazards_relations>
+        <system_safety_constraint_hazards_relation>
+          <ssc_id>5</ssc_id>
+          <hazard_id>2</hazard_id>
+          <created_at>2021-08-21 17:22:39</created_at>
+          <updated_at>2021-08-21 17:22:39</updated_at>
+        </system_safety_constraint_hazards_relation>
+      </system_safety_constraint_hazards_relations>
+    </system_safety_constraint>
+    <system_safety_constraint>
+      <id>6</id>
+      <name>When in Emergency situation, the door must be open.</name>
+      <description>Teste</description>
+      <project_id>1</project_id>
+      <created_at>2021-08-21 17:22:52</created_at>
+      <updated_at>2021-08-21 17:22:52</updated_at>
+      <system_safety_constraint_hazards_relations>
+        <system_safety_constraint_hazards_relation>
+          <ssc_id>6</ssc_id>
+          <hazard_id>3</hazard_id>
+          <created_at>2021-08-21 17:22:53</created_at>
+          <updated_at>2021-08-21 17:22:53</updated_at>
+        </system_safety_constraint_hazards_relation>
+      </system_safety_constraint_hazards_relations>
+    </system_safety_constraint>
+  </system_safety_constraints>
+  <connections>
+    <connection>
+      <id>1</id>
+      <output_component_id>1</output_component_id>
+      <type_output>controller</type_output>
+      <input_component_id>1</input_component_id>
+      <type_input>actuator</type_input>
+      <created_at>2021-08-21 17:28:04</created_at>
+      <updated_at>2021-08-21 17:28:04</updated_at>
+    </connection>
+    <connection>
+      <id>2</id>
+      <output_component_id>1</output_component_id>
+      <type_output>controller</type_output>
+      <input_component_id>1</input_component_id>
+      <type_input>controller</type_input>
+      <created_at>2021-08-21 17:28:14</created_at>
+      <updated_at>2021-08-21 17:28:14</updated_at>
+    </connection>
+    <connection>
+      <id>3</id>
+      <output_component_id>1</output_component_id>
+      <type_output>actuator</type_output>
+      <input_component_id>1</input_component_id>
+      <type_input>controlled_process</type_input>
+      <created_at>2021-08-21 17:28:38</created_at>
+      <updated_at>2021-08-21 17:28:38</updated_at>
+    </connection>
+    <connection>
+      <id>5</id>
+      <output_component_id>1</output_component_id>
+      <type_output>actuator</type_output>
+      <input_component_id>1</input_component_id>
+      <type_input>controller</type_input>
+      <created_at>2021-08-21 17:28:54</created_at>
+      <updated_at>2021-08-21 17:28:54</updated_at>
+    </connection>
+    <connection>
+      <id>6</id>
+      <output_component_id>1</output_component_id>
+      <type_output>controlled_process</type_output>
+      <input_component_id>1</input_component_id>
+      <type_input>sensor</type_input>
+      <created_at>2021-08-21 17:29:17</created_at>
+      <updated_at>2021-08-21 17:29:17</updated_at>
+    </connection>
+    <connection>
+      <id>7</id>
+      <output_component_id>1</output_component_id>
+      <type_output>controlled_process</type_output>
+      <input_component_id>1</input_component_id>
+      <type_input>actuator</type_input>
+      <created_at>2021-08-21 17:29:25</created_at>
+      <updated_at>2021-08-21 17:29:25</updated_at>
+    </connection>
+    <connection>
+      <id>8</id>
+      <output_component_id>1</output_component_id>
+      <type_output>sensor</type_output>
+      <input_component_id>1</input_component_id>
+      <type_input>controller</type_input>
+      <created_at>2021-08-21 17:31:54</created_at>
+      <updated_at>2021-08-21 17:31:54</updated_at>
+    </connection>
+    <connection>
+      <id>9</id>
+      <output_component_id>1</output_component_id>
+      <type_output>sensor</type_output>
+      <input_component_id>1</input_component_id>
+      <type_input>controlled_process</type_input>
+      <created_at>2021-08-21 17:32:00</created_at>
+      <updated_at>2021-08-21 17:32:00</updated_at>
+    </connection>
+  </connections>
+</project>

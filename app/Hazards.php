@@ -13,7 +13,7 @@ class Hazards extends Model
 		return $this->belongsTo(Projects::class);
 	}
 
-	public function losseshazards(){
+	public function losseshazardsRelations(){
 		return $this->hasMany(LossesHazards::class, "hazard_id");
 	}
 

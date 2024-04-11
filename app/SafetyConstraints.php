@@ -20,7 +20,7 @@ class SafetyConstraints extends Model
 		return $this->hasMany(CausalAnalysis::class, "safety_constraint_id");
 	}
 
-	public function rulesSafetyConstraintsHazards(){
+	public function rulesSafetyConstraintsHazardsRelations(){
 		return $this->hasMany(RulesSafetyConstraintsHazards::class, "sc_id");
 	}
 }

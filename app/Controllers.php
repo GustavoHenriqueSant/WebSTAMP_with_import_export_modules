@@ -10,7 +10,7 @@ class Controllers extends Model
 		return $this->belongsTo(Projects::class);
 	}
 
-	public function controlaction(){
+	public function controlActions(){
 		return $this->hasMany(ControlAction::class, "controller_id");
 	}
 
