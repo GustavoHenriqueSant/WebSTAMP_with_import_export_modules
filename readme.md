@@ -33,7 +33,7 @@ The schemas defined in this work are used to validate analyses in JSON or XML fo
 
 Users have the option to export hazard analyses conducted in WebSTAMP in JSON or XML format:
 
-![Exporting a hazard analysis](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/a8bc63a5-f0e5-48e1-b342-980e1f026a7f)
+![Exporting a hazard analysis](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/15d89777-9933-4362-89e8-6d93135c621d)
 
 After the user indicates their choice, the analysis is downloaded in the chosen format:
 
