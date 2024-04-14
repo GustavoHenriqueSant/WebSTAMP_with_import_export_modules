@@ -13,7 +13,7 @@ Following are the main contributions of this work:
 
 Using the JSON and XML schemas developed in this work, we implemented import and export functionalities for hazard analyses (projects) in WebSTAMP. This is the WebSTAMP home page. Here, users have the option to log in or create a new account:
 
-![The WebSTAMP home page](https://drive.google.com/file/d/1jGbLyLDaTSqa1iKLJh1aij7arwDm5b-3/view?usp=sharing)
+![The WebSTAMP home page]([https://drive.google.com/file/d/1jGbLyLDaTSqa1iKLJh1aij7arwDm5b-3/view?usp=sharing](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/238fcf83-c188-4175-bfb3-8314d3bbc0ba))
 
 After the authentication process, users are directed to a page where they can access the projects (hazard analyses) they have created within WebSTAMP. In the case of a newly registered user, this page will be empty, as there are no projects associated with their account yet.
 
@@ -23,7 +23,7 @@ After the authentication process, users are directed to a page where they can ac
 
 In the import process, the user must upload the analysis in JSON or XML format:
 
-![Importing a hazard analysis]()
+![Importing a hazard analysis](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/5bae989b-3502-4286-9bb8-f88a20824209)
 
 The schemas defined in this work are used to validate analyses in JSON or XML format. When an analysis is submitted for import, it undergoes a compliance check with the corresponding schemas. If the analysis is compliant, the data is persisted in the WebSTAMP database, resulting in the creation of a new project in the tool:
 
