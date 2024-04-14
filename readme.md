@@ -27,7 +27,7 @@ In the import process, the user must upload the analysis in JSON or XML format:
 
 The schemas defined in this work are used to validate analyses in JSON or XML format. When an analysis is submitted for import, it undergoes a compliance check with the corresponding schemas. If the analysis is compliant, the data is persisted in the WebSTAMP database, resulting in the creation of a new project in the tool:
 
-![Succesfully import](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/30028f01-e65a-466b-9010-1544731c9d4e)
+![Succesfully import](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/487332a9-6296-48a4-be6d-46d792098bd8)
 
 ## Exporting a hazard analysis:
 
