@@ -17,7 +17,7 @@ Using the JSON and XML schemas developed in this work, we implemented import and
 
 After the authentication process, users are directed to a page where they can access the projects (hazard analyses) they have created within WebSTAMP. In the case of a newly registered user, this page will be empty, as there are no projects associated with their account yet.
 
-![Projects page](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/44ad00ad-8947-4109-ac23-1d2fc6429b44)
+![Projects page](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/19dbf9a3-8cbe-48b7-aec8-0eef1df9e146)
 
 ## Importing a hazard analysis:
 
