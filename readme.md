@@ -13,31 +13,31 @@ Following are the main contributions of this work:
 
 Using the JSON and XML schemas developed in this work, we implemented import and export functionalities for hazard analyses (projects) in WebSTAMP. This is the WebSTAMP home page. Here, users have the option to log in or create a new account:
 
-![The WebSTAMP home page]([https://drive.google.com/file/d/1jGbLyLDaTSqa1iKLJh1aij7arwDm5b-3/view?usp=sharing](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/238fcf83-c188-4175-bfb3-8314d3bbc0ba))
+![The WebSTAMP home page](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/issues/1#issue-2242031687)
 
 After the authentication process, users are directed to a page where they can access the projects (hazard analyses) they have created within WebSTAMP. In the case of a newly registered user, this page will be empty, as there are no projects associated with their account yet.
 
-![Projects page]()
+![Projects page](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/44ad00ad-8947-4109-ac23-1d2fc6429b44)
 
 ## Importing a hazard analysis:
 
 In the import process, the user must upload the analysis in JSON or XML format:
 
-![Importing a hazard analysis](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/5bae989b-3502-4286-9bb8-f88a20824209)
+![Importing a hazard analysis](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/abf1b151-b33b-465a-9eff-96f0ee4f356e)
 
 The schemas defined in this work are used to validate analyses in JSON or XML format. When an analysis is submitted for import, it undergoes a compliance check with the corresponding schemas. If the analysis is compliant, the data is persisted in the WebSTAMP database, resulting in the creation of a new project in the tool:
 
-![Succesfully import]()
+![Succesfully import](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/30028f01-e65a-466b-9010-1544731c9d4e)
 
 ## Exporting a hazard analysis:
 
 Users have the option to export hazard analyses conducted in WebSTAMP in JSON or XML format:
 
-![Exporting a hazard analysis]()
+![Exporting a hazard analysis](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/a8bc63a5-f0e5-48e1-b342-980e1f026a7f)
 
 After the user indicates their choice, the analysis is downloaded in the chosen format:
 
-![Succesfully export]()
+![Succesfully export](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/554537b5-86b5-4afc-bf97-655033c321fd)
 
 # **A rule-based tool for System-Theoretic Process Analysis (STPA)**
 
