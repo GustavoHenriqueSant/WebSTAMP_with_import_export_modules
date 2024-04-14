@@ -13,7 +13,7 @@ Following are the main contributions of this work:
 
 Using the JSON and XML schemas developed in this work, we implemented import and export functionalities for hazard analyses (projects) in WebSTAMP. This is the WebSTAMP home page. Here, users have the option to log in or create a new account:
 
-![The WebSTAMP home page](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/b364f124-bbd2-42c5-88ca-a0def452b52d)
+![The WebSTAMP home page](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/11e18dfa-91d0-4210-b1ee-2b7c9cf96e62)
 
 After the authentication process, users are directed to a page where they can access the projects (hazard analyses) they have created within WebSTAMP. In the case of a newly registered user, this page will be empty, as there are no projects associated with their account yet.
 
