@@ -1,3 +1,20 @@
+# **JSON and XML Schemas for WebSTAMP**
+
+This repository contains the modified source code of WebSTAMP, a software tool designed to assist safety and security analysts in applying the STPA technique. In this modified version, XML and JSON schemas have been incorporated using XSD and JSON Schema technologies, respectively. These schemas were implemented to enable the export and import functionalities of STPA analyses between WebSTAMP and other software tools compatible with the schemas. To validate these additional functionalities, we incorporated the schemas into a second tool and conducted tests using examples of STPA analyses presented in the literature. The schemas created for WebSTAMP provided portability for hazard analyses, allowing an STPA analysis created in WebSTAMP to be used in other applications supporting the schemas, and vice versa. The results obtained allow us to conclude that XML and JSON schemas compatible with STPA assist safety and security analysts, making the task of conducting hazard analyses more flexible, as they allow analysts to use the tools of their choice, including the possibility of using multiple tools and leveraging the advantages of each.
+
+Following are the main contributions of this work:
+
+- JSON and XML Schemas: `app/Schemas`.
+  - Contains the JSON and XML schemas used by the application to define the structure and format of the data.
+- Methods for importing and exporting analyses: `app/Http/Controllers/ProjectController.php`.
+  - Contains the methods responsible for the logic of importing and exporting analyses within the application.
+
+# **Use case: WebSTAMP**
+
+This is the WebSTAMP home page:
+
+![The WebSTAMP home page](https://drive.google.com/file/d/1jGbLyLDaTSqa1iKLJh1aij7arwDm5b-3/view?usp=sharing)
+
 # **A rule-based tool for System-Theoretic Process Analysis (STPA)**
 
 TO DO

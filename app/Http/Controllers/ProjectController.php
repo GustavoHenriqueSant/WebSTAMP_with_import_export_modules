@@ -102,7 +102,7 @@ class ProjectController extends Controller
 		$arrayJSON = json_decode($JSON, true);
 
 		
-		if($objDom->schemaValidate(__DIR__ . "/WebSTAMP_XML_Schema.xsd")){
+		if($objDom->schemaValidate(__DIR__ . "../../Schemas/WebSTAMP_XML_Schema.xsd")){
 			//Criando novo projeto:
 			$projeto = new Project();
 			$projeto->name = ProjectController::string_test($arrayJSON['name']);
@@ -1012,7 +1012,7 @@ class ProjectController extends Controller
 			$contentII = $xml->asXML();
 			header('Content-Description: File Transfer');
     		header('Content-Type: application/octet-stream');
-    		header('Content-disposition: attachment; filename=file.xml');
+    		header('Content-disposition: attachment; filename=' . str_replace(" ", "_", $project['name']) . '.xml' );
     		header('Content-Length: '.strlen($contentII));
     		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
     		header('Expires: 0');
