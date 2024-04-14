@@ -37,7 +37,7 @@ Users have the option to export hazard analyses conducted in WebSTAMP in JSON or
 
 After the user indicates their choice, the analysis is downloaded in the chosen format:
 
-![Succesfully export](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/554537b5-86b5-4afc-bf97-655033c321fd)
+![Succesfully export](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/6580d1e4-418f-48ac-8bc6-bbb5c83fb358)
 
 # **A rule-based tool for System-Theoretic Process Analysis (STPA)**
 
