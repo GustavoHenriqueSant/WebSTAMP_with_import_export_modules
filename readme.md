@@ -1,6 +1,6 @@
 # **JSON and XML Schemas for WebSTAMP**
 
-This repository contains the modified source code of WebSTAMP, a software tool designed to assist safety and security analysts in applying the STPA technique. In this modified version, XML and JSON schemas have been incorporated using XSD and JSON Schema technologies, respectively. These schemas were implemented to enable the export and import functionalities of STPA analyses between WebSTAMP and other software tools compatible with the schemas. To validate these additional functionalities, we incorporated the schemas into a second tool and conducted tests using examples of STPA analyses presented in the literature. The schemas created for WebSTAMP provided portability for hazard analyses, allowing an STPA analysis created in WebSTAMP to be used in other applications supporting the schemas, and vice versa. The results obtained allow us to conclude that XML and JSON schemas compatible with STPA assist safety and security analysts, making the task of conducting hazard analyses more flexible, as they allow analysts to use the tools of their choice, including the possibility of using multiple tools and leveraging the advantages of each.
+This repository contains the modified source code of WebSTAMP, a software tool designed to assist safety and security analysts in applying the STPA technique. In this modified version, XML and JSON schemas have been incorporated using XSD and JSON Schema technologies, respectively. These schemas were implemented to enable the export and import functionalities of hazard analyses between WebSTAMP and other software tools compatible with the schemas. To validate these additional functionalities, we incorporated the schemas into a second tool and conducted tests using examples of hazard analyses presented in the literature. The schemas created for WebSTAMP provided portability for hazard analyses, allowing an analysis created in WebSTAMP to be used in other applications supporting the schemas, and vice versa. The results obtained allow us to conclude that XML and JSON schemas compatible with STPA assist safety and security analysts, making the task of conducting hazard analyses more flexible, as they allow analysts to use the tools of their choice, including the possibility of using multiple tools and leveraging the advantages of each.
 
 Following are the main contributions of this work:
 
@@ -38,6 +38,16 @@ Users have the option to export hazard analyses conducted in WebSTAMP in JSON or
 After the user indicates their choice, the analysis is downloaded in the chosen format:
 
 ![Succesfully export](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/6580d1e4-418f-48ac-8bc6-bbb5c83fb358)
+
+For readers interested in exploring the additional features of WebSTAMP, as demonstrated in this section, have the option to use a sample analysis available in the `docs` directory. This analysis, titled 'Train Door System', is available in XML and JSON formats.
+
+# **JSON and XML Schemas validation**
+
+To validate the created JSON and XML schemas, we used two examples of hazard analyses found in the literature: a train door controller and an insulin pump. To enable validation, we modified the WebSTAMP source code to include import/export functionalities for hazard analysis. Additionally, we developed a small desktop application, independent of WebSTAMP, also equipped with import and export functionalities for hazard analyses, to simulate the portability of analyses between the two tools.
+
+The figure below illustrates the experiment conducted to validate the implemented JSON and XML schemas. The scenario described in the figure encompasses (starting from the top left corner) a hazard analysis created in WebSTAMP, exported in JSON format, and imported into an independent application. After importation by the independent application, the hazard analysis is edited and exported again, to be imported once more by WebSTAMP. The analysis imported back into WebSTAMP incorporates the updates made in the analysis by the independent application, demonstrating the portability of the analysis between software tools and the flexibility granted to security analysts when selecting the appropriate tool for analysis.
+
+For readers interested in replicating the experiment, the source code of the independent tool can be found in a separate repository ([link](https://github.com/GustavoHenriqueSant/JSON_and_XML_independent_tools)). The readme of this repository contains more information to replicate the experiment.
 
 # **A rule-based tool for System-Theoretic Process Analysis (STPA)**
 

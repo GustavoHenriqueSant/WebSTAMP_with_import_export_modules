@@ -63,7 +63,7 @@
                             <div id="export_options_div_master">
                                 <label for="export_options"> <img src="images/export.png" id="image_export_options" style="width: 18px; height: 18px;"> </label>
                                 <select id="export_options" name="export_options" class="ls-select" style="height: 25px; width: 147px;" onchange="exportar_project(this.value, '{{$idProjeto}}');">
-                                    <option value="0" disabled selected>&nbsp Exportar Project</option>
+                                    <option value="0" disabled selected>&nbsp Export Project</option>
                                     <option value="1"> &nbsp XML</option>
                                     <option value="2"> &nbsp JSON</option>
                                 </select>

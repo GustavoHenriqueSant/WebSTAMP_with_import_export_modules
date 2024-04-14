@@ -548,7 +548,7 @@ class ProjectController extends Controller
 		$json = file_get_contents($file);
 		$arrayJSON = json_decode($json);
 
-		$schema = json_decode(file_get_contents(__DIR__ . "/WebSTAMP_JSON_Schema.json"));
+		$schema = json_decode(file_get_contents(__DIR__ . "../../../Schemas/WebSTAMP_JSON_Schema.json"));
 		$validator = new Validator();
 		$validator->validate($arrayJSON, $schema);
 		$arrayJSON = json_decode($json, true);
@@ -1012,7 +1012,7 @@ class ProjectController extends Controller
 			$contentII = $xml->asXML();
 			header('Content-Description: File Transfer');
     		header('Content-Type: application/octet-stream');
-    		header('Content-disposition: attachment; filename=' . str_replace(" ", "_", $project['name']) . '.xml' );
+    		header('Content-disposition: attachment; filename=' . str_replace(" ", "_", $project['name']) . '.xml');
     		header('Content-Length: '.strlen($contentII));
     		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
     		header('Expires: 0');
@@ -1022,7 +1022,7 @@ class ProjectController extends Controller
 		} elseif($request->get('option_export') == 2){
 			header('Content-Description: File Transfer');
     		header('Content-Type: application/octet-stream');
-    		header('Content-disposition: attachment; filename=file.json');
+    		header('Content-disposition: attachment; filename=' . str_replace(" ", "_", $project['name']) . '.json');
     		header('Content-Length: '.strlen($content));
     		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
     		header('Expires: 0');
