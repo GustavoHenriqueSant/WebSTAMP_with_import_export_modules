@@ -69,8 +69,8 @@ class ProjectController extends Controller
 		}
 
 		$file = $request->file("import");
-		json_decode(file_get_contents($file));
-		if(json_last_error() === JSON_ERROR_NONE)
+		$extension = $file->getClientOriginalExtension();
+		if($extension === 'json')
 			ProjectController::import_json($file, $request->user()->id);
 		else
 			ProjectController::import_xml($file, $request->user()->id);
@@ -100,7 +100,7 @@ class ProjectController extends Controller
 		$arrayJSON = json_decode($JSON, true);
 
 		//Validating analysis in xml using xsd
-		if($objDom->schemaValidate(__DIR__ . "../../Schemas/WebSTAMP_XML_Schema.xsd")){
+		if($objDom->schemaValidate(__DIR__ . "../../../Schemas/WebSTAMP_XML_Schema.xsd")){
 			//Creating new project:
 			$projeto = new Project();
 			$projeto->name = ProjectController::string_test($arrayJSON['name']);
@@ -654,7 +654,7 @@ class ProjectController extends Controller
 								}
 							}
 							if($flag){
-								session()->flash("suspect", "There is no variable associated with the rule in the JSON file. Import project failure.");
+								session()->flash("suspect", "There is no variable associated with a rule in the JSON file. Import project failure.");
 								ProjectController::delete_for_import($projeto->id);
 								return redirect("/projects");
 							}
@@ -666,7 +666,7 @@ class ProjectController extends Controller
 								}
 							}
 							if($flag){
-								session()->flash("suspect", "There is no state associated with the variables and rule in the JSON file. Import project failure.");
+								session()->flash("suspect", "There is no state associated with a variable and a rule in the JSON file. Import project failure.");
 								ProjectController::delete_for_import($projeto->id);
 								return redirect("/projects");
 							}
@@ -754,7 +754,7 @@ class ProjectController extends Controller
 						}
 					}
 					if($flag){
-						session()->flash("suspect", "There is no loss associated with the hazard in the JSON file. Import Project failure.");
+						session()->flash("suspect", "There is no loss associated with a hazard in the JSON file. Import Project failure.");
 						ProjectController::delete_for_import($projeto->id);
 						return redirect("/projects");
 					}
@@ -799,7 +799,7 @@ class ProjectController extends Controller
 						}
 					}
 					if($flag){
-						session()->flash("suspect", "There is no hazard associated with the ssc in the JSON file. Import project failure.");
+						session()->flash("suspect", "There is no hazard associated with a ssc in the JSON file. Import project failure.");
 						ProjectController::delete_for_import($projeto->id);
 						return redirect("/projects");
 					}
@@ -852,10 +852,11 @@ class ProjectController extends Controller
 						break;
 				}
 				if($flag){
-					session()->flash("suspect", "There is no input component associated with the connection in the JSON file. Import project failure.");
+					session()->flash("suspect", "There is no input component associated with a connection in the JSON file. Import project failure.");
 					ProjectController::delete_for_import($projeto->id);
 					return redirect("/projects");
 				}
+				$flag = True;
 				switch($conexao['type_input']){
 					case "controller":
 						foreach($map_id_controllers as $auxI){
@@ -895,7 +896,7 @@ class ProjectController extends Controller
 						break;
 				}
 				if($flag){
-					session()->flash("suspect", "There is no output component associated with the connection in the JSON file. Import project failure.");
+					session()->flash("suspect", "There is no output component associated with a connection in the JSON file. Import project failure.");
 					ProjectController::delete_for_import($projeto->id);
 					return redirect("/projects");
 				}
