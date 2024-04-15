@@ -39,7 +39,7 @@ After the user indicates their choice, the analysis is downloaded in the chosen 
 
 ![Succesfully export](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/6580d1e4-418f-48ac-8bc6-bbb5c83fb358)
 
-For readers interested in exploring the additional features of WebSTAMP, as demonstrated in this section, have the option to use a sample analysis available in the `docs` directory. This analysis, titled 'Train Door System', is available in XML and JSON formats.
+For readers interested in exploring the additional features of WebSTAMP, as demonstrated in this section, have the option to use a sample analysis available in the `./docs` directory. This analysis, titled 'Train Door System', is available in XML and JSON formats.
 
 # **JSON and XML Schemas validation**
 
