@@ -79,7 +79,7 @@ class ProjectController extends Controller
 	}
 
 	public function import_xml($file, $user_id){
-		//Iniciando vetores auxiliares
+		//Starting auxiliary vectors
 		$map_id_actuators = array();
 		$map_id_controlledProcess = array();
 		$map_id_controllers = array();
@@ -90,36 +90,34 @@ class ProjectController extends Controller
 		$map_id_states = array();
 		$map_id_variables = array();
 
-		//Carregando xml e xsd para a importacao 
+		//Loading the analysis in xml and xsd for import
 		libxml_use_internal_errors(true);
 		$objDom = new \DomDocument();
 		$objDom->load($file);
-		//$xml_tree = $objDom->saveXML();
-		//, "SimpleXMLElement", LIBXML_NOCDATA);
 		$data = file_get_contents($file);
 		$xml = simplexml_load_string($data);
 		$JSON = json_encode($xml);
 		$arrayJSON = json_decode($JSON, true);
 
-		
+		//Validating analysis in xml using xsd
 		if($objDom->schemaValidate(__DIR__ . "../../Schemas/WebSTAMP_XML_Schema.xsd")){
-			//Criando novo projeto:
+			//Creating new project:
 			$projeto = new Project();
 			$projeto->name = ProjectController::string_test($arrayJSON['name']);
 			$projeto->description = ProjectController::string_test($arrayJSON['description']);
 			$projeto->type = ProjectController::string_test($arrayJSON['type']);
 			$projeto->save();
-			//Setabdo nome de URL �nica
+			//Setting unique URL name
 			$url = $projeto->name . " " . $projeto->id;
 			$projeto->URL = str_slug($url, '-');
 			$projeto->save();
-			//Setando id de usu�rio envolvido com o projeto importado
+			//Setting the user ID that is importing the analysis
 			$team = new Team();
 			$team->user_id = $user_id;
 			$team->project_id = $projeto->id;
 			$team->save();
 
-			//Salvando Actuators
+			//Saving Actuators
 			ProjectController::tratando_array($arrayJSON, "actuators", "actuator");
 			foreach($arrayJSON['actuators'] as $atuador){
 				$actuator = new Actuators();
@@ -129,7 +127,7 @@ class ProjectController extends Controller
 				$map_id_actuators[] = array($actuator->id, $atuador['id']);
 			}
 
-			//Salvando as assumptions
+			//Saving assumptions
 			ProjectController::tratando_array($arrayJSON, "assumptions", "assumption");
 			if($arrayJSON['assumptions']){
 				foreach($arrayJSON['assumptions'] as $premissa){
@@ -141,7 +139,7 @@ class ProjectController extends Controller
 				}
 			}
 
-			//Salvando Controlled Process
+			//Saving Controlled Process
 			if($arrayJSON['controlled_process']){
 				$controlled = new ControlledProcess();
 				$controlled->name = ProjectController::string_test($arrayJSON['controlled_process']['name']);
@@ -150,7 +148,7 @@ class ProjectController extends Controller
 				$map_id_controlledProcess[] = array($controlled->id, $arrayJSON['controlled_process']['id']);
 			}
 
-			//Salvando controllers
+			//Saving controllers
 			ProjectController::tratando_array($arrayJSON, "controllers", "controller");
 			foreach($arrayJSON['controllers'] as $controlador){
 				$controller = new Controllers();
@@ -159,7 +157,7 @@ class ProjectController extends Controller
 				$controller->project_id = $projeto->id;
 				$controller->save();
 				$map_id_controllers[] = array($controller->id, $controlador['id']);
-				//Salvando Vari�veis
+				//Saving variables
 				ProjectController::tratando_array($controlador, "variables", "variable");
 				foreach($controlador['variables'] as $variavel){
 					$variable = new Variable();
@@ -172,7 +170,7 @@ class ProjectController extends Controller
 					}
 					$variable->save();
 					$map_id_variables[] = array($variable->id, $variavel['id']);
-					//Salvando estados
+					//Saving states
 					ProjectController::tratando_array($variavel, "states", "state");
 					foreach($variavel['states'] as $estado){
 						$state = new State();
@@ -182,7 +180,7 @@ class ProjectController extends Controller
 						$map_id_states[] = array($state->id, $estado['id']);
 					}
 				}
-				//Salvando control actions de um Controller
+				//Saving control actions from a controller
 				ProjectController::tratando_array($controlador, "controlactions", "controlaction");
 				foreach($controlador['controlactions'] as $acoes){
 					$control = new ControlAction();
@@ -190,7 +188,7 @@ class ProjectController extends Controller
 					$control->description = ProjectController::string_test($acoes['description']);
 					$control->controller_id = $controller->id;
 					$control->save();
-					//Salvando as regras de uma control action
+					//Saving rules from a control action
 					ProjectController::tratando_array($acoes, "rules", "rule");
 					foreach($acoes['rules'] as $regra){
 						$rule = new Rule();
@@ -198,7 +196,7 @@ class ProjectController extends Controller
 						$rule->column = ProjectController::string_test($regra['column']);
 						$rule->save();
 						$map_id_rules[] = array($rule->id, $regra['id']);
-						//Salavando a rela��o state, variable and rule
+						//Saving variables states from a rule
 						$relacao_variable_state = new RulesVariablesStates();
 						$relacao_variable_state->rule_id = $rule->id;
 						$flag = True;
@@ -214,7 +212,6 @@ class ProjectController extends Controller
 							ProjectController::delete_for_import($projeto->id);
 							return redirect("/projects");
 						}
-						//$flag = True; // FOI AQUI MANO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 						foreach($map_id_states as $aux){
 							if($aux[1] === $regra['variable_state_relations']['state_id']){
 								$relacao_variable_state->state_id = $aux[0];
@@ -229,7 +226,7 @@ class ProjectController extends Controller
 						}
 						$relacao_variable_state->save();
 					}
-					//Salvando a context table
+					//Saving context table
 					ProjectController::tratando_array($acoes, "context_tables", "context_table");
 					foreach($acoes['context_tables'] as $tabela){
 						$table = new ContextTable();
@@ -244,7 +241,7 @@ class ProjectController extends Controller
 						$table->ca_too_long = ProjectController::string_test($tabela['ca_too_long']);
 						$table->save();
 					}
-					//Salvando as safety constraints
+					//Saving safety constraints
 					ProjectController::tratando_array($acoes, "safety_constraints", "safety_constraint");
 					foreach($acoes['safety_constraints'] as $restricao){
 						$safety = new SafetyConstraints();
@@ -284,7 +281,7 @@ class ProjectController extends Controller
 				}
 			}
 
-			//Salvando as losses
+			//Saving losses
 			ProjectController::tratando_array($arrayJSON, "losses", "loss");
 			foreach($arrayJSON['losses'] as $perda){
 				$losse = new Losses();
@@ -295,7 +292,7 @@ class ProjectController extends Controller
 				$map_id_losses[] = array($losse->id, $perda['id']);
 			}
 
-			//Salvando os hazards
+			//Saving hazards
 			ProjectController::tratando_array($arrayJSON, "hazards", "hazard");
 			foreach($arrayJSON['hazards'] as $perigo){
 				$hazard = new Hazards();
@@ -325,7 +322,7 @@ class ProjectController extends Controller
 				}
 			}
 
-			//Salvando sensor
+			//Saving sensor
 			ProjectController::tratando_array($arrayJSON, "sensors", "sensor");
 			foreach($arrayJSON['sensors'] as $sensore){
 				$sensor = new Sensors();
@@ -335,7 +332,7 @@ class ProjectController extends Controller
 				$map_id_sensors[] = array($sensor->id, $sensore['id']);
 			}
 
-			//Salvando system goals
+			//Saving system goals
 			ProjectController::tratando_array($arrayJSON, "system_goals", "system_goal");
 			foreach($arrayJSON['system_goals'] as $objetivo){
 				$goal = new SystemGoals();
@@ -345,7 +342,7 @@ class ProjectController extends Controller
 				$goal->save();
 			}
 
-			//Salvando ssc
+			//Saving ssc
 			ProjectController::tratando_array($arrayJSON, "system_safety_constraints", "system_safety_constraint");
 			foreach($arrayJSON['system_safety_constraints'] as $restricaoSistema){
 				$ssc = new SystemSafetyConstraints();
@@ -374,7 +371,7 @@ class ProjectController extends Controller
 				}
 			}
 		
-			//Salvando as conexoes
+			//Saving connections
 			ProjectController::tratando_array($arrayJSON, "connections", "connection");
 			foreach($arrayJSON['connections'] as $conexao){
 				$conection = new Connections();
@@ -524,7 +521,7 @@ class ProjectController extends Controller
 		return $output;
 	}
 
-	# Metodo para resolver bug de string vazias na importacao com XML
+	# Method to resolve empty string bug when importing with XML
 	public function string_test($array){
 		if(is_array($array))
 			return "";
@@ -533,7 +530,7 @@ class ProjectController extends Controller
 	}
 
 	public function import_json($file, $user_id){
-		//Iniciando vetores auxiliares
+		//Starting auxiliary vectors
 		$map_id_actuators = array();
 		$map_id_controlledProcess = array();
 		$map_id_controllers = array();
@@ -544,7 +541,7 @@ class ProjectController extends Controller
 		$map_id_states = array();
 		$map_id_variables = array();
 
-		//Lendo arquivo de importa��o e transformando em um array.
+		//Reading json file from the imported analysis and transforming it into an array
 		$json = file_get_contents($file);
 		$arrayJSON = json_decode($json);
 
@@ -554,23 +551,23 @@ class ProjectController extends Controller
 		$arrayJSON = json_decode($json, true);
 
 		if($validator->isValid()){
-			//Criando novo projeto:
+			//Creating new project
 			$projeto = new Project();
 			$projeto->name = $arrayJSON['name'];
 			$projeto->description = $arrayJSON['description'];
 			$projeto->type = $arrayJSON['type'];
 			$projeto->save();
-			//Setabdo nome de URL �nica
+			//Setting unique URL name
 			$url = $projeto->name . " " . $projeto->id;
 			$projeto->URL = str_slug($url, '-');
 			$projeto->save();
-			//Setando id de usu�rio envolvido com o projeto importado
+			//Setting the user ID that is importing the analysis
 			$team = new Team();
 			$team->user_id = $user_id;
 			$team->project_id = $projeto->id;
 			$team->save();
 
-			//Salvando os actuators
+			//Saving actuators
 			if($arrayJSON['actuators']){
 				foreach($arrayJSON['actuators'] as $atuador){
 					$actuator = new Actuators();
@@ -581,7 +578,7 @@ class ProjectController extends Controller
 				}
 			}
 
-			//Salvando as assumptions
+			//Saving assumptions
 			if($arrayJSON['assumptions']){
 				foreach($arrayJSON['assumptions'] as $premissa){
 					$assumption = new Assumptions();
@@ -592,7 +589,7 @@ class ProjectController extends Controller
 				}
 			}
 
-			//Salvando Controlled Process
+			//Saving Controlled Process
 			if($arrayJSON['controlled_process']){
 				$controlled = new ControlledProcess();
 				$controlled->name = $arrayJSON['controlled_process']['name'];
@@ -601,7 +598,7 @@ class ProjectController extends Controller
 				$map_id_controlledProcess[] = array($controlled->id, $arrayJSON['controlled_process']['id']);
 			}
 
-			//Salvando controllers
+			//Saving controllers
 			if($arrayJSON['controllers']){
 				foreach($arrayJSON['controllers'] as $controlador){
 					$controller = new Controllers();
@@ -610,7 +607,7 @@ class ProjectController extends Controller
 					$controller->project_id = $projeto->id;
 					$controller->save();
 					$map_id_controllers[] = array($controller->id, $controlador['id']);
-					//Salvando Vari�veis
+					//Saving variables
 					foreach($controlador['variables'] as $variavel){
 						$variable = new Variable();
 						$variable->name = $variavel['name'];
@@ -622,7 +619,7 @@ class ProjectController extends Controller
 						}
 						$variable->save();
 						$map_id_variables[] = array($variable->id, $variavel['id']);
-						//Salvando estados
+						//Saving states
 						foreach($variavel['states'] as $estado){
 							$state = new State();
 							$state->name = $estado['name'];
@@ -631,21 +628,21 @@ class ProjectController extends Controller
 							$map_id_states[] = array($state->id, $estado['id']);
 						}
 					}
-					//Salvando control actions de um Controller
+					//Saving control actions from Controller
 					foreach($controlador['controlactions'] as $acoes){
 						$control = new ControlAction();
 						$control->name = $acoes['name'];
 						$control->description = $acoes['description'];
 						$control->controller_id = $controller->id;
 						$control->save();
-						//Salvando as regras de uma control action
+						//Saving rules from control action
 						foreach($acoes['rules'] as $regra){
 							$rule = new Rule();
 							$rule->controlaction_id = $control->id;
 							$rule->column = $regra['column'];
 							$rule->save();
 							$map_id_rules[] = array($rule->id, $regra['id']);
-							//Salavando a rela��o state, variable and rule
+							//Saving variable states from rule
 							$relacao_variable_state = new RulesVariablesStates();
 							$relacao_variable_state->rule_id = $rule->id;
 							$flag = True;
@@ -675,7 +672,7 @@ class ProjectController extends Controller
 							}
 							$relacao_variable_state->save();
 						}
-						//Salvando a context table
+						//Saving context table
 						foreach($acoes['context_tables'] as $tabela){
 							$table = new ContextTable();
 							$table->controlaction_id = $control->id;
@@ -689,7 +686,7 @@ class ProjectController extends Controller
 							$table->ca_too_long = $tabela['ca_too_long'];
 							$table->save();
 						}
-						//Salvando as safety constraints
+						//Saving safety constraints
 						foreach($acoes['safety_constraints'] as $restricao){
 							$safety = new SafetyConstraints();
 							$safety->unsafe_control_action = $restricao['unsafe_control_action'];
@@ -727,7 +724,7 @@ class ProjectController extends Controller
 					}	
 				}
 			}
-			//Salvando as losses
+			//Saving losses
 			foreach($arrayJSON['losses'] as $perda){
 				$losse = new Losses();
 				$losse->name = $perda['name'];
@@ -737,7 +734,7 @@ class ProjectController extends Controller
 				$map_id_losses[] = array($losse->id, $perda['id']);
 			}
 
-			//Salvando os hazards
+			//Saving hazards
 			foreach($arrayJSON['hazards'] as $perigo){
 				$hazard = new Hazards();
 				$hazard->name = $perigo['name'];
@@ -765,7 +762,7 @@ class ProjectController extends Controller
 				}
 			}
 
-			//Salvando sensor
+			//Saving sensor
 			foreach($arrayJSON['sensors'] as $sensore){
 				$sensor = new Sensors();
 				$sensor->name = $sensore['name'];
@@ -774,7 +771,7 @@ class ProjectController extends Controller
 				$map_id_sensors[] = array($sensor->id, $sensore['id']);
 			}
 
-			//Salvando system goals
+			//Saving system goals
 			foreach($arrayJSON['system_goals'] as $objetivo){
 				$goal = new SystemGoals();
 				$goal->name = $objetivo['name'];
@@ -783,7 +780,7 @@ class ProjectController extends Controller
 				$goal->save();
 			}
 
-			//Salvando ssc
+			//Saving ssc
 			foreach($arrayJSON['system_safety_constraints'] as $restricaoSistema){
 				$ssc = new SystemSafetyConstraints();
 				$ssc->name = $restricaoSistema['name'];
@@ -810,7 +807,7 @@ class ProjectController extends Controller
 				}
 			}
 		
-			//Salvando as conexoes
+			//Saving connections
 			foreach($arrayJSON['connections'] as $conexao){
 				$conection = new Connections();
 				$flag= True;
@@ -904,7 +901,7 @@ class ProjectController extends Controller
 				}
 				$conection->save();
 			}
-			session()->flash("success", "Event imported successfully!");
+			session()->flash("success", "Project imported successfully!");
 		} else {
 			echo "O documento n � v�lido. Viola��es: <br/>";
 			echo "<ul>";
@@ -985,8 +982,6 @@ class ProjectController extends Controller
 		}
 		
 		$content =  json_encode($project);
-
-		//return readfile(json_encode($nomeArquivo));
 		
 		if($request->get('option_export') == 1){
 			$xml = new \SimpleXMLElement('<?xml version="1.0"?><project></project>');
@@ -995,20 +990,6 @@ class ProjectController extends Controller
 			$dom->preserveWhiteSpace = false;
 			$dom->formatOutput = true;
 			$dom->loadXML($xml->asXML());
-			//$dom->save(__DIR__ . "/" . $project['URL'] . ".xml");
-
-			//if(file_exists(__DIR__ . "/" . $project['URL'] . ".xml")){
-				//setando hearders http:
-			//	header('Pragma: public');
-			//	header('Expires: 0');
-			//	header('Content-Type: application/force-download');
-			//	header('Content-Disposition: inline; filename="Projeto.xml"');
-			//	header('Content-Length: ' . filesize(__DIR__ . "/" . $project['URL'] . ".xml"));
-			//	header('Connection: close');
-			//	readfile(__DIR__ . "/" . $project['URL'] . ".xml");
-			//}
-
-			//unlink(__DIR__ . "/" . $project['URL'] . ".xml");
 			$contentII = $xml->asXML();
 			header('Content-Description: File Transfer');
     		header('Content-Type: application/octet-stream');
