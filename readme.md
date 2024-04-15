@@ -49,7 +49,7 @@ The figure below illustrates the experiment conducted to validate the implemente
 
 [IMAGE HERE]
 
-For readers interested in replicating the experiment, the source code of the independent tool can be found in a separate repository ([link](https://github.com/GustavoHenriqueSant/JSON_and_XML_Schemas_Independent_tools/tree/master)). The readme of this repository contains more information to replicate the experiment.
+For readers interested in replicating the experiment, the source code of the independent tool can be found in a separate repository ([link](https://github.com/GustavoHenriqueSant/JSON_and_XML_Schemas_Independent_tools)). The readme of this repository contains more information to replicate the experiment.
 
 # **A rule-based tool for System-Theoretic Process Analysis (STPA)**
 
