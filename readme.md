@@ -1,5 +1,7 @@
 # **JSON and XML Schemas for WebSTAMP**
 
+## **I.** About
+
 This repository contains the modified source code of WebSTAMP, a software tool designed to assist safety and security analysts in applying the STPA (Systems-Theoretic Process Analysis) technique. In this modified version, XML and JSON schemas have been incorporated using XSD and JSON Schema technologies, respectively. These schemas were implemented to enable the export and import functionalities of hazard analyses between WebSTAMP and other software tools compatible with the schemas. To validate these additional functionalities, we incorporated the schemas into a second tool and conducted tests using examples of hazard analyses presented in the literature. The schemas created for WebSTAMP provided portability for hazard analyses, allowing an analysis created in WebSTAMP to be used in other applications supporting the schemas, and vice versa. The results obtained allow us to conclude that XML and JSON schemas compatible with STPA assist safety and security analysts, making the task of conducting hazard analyses more flexible, as they allow analysts to use the tools of their choice, including the possibility of using multiple tools and leveraging the advantages of each.
 
 Following are the main contributions of this work:
@@ -8,6 +10,29 @@ Following are the main contributions of this work:
   - Contains the JSON and XML schemas used by the application to define the structure and format of the hazard analyses.
 - Methods for importing and exporting analyses: `app/Http/Controllers/ProjectController.php`.
   - Contains the methods responsible for the logic of importing and exporting analyses within the WebSTAMP.
+
+## **II.** Installation
+
+You need to install [Docker Desktop (preferably the latest version)](https://www.docker.com/products/docker-desktop/) and [git (latest version)](https://git-scm.com/downloads). Initially open a terminal to clone this repository:
+
+``` bash
+git clone https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules.git
+```
+
+ Then start Docker Desktop. With Docker Desktop initialized and within the `WebSTAMP_with_import_export_modules` directory, run the following command:
+
+```bash
+docker-compose up -d --build
+```
+
+When the previous command finishes processing, you should access the 'webstamp-app' container to install the composer dependencies and run Laravel. This can be achieved with the following commands:
+
+```bash
+docker exec -i -t webstamp-app /bin/bash
+composer update
+```
+
+After that, you will be able to access the WebSTAMP (localhost:8000).
 
 # **Use case: WebSTAMP**
 
@@ -19,7 +44,7 @@ After the authentication process, users are directed to a page where they can ac
 
 ![Projects page](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/0ad9846f-ab91-4dad-81da-fdb2b4bf0877)
 
-## Importing a hazard analysis:
+## **I.** Importing a hazard analysis:
 
 In the import process, the user must upload the analysis in JSON or XML format:
 
@@ -29,7 +54,7 @@ The schemas defined in this work are used to validate analyses in JSON or XML fo
 
 ![Succesfully import](https://github.com/GustavoHenriqueSant/WebSTAMP_with_import_export_modules/assets/71770334/487332a9-6296-48a4-be6d-46d792098bd8)
 
-## Exporting a hazard analysis:
+## **II.** Exporting a hazard analysis:
 
 Users have the option to export hazard analyses conducted in WebSTAMP in JSON or XML format:
 
@@ -51,107 +76,7 @@ The figure below illustrates the experiment conducted to validate the implemente
 
 For readers interested in replicating the experiment, the source code of the independent tool can be found in a separate repository ([link](https://github.com/GustavoHenriqueSant/JSON_and_XML_Schemas_Independent_tools)). The readme of this repository contains more information to replicate the experiment.
 
-# **A rule-based tool for System-Theoretic Process Analysis (STPA)**
-
-TO DO
-
-## **Prerequisites**
-
-For execution of all commands, it is necessary the use of [Composer](https://getcomposer.org/download/) and [Node.js](https://nodejs.org/en/download/)
-
-## **Installation**
-
-Open a bash/git bash to clone the repository
-
-```
-#!npm
-git clone https://bitbucket.org/FellipeRey/stpatool
-```
-
-
-In stpatool folder, we need install Gulp, an automated task runner. Typing the command below, a new folder (node_modules) will be created with the content of Gulp.
-
-```
-#!npm
-npm install -g gulp
-```
-
-
-To install the remaining dependencies, execute the command:
-
-```
-#!npm
-npm install
-```
-
-
-Some Laravel folders (like vendor) do not change, so it is not necessary to send them to the repository, it can be obtained through the command:
-
-```
-#!composer
-composer install
-```
-
-
-
-Gulp is the responsible to get all views, css, images and javascripts files(folder resources), compile them and send to the public folder.
-
-```
-#!composer
-gulp
-```
-
-
-
-**Attention!**
-
-1. Create a new .env file. Copy the content of .env.example and modify using your database configuration
-
-
-2. Create a schema in your database named "stpatool"
-
-
-3. To create all tables automatically, just type:
-
-
-
-
-
-A new key must be generated for the new Laravel application. 
-
-```
-#!composer
-php artisan key:generate
-```
-
-To create the database
-
-```
-#!mysql
-
-php artisan migrate --seed
-```
-
-## **Running the application**
-
-After complete the Installation, you must open two bashes and execute the commands:
-
-```
-#!bash
-
-php artisan serve
-```
-and
-```
-#!bash
-
-gulp watch
-```
-
-**Attention! ** If no change in the resources folder, it is not necessary to run the second command (gulp watch)
-
-
-## **About Laravel**
+# **About Laravel**
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
 [![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
@@ -163,19 +88,18 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
-
-## **Laravel Documentation**
+## **I. ** Laravel Documentation
 
 Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
 
-## **Laravel Contributing**
+## **II.** Laravel Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
 
-## **Laravel Security Vulnerabilities**
+## **III.** Laravel Security Vulnerabilities
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
 
-## **Laravel License**
+## **IV.** Laravel License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
