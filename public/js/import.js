@@ -4,7 +4,6 @@ function close_import_errors(){
     window.location.reload();
 }
 
-// Mostrar, remover progresso de importa��o:
 function import_loading() {
     document.getElementById("import_loading").style.display = 'block';
 }
@@ -27,8 +26,6 @@ function iniciaAjax() {
     return req;
 }
 
-
-// Realizar submit automático ao enviar arquivo de upload para a importação de análise:
 var fileUpload = document.getElementById("import");
 var enviar_button = document.getElementById("enviar_file_import");
 fileUpload.addEventListener("change", function (event) {

@@ -68,7 +68,6 @@
                                     <option value="2"> &nbsp JSON</option>
                                 </select>
                             </div>
-                            <!-- div para bot�o de exportar projeto -->
                         </div>
                     </form>
                     <form action="/editproject" method="POST" class="editing-form ajaxform">
