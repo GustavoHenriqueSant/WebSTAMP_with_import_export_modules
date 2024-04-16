@@ -6,9 +6,9 @@ This repository contains the modified source code of WebSTAMP, a software tool d
 
 Following are the main contributions of this work:
 
-- JSON and XML Schemas: `app/Schemas`.
+- JSON and XML Schemas: `./app/Schemas`.
   - Contains the JSON and XML schemas used by the application to define the structure and format of the hazard analyses.
-- Methods for importing and exporting analyses: `app/Http/Controllers/ProjectController.php`.
+- Methods for importing and exporting analyses: `./app/Http/Controllers/ProjectController.php`.
   - Contains the methods responsible for the logic of importing and exporting analyses within the WebSTAMP.
 
 ## **II.** Installation
