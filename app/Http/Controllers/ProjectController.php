@@ -466,8 +466,8 @@ class ProjectController extends Controller
 				}
 				$conection->save();
 			}
+			session()->flash("success", "Project imported successfully!");
 			return redirect('/projects');
-
 		} else {
 			$errors = libxml_get_errors();
 			$errors['data_format'] = 'XML';
