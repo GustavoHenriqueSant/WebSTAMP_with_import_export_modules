@@ -470,10 +470,9 @@ class ProjectController extends Controller
 
 		} else {
 			$errors = libxml_get_errors();
-			foreach($errors as $error){
-				echo "Erro de validação: $error->message\n";
-			}
+			$errors['data_format'] = 'XML';
 			libxml_clear_errors();
+			return redirect('/projects')->withErrors($errors);
 		}
 
 	}
@@ -904,15 +903,9 @@ class ProjectController extends Controller
 			}
 			session()->flash("success", "Project imported successfully!");
 		} else {
-			echo "O documento n � v�lido. Viola��es: <br/>";
-			echo "<ul>";
-			
-			foreach($validator->getErrors() as $error){
-				echo "<li>" . sprintf("[%s] %s", $error["property"], $error['message']) . "</li>";
-			}
-			echo "</ul>";
-			$errors = libxml_get_errors();
-			print_r($errors);
+			$errors = $validator->getErrors();
+			$errors['data_format'] = 'json';
+			return redirect('/projects')->withErrors($errors);
 		}
 	}
 

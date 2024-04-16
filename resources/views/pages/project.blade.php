@@ -181,4 +181,29 @@
     </form>
 </div>
 
+@if($errors->any())
+    <div id="import_errors">
+        <h1>Schema Validation Errors:</h1>
+        @if ($errors->getBag('default')->get('data_format')[0] === 'json')
+            <ul>
+                @foreach($errors->getBag('default')->getMessages() as $error)
+                    @if(isset($error['property']))
+                        <li> In <span style="color:#2c3e50">property {{$error['property']}}</span> have an error with <span style="color:#2c3e50">message "{{$error['message']}}</span>"</li>
+                    @endif
+                @endforeach
+            </ul>
+        @else
+            <ul>
+                @foreach($errors->getBag('default')->getMessages() as $error)
+                    @if(isset($error['level']))
+                        <li>In <span style="color:#2c3e50">level {{$error['level']}}</span> has an error with <span style="color:#2c3e50">message "{{$error['message']}}"</span></li>
+                    @endif
+                @endforeach
+            </ul>
+        @endif
+
+        <button id="ok_import_button" onclick="close_import_errors()">OK</button>
+    </div>
+@endif
+
 @endsection

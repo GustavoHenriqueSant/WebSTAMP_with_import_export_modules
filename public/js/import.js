@@ -1,3 +1,9 @@
+function close_import_errors(){
+    var importErrorsDiv = document.getElementById("import_errors");
+    importErrorsDiv.style.display = "none";
+    window.location.reload();
+}
+
 // Mostrar, remover progresso de importa��o:
 function import_loading() {
     document.getElementById("import_loading").style.display = 'block';
